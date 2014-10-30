@@ -5,10 +5,12 @@ package components;
  */
 public class Entity {
 
+    private static int NEXT_UNIQUE_ID = 1;
     private int id;
 
     public Entity() {
-        id = (int)(Math.random() * 1000);
+        id = NEXT_UNIQUE_ID;
+        NEXT_UNIQUE_ID += 1;
     }
 
 
