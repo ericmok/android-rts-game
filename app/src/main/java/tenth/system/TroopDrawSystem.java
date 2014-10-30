@@ -20,14 +20,8 @@ import tenth.system.SystemNode.NodeType;
 public class TroopDrawSystem {
 	private Game game;
 	
-	public HashMap<Troop.State, String> stateMap;
-	
 	public TroopDrawSystem(Game game) {
 		this.game = game;
-		
-		stateMap = new HashMap<Troop.State, String>();
-		stateMap.put(Troop.State.IDLE, DrawList2DItem.ANIMATION_TROOPS_IDLING);
-		stateMap.put(Troop.State.DEAD, DrawList2DItem.ANIMATION_TROOPS_DYING);
 	}
 	
 	/**
