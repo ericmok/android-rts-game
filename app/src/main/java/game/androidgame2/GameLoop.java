@@ -177,17 +177,7 @@ public class GameLoop implements Runnable {
 	private void performGameLogic(long elapsedTime) {
 		
 		// TODO: Allow scrolling of the screen
-//		
-//		Filterable bigTroopFilter = new Filterable() {
-//			public SystemNode filter(SystemNode in) {
-//				if ( ((Troop)in).type == Troop.Type.BIG_TROOP ) {
-//					return in;
-//				} 
-//				else {
-//					return null;
-//				}
-//			}
-//		};
+
 		if (game.getGameState() == Game.State.RUNNING) {
 			
 			// Team 0
