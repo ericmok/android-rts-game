@@ -5,7 +5,6 @@ import android.util.Log;
 public class GamePool {
 	
 	public MemoryPool<Troop> troops;
-	public MemoryPool<TroopRenderNode> troopRenderNodes;
 	
 	public MemoryPool<TriggerField> triggerFields;
 	
@@ -23,8 +22,7 @@ public class GamePool {
 	
 	public void allocate() {
 		troops = new MemoryPool<Troop>(Troop.class, 1024);
-		troopRenderNodes = new MemoryPool<TroopRenderNode>(TroopRenderNode.class, 1024);
-		
+
 		drawItems = new MemoryPool<DrawList2DItem>(DrawList2DItem.class, 2048);
 		
 		temporaryDrawItems = new MemoryPool<TemporaryDrawList2DItem>(TemporaryDrawList2DItem.class, 2048);

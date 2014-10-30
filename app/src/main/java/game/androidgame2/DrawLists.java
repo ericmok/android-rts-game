@@ -10,9 +10,7 @@ import java.util.List;
 public class DrawLists {
 	
 	public static final int MAX_SPRITES = Game.MAX_UNITS;
-	
-	// TODO: Deprecate
-	public ConcurrentCircularBuffer<TroopRenderNode> troopRenderNodes;
+
 	// TODO: Deprecate
 	public ConcurrentCircularBuffer<DrawList2DItem> batch2dSprites;
 	
@@ -28,21 +26,14 @@ public class DrawLists {
 	
 	
 	public ConcurrentCircularBufferWithRewritableArray<TextDrawItem> textDrawItems = new ConcurrentCircularBufferWithRewritableArray<TextDrawItem>(TextDrawItem.class, MAX_SPRITES);
-	
-	
-	// TODO: Deprecate
-	public ConcurrentCircularBufferWithRewritableArray<TroopRenderNode> troopRenderNodes2;
-	
-	
+
 	// Other circular buffers...
 	
 	public DrawLists() {
 
-		troopRenderNodes = new ConcurrentCircularBuffer<TroopRenderNode>(TroopRenderNode.class, MAX_SPRITES);
 		batch2dSprites = new ConcurrentCircularBuffer<DrawList2DItem>(DrawList2DItem.class, MAX_SPRITES);
 		
 		drawListSprites = new ConcurrentCircularBufferWithRewritableArray<DrawList2DItem>(DrawList2DItem.class, MAX_SPRITES);
-		troopRenderNodes2 = new ConcurrentCircularBufferWithRewritableArray<TroopRenderNode>(TroopRenderNode.class, MAX_SPRITES);
 
 		temporarySprites = Collections.synchronizedList(new ArrayList<TemporaryDrawList2DItem>(Game.MAX_UNITS)); 
 	}
