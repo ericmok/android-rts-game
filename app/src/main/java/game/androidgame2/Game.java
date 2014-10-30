@@ -177,11 +177,11 @@ public class Game implements OnGestureListener {
 			enemyTroop.position.y = 1.4f + (Math.random() * 0.3f);
 			enemyTroop.orientation.setDegrees(90);
 			enemyTroop.type = Math.random() > 0 ? Troop.Type.BIG_TROOP : Troop.Type.SMALL_TROOP;
-            if (temp.type == Troop.Type.BIG_TROOP) {
-                temp.getLabels().add(SystemNode.Label.BigTroop);
+            if (enemyTroop.type == Troop.Type.BIG_TROOP) {
+                enemyTroop.getLabels().add(SystemNode.Label.BigTroop);
             }
             else {
-                temp.getLabels().add(SystemNode.Label.SmallTroop);
+                enemyTroop.getLabels().add(SystemNode.Label.SmallTroop);
             }
 			enemyTroop.player[0] = 1;
 			//enemyTroop.team = Troop.Team.TEAM_1;
