@@ -28,7 +28,7 @@ public class ShipDrawSystem {
 	 */
 	public void update(RewritableArray<DrawList2DItem> output, ArrayList<SystemNode> nodes, long elapsedTime) {
 		for (int i = 0; i < nodes.size(); i++) {
-			if (!nodes.get(i).getNodes().contains(NodeType.SHIP_DRAW)) {
+			if (!nodes.get(i).getNodeTypes().contains(NodeType.SHIP_DRAW)) {
 				return; 
 			}
 			

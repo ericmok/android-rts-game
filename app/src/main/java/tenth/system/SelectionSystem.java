@@ -38,7 +38,7 @@ public class SelectionSystem {
 
 			selected.clear();
 			for (int i = 0; i < nodes.size(); i++) {
-				if (!nodes.get(i).getNodes().contains(NodeType.SELECTION)) {
+				if (!nodes.get(i).getNodeTypes().contains(NodeType.SELECTION)) {
 					 continue;
 				}
 				

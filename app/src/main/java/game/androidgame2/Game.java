@@ -6,7 +6,6 @@ import tenth.system.Constants;
 import tenth.system.FormationSystem;
 import tenth.system.FormationSystem.FormationNode;
 import tenth.system.GenerateTroopsInSquadPositionsSystem;
-import tenth.system.Ship;
 import tenth.system.SquadPosition;
 import tenth.system.States;
 

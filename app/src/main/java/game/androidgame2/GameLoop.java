@@ -8,8 +8,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import game.androidgame2.Game;
-
 import tenth.system.BattleSystem;
 import tenth.system.CleanDeadUnitSystem;
 import tenth.system.Constants;
@@ -186,7 +184,7 @@ public class GameLoop implements Runnable {
 			tempList.clear();
 			for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
 				SystemNode node = game.stage.players.get(0).units.get(i);
-				if (!node.getTags().contains(Tags.TROOP)) {
+				if (!node.getLabels().contains(SystemNode.Label.Troop)) {
 					continue;
 				}
 				Troop troop = (Troop)game.stage.players.get(0).units.get(i);
@@ -198,7 +196,7 @@ public class GameLoop implements Runnable {
 			tempList2.clear();
 			for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
 				SystemNode node = game.stage.players.get(0).units.get(i);
-				if (!node.getTags().contains(Tags.TROOP)) {
+				if (!node.getLabels().contains(SystemNode.Label.Troop)) {
 					continue;
 				}
 				Troop troop = (Troop)game.stage.players.get(0).units.get(i);
@@ -219,7 +217,7 @@ public class GameLoop implements Runnable {
 			tempList.clear();
 			for (int i = 0; i < game.stage.players.get(1).units.size(); i++) {
 				SystemNode node = game.stage.players.get(1).units.get(i);
-				if (!node.getTags().contains(Tags.TROOP)) {
+				if (!node.getLabels().contains(SystemNode.Label.Troop)) {
 					continue;
 				}
 				Troop troop = (Troop)game.stage.players.get(1).units.get(i);
@@ -231,7 +229,7 @@ public class GameLoop implements Runnable {
 			tempList2.clear();
 			for (int i = 0; i < game.stage.players.get(1).units.size(); i++) {
 				SystemNode node = game.stage.players.get(1).units.get(i);
-				if (!node.getTags().contains(Tags.TROOP)) {
+				if (!node.getLabels().contains(SystemNode.Label.Troop)) {
 				//if (!node.getTags().contains(Troop.class.getSimpleName())) {
 					continue;
 				}
@@ -250,13 +248,13 @@ public class GameLoop implements Runnable {
             tempList2.clear();
             for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
                 SystemNode node = game.stage.players.get(0).units.get(i);
-                if (node.getTags().contains(Tags.TROOP)) {
+                if (node.getLabels().contains(SystemNode.Label.Troop)) {
                     tempList2.add((Troop) node);
                 }
             }
             for (int i = 0; i < game.stage.players.get(1).units.size(); i++) {
                 SystemNode node = game.stage.players.get(1).units.get(i);
-                if (node.getTags().contains(Tags.TROOP)) {
+                if (node.getLabels().contains(SystemNode.Label.Troop)) {
                     tempList2.add((Troop) node);
                 }
             }            separationSystem.update(tempList2, elapsedTime);

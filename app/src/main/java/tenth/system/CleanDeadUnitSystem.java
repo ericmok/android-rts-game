@@ -3,8 +3,6 @@ package tenth.system;
 import java.util.ArrayList;
 
 import game.androidgame2.Game;
-import game.androidgame2.Stage;
-import game.androidgame2.Tags;
 import game.androidgame2.Troop;
 import tenth.system.BattleSystem.BattleNode;
 import tenth.system.BattleSystem.BattleNodeBindable;
@@ -62,7 +60,7 @@ public class CleanDeadUnitSystem {
 			BattleNode bn = ((BattleNodeBindable)units.get(i)).getBattleNode();
 			if (bn.isAlive[0] == false) {
 				
-				if (node.getTags().contains(Tags.TROOP)) {
+				if (node.getLabels().contains(SystemNode.Label.Troop)) {
 					// TODO: Time sensitive memory pool..
 					game.gamePool.recycle(units.get(i), Troop.class);
 				}

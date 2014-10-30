@@ -35,7 +35,7 @@ public class TroopDrawSystem {
 		
 		for (int i = 0; i < troops.size(); i++) {
 			
-			if (!troops.get(i).getNodes().contains(NodeType.TROOP_DRAW)) {
+			if (!troops.get(i).getNodeTypes().contains(NodeType.TROOP_DRAW)) {
 				continue;
 			}
 			

@@ -1,12 +1,14 @@
 package tenth.system;
 
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
 
 /**
  * TODO
  * Concerns: We still loop over all game objects per system...
  */
-public interface SystemNode {
+public abstract class SystemNode {
 	public enum NodeType {
 		FORMATION,
 		SEPARATION,
@@ -18,15 +20,17 @@ public interface SystemNode {
 		ORIENTATION,
 		SELECTION
 	};
-	
-	public HashSet<NodeType> getNodes();
 
-	/**
-	 * For Memory Pools
-	 * This will lower explicitness...
-	 * @return
-	 */
-	public HashSet<String> getTags();
-	
-	
+    public enum Label {
+        Troop,
+        SmallShip
+    };
+
+    public abstract HashSet<NodeType> getNodeTypes();
+
+    public HashSet<Label> labels = new HashSet<Label>(16);
+
+    public HashSet<Label> getLabels() {
+        return labels;
+    }
 }

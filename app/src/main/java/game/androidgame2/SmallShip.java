@@ -21,7 +21,7 @@ import tenth.system.ShipDrawSystem.ShipDrawNodeBindable;
 import tenth.system.SquadPosition;
 import tenth.system.SystemNode;
 
-public class SmallShip implements SystemNode, 
+public class SmallShip extends SystemNode implements
 									FieldUnitNodeBindable, FormationNodeBindable, SeparationNodeBindable, 
 									ForceIntegratorNodeBindable, 
 									BattleNodeBindable, 
@@ -37,13 +37,11 @@ public class SmallShip implements SystemNode,
 		this.add(SystemNode.NodeType.SHIP_DRAW);
 		this.add(SystemNode.NodeType.ORIENTATION);
 	}};
-	
-	public HashSet<String> TAGS = new HashSet<String>(8) {{
-		this.add(SmallShip.class.getSimpleName());
-	}};
-	public HashSet<String> getTags() { return TAGS; }
-	
-	public final int[] team = new int[] { 0 };
+
+    public HashSet<NodeType> getNodeTypes() {  return NODE_TYPES;   }
+
+
+    public final int[] team = new int[] { 0 };
 	
 	public final Vector3 position = new Vector3();
 	public final Vector3 velocity = new Vector3();
@@ -82,6 +80,8 @@ public class SmallShip implements SystemNode,
 	public Hashtable<String, TimedProgress> stateAnimations;
 	
 	public SmallShip() {
+        this.labels.add(Label.SmallShip);
+
 		fieldUnitNode = new FieldUnitNode(position, velocity,orientation, fieldForce, fieldForceSensitivity, leadershipPropensity, this, isAlive, states, events);
 		formationNode = new FormationNode(position, velocity, orientation, formationForce, isAlive, squadPositionToFollow, squadPositions);
 		separationNode = new SeparationNode(position, velocity, orientation, separationForce, leadershipPropensity, isAlive, states, this);
@@ -93,11 +93,6 @@ public class SmallShip implements SystemNode,
 		orientationNode = new OrientationNode(velocity, orientation, turningRate);
 		
 		shipDrawNode = new ShipDrawNode(position, velocity, orientation, radius, isAlive, team, stateAnimations);
-	}
-	
-	@Override
-	public HashSet<NodeType> getNodes() {
-		return NODE_TYPES;
 	}
 
 	@Override

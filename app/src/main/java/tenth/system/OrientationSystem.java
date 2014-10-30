@@ -29,7 +29,7 @@ public class OrientationSystem {
 	public void update(ArrayList<SystemNode> units, long elapsedTime) {
 		for (int i = 0; i < units.size(); i++) {
 			
-			if (!units.get(i).getNodes().contains(NodeType.ORIENTATION)) {
+			if (!units.get(i).getNodeTypes().contains(NodeType.ORIENTATION)) {
 				return;
 			}
 			

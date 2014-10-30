@@ -1,5 +1,7 @@
 package game.androidgame2;
 
+import org.w3c.dom.Node;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -27,8 +29,8 @@ import tenth.system.SystemNode;
 import tenth.system.TroopDrawSystem.UnitDrawNode;
 import tenth.system.TroopDrawSystem.UnitDrawNodeBindable;
 
-public class Troop implements SystemNode, 
-								FieldUnitNodeBindable, SeparationNodeBindable, FormationNodeBindable, 
+public class Troop extends SystemNode implements
+								FieldUnitNodeBindable, SeparationNodeBindable, FormationNodeBindable,
 								ForceIntegratorNodeBindable, 
 								BattleNodeBindable, 
 								UnitDrawNodeBindable,
@@ -48,12 +50,8 @@ public class Troop implements SystemNode,
 		this.add(SystemNode.NodeType.ORIENTATION);
 		this.add(SystemNode.NodeType.SELECTION);
 	}};
-	
-	public static final HashSet<String> TAGS = new HashSet<String>(8) {{
-		this.add(Troop.class.getSimpleName());
-	}};
-	public HashSet<String> getTags() { return TAGS; }
-	
+    public HashSet<NodeType> getNodeTypes() {  return NODE_TYPES;   }
+
 	public static float TROOP_RADIUS = 0.065f;
 	public static float TROOP_INNER_RADIUS = 0.06f;
 	
@@ -160,7 +158,8 @@ public class Troop implements SystemNode,
 	public int player[] = new int[] {0};
 	
 	public Troop() {
-		
+		this.labels.add(Label.Troop);
+
 		position = new Vector3();
 		velocity = new Vector3();
 		orientation = new Orientation();
@@ -221,11 +220,6 @@ public class Troop implements SystemNode,
 
 	public ForceIntegratorNode getForceIntegratorNode() {
 		return forceIntegratorNode;
-	}
-	
-	
-	public HashSet<NodeType> getNodes() {
-		return NODE_TYPES;
 	}
 
 	@Override
