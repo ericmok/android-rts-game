@@ -198,11 +198,7 @@ public class Troop implements SystemNode,
 		
 		selectionNode = new SelectionNode(position, isSelected);
 	}
-	
-	public void occupySquadPosition(Squad.SquadPosition position) {
-		
-	}
-	
+
 	public void headTowardsPosition(Vector3 position, long elapsedTime) {
 		
 	}

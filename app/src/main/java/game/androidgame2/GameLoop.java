@@ -219,9 +219,9 @@ public class GameLoop implements Runnable {
 			
 			//formationSystem.update(tempList, tempList2, elapsedTime);
 			
-			separationSystem.update(game.stage.players.get(0).units, elapsedTime);
+			//separationSystem.update(game.stage.players.get(0).units, elapsedTime);
 			
-			forceIntegratorSystem.update(game.stage.players.get(0).units, elapsedTime);
+			//forceIntegratorSystem.update(game.stage.players.get(0).units, elapsedTime);
 			
 			// Team 1			
 			fieldMovementSystem.update(game.stage.players.get(1).units, game.stage.players.get(1).fields, elapsedTime);
@@ -251,11 +251,28 @@ public class GameLoop implements Runnable {
 				}
 			}
 
-			formationSystem.update(tempList, tempList2, elapsedTime);
+			//formationSystem.update(tempList, tempList2, elapsedTime);
 
-			separationSystem.update(game.stage.players.get(1).units, elapsedTime);
-			forceIntegratorSystem.update(game.stage.players.get(1).units, elapsedTime);
-			
+			//separationSystem.update(game.stage.players.get(1).units, elapsedTime);
+			//forceIntegratorSystem.update(game.stage.players.get(1).units, elapsedTime);
+
+
+            tempList2.clear();
+            for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
+                SystemNode node = game.stage.players.get(0).units.get(i);
+                if (node.getTags().contains(Tags.TROOP)) {
+                    tempList2.add((Troop) node);
+                }
+            }
+            for (int i = 0; i < game.stage.players.get(1).units.size(); i++) {
+                SystemNode node = game.stage.players.get(1).units.get(i);
+                if (node.getTags().contains(Tags.TROOP)) {
+                    tempList2.add((Troop) node);
+                }
+            }            separationSystem.update(tempList2, elapsedTime);
+            forceIntegratorSystem.update(tempList2, elapsedTime);
+
+
 			orientationSystem.update(game.stage.players.get(0).units, elapsedTime);
 			orientationSystem.update(game.stage.players.get(1).units, elapsedTime);
 			
