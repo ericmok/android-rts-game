@@ -181,71 +181,10 @@ public class GameLoop implements Runnable {
 			// Team 0
 			fieldMovementSystem.update(game.stage.players.get(0).units, game.stage.players.get(0).fields, elapsedTime);
 
-			tempList.clear();
-			for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
-				SystemNode node = game.stage.players.get(0).units.get(i);
-				if (!node.getLabels().contains(SystemNode.Label.Troop)) {
-					continue;
-				}
-				Troop troop = (Troop)game.stage.players.get(0).units.get(i);
-				if (troop.type == Troop.Type.BIG_TROOP) {
-					tempList.add(troop);
-				}
-			}
-			
-			tempList2.clear();
-			for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
-				SystemNode node = game.stage.players.get(0).units.get(i);
-				if (!node.getLabels().contains(SystemNode.Label.Troop)) {
-					continue;
-				}
-				Troop troop = (Troop)game.stage.players.get(0).units.get(i);
-				if (troop.type == Troop.Type.SMALL_TROOP) {
-					tempList2.add(troop);
-				}
-			}
-			
-			//formationSystem.update(tempList, tempList2, elapsedTime);
-			
-			//separationSystem.update(game.stage.players.get(0).units, elapsedTime);
-			
-			//forceIntegratorSystem.update(game.stage.players.get(0).units, elapsedTime);
-			
-			// Team 1			
+			// Team 1
 			fieldMovementSystem.update(game.stage.players.get(1).units, game.stage.players.get(1).fields, elapsedTime);
 
-			tempList.clear();
-			for (int i = 0; i < game.stage.players.get(1).units.size(); i++) {
-				SystemNode node = game.stage.players.get(1).units.get(i);
-				if (!node.getLabels().contains(SystemNode.Label.Troop)) {
-					continue;
-				}
-				Troop troop = (Troop)game.stage.players.get(1).units.get(i);
-				if (troop.type == Troop.Type.BIG_TROOP) {
-					tempList.add(troop);
-				}
-			}
-			
-			tempList2.clear();
-			for (int i = 0; i < game.stage.players.get(1).units.size(); i++) {
-				SystemNode node = game.stage.players.get(1).units.get(i);
-				if (!node.getLabels().contains(SystemNode.Label.Troop)) {
-				//if (!node.getTags().contains(Troop.class.getSimpleName())) {
-					continue;
-				}
-				Troop troop = (Troop)game.stage.players.get(1).units.get(i);
-				if (troop.type == Troop.Type.SMALL_TROOP) {
-					tempList2.add(troop);
-				}
-			}
-
-			//formationSystem.update(tempList, tempList2, elapsedTime);
-
-			//separationSystem.update(game.stage.players.get(1).units, elapsedTime);
-			//forceIntegratorSystem.update(game.stage.players.get(1).units, elapsedTime);
-
-
-            tempList2.clear();
+            tempList.clear();
             for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
                 SystemNode node = game.stage.players.get(0).units.get(i);
                 if (node.getLabels().contains(SystemNode.Label.Troop)) {
@@ -257,29 +196,30 @@ public class GameLoop implements Runnable {
                 if (node.getLabels().contains(SystemNode.Label.Troop)) {
                     tempList2.add((Troop) node);
                 }
-            }            separationSystem.update(tempList2, elapsedTime);
-            forceIntegratorSystem.update(tempList2, elapsedTime);
+            }
+            separationSystem.update(tempList, elapsedTime);
+            forceIntegratorSystem.update(tempList, elapsedTime);
 
 
 			orientationSystem.update(game.stage.players.get(0).units, elapsedTime);
 			orientationSystem.update(game.stage.players.get(1).units, elapsedTime);
-			
+
 			battleResolutionSystem.update(game.stage.players.get(0).units, game.stage.players.get(1).units, elapsedTime);
-			
-			
+
+
 			selectionSystem.update(game.stage.players.get(0).units, selected, touchX, touchY, gestures, elapsedTime);
-			
-			
+
+
 			RewritableArray<DrawList2DItem> drawItems = game.graphics.drawLists.drawListSprites.lockWritableBuffer();
 			drawItems.resetWriteIndex();
-			
+
 			troopDrawSystem.update(drawItems, game.graphics.drawLists.temporarySprites, game.stage.players.get(0).units, elapsedTime);
 			troopDrawSystem.update(drawItems, game.graphics.drawLists.temporarySprites, game.stage.players.get(1).units, elapsedTime);
-			
+
 			shipDrawSystem.update(drawItems, game.stage.players.get(0).units, elapsedTime);
 			shipDrawSystem.update(drawItems, game.stage.players.get(1).units, elapsedTime);
-			
-			
+
+
 			if (activeTriggerField != null) {
 				DrawList2DItem triggerField = drawItems.takeNextWritable();
 
@@ -287,13 +227,13 @@ public class GameLoop implements Runnable {
 				triggerField.position.y = activeTriggerField.source.y;
 				triggerField.width = 0.71f; // originally .52 -> .5
 				triggerField.height = 0.71f;
-				triggerField.angle = (float) Orientation.getDegrees(activeTriggerField.source.x, activeTriggerField.source.y, 
+				triggerField.angle = (float) Orientation.getDegrees(activeTriggerField.source.x, activeTriggerField.source.y,
 											activeTriggerField.dest.x, activeTriggerField.dest.y);
 				triggerField.animationName = DrawList2DItem.ANIMATION_TRIGGER_FIELDS_EXISTING;
 				activeAnimation.update(elapsedTime);
 				triggerField.animationProgress = (int)activeAnimation.progress;
 			}
-			
+
 			for (int i = 0; i < game.stage.players.get(0).fields.size(); i++) {
 				DrawList2DItem triggerField = drawItems.takeNextWritable();
 
@@ -303,11 +243,11 @@ public class GameLoop implements Runnable {
 				triggerField.height = 0.65f;
 				triggerField.angle = game.stage.players.get(0).fields.get(i).getAngle();
 				triggerField.animationName = DrawList2DItem.ANIMATION_TRIGGER_FIELDS_EXISTING;
-				triggerField.animationProgress = 0;	
-				
+				triggerField.animationProgress = 0;
+
 			}
 
-			
+
 			if (selected.size() > 0) {
 				DrawList2DItem buttonTest = drawItems.takeNextWritable();
 				buttonTest.animationName = DrawList2DItem.ANIMATION_BUTTONS_MOVE;
@@ -316,7 +256,7 @@ public class GameLoop implements Runnable {
 				buttonTest.angle = 0;
 				buttonTest.width = 0.2f;
 				buttonTest.height = 0.2f;
-				
+
 				buttonTest = drawItems.takeNextWritable();
 				buttonTest.animationName = DrawList2DItem.ANIMATION_BUTTONS_ATTACK;
 				buttonTest.position.x = -1.42;
@@ -324,7 +264,7 @@ public class GameLoop implements Runnable {
 				buttonTest.angle = 0;
 				buttonTest.width = 0.2f;
 				buttonTest.height = 0.2f;
-				
+
 				buttonTest = drawItems.takeNextWritable();
 				buttonTest.animationName = "Animations/Panels/Sidebar";
 				buttonTest.position.x = -1.7;
@@ -332,7 +272,7 @@ public class GameLoop implements Runnable {
 				buttonTest.angle = 0;
 				buttonTest.width = 0.5f;
 				buttonTest.height = 2f;
-				
+
 				for (int i = 0; i < selected.size(); i++) {
 					SystemNode node = selected.get(i);
 					buttonTest = drawItems.takeNextWritable();
@@ -344,11 +284,11 @@ public class GameLoop implements Runnable {
 					buttonTest.height = 0.1f;
 				}
 			}
-			
+
 			game.graphics.drawLists.drawListSprites.unlockWritableBuffer();
 			game.graphics.drawLists.drawListSprites.finalizeUpdate();
 
-			
+
 			RewritableArray<TextDrawItem> textDrawItems = game.graphics.drawLists.textDrawItems.lockWritableBuffer();
 			textDrawItems.resetWriteIndex();
 			TextDrawItem text = textDrawItems.takeNextWritable();
@@ -365,12 +305,12 @@ public class GameLoop implements Runnable {
 				text.color = Color.YELLOW;
 			}
 			text.position.y = 1.0;
-			
 
-			
+
+
 			cleanDeadUnitSystem.update(game.stage.players.get(0).units, elapsedTime);
 			cleanDeadUnitSystem.update(game.stage.players.get(1).units, elapsedTime);
-			
+
 			if (gestures.containsKey(GESTURE_ON_SINGLE_TAP_UP)) {
 				Log.i("Make tap sprite", "Make tap sprite");
 				TemporaryDrawList2DItem reticle = game.gamePool.temporaryDrawItems.fetchMemory();
@@ -384,11 +324,11 @@ public class GameLoop implements Runnable {
 				reticle.progress.duration = 300;
 				game.graphics.drawLists.temporarySprites.add(reticle);
 			}
-			
-			
+
+
 			game.graphics.drawLists.textDrawItems.unlockWritableBuffer();
 			game.graphics.drawLists.textDrawItems.finalizeUpdate();
-			
+
 		}
 		
 		gestures.clear();
