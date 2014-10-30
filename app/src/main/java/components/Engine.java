@@ -9,7 +9,7 @@ import tenth.system.SystemNode;
  */
 public class Engine {
 
-    private DenormalizedDataSet entityComponentDataSet;
+    private DenormalizedDataSet entityLogicDataSet;
     private DenormalizedDataSet entityTagDataSet;
 
     public static final int LOGIC_FORMATION = 0;
@@ -28,20 +28,11 @@ public class Engine {
     public static final int TAG_FOLLOWER = 4;
 
     public Engine() {
-        entityComponentDataSet = new DenormalizedDataSet(16, 300);
+        entityLogicDataSet = new DenormalizedDataSet(16, 300);
         entityTagDataSet = new DenormalizedDataSet(16, 300);
+    }
 
-        DenormalizedDataSet.DataPoint entity = new DenormalizedDataSet.DataPoint() {
+    public void addEntity(Entity entity) {
 
-            ArrayList<Integer> labels = new ArrayList<Integer>(16) {{
-                this.add(LOGIC_FIELD_MOVEMENT);
-            }};
-
-            public ArrayList<Integer> getLabels() {
-                return labels;
-            }
-        };
-
-        entityComponentDataSet.addDataPoint(entity);
     }
 }
