@@ -5,6 +5,17 @@ import java.util.Iterator;
 
 import tenth.system.SystemNode;
 
+/**
+ * ArrayList wrapper that adds functional filter capability.
+ * Each iteration.next() call returns a unit that passes the condition.
+ * The iterator.hasNext() call is cached so conditions won't be re-evaluated for
+ * next units unnecessarily.
+ *
+ * The conditional returns null if the condition is false or it can
+ * operate on the node that passes the condition.
+ *
+ * TODO: Deprecate usage, it is allocation unsafe
+ */
 public class UnitArrayList extends ArrayList<SystemNode> {
 	
 	public UnitArrayList(int maxUnits) {
