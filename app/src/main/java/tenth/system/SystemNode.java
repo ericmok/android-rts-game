@@ -28,7 +28,7 @@ public abstract class SystemNode {
 
     public abstract HashSet<NodeType> getNodeTypes();
 
-    public HashSet<Label> labels = new HashSet<Label>(16);
+    protected  HashSet<Label> labels = new HashSet<Label>(16);
 
     public HashSet<Label> getLabels() {
         return labels;
