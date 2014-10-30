@@ -19,7 +19,7 @@ import tenth.system.SystemNode.NodeType;
 
 public class TroopDrawSystem {
 	private Game game;
-	
+
 	public TroopDrawSystem(Game game) {
 		this.game = game;
 	}
