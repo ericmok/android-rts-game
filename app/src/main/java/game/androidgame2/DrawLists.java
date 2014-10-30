@@ -11,9 +11,6 @@ public class DrawLists {
 	
 	public static final int MAX_SPRITES = Game.MAX_UNITS;
 
-	// TODO: Deprecate
-	public ConcurrentCircularBuffer<DrawList2DItem> batch2dSprites;
-	
 	/** Draw List for sprites  */
 	public ConcurrentCircularBufferWithRewritableArray<DrawList2DItem> drawListSprites;
 
@@ -31,8 +28,6 @@ public class DrawLists {
 	
 	public DrawLists() {
 
-		batch2dSprites = new ConcurrentCircularBuffer<DrawList2DItem>(DrawList2DItem.class, MAX_SPRITES);
-		
 		drawListSprites = new ConcurrentCircularBufferWithRewritableArray<DrawList2DItem>(DrawList2DItem.class, MAX_SPRITES);
 
 		temporarySprites = Collections.synchronizedList(new ArrayList<TemporaryDrawList2DItem>(Game.MAX_UNITS)); 
