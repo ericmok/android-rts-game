@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 
+import game.androidgame2.SmallShip;
+
 /**
  * TODO
  * Concerns: We still loop over all game objects per system...
@@ -23,7 +25,13 @@ public abstract class SystemNode {
 
     public enum Label {
         Troop,
-        SmallShip
+        SmallTroop,
+        BigTroop,
+        SmallShip,
+        PlayerOwned,
+        AlliedOwned,
+        EnemyOwned,
+        Selectable
     };
 
     public abstract HashSet<NodeType> getNodeTypes();

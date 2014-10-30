@@ -8,6 +8,7 @@ import tenth.system.FormationSystem.FormationNode;
 import tenth.system.GenerateTroopsInSquadPositionsSystem;
 import tenth.system.SquadPosition;
 import tenth.system.States;
+import tenth.system.SystemNode;
 
 import android.app.Activity;
 import android.content.Context;
@@ -138,6 +139,12 @@ public class Game implements OnGestureListener {
 			temp.position.y = -0.9f + (Math.random() * 0.2f);
 			temp.orientation.setDegrees(90);
 			temp.type = Math.random() > 0 ? Troop.Type.BIG_TROOP : Troop.Type.SMALL_TROOP;
+            if (temp.type == Troop.Type.BIG_TROOP) {
+                temp.getLabels().add(SystemNode.Label.BigTroop);
+            }
+            else {
+                temp.getLabels().add(SystemNode.Label.SmallTroop);
+            }
 			if (temp.type == Troop.Type.BIG_TROOP) { 
 				temp.radius[0] = Constants.UNIT_RADIUS;
 			}
@@ -170,6 +177,12 @@ public class Game implements OnGestureListener {
 			enemyTroop.position.y = 1.4f + (Math.random() * 0.3f);
 			enemyTroop.orientation.setDegrees(90);
 			enemyTroop.type = Math.random() > 0 ? Troop.Type.BIG_TROOP : Troop.Type.SMALL_TROOP;
+            if (temp.type == Troop.Type.BIG_TROOP) {
+                temp.getLabels().add(SystemNode.Label.BigTroop);
+            }
+            else {
+                temp.getLabels().add(SystemNode.Label.SmallTroop);
+            }
 			enemyTroop.player[0] = 1;
 			//enemyTroop.team = Troop.Team.TEAM_1;
 			if (enemyTroop.type == Troop.Type.BIG_TROOP) { 
@@ -239,23 +252,6 @@ public class Game implements OnGestureListener {
 		test.dest.x = 0;
 		test.dest.y = 0f;
 		stage.players.get(1).fields.add(test);
-		
-/*		test = this.gamePool.triggerFields.fetchMemory();
-		test.source.x = -1.1;
-		test.source.y = 1.1f;
-		test.dest.x = 0.2;
-		test.dest.y = -0.8f;
-		stage.players.get(Stage.TEAM_1).fields.add(test);
-		*/
-//		test = this.gamePool.triggerFields.fetchMemory();
-//		test.source.x = 1.1;
-//		test.source.y = -1.4f;
-//		test.dest.x = 0;
-//		test.dest.y = 0f;
-//		stage.players.get(Stage.TEAM_1).fields.add(test);
-		
-		//fighter = fighterFactory.createFighter();
-		
 	}
 	
 	public GameRenderer getGameRenderer() {
