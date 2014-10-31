@@ -62,7 +62,11 @@ public class Graphics {
 			Log.e("Graphics", "Failed to initialize!");
 		}
 	}
-	
+
+    /**
+     * If the application loses graphics for some reason, ie. os switch to different app,
+     * then call invalidate so that graphics will be loadable again.
+     */
 	public void invalidate() {
 		this.isLoaded = false;
 		Runtime rc = Runtime.getRuntime();
