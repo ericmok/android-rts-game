@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +22,8 @@ import org.json.JSONObject;
 
 import components.Engine;
 
-public class Game implements OnGestureListener {
+public class Game extends ScaleGestureDetector.SimpleOnScaleGestureListener
+                  implements OnGestureListener {
 
     public Engine engine = new Engine();
 
@@ -392,5 +394,9 @@ public class Game implements OnGestureListener {
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		return gameLoop.gestureOnFling(e1, e2, velocityX, velocityY);
 	}
-	
+
+    @Override
+    public boolean onScale(ScaleGestureDetector detector) {
+        return gameLoop.onScale(detector);
+    }
 }

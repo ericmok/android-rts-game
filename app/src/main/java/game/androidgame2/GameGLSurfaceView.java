@@ -1,9 +1,11 @@
 package game.androidgame2;
 
 import android.content.Context;
+import android.gesture.Gesture;
 import android.opengl.GLSurfaceView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 /**
@@ -14,13 +16,17 @@ public class GameGLSurfaceView extends GLSurfaceView {
 	private Game game;
 	
 	private GestureDetector gestureDetector;
+
+    private ScaleGestureDetector scaleGestureDetector;
 	
 	public GameGLSurfaceView(Context context, Game game) {
 		super(context);
 		
 		this.game = game;
+
 		gestureDetector = new GestureDetector(this.getContext(), game);
-		
+		scaleGestureDetector = new ScaleGestureDetector(this.getContext(), game);
+
 		this.setEGLContextClientVersion(2);
 	}
 	
@@ -62,6 +68,7 @@ public class GameGLSurfaceView extends GLSurfaceView {
 		
 		game.onTouchEvent(event);
 		gestureDetector.onTouchEvent(event);
+        scaleGestureDetector.onTouchEvent(event);
 
 		return true;
 	}

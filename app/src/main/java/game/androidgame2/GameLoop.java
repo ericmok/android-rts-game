@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 
 import components.CameraSettingsComponent;
 import components.Denormalizable;
@@ -46,13 +47,15 @@ public class GameLoop implements Runnable {
 	private float touchY = 0;
 
 	
-	private Hashtable<Integer, Boolean> gestures = new Hashtable<Integer, Boolean>(8);
+	private Hashtable<Integer, Boolean> gestures = new Hashtable<Integer, Boolean>(16);
 	public static final int GESTURE_ON_DOWN = 0;
 	public static final int GESTURE_ON_SHOW_PRESS = 1;
 	public static final int GESTURE_ON_SINGLE_TAP_UP = 2;
 	public static final int GESTURE_ON_SCROLL = 3;
 	public static final int GESTURE_ON_LONG_PRESS = 4;
 	public static final int GESTURE_ON_FLING = 5;
+
+    public static final int GESTURE_ON_SCALE = 6;
 	
 	
 	private FieldMovementSystem fieldMovementSystem;
@@ -183,6 +186,10 @@ public class GameLoop implements Runnable {
         Entity cameraEntity = ((Entity)cameraEntities.get(0).getContainer());
 
         CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.data.get(CameraSettingsComponent.class);
+
+        if (gestures.containsKey(GESTURE_ON_SCALE)) {
+            csm.scale -= 0.1f;
+        }
 
         game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
         game.graphics.flushCameraModifications();
@@ -478,4 +485,9 @@ public class GameLoop implements Runnable {
 		return true;
 	}
 
+    public boolean onScale(ScaleGestureDetector detector) {
+        Log.i("onScale", "onScale");
+        gestures.put(GESTURE_ON_SCALE, true);
+        return true;
+    }
 }
