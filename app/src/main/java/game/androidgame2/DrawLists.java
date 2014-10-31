@@ -20,9 +20,11 @@ public class DrawLists {
 	 * TODO: Make this better async by adding an add queue?
 	 */
 	public List<TemporaryDrawList2DItem> temporarySprites;
-	
-	
-	public DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItems = new DoubleBufferredRewriteOnlyArray<TextDrawItem>(TextDrawItem.class, MAX_SPRITES);
+
+    /**
+     * A list specific for for text.
+     */
+	public DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItems;
 
 	// Other circular buffers...
 	
@@ -30,6 +32,8 @@ public class DrawLists {
 
 		regularSprites = new DoubleBufferredRewriteOnlyArray<DrawList2DItem>(DrawList2DItem.class, MAX_SPRITES);
 
-		temporarySprites = Collections.synchronizedList(new ArrayList<TemporaryDrawList2DItem>(Game.MAX_UNITS)); 
+		temporarySprites = Collections.synchronizedList(new ArrayList<TemporaryDrawList2DItem>(Game.MAX_UNITS));
+
+        textDrawItems = new DoubleBufferredRewriteOnlyArray<TextDrawItem>(TextDrawItem.class, MAX_SPRITES);
 	}
 }
