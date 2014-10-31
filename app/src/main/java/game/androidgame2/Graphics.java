@@ -19,6 +19,10 @@ public class Graphics {
 	public final static String TRIGGER_FIELDS_ASSETS = "TriggerFields";
 	public final static String CAPITAL_SHIPS_ASSETS = "CapitalShips";
 
+    /**
+     * Use drawLists as a communication bridge between game logic and lower-level renderers.
+     * The draw lists contain concurrent-safe mechanisms.
+     */
 	public DrawLists drawLists;
 	
 	/**
