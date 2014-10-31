@@ -12,7 +12,7 @@ public class DrawLists {
 	public static final int MAX_SPRITES = Game.MAX_UNITS;
 
 	/** Draw List for sprites  */
-	public ConcurrentCircularBufferWithRewritableArray<DrawList2DItem> drawListSprites;
+	public DoubleBufferredRewriteOnlyArray<DrawList2DItem> regularSprites;
 
 	/**
 	 * Animations that are managed by graphics loops. Will automatically clean up when progress is finished.<br/>
@@ -22,13 +22,13 @@ public class DrawLists {
 	public List<TemporaryDrawList2DItem> temporarySprites;
 	
 	
-	public ConcurrentCircularBufferWithRewritableArray<TextDrawItem> textDrawItems = new ConcurrentCircularBufferWithRewritableArray<TextDrawItem>(TextDrawItem.class, MAX_SPRITES);
+	public DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItems = new DoubleBufferredRewriteOnlyArray<TextDrawItem>(TextDrawItem.class, MAX_SPRITES);
 
 	// Other circular buffers...
 	
 	public DrawLists() {
 
-		drawListSprites = new ConcurrentCircularBufferWithRewritableArray<DrawList2DItem>(DrawList2DItem.class, MAX_SPRITES);
+		regularSprites = new DoubleBufferredRewriteOnlyArray<DrawList2DItem>(DrawList2DItem.class, MAX_SPRITES);
 
 		temporarySprites = Collections.synchronizedList(new ArrayList<TemporaryDrawList2DItem>(Game.MAX_UNITS)); 
 	}

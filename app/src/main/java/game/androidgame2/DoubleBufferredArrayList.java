@@ -2,7 +2,7 @@ package game.androidgame2;
 
 import java.util.ArrayList;
 
-public class ConcurrentCircularBuffer<E> {
+public class DoubleBufferredArrayList<E> {
 	
 	// TODO: Make these array lists into rewritable arrays
 	private ArrayList<E> buffer1;
@@ -19,7 +19,7 @@ public class ConcurrentCircularBuffer<E> {
 	public Object isUpdatedMutex;
 	private boolean isUpdated = false;
 	
-	public ConcurrentCircularBuffer(Class cls, int capacity) {
+	public DoubleBufferredArrayList(Class cls, int capacity) {
 		buffer1 = new ArrayList<E>();
 		buffer2 = new ArrayList<E>();
 		activeList = buffer1;

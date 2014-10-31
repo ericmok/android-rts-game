@@ -76,7 +76,7 @@ public class SmallShip extends SystemNode implements
 	private ShipDrawNode shipDrawNode;
 	
 	private SquadPosition squadPositionToFollow = new SquadPosition();
-	private RewritableArray<SquadPosition> squadPositions = new RewritableArray<SquadPosition>(SquadPosition.class, 64);
+	private RewriteOnlyArray<SquadPosition> squadPositions = new RewriteOnlyArray<SquadPosition>(SquadPosition.class, 64);
 	
 	public Hashtable<String, TimedProgress> stateAnimations;
 	

@@ -9,7 +9,7 @@ import android.graphics.Color;
 import game.androidgame2.DrawList2DItem;
 import game.androidgame2.Game;
 import utils.Orientation;
-import game.androidgame2.RewritableArray;
+import game.androidgame2.RewriteOnlyArray;
 import game.androidgame2.TemporaryDrawList2DItem;
 import game.androidgame2.TimedProgress;
 import game.androidgame2.Troop;
@@ -30,7 +30,7 @@ public class TroopDrawSystem {
 	 * @param troops
 	 * @param elapsedTime
 	 */
-	public void update(RewritableArray<DrawList2DItem> output, List<TemporaryDrawList2DItem> tempSprites, ArrayList<SystemNode> troops, long elapsedTime) {
+	public void update(RewriteOnlyArray<DrawList2DItem> output, List<TemporaryDrawList2DItem> tempSprites, ArrayList<SystemNode> troops, long elapsedTime) {
 		
 		for (int i = 0; i < troops.size(); i++) {
 			

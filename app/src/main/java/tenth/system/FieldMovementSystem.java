@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import android.util.Log;
 
 import game.androidgame2.Game;
-import game.androidgame2.RewritableArray;
 import game.androidgame2.TriggerField;
-import game.androidgame2.Troop;
 import game.androidgame2.Vector3;
 import tenth.system.FieldUnitNode.FieldUnitNodeBindable;
 

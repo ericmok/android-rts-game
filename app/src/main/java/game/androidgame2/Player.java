@@ -1,6 +1,5 @@
 package game.androidgame2;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import tenth.system.SquadPosition;
@@ -15,7 +14,7 @@ public class Player {
 		
 	public ArrayList<TriggerField> fields;
 	
-	public RewritableArray<SquadPosition> squadPositions;
+	public RewriteOnlyArray<SquadPosition> squadPositions;
 
 	public String name;
 	
@@ -25,6 +24,6 @@ public class Player {
 		units = new ArrayList<SystemNode>(MAX_UNITS);
 		fields = new ArrayList<TriggerField>(MAX_FIELDS);
 		
-		squadPositions = new RewritableArray<SquadPosition>(SquadPosition.class, MAX_UNITS * 10);	
+		squadPositions = new RewriteOnlyArray<SquadPosition>(SquadPosition.class, MAX_UNITS * 10);
 	}
 }

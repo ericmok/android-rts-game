@@ -2,9 +2,9 @@ package tenth.system;
 
 import java.util.ArrayList;
 
+import game.androidgame2.RewriteOnlyArray;
 import game.androidgame2.Game;
 import utils.Orientation;
-import game.androidgame2.RewritableArray;
 import game.androidgame2.Vector3;
 
 public class Formation2System {
@@ -30,9 +30,9 @@ public class Formation2System {
 
 		public Boolean[] isAlive;
 		
-		public RewritableArray<SquadPosition> squadPositions = null;;
+		public RewriteOnlyArray<SquadPosition> squadPositions = null;;
 		
-		public FormationNode(Vector3 inPosition, Vector3 inVelocity, Orientation inOrientation, Vector3 inFormationForce, Boolean[] isAlive, RewritableArray<SquadPosition> squadPositions) {
+		public FormationNode(Vector3 inPosition, Vector3 inVelocity, Orientation inOrientation, Vector3 inFormationForce, Boolean[] isAlive, RewriteOnlyArray<SquadPosition> squadPositions) {
 			this.position = inPosition;
 			this.velocity = inVelocity;
 			this.orientation = inOrientation;

@@ -160,7 +160,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 			
 			game.graphics.getSimpleSpriteBatch().beginDrawing();	
 
-			RewritableArray<DrawList2DItem> sprites = game.graphics.drawLists.drawListSprites.swapBuffer();
+			RewriteOnlyArray<DrawList2DItem> sprites = game.graphics.drawLists.regularSprites.swapBuffer();
 	
 			sprites.resetIterator();
 			
@@ -197,7 +197,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 															tempSprite.color);
 			}
 			
-			RewritableArray<TextDrawItem> textDrawItems = game.graphics.drawLists.textDrawItems.swapBuffer();
+			RewriteOnlyArray<TextDrawItem> textDrawItems = game.graphics.drawLists.textDrawItems.swapBuffer();
 			textDrawItems.resetIterator();
 			
 			while (textDrawItems.canIterateNext()) {

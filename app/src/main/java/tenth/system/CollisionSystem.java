@@ -3,7 +3,7 @@ package tenth.system;
 import java.util.ArrayList;
 
 import game.androidgame2.Game;
-import game.androidgame2.RewritableArray;
+import game.androidgame2.RewriteOnlyArray;
 import game.androidgame2.Vector3;
 
 /**
@@ -17,7 +17,7 @@ public class CollisionSystem {
 		this.game = game;
 	}
 	
-	public void update(ArrayList<SystemNode> nodes, RewritableArray<CollisionNode> output, float collisionRadius, long elapsedTime) {
+	public void update(ArrayList<SystemNode> nodes, RewriteOnlyArray<CollisionNode> output, float collisionRadius, long elapsedTime) {
 		
 		output.resetWriteIndex();
 		

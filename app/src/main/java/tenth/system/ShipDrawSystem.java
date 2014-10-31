@@ -5,10 +5,10 @@ import java.util.Hashtable;
 
 import android.graphics.Color;
 
+import game.androidgame2.RewriteOnlyArray;
 import game.androidgame2.DrawList2DItem;
 import game.androidgame2.Game;
 import utils.Orientation;
-import game.androidgame2.RewritableArray;
 import game.androidgame2.TimedProgress;
 import game.androidgame2.Vector3;
 import tenth.system.SystemNode.NodeType;
@@ -26,7 +26,7 @@ public class ShipDrawSystem {
 	 * @param nodes ShipDrawNodes
 	 * @param elapsedTime
 	 */
-	public void update(RewritableArray<DrawList2DItem> output, ArrayList<SystemNode> nodes, long elapsedTime) {
+	public void update(RewriteOnlyArray<DrawList2DItem> output, ArrayList<SystemNode> nodes, long elapsedTime) {
 		for (int i = 0; i < nodes.size(); i++) {
 			if (!nodes.get(i).getNodeTypes().contains(NodeType.SHIP_DRAW)) {
 				return; 

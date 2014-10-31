@@ -1,14 +1,14 @@
 package game.androidgame2;
 
-public class ConcurrentCircularBufferWithRewritableArray<E> {
+public class DoubleBufferredRewriteOnlyArray<E> {
 	
-	private RewritableArray<E> buffer1;
-	private RewritableArray<E> buffer2;
+	private RewriteOnlyArray<E> buffer1;
+	private RewriteOnlyArray<E> buffer2;
 	
 	/**
 	 * List that is actively written to
 	 */
-	private RewritableArray<E> activeList;
+	private RewriteOnlyArray<E> activeList;
 	
 	private Class cls;
 	
@@ -16,11 +16,11 @@ public class ConcurrentCircularBufferWithRewritableArray<E> {
 	public Object isUpdatedMutex;
 	private boolean isUpdated = false;
 	
-	public ConcurrentCircularBufferWithRewritableArray(Class cls, int capacity) {
+	public DoubleBufferredRewriteOnlyArray(Class cls, int capacity) {
 		this.cls = cls;
 		
-		buffer1 = new RewritableArray<E>(cls, capacity);
-		buffer2 = new RewritableArray<E>(cls, capacity);
+		buffer1 = new RewriteOnlyArray<E>(cls, capacity);
+		buffer2 = new RewriteOnlyArray<E>(cls, capacity);
 		
 		activeList = buffer1;
 		
@@ -28,7 +28,7 @@ public class ConcurrentCircularBufferWithRewritableArray<E> {
 	}
 	
 	// TODO: Return null if locked by someone else
-	public RewritableArray<E> lockWritableBuffer() {
+	public RewriteOnlyArray<E> lockWritableBuffer() {
 		writeLock = true;
 		return activeList;
 	}
@@ -43,7 +43,7 @@ public class ConcurrentCircularBufferWithRewritableArray<E> {
 		}
 	}
 	
-	private RewritableArray<E> otherList(RewritableArray<E> list) {
+	private RewriteOnlyArray<E> otherList(RewriteOnlyArray<E> list) {
 		if (list == buffer1) {
 			return buffer2;
 		}
@@ -52,7 +52,7 @@ public class ConcurrentCircularBufferWithRewritableArray<E> {
 		}
 	}
 	
-	public synchronized RewritableArray<E> swapBuffer() {
+	public synchronized RewriteOnlyArray<E> swapBuffer() {
 		
 		synchronized(isUpdatedMutex) {
 			
@@ -60,7 +60,7 @@ public class ConcurrentCircularBufferWithRewritableArray<E> {
 			// Swap activeList pointer
 			// return the active list that was just updated
 			if (isUpdated) {
-				RewritableArray<E> temp = activeList;
+				RewriteOnlyArray<E> temp = activeList;
 				activeList = otherList(activeList);
 				isUpdated = false;
 				return temp;

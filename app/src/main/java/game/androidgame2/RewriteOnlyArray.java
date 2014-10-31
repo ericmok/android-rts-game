@@ -4,13 +4,16 @@ import java.lang.reflect.Array;
 import java.util.Iterator;
 
 /**
- * A collection of objects. <br/>
- * This one is to be used as lists where objects
- * are overwritten rather than deleted. There is no add functionality. 
- * <br/>
+ * <p>
+ *     A collection of objects where objects are never removed but only rewritten.
+ * </p>
+ * <p>
+ *     You cannot add an entry, you can only rewrite an existing entry. Make sure
+ *     when you rewrite the entry, that is error-free!
+ * </p>
  *
  */
-public class RewritableArray<E> {
+public class RewriteOnlyArray<E> {
 	
 	private Class<E> cls;
 	private E[] data;
@@ -18,7 +21,7 @@ public class RewritableArray<E> {
 	
 	private int singleIteratorIndex;
 	
-	public RewritableArray(Class<E> cls, int capacity) {
+	public RewriteOnlyArray(Class<E> cls, int capacity) {
 		this.cls = cls;
 		lastIndex = -1;
 		

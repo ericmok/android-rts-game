@@ -128,7 +128,7 @@ public class Troop extends SystemNode implements
 	private FieldUnitNode fieldUnitNode;
 	public float[] fieldForceSensitivity;
 	
-	private RewritableArray<SquadPosition> squadPositions = new RewritableArray<SquadPosition>(SquadPosition.class, 32);
+	private RewriteOnlyArray<SquadPosition> squadPositions = new RewriteOnlyArray<SquadPosition>(SquadPosition.class, 32);
 	private FormationNode formationNode;
 	//public FormationNode.Type[] formationType;
 	

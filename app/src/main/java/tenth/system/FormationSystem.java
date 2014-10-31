@@ -6,7 +6,7 @@ import android.util.Log;
 
 import game.androidgame2.Game;
 import utils.Orientation;
-import game.androidgame2.RewritableArray;
+import game.androidgame2.RewriteOnlyArray;
 import game.androidgame2.Vector3;
 
 public class FormationSystem {
@@ -563,9 +563,9 @@ public class FormationSystem {
 		};
 
 		public SquadPosition squadPositionToFollow = null;
-		public RewritableArray<SquadPosition> squadPositions = null;
+		public RewriteOnlyArray<SquadPosition> squadPositions = null;
 		
-		public FormationNode(Vector3 inPosition, Vector3 inVelocity, Orientation inOrientation, Vector3 inFormationForce, Boolean[] isAlive, SquadPosition squadPositionToFollow, RewritableArray<SquadPosition> squadPositions) {
+		public FormationNode(Vector3 inPosition, Vector3 inVelocity, Orientation inOrientation, Vector3 inFormationForce, Boolean[] isAlive, SquadPosition squadPositionToFollow, RewriteOnlyArray<SquadPosition> squadPositions) {
 			this.position = inPosition;
 			this.velocity = inVelocity;
 			this.orientation = inOrientation;

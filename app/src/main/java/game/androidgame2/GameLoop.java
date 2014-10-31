@@ -178,7 +178,7 @@ public class GameLoop implements Runnable {
 		
 		// TODO: Allow scrolling of the screen
 
-        RewritableArray<DrawList2DItem> drawItems = game.graphics.drawLists.drawListSprites.lockWritableBuffer();
+        RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         drawItems.resetWriteIndex();
 
          // Get the list that has the draw stuff
@@ -201,8 +201,8 @@ public class GameLoop implements Runnable {
             drawItem.height = 0.07f;
         }
 
-        game.graphics.drawLists.drawListSprites.unlockWritableBuffer();
-        game.graphics.drawLists.drawListSprites.finalizeUpdate();
+        game.graphics.drawLists.regularSprites.unlockWritableBuffer();
+        game.graphics.drawLists.regularSprites.finalizeUpdate();
 
 //		if (game.getGameState() == Game.State.RUNNING) {
 //
@@ -238,7 +238,7 @@ public class GameLoop implements Runnable {
 //			selectionSystem.update(game.stage.players.get(0).units, selected, touchX, touchY, gestures, elapsedTime);
 //
 //
-//			RewritableArray<DrawList2DItem> drawItems = game.graphics.drawLists.drawListSprites.lockWritableBuffer();
+//			RewritableArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
 //			drawItems.resetWriteIndex();
 //
 //			troopDrawSystem.update(drawItems, game.graphics.drawLists.temporarySprites, game.stage.players.get(0).units, elapsedTime);
@@ -313,8 +313,8 @@ public class GameLoop implements Runnable {
 //				}
 //			}
 //
-//			game.graphics.drawLists.drawListSprites.unlockWritableBuffer();
-//			game.graphics.drawLists.drawListSprites.finalizeUpdate();
+//			game.graphics.drawLists.regularSprites.unlockWritableBuffer();
+//			game.graphics.drawLists.regularSprites.finalizeUpdate();
 //
 //
 //			RewritableArray<TextDrawItem> textDrawItems = game.graphics.drawLists.textDrawItems.lockWritableBuffer();

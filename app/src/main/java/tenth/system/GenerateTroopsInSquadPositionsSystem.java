@@ -3,9 +3,6 @@ package tenth.system;
 import java.util.ArrayList;
 
 import game.androidgame2.Game;
-import game.androidgame2.Player;
-import game.androidgame2.RewritableArray;
-import game.androidgame2.Stage;
 import game.androidgame2.Troop;
 import tenth.system.FormationSystem.FormationNode;
 import tenth.system.FormationSystem.FormationNodeBindable;
