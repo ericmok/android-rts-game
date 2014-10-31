@@ -25,8 +25,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	private Game game;
 	
 	private Stack<float[]> matrixStack;
-	private float[] tempMatrix;
-	private float[] modelMatrix; // deprecate
+
 	private float[] viewMatrix; 
 	private float[] projectionMatrix;
 	private float[] mvpMatrix;
@@ -43,9 +42,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	public GameRenderer(Context parentActivity, Game game) {
 		this.context = parentActivity;
 		this.game = game;
-		
-		tempMatrix = new float[16];
-		modelMatrix = new float[16];
+
 		viewMatrix = new float[16];
 		projectionMatrix = new float[16];
 		mvpMatrix = new float[16];
@@ -130,9 +127,6 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
         // TODO: Do this calculation in the shader!
         Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
-
-        // Reset this too?
-        Matrix.setIdentityM(modelMatrix, 0);
 	}
 	
 	
