@@ -9,8 +9,8 @@ import tenth.system.SystemNode;
  */
 public class Engine {
 
-    private DenormalizedDataSet entityLogicDataSet;
-    private DenormalizedDataSet entityTagDataSet;
+    public DenormalizedDataSet entityLogicDataSet;
+    public DenormalizedDataSet entityTagDataSet;
 
     public static final int LOGIC_FORMATION = 0;
     public static final int LOGIC_SEPARATION = 1;
@@ -33,6 +33,12 @@ public class Engine {
     }
 
     public void addEntity(Entity entity) {
+        entityLogicDataSet.addDataPoint(entity.getComponentLabeler());
+        entityTagDataSet.addDataPoint(entity.getTagLabeler());
+    }
 
+    public void removeEntity(Entity entity) {
+        entityLogicDataSet.removeDataPoint(entity.getComponentLabeler());
+        entityTagDataSet.removeDataPoint(entity.getTagLabeler());
     }
 }

@@ -1,8 +1,11 @@
 package game.androidgame2;
 
 import java.io.IOException;
+import java.io.InputStream;
 
+import components.Entity;
 import components.GameEntities;
+import components.PositionComponent;
 import tenth.system.Constants;
 import tenth.system.FormationSystem;
 import tenth.system.FormationSystem.FormationNode;
@@ -14,9 +17,14 @@ import tenth.system.SystemNode;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import components.Engine;
 
 public class Game implements OnGestureListener {
@@ -55,7 +63,7 @@ public class Game implements OnGestureListener {
 		LOADED,
 		RUNNING,
 		STOPPED
-	};
+	}
 	
 	private State gameState;
 	
@@ -108,12 +116,46 @@ public class Game implements OnGestureListener {
 	public void loadLevel() {
         engine = new Engine();
 
-////		try {
-////			this.getContext().getResources().getAssets().open("test.json");
-////		} catch (IOException e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
+		try {
+		    InputStream is = this.getContext().getResources().getAssets().open("level0.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            String json = new String(buffer, "UTF-8");
+            Log.i("LEVEL JSON", json);
+            try {
+                JSONObject jObj = new JSONObject(json);
+                JSONArray jArr = jObj.getJSONArray("player");
+
+                Log.i("LEVEL JSON", "Number units! " + jArr.length());
+                for (int i = 0; i < jArr.length(); i++) {
+                    Log.i("LEVEL JSON", "Number units! " + jArr.length());
+
+                    JSONObject jEntity = jArr.getJSONObject(i);
+
+                    String type = jEntity.getString("type");
+                    if (type.equals("troop")) {
+                        Entity troop = GameEntities.buildTroop(
+                                Engine.TAG_PLAYER_OWNED, Engine.TAG_FOLLOWER);
+                        engine.addEntity(troop);
+
+                        PositionComponent pc =
+                                ((PositionComponent)troop.data.get(PositionComponent.class));
+                        pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
+                    }
+                }
+            }
+            catch (Exception e) {
+                Log.e("JSON", e.getMessage());
+                e.printStackTrace();
+            }
+
+		} catch (IOException e) {
+            Log.e("JSON", e.getMessage());
+			e.printStackTrace();
+		}
 ////
 //		stage = new Stage();
 //
@@ -311,8 +353,6 @@ public class Game implements OnGestureListener {
 	/**
 	 * Called by UI thread
 	 * @param event
-	 * @param x
-	 * @param y
 	 */
 	public void onTouchEvent(MotionEvent event) {
 		//DisplayMetrics metrics = context.getResources().getDisplayMetrics();

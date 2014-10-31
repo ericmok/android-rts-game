@@ -8,6 +8,11 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import components.DenormalizedDataSet;
+import components.Engine;
+import components.PositionComponent;
+import components.Entity;
+
 import tenth.system.BattleSystem;
 import tenth.system.CleanDeadUnitSystem;
 import tenth.system.Constants;
@@ -175,6 +180,28 @@ public class GameLoop implements Runnable {
 	private void performGameLogic(long elapsedTime) {
 		
 		// TODO: Allow scrolling of the screen
+
+        RewritableArray<DrawList2DItem> drawItems = game.graphics.drawLists.drawListSprites.lockWritableBuffer();
+        drawItems.resetWriteIndex();
+
+         // Get the list that has the draw stuff
+        ArrayList<DenormalizedDataSet.DataPoint> entitiesToDraw = game.engine.entityLogicDataSet.lists.get(Engine.LOGIC_TROOP_DRAW);
+
+        for (int i = 0; i < entitiesToDraw.size(); i++) {
+            Entity entity = (Entity)entitiesToDraw.get(i).getContainer();
+            PositionComponent pc = (PositionComponent)entity.data.get(PositionComponent.class);
+
+            DrawList2DItem drawItem = drawItems.takeNextWritable();
+            drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
+            drawItem.position.x = pc.x;
+            drawItem.position.y = pc.y;
+            drawItem.angle = 0;
+            drawItem.width = 0.09f;
+            drawItem.height = 0.09f;
+        }
+
+        game.graphics.drawLists.drawListSprites.unlockWritableBuffer();
+        game.graphics.drawLists.drawListSprites.finalizeUpdate();
 
 //		if (game.getGameState() == Game.State.RUNNING) {
 //

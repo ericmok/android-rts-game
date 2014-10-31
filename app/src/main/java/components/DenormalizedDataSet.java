@@ -52,7 +52,19 @@ import java.util.Map;
  */
 public class DenormalizedDataSet {
 
-    private Hashtable<Integer, ArrayList<DataPoint>> lists;
+    /**
+     * <p>
+     *     Hash that maps a label to a list.
+     * </p>
+     *
+     * <p>
+     *     Example: We have a list for n-body simulation and a list for selectable units.
+     *     The elements in one list may be repeated in another because we may have bodies that
+     *     are selectable.
+     * </p>
+     */
+    public Hashtable<Integer, ArrayList<DataPoint>> lists;
+
     private int upperBoundNumberDataPointsPerLabel;
 
     /**
@@ -64,22 +76,26 @@ public class DenormalizedDataSet {
 
         lists = new Hashtable<Integer, ArrayList<DataPoint>>(upperBoundNumberLabels);
 
-        Iterator<Map.Entry<Integer, ArrayList<DataPoint>>> itr = lists.entrySet().iterator();
-        while (itr.hasNext()) {
-            lists.put( itr.next().getKey(), new ArrayList<DataPoint>(upperBoundNumberDataPointsPerLabel));
-        }
+//        Iterator<Map.Entry<Integer, ArrayList<DataPoint>>> itr = lists.entrySet().iterator();
+//        while (itr.hasNext()) {
+//            lists.put( itr.next().getKey(), new ArrayList<DataPoint>(upperBoundNumberDataPointsPerLabel));
+//        }
     }
 
     /**
      * Adds the dataPoint to all the lists for which the dataPoint contains the label for.
      * @param dataPoint
      */
-    public void addDataPoint(DataPoint dataPoint) {
+    public synchronized void addDataPoint(DataPoint dataPoint) {
         ArrayList<Integer> labels = dataPoint.getLabels();
 
         for (int i = 0; i < labels.size(); i++) {
-
             int label = labels.get(i);
+
+            if (!lists.containsKey(label)) {
+                lists.put(label, new ArrayList<DataPoint>(upperBoundNumberDataPointsPerLabel));
+            }
+
             lists.get(label).add(dataPoint);
         }
     }
@@ -88,7 +104,7 @@ public class DenormalizedDataSet {
      * Removes the dataPoint from all lists for which it is labeled for
      * @param dataPoint
      */
-    public void removeDataPoint(DataPoint dataPoint) {
+    public synchronized void removeDataPoint(DataPoint dataPoint) {
         ArrayList<Integer> labels = dataPoint.getLabels();
 
         for (int i = 0; i < labels.size(); i++) {
@@ -102,6 +118,7 @@ public class DenormalizedDataSet {
     }
 
     public static interface DataPoint {
+        public Object getContainer();
         public ArrayList<Integer> getLabels();
     }
 }
