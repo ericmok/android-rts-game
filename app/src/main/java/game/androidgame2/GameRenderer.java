@@ -74,55 +74,65 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 		// Set up projectionMatrix
 		// The smallest width is used
-		float ratio;
 		float left;
 		float right;
 		float bottom;
 		float top;
 		float near;
 		float far;
+
+        // Treat scale as "unit" size
 		//float scale = 16; // 1024 is a power of 2
 		float scale = 1.0f;
-		// Treat scale as "unit" size
-		
-		// Portrait mode
-		if (width <= height) {
-			aspectRatio = (float)height / width;
-			
-			ratio = scale * (float) height / width;
-			
-			left = -scale * 1.0f;
-			right = scale * 1.0f;
-			
-			bottom = -ratio;
-			top = ratio;
-			
-			near = 1.0f;
-			far = 1000.0f;			
-			Matrix.orthoM(projectionMatrix, 0, left, right, bottom, top, near, far);
-		}
-				
-		if (width > height) {
-			aspectRatio = scale * (float) width / height; 
-			
-			ratio = (float) width / height;
-			left = -ratio;
-			right = ratio;
-			bottom = scale * -1.0f;
-			top = scale * 1.0f;
-			near = 1.0f;
-			far = 1000.0f;
-			Matrix.orthoM(projectionMatrix, 0, left, right, bottom, top, near, far);
-		}
-		
-		
-		Matrix.setIdentityM(modelMatrix, 0);
-		
+
+        /*
+         * Landscape and portrait mode will change how big a unit length looks on the screen.
+         * The game is tailored for landscape. The dimensions will wind up being the reciprocal
+         * of the aspect ratio larger in portrait mode. Have to rescale to normalization.
+         *
+         * Landscape:
+         * Left and right bounds: [-asp, +asp]
+         * Bottom and top bounds: [-1, +1]
+         *
+         * Portrait:
+         * Left and right bounds: [-1, +1]
+         * Bottom and top bounds: [-asp, +asp]
+         */
+        aspectRatio = (float) width / height;
+
+        if (aspectRatio > 1.0f) {
+
+            // Landscape
+            left = aspectRatio * -1.0f;
+            right = aspectRatio * 1.0f;
+
+            bottom = -1.0f;
+            top = 1.0f;
+        }
+        else {
+
+            // Portrait
+            bottom= aspectRatio * -1.0f;
+            top = aspectRatio * 1.0f;
+
+            left = -1.0f;
+            right = 1.0f;
+        }
+
+        near = 1.0f;
+        far = 1000.0f;
+
+        Matrix.orthoM(projectionMatrix, 0, left, right, bottom, top, near, far);
+
 		// Set up viewMatrix
 		Matrix.setIdentityM(viewMatrix, 0);
 		Matrix.translateM(viewMatrix, 0, 0.0f, 0.0f, -2.0f);
-		
-		Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
+        // TODO: Do this calculation in the shader!
+        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
+        // Reset this too?
+        Matrix.setIdentityM(modelMatrix, 0);
 	}
 	
 	
