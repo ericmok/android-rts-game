@@ -23,4 +23,14 @@ public class GameEntities {
 
         return troop;
     }
+
+    public static Entity buildCamera() {
+        Entity camera = new Entity();
+        CameraSettingsComponent csm = new CameraSettingsComponent();
+        camera.data.put(CameraSettingsComponent.class, csm);
+
+        camera.getComponentLabeler().getLabels().add(Entity.LOGIC_CAMERA);
+
+        return camera;
+    }
 }

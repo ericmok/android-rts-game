@@ -19,6 +19,8 @@ public class Entity {
     public static final int LOGIC_ORIENTATION = 6;
     public static final int LOGIC_SELECTION = 7;
 
+    public static final int LOGIC_CAMERA = 8;
+
     public static final int TAG_PLAYER_OWNED = 0;
     public static final int TAG_ALLIED_OWNED = 1;
     public static final int TAG_ENEMY_OWNED = 2;
