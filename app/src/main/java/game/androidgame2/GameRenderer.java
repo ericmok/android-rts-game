@@ -26,7 +26,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	
 	private Stack<float[]> matrixStack;
 
-	private float[] viewMatrix; 
+	private float[] cameraMatrix;
 	private float[] projectionMatrix;
 	private float[] mvpMatrix;
 	
@@ -43,7 +43,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		this.context = parentActivity;
 		this.game = game;
 
-		viewMatrix = new float[16];
+		cameraMatrix = new float[16];
 		projectionMatrix = new float[16];
 		mvpMatrix = new float[16];
 	}
@@ -121,12 +121,12 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
         Matrix.orthoM(projectionMatrix, 0, left, right, bottom, top, near, far);
 
-		// Set up viewMatrix
-		Matrix.setIdentityM(viewMatrix, 0);
-		Matrix.translateM(viewMatrix, 0, 0.0f, 0.0f, -2.0f);
+		// Set up cameraMatrix
+		Matrix.setIdentityM(cameraMatrix, 0);
+		Matrix.translateM(cameraMatrix, 0, 0.0f, 0.0f, -2.0f);
 
         // TODO: Do this calculation in the shader!
-        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
 	}
 	
 	
