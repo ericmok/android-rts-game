@@ -103,20 +103,20 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
         if (aspectRatio > 1.0f) {
 
             // Landscape
-            left = aspectRatio * -1.0f;
-            right = aspectRatio * 1.0f;
+            left = aspectRatio * -1.0f * scale;
+            right = aspectRatio * 1.0f * scale;
 
-            bottom = -1.0f;
-            top = 1.0f;
+            bottom = -1.0f * scale;
+            top = 1.0f * scale;
         }
         else {
 
             // Portrait
-            bottom= aspectRatio * -1.0f;
-            top = aspectRatio * 1.0f;
+            bottom= aspectRatio * -1.0f * scale;
+            top = aspectRatio * 1.0f * scale;
 
-            left = -1.0f;
-            right = 1.0f;
+            left = -1.0f * scale;
+            right = 1.0f * scale;
         }
 
         near = 1.0f;
