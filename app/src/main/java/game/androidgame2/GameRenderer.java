@@ -26,9 +26,9 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	
 	private Stack<float[]> matrixStack;
 
-	private float[] cameraMatrix;
+    private float[] tempMatrix;
+	//private float[] cameraMatrix;
 	private float[] projectionMatrix;
-	private float[] mvpMatrix;
 	
 	private float aspectRatio = 1.0f;
 	
@@ -43,9 +43,9 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		this.context = parentActivity;
 		this.game = game;
 
-		cameraMatrix = new float[16];
+        tempMatrix = new float[16];
+		//cameraMatrix = new float[16];
 		projectionMatrix = new float[16];
-		mvpMatrix = new float[16];
 	}
 	
 	public Graphics getGraphics() {
@@ -122,11 +122,11 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
         Matrix.orthoM(projectionMatrix, 0, left, right, bottom, top, near, far);
 
 		// Set up cameraMatrix
-		Matrix.setIdentityM(cameraMatrix, 0);
-		Matrix.translateM(cameraMatrix, 0, 0.0f, 0.0f, -2.0f);
+		//Matrix.setIdentityM(cameraMatrix, 0);
+		//Matrix.translateM(cameraMatrix, 0, 0.0f, 0.0f, -2.0f);
 
         // TODO: Do this calculation in the shader!
-        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
+        //Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
 	}
 	
 	
@@ -151,7 +151,14 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		previousTick = startTick; // Leapfrog previous tick
 		
 		synchronized(drawingMutex) {
-			
+
+            float[] cameraMatrix = game.graphics.getCameraMatrix();
+
+            // Temporarily rename a matrix
+            float[] mvpMatrix = tempMatrix;
+
+            Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
+
 			game.graphics.getSimpleSpriteBatch().beginDrawing();	
 
 			RewriteOnlyArray<DrawList2DItem> sprites = game.graphics.drawLists.regularSprites.swapBuffer();

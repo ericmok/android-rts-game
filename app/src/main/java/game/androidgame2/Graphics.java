@@ -2,6 +2,7 @@ package game.androidgame2;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 
 /**
@@ -20,6 +21,27 @@ public class Graphics {
 	public final static String CAPITAL_SHIPS_ASSETS = "CapitalShips";
 
     /**
+     * Camera matrix
+     */
+    private float[] cameraMatrix = new float[16];
+
+    /**
+     * A copy of camera matrix to use for rendering while camera matrix is being modified
+     */
+    private float[] cameraMatrixCache = new float[16];
+
+    /**
+     * To avoid camera matrix read and write race conditions.
+     * If set to true because it is be written to, return a cache.
+     */
+    private boolean cameraMatrixUnderModification = false;
+
+    /**
+     * Synchronization for cameraMatrixUnderModification
+     */
+    private Object cameraMatrixMutex = new Object();
+
+    /**
      * Use drawLists as a communication bridge between game logic and lower-level renderers.
      * The draw lists contain concurrent-safe mechanisms.
      */
@@ -34,7 +56,13 @@ public class Graphics {
 		simpleShader = new SimpleShader(context.getResources());
 		simpleSpriteBatch = new SimpleSpriteBatch(simpleShader);
 		textureLoader = new TextureLoader(context);
-		
+
+        cameraMatrix = new float[16];
+        resetCamera();
+        flushCameraModifications();
+
+       // initializeCameraMatrixBuffer();
+
 		drawLists = new DrawLists();
 	}
 	
@@ -128,4 +156,61 @@ public class Graphics {
 	 * @return
 	 */
 	public SimpleSpriteBatch getSimpleSpriteBatch() { return this.simpleSpriteBatch; }
+
+    /**
+     * Remember to flush changes
+     */
+    public void resetCamera() {
+        setCameraPositionAndScale(0, 0, 1);
+    }
+
+    /**
+     * Flushes modifications to the matrix. Used to facilitate syncing.
+     */
+    public void flushCameraModifications() {
+        synchronized (cameraMatrixMutex) {
+            System.arraycopy(cameraMatrix, 0, cameraMatrixCache, 0, cameraMatrix.length);
+            cameraMatrixUnderModification = false;
+        }
+    }
+
+    /**
+     * Mutate camera matrix using this method. An internal flag will note that the matrix has changed.
+     *
+     * Flush changes the changes with flushCameraModifications.
+     *
+     * @param x The position of camera (method will take into account its inversion)
+     * @param y The position of camera (method will take into account its inversion)
+     * @param scale
+     */
+    public void setCameraPositionAndScale(float x, float y, float scale) {
+        synchronized (cameraMatrixMutex) {
+            cameraMatrixUnderModification = true;
+
+            Matrix.setIdentityM(cameraMatrix, 0);
+            Matrix.scaleM(cameraMatrix, 0, scale, scale, 1);
+            Matrix.translateM(cameraMatrix, 0, -x, -y, -2.0f);
+        }
+    }
+
+    /**
+     * Checks if camera is under modification and returns
+     * a cache'd camera matrix if it is, otherwise it returns the current up-to-date camera matrix
+     *
+     * This prevents read and write race conditions along with game data syncing issues.
+     *
+     * <strong>Do not modify the matrix returned by this method!
+     * Use the setCameraPositionAndScale method instead</strong>
+     *
+     *
+     * @return
+     */
+    public float[] getCameraMatrix() {
+        synchronized (cameraMatrixMutex) {
+            if (cameraMatrixUnderModification) {
+                return cameraMatrixCache;
+            }
+            return cameraMatrix;
+        }
+    }
 }

@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import components.CameraSettingsComponent;
 import components.Denormalizable;
 import components.PositionComponent;
 import components.Entity;
@@ -175,8 +176,16 @@ public class GameLoop implements Runnable {
 	}
 	
 	private void performGameLogic(long elapsedTime) {
-		
+
 		// TODO: Allow scrolling of the screen
+
+        ArrayList<Denormalizable> cameraEntities = game.engine.entitiesByComponents.lists.get(Entity.LOGIC_CAMERA);
+        Entity cameraEntity = ((Entity)cameraEntities.get(0).getContainer());
+
+        CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.data.get(CameraSettingsComponent.class);
+
+        game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
+        game.graphics.flushCameraModifications();
 
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         drawItems.resetWriteIndex();
@@ -203,6 +212,8 @@ public class GameLoop implements Runnable {
 
         game.graphics.drawLists.regularSprites.unlockWritableBuffer();
         game.graphics.drawLists.regularSprites.finalizeUpdate();
+
+        //game.graphics.flushCameraModifications(false);
 
 //		if (game.getGameState() == Game.State.RUNNING) {
 //
