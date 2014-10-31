@@ -50,7 +50,7 @@ import java.util.Map;
  * Entities are duplicated across 'processing lists' given the processing components they contain.
  * </p>
  */
-public class DenormalizedDataSet {
+public class DenormalizedDataSet implements Denormalizable {
 
     /**
      * <p>
@@ -63,62 +63,67 @@ public class DenormalizedDataSet {
      *     are selectable.
      * </p>
      */
-    public Hashtable<Integer, ArrayList<DataPoint>> lists;
+    public Hashtable<Integer, ArrayList<Denormalizable>> lists;
 
-    private int upperBoundNumberDataPointsPerLabel;
+    private ArrayList<Integer> labels = new ArrayList<Integer>();
+
+    private int upperBoundNumberDenormalizablesPerLabel;
 
     /**
      * @param upperBoundNumberLabels Keep this small!
-     * @param upperBoundNumberDataPointsPerLabel
+     * @param upperBoundNumberDenormalizablesPerLabel
      */
-    public DenormalizedDataSet(int upperBoundNumberLabels, int upperBoundNumberDataPointsPerLabel) {
-        this.upperBoundNumberDataPointsPerLabel = upperBoundNumberDataPointsPerLabel;
+    public DenormalizedDataSet(int upperBoundNumberLabels, int upperBoundNumberDenormalizablesPerLabel) {
+        this.upperBoundNumberDenormalizablesPerLabel = upperBoundNumberDenormalizablesPerLabel;
 
-        lists = new Hashtable<Integer, ArrayList<DataPoint>>(upperBoundNumberLabels);
+        lists = new Hashtable<Integer, ArrayList<Denormalizable>>(upperBoundNumberLabels);
 
-//        Iterator<Map.Entry<Integer, ArrayList<DataPoint>>> itr = lists.entrySet().iterator();
+//        Iterator<Map.Entry<Integer, ArrayList<Denormalizable>>> itr = lists.entrySet().iterator();
 //        while (itr.hasNext()) {
-//            lists.put( itr.next().getKey(), new ArrayList<DataPoint>(upperBoundNumberDataPointsPerLabel));
+//            lists.put( itr.next().getKey(), new ArrayList<Denormalizable>(upperBoundNumberDenormalizablesPerLabel));
 //        }
     }
 
     /**
-     * Adds the dataPoint to all the lists for which the dataPoint contains the label for.
-     * @param dataPoint
+     * Adds the denormalizable to all the lists for which the denormalizable contains the label for.
+     * @param denormalizable
      */
-    public synchronized void addDataPoint(DataPoint dataPoint) {
-        ArrayList<Integer> labels = dataPoint.getLabels();
+    public synchronized void addDenormalizable(Denormalizable denormalizable) {
+        ArrayList<Integer> labels = denormalizable.getLabels();
 
         for (int i = 0; i < labels.size(); i++) {
             int label = labels.get(i);
 
             if (!lists.containsKey(label)) {
-                lists.put(label, new ArrayList<DataPoint>(upperBoundNumberDataPointsPerLabel));
+                lists.put(label, new ArrayList<Denormalizable>(upperBoundNumberDenormalizablesPerLabel));
             }
 
-            lists.get(label).add(dataPoint);
+            lists.get(label).add(denormalizable);
         }
     }
 
     /**
-     * Removes the dataPoint from all lists for which it is labeled for
-     * @param dataPoint
+     * Removes the denormalizable from all lists for which it is labeled for
+     * @param denormalizable
      */
-    public synchronized void removeDataPoint(DataPoint dataPoint) {
-        ArrayList<Integer> labels = dataPoint.getLabels();
+    public synchronized void removeDenormalizable(Denormalizable denormalizable) {
+        ArrayList<Integer> labels = denormalizable.getLabels();
 
         for (int i = 0; i < labels.size(); i++) {
 
             int label = labels.get(i);
 
             if (lists.contains(label)) {
-                lists.get(label).remove(dataPoint);
+                lists.get(label).remove(denormalizable);
             }
         }
     }
 
-    public static interface DataPoint {
-        public Object getContainer();
-        public ArrayList<Integer> getLabels();
+    public Object getContainer() {
+        return this;
+    }
+
+    public ArrayList<Integer> getLabels() {
+        return labels;
     }
 }

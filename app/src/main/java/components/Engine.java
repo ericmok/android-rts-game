@@ -33,12 +33,12 @@ public class Engine {
     }
 
     public void addEntity(Entity entity) {
-        entityLogicDataSet.addDataPoint(entity.getComponentLabeler());
-        entityTagDataSet.addDataPoint(entity.getTagLabeler());
+        entityLogicDataSet.addDenormalizable(entity.getComponentLabeler());
+        entityTagDataSet.addDenormalizable(entity.getTagLabeler());
     }
 
     public void removeEntity(Entity entity) {
-        entityLogicDataSet.removeDataPoint(entity.getComponentLabeler());
-        entityTagDataSet.removeDataPoint(entity.getTagLabeler());
+        entityLogicDataSet.removeDenormalizable(entity.getComponentLabeler());
+        entityTagDataSet.removeDenormalizable(entity.getTagLabeler());
     }
 }

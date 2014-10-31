@@ -20,12 +20,12 @@ public class Entity {
 
     public Hashtable<Class<? extends Component>, Component> data = new Hashtable<Class<? extends Component>, Component>(64);
 
-    private DenormalizedDataSet.DataPoint componentLabeler = new DenormalizedDataSet.DataPoint() {
+    private Denormalizable componentLabeler = new Denormalizable() {
         public Object getContainer() { return self; }
         public ArrayList<Integer> getLabels() { return components; }
     };
 
-    private DenormalizedDataSet.DataPoint tagLabeler = new DenormalizedDataSet.DataPoint() {
+    private Denormalizable tagLabeler = new Denormalizable() {
         public Object getContainer() { return self; }
         public ArrayList<Integer> getLabels() { return tags; }
     };
@@ -35,11 +35,11 @@ public class Entity {
         NEXT_UNIQUE_ID += 1;
     }
 
-    public DenormalizedDataSet.DataPoint getComponentLabeler() {
+    public Denormalizable getComponentLabeler() {
         return componentLabeler;
     }
 
-    public DenormalizedDataSet.DataPoint getTagLabeler() {
+    public Denormalizable getTagLabeler() {
         return tagLabeler;
     }
 }

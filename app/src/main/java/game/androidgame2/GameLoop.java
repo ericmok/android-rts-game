@@ -8,6 +8,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import components.Denormalizable;
 import components.DenormalizedDataSet;
 import components.Engine;
 import components.PositionComponent;
@@ -185,7 +186,7 @@ public class GameLoop implements Runnable {
         drawItems.resetWriteIndex();
 
          // Get the list that has the draw stuff
-        ArrayList<DenormalizedDataSet.DataPoint> entitiesToDraw = game.engine.entityLogicDataSet.lists.get(Engine.LOGIC_TROOP_DRAW);
+        ArrayList<Denormalizable> entitiesToDraw = game.engine.entityLogicDataSet.lists.get(Engine.LOGIC_TROOP_DRAW);
 
         for (int i = 0; i < entitiesToDraw.size(); i++) {
             Entity entity = (Entity)entitiesToDraw.get(i).getContainer();
