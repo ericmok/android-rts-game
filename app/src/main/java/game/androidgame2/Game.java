@@ -2,6 +2,7 @@ package game.androidgame2;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 
 import components.Entity;
 import components.GameEntities;
@@ -109,62 +110,9 @@ public class Game implements OnGestureListener {
 	public void loadLevel() {
         engine = new Engine();
 
-		try {
-		    InputStream is = this.getContext().getResources().getAssets().open("level0.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
+        LevelLoader levelLoader = new LevelLoader(this.context);
+        levelLoader.load(engine, "level0.json");
 
-            String json = new String(buffer, "UTF-8");
-            Log.i("LEVEL JSON", json);
-            try {
-                JSONObject jObj = new JSONObject(json);
-                JSONObject playerObj = jObj.getJSONObject("player");
-
-                JSONArray troopArr = playerObj.getJSONArray("troop");
-
-                Log.i("LEVEL JSON", "Number units! " + troopArr.length());
-
-                for (int i = 0; i < troopArr.length(); i++) {
-                    JSONObject jEntity = troopArr.getJSONObject(i);
-
-                    Entity troop = GameEntities.buildTroop(
-                            Entity.TAG_PLAYER_OWNED, Entity.TAG_FOLLOWER);
-                    engine.addEntity(troop);
-
-                    PositionComponent pc =
-                            ((PositionComponent)troop.data.get(PositionComponent.class));
-                    pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
-                }
-
-                playerObj = jObj.getJSONObject("enemy");
-
-                troopArr = playerObj.getJSONArray("troop");
-
-                Log.i("LEVEL JSON", "Number units! " + troopArr.length());
-
-                for (int i = 0; i < troopArr.length(); i++) {
-                    JSONObject jEntity = troopArr.getJSONObject(i);
-
-                    Entity troop = GameEntities.buildTroop(
-                            Entity.TAG_ENEMY_OWNED, Entity.TAG_FOLLOWER);
-                    engine.addEntity(troop);
-
-                    PositionComponent pc =
-                            ((PositionComponent)troop.data.get(PositionComponent.class));
-                    pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
-                }
-            }
-            catch (JSONException e) {
-                Log.e("JSON", e.getMessage());
-                e.printStackTrace();
-            }
-
-		} catch (IOException e) {
-            Log.e("JSON", e.getMessage());
-			e.printStackTrace();
-		}
 ////
 //		stage = new Stage();
 //
