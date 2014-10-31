@@ -1,5 +1,7 @@
 package game.androidgame2;
 
+import utils.Orientation;
+
 public class TriggerField {
 	public Vector3 source;
 	public Vector3 dest;
@@ -15,7 +17,7 @@ public class TriggerField {
 	
 	public float getAngle() {
 		Vector3.subtract(ret, dest, source);
-		return (float) Orientation.getDegrees( ret );
+		return (float) Orientation.getDegrees(ret);
 	}
 	
 	public void getDirection(Vector3 output) {

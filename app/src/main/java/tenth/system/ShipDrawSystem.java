@@ -7,7 +7,7 @@ import android.graphics.Color;
 
 import game.androidgame2.DrawList2DItem;
 import game.androidgame2.Game;
-import game.androidgame2.Orientation;
+import utils.Orientation;
 import game.androidgame2.RewritableArray;
 import game.androidgame2.TimedProgress;
 import game.androidgame2.Vector3;

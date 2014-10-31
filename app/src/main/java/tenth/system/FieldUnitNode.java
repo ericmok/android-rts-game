@@ -3,7 +3,7 @@ package tenth.system;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import game.androidgame2.Orientation;
+import utils.Orientation;
 import game.androidgame2.Vector3;
 
 /**

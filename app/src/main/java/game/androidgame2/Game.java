@@ -23,6 +23,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import components.Engine;
@@ -127,27 +128,43 @@ public class Game implements OnGestureListener {
             Log.i("LEVEL JSON", json);
             try {
                 JSONObject jObj = new JSONObject(json);
-                JSONArray jArr = jObj.getJSONArray("player");
+                JSONObject playerObj = jObj.getJSONObject("player");
 
-                Log.i("LEVEL JSON", "Number units! " + jArr.length());
-                for (int i = 0; i < jArr.length(); i++) {
-                    Log.i("LEVEL JSON", "Number units! " + jArr.length());
+                JSONArray troopArr = playerObj.getJSONArray("troop");
 
-                    JSONObject jEntity = jArr.getJSONObject(i);
+                Log.i("LEVEL JSON", "Number units! " + troopArr.length());
 
-                    String type = jEntity.getString("type");
-                    if (type.equals("troop")) {
-                        Entity troop = GameEntities.buildTroop(
-                                Engine.TAG_PLAYER_OWNED, Engine.TAG_FOLLOWER);
-                        engine.addEntity(troop);
+                for (int i = 0; i < troopArr.length(); i++) {
+                    JSONObject jEntity = troopArr.getJSONObject(i);
 
-                        PositionComponent pc =
-                                ((PositionComponent)troop.data.get(PositionComponent.class));
-                        pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
-                    }
+                    Entity troop = GameEntities.buildTroop(
+                            Engine.TAG_PLAYER_OWNED, Engine.TAG_FOLLOWER);
+                    engine.addEntity(troop);
+
+                    PositionComponent pc =
+                            ((PositionComponent)troop.data.get(PositionComponent.class));
+                    pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
+                }
+
+                playerObj = jObj.getJSONObject("enemy");
+
+                troopArr = playerObj.getJSONArray("troop");
+
+                Log.i("LEVEL JSON", "Number units! " + troopArr.length());
+
+                for (int i = 0; i < troopArr.length(); i++) {
+                    JSONObject jEntity = troopArr.getJSONObject(i);
+
+                    Entity troop = GameEntities.buildTroop(
+                            Engine.TAG_ENEMY_OWNED, Engine.TAG_FOLLOWER);
+                    engine.addEntity(troop);
+
+                    PositionComponent pc =
+                            ((PositionComponent)troop.data.get(PositionComponent.class));
+                    pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 }
             }
-            catch (Exception e) {
+            catch (JSONException e) {
                 Log.e("JSON", e.getMessage());
                 e.printStackTrace();
             }

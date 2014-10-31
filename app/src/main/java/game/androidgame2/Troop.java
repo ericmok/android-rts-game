@@ -1,7 +1,5 @@
 package game.androidgame2;
 
-import org.w3c.dom.Node;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -22,12 +20,12 @@ import tenth.system.SelectionSystem.SelectionNodeBindable;
 import tenth.system.SeparationSystem;
 import tenth.system.SeparationSystem.SeparationNode;
 import tenth.system.SeparationSystem.SeparationNodeBindable;
-import tenth.system.SelectionSystem;
 import tenth.system.SquadPosition;
 import tenth.system.States;
 import tenth.system.SystemNode;
 import tenth.system.TroopDrawSystem.UnitDrawNode;
 import tenth.system.TroopDrawSystem.UnitDrawNodeBindable;
+import utils.Orientation;
 
 public class Troop extends SystemNode implements
 								FieldUnitNodeBindable, SeparationNodeBindable, FormationNodeBindable,

@@ -20,6 +20,7 @@ import tenth.system.ShipDrawSystem.ShipDrawNode;
 import tenth.system.ShipDrawSystem.ShipDrawNodeBindable;
 import tenth.system.SquadPosition;
 import tenth.system.SystemNode;
+import utils.Orientation;
 
 public class SmallShip extends SystemNode implements
 									FieldUnitNodeBindable, FormationNodeBindable, SeparationNodeBindable, 

@@ -3,7 +3,7 @@ package tenth.system;
 import java.util.ArrayList;
 
 import game.androidgame2.Game;
-import game.androidgame2.Orientation;
+import utils.Orientation;
 import game.androidgame2.Vector3;
 import tenth.system.ForceIntegratorSystem.ForceIntegratorNode;
 import tenth.system.ForceIntegratorSystem.ForceIntegratorNodeBindable;

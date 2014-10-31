@@ -1,5 +1,7 @@
 package game.androidgame2;
 
+import utils.Orientation;
+
 public class KinematicRotation2D {
 	public Orientation orientation;
 	public double angularVelocity;

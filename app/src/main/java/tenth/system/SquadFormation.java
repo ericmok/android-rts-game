@@ -2,8 +2,7 @@ package tenth.system;
 
 import java.util.ArrayList;
 
-import game.androidgame2.Orientation;
-import game.androidgame2.Vector2;
+import utils.Orientation;
 import game.androidgame2.Vector3;
 
 public class SquadFormation {

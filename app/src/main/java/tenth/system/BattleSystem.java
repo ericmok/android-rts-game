@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import game.androidgame2.Game;
-import game.androidgame2.Orientation;
+import utils.Orientation;
 import game.androidgame2.Vector3;
-
-import game.androidgame2.Game;
 
 public class BattleSystem {
 	private Game game;

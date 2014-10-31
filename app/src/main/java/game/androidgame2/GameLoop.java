@@ -193,11 +193,15 @@ public class GameLoop implements Runnable {
 
             DrawList2DItem drawItem = drawItems.takeNextWritable();
             drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
+
+            if (entity.getTagLabeler().getLabels().contains(Engine.TAG_ENEMY_OWNED)) {
+                drawItem.animationName = DrawList2DItem.ANIMATION_ENEMY_TROOPS_IDLING;
+            }
             drawItem.position.x = pc.x;
             drawItem.position.y = pc.y;
             drawItem.angle = 0;
-            drawItem.width = 0.09f;
-            drawItem.height = 0.09f;
+            drawItem.width = 0.07f;
+            drawItem.height = 0.07f;
         }
 
         game.graphics.drawLists.drawListSprites.unlockWritableBuffer();

@@ -1,4 +1,7 @@
-package game.androidgame2;
+package utils;
+
+import game.androidgame2.Vector2;
+import game.androidgame2.Vector3;
 
 /**
  * TODO: Make fields private

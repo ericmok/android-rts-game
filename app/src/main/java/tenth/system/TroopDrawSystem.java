@@ -1,7 +1,6 @@
 package tenth.system;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -9,7 +8,7 @@ import android.graphics.Color;
 
 import game.androidgame2.DrawList2DItem;
 import game.androidgame2.Game;
-import game.androidgame2.Orientation;
+import utils.Orientation;
 import game.androidgame2.RewritableArray;
 import game.androidgame2.TemporaryDrawList2DItem;
 import game.androidgame2.TimedProgress;
