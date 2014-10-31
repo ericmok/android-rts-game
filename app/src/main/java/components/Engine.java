@@ -1,16 +1,12 @@
 package components;
 
-import java.util.ArrayList;
-
-import tenth.system.SystemNode;
-
 /**
  * Created by eric on 10/30/14.
  */
 public class Engine {
 
-    public DenormalizedDataSet entityLogicDataSet;
-    public DenormalizedDataSet entityTagDataSet;
+    public DenormalizedDataSet entitiesByComponents;
+    public DenormalizedDataSet entitiesByTags;
 
     public static final int LOGIC_FORMATION = 0;
     public static final int LOGIC_SEPARATION = 1;
@@ -28,17 +24,17 @@ public class Engine {
     public static final int TAG_FOLLOWER = 4;
 
     public Engine() {
-        entityLogicDataSet = new DenormalizedDataSet(16, 300);
-        entityTagDataSet = new DenormalizedDataSet(16, 300);
+        entitiesByComponents = new DenormalizedDataSet(16, 300);
+        entitiesByTags = new DenormalizedDataSet(16, 300);
     }
 
     public void addEntity(Entity entity) {
-        entityLogicDataSet.addDenormalizable(entity.getComponentLabeler());
-        entityTagDataSet.addDenormalizable(entity.getTagLabeler());
+        entitiesByComponents.addDenormalizable(entity.getComponentLabeler());
+        entitiesByTags.addDenormalizable(entity.getTagLabeler());
     }
 
     public void removeEntity(Entity entity) {
-        entityLogicDataSet.removeDenormalizable(entity.getComponentLabeler());
-        entityTagDataSet.removeDenormalizable(entity.getTagLabeler());
+        entitiesByComponents.removeDenormalizable(entity.getComponentLabeler());
+        entitiesByTags.removeDenormalizable(entity.getTagLabeler());
     }
 }
