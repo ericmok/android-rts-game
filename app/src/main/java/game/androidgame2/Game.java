@@ -108,7 +108,10 @@ public class Game implements OnGestureListener {
 	//}
 	
 	public void loadLevel() {
+
         engine = new Engine();
+
+        engine.addEntity(GameEntities.buildCamera());
 
         LevelLoader levelLoader = new LevelLoader(this.context);
         levelLoader.load(engine, "level0.json");
