@@ -1,7 +1,5 @@
 package components;
 
-import java.util.ArrayList;
-
 /**
  * Created by eric on 10/30/14.
  */
@@ -18,7 +16,7 @@ public class GameEntities {
         PositionComponent positionComponent = new PositionComponent();
         troop.data.put(PositionComponent.class, positionComponent);
 
-        troop.getComponentLabeler().getLabels().add(Engine.LOGIC_TROOP_DRAW);
+        troop.getComponentLabeler().getLabels().add(Entity.LOGIC_TROOP_DRAW);
 
         troop.getTagLabeler().getLabels().add(owner);
         troop.getTagLabeler().getLabels().add(leader);

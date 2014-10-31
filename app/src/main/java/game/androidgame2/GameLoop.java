@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import components.Denormalizable;
-import components.Engine;
 import components.PositionComponent;
 import components.Entity;
 
@@ -183,7 +182,7 @@ public class GameLoop implements Runnable {
         drawItems.resetWriteIndex();
 
          // Get the list that has the draw stuff
-        ArrayList<Denormalizable> entitiesToDraw = game.engine.entitiesByComponents.lists.get(Engine.LOGIC_TROOP_DRAW);
+        ArrayList<Denormalizable> entitiesToDraw = game.engine.entitiesByComponents.lists.get(Entity.LOGIC_TROOP_DRAW);
 
         for (int i = 0; i < entitiesToDraw.size(); i++) {
             Entity entity = (Entity)entitiesToDraw.get(i).getContainer();
@@ -192,7 +191,7 @@ public class GameLoop implements Runnable {
             DrawList2DItem drawItem = drawItems.takeNextWritable();
             drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
 
-            if (entity.getTagLabeler().getLabels().contains(Engine.TAG_ENEMY_OWNED)) {
+            if (entity.getTagLabeler().getLabels().contains(Entity.TAG_ENEMY_OWNED)) {
                 drawItem.animationName = DrawList2DItem.ANIMATION_ENEMY_TROOPS_IDLING;
             }
             drawItem.position.x = pc.x;

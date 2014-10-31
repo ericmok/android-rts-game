@@ -6,18 +6,10 @@ import java.io.InputStream;
 import components.Entity;
 import components.GameEntities;
 import components.PositionComponent;
-import tenth.system.Constants;
-import tenth.system.FormationSystem;
-import tenth.system.FormationSystem.FormationNode;
-import tenth.system.GenerateTroopsInSquadPositionsSystem;
-import tenth.system.SquadPosition;
-import tenth.system.States;
-import tenth.system.SystemNode;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
@@ -138,7 +130,7 @@ public class Game implements OnGestureListener {
                     JSONObject jEntity = troopArr.getJSONObject(i);
 
                     Entity troop = GameEntities.buildTroop(
-                            Engine.TAG_PLAYER_OWNED, Engine.TAG_FOLLOWER);
+                            Entity.TAG_PLAYER_OWNED, Entity.TAG_FOLLOWER);
                     engine.addEntity(troop);
 
                     PositionComponent pc =
@@ -156,7 +148,7 @@ public class Game implements OnGestureListener {
                     JSONObject jEntity = troopArr.getJSONObject(i);
 
                     Entity troop = GameEntities.buildTroop(
-                            Engine.TAG_ENEMY_OWNED, Engine.TAG_FOLLOWER);
+                            Entity.TAG_ENEMY_OWNED, Entity.TAG_FOLLOWER);
                     engine.addEntity(troop);
 
                     PositionComponent pc =
