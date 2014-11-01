@@ -219,8 +219,8 @@ public class GameLoop implements Runnable {
             drawItem.position.x = pc.x;
             drawItem.position.y = pc.y;
             drawItem.angle = 0;
-            drawItem.width = 0.07f;
-            drawItem.height = 0.07f;
+            drawItem.width = 1.0f;
+            drawItem.height = 1.0f;
         }
 
         game.graphics.drawLists.regularSprites.unlockWritableBuffer();

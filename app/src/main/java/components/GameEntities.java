@@ -29,6 +29,7 @@ public class GameEntities {
     public static Entity buildCamera() {
         Entity camera = new Entity();
         CameraSettingsComponent csm = new CameraSettingsComponent();
+
         camera.cData.put(CameraSettingsComponent.class, csm);
 
         camera.getLabels().add(Entity.LOGIC_CAMERA);

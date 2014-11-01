@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
+import components.CameraSettingsComponent;
 import components.Entity;
 import components.GameEntities;
 import components.PositionComponent;
@@ -113,7 +114,12 @@ public class Game extends ScaleGestureDetector.SimpleOnScaleGestureListener
 
         engine = new Engine();
 
-        engine.addEntity(GameEntities.buildCamera());
+        Entity cameraEntity = GameEntities.buildCamera();
+        engine.addEntity(cameraEntity);
+
+        CameraSettingsComponent csm = (CameraSettingsComponent)cameraEntity.cData.get(CameraSettingsComponent.class);
+        csm.reset();
+        csm.scale = csm.scale * GameSettings.UNIT_LENGTH_MULTIPLIER;
 
         LevelLoader levelLoader = new LevelLoader(this.context);
         levelLoader.load(engine, "level0.json");
