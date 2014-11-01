@@ -56,7 +56,10 @@ public class GameLoop implements Runnable {
 	public static final int GESTURE_ON_FLING = 5;
 
     public static final int GESTURE_ON_SCALE = 6;
-	
+
+    public float gestureScrollValueX = 0.0f;
+    public float gestureScrollValueY = 0.0f;
+    public float gestureScaleValue = 1.0f;
 	
 	private FieldMovementSystem fieldMovementSystem;
 	
@@ -187,8 +190,12 @@ public class GameLoop implements Runnable {
 
         CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.data.get(CameraSettingsComponent.class);
 
+        if (gestures.containsKey(GESTURE_ON_SCROLL)) {
+            csm.x += 0.001f * gestureScrollValueX;
+            csm.y += 0.001f * gestureScrollValueY;
+        }
         if (gestures.containsKey(GESTURE_ON_SCALE)) {
-            csm.scale -= 0.1f;
+            csm.scale += 2 * (gestureScaleValue - 1.0f) / gestureScaleValue;
         }
 
         game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
@@ -468,10 +475,22 @@ public class GameLoop implements Runnable {
 		return true;
 	}
 
+    /**
+     * Since drawing y axis is actually inverted, the vertical scroll we be inverted
+     * @param e1
+     * @param e2
+     * @param distanceX
+     * @param distanceY
+     * @return
+     */
 	public boolean gestureOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		Log.i("gestureOnScroll", "gestureOnScroll");
         //Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
 		gestures.put(GESTURE_ON_SCROLL, true);
+
+        gestureScrollValueX = distanceX;
+        gestureScrollValueY = -distanceY;
+
 		return true;
 	}
 
@@ -490,6 +509,9 @@ public class GameLoop implements Runnable {
         Log.i("onScale", "onScale");
         //Log.i("onScale", "onScale scaleFactor [" + detector.getScaleFactor() + "]");
         gestures.put(GESTURE_ON_SCALE, true);
+
+        gestureScaleValue = detector.getScaleFactor();
+
         return true;
     }
 }
