@@ -5,7 +5,14 @@ package components;
  */
 public class Engine {
 
+    /**
+     * Entities organized by logic-y stuff
+     */
     public DenormalizedDataSet entitiesByComponents;
+
+    /**
+     * Entities organized by metadata and category-ish stuff, like troops, tanks, player type
+     */
     public DenormalizedDataSet entitiesByTags;
 
     public Engine() {
