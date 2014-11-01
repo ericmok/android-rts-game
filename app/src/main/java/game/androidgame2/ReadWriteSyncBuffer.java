@@ -102,7 +102,7 @@ public class ReadWriteSyncBuffer {
 	}
 	
 	/**
-	 * Prevents updating the lists while external updates are made to lists.
+	 * Prevents updating the denormalizedLists while external updates are made to denormalizedLists.
 	 * The write list is populated with previous data that was last used by graphics.
 	 * Clearing the list may be needed.<br/>
 	 * This method is synchronized with swapping requests to prevent starvation for the reader.

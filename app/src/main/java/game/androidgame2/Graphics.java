@@ -43,7 +43,7 @@ public class Graphics {
 
     /**
      * Use drawLists as a communication bridge between game logic and lower-level renderers.
-     * The draw lists contain concurrent-safe mechanisms.
+     * The draw denormalizedLists contain concurrent-safe mechanisms.
      */
 	public DrawLists drawLists;
 	

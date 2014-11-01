@@ -1,17 +1,14 @@
 package components;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by eric on 10/30/14.
  *
  * <p>
- * Where data is duplicated in various lists but needs to be managed so that
- * adding and removal of the data is consistent across all the lists.
+ * Where data is duplicated in various denormalizedLists but needs to be managed so that
+ * adding and removal of the data is consistent across all the denormalizedLists.
  * Denormalizing data allows for faster data access with the expense of using more memory.
  * </p>
  *
@@ -35,7 +32,7 @@ import java.util.Map;
  *     world.add( someObjectLabeled_1_And_2_ ); x 1000
  *
  *     // Internally
- *     world has two lists,
+ *     world has two denormalizedLists,
  *     world.getListLabeled(1) <= has 2000 objects
  *     world.getListLabeled(2) <= has 2000 objects
  *
@@ -47,7 +44,7 @@ import java.util.Map;
  * <p>
  * Data is duplicated in accordance with labels.
  * This programming pattern can be found in Entity Component System frameworks.
- * Entities are duplicated across 'processing lists' given the processing components they contain.
+ * Entities are duplicated across 'processing denormalizedLists' given the processing components they contain.
  * </p>
  */
 public class DenormalizedDataSet implements Denormalizable {
@@ -63,7 +60,7 @@ public class DenormalizedDataSet implements Denormalizable {
      *     are selectable.
      * </p>
      */
-    public Hashtable<Integer, ArrayList<Denormalizable>> lists;
+    public Hashtable<Integer, ArrayList<Denormalizable>> denormalizedLists;
 
     private ArrayList<Integer> labels = new ArrayList<Integer>();
 
@@ -76,16 +73,16 @@ public class DenormalizedDataSet implements Denormalizable {
     public DenormalizedDataSet(int upperBoundNumberLabels, int upperBoundNumberDenormalizablesPerLabel) {
         this.upperBoundNumberDenormalizablesPerLabel = upperBoundNumberDenormalizablesPerLabel;
 
-        lists = new Hashtable<Integer, ArrayList<Denormalizable>>(upperBoundNumberLabels);
+        denormalizedLists = new Hashtable<Integer, ArrayList<Denormalizable>>(upperBoundNumberLabels);
 
-//        Iterator<Map.Entry<Integer, ArrayList<Denormalizable>>> itr = lists.entrySet().iterator();
+//        Iterator<Map.Entry<Integer, ArrayList<Denormalizable>>> itr = denormalizedLists.entrySet().iterator();
 //        while (itr.hasNext()) {
-//            lists.put( itr.next().getKey(), new ArrayList<Denormalizable>(upperBoundNumberDenormalizablesPerLabel));
+//            denormalizedLists.put( itr.next().getKey(), new ArrayList<Denormalizable>(upperBoundNumberDenormalizablesPerLabel));
 //        }
     }
 
     /**
-     * Adds the denormalizable to all the lists for which the denormalizable contains the label for.
+     * Adds the denormalizable to all the denormalizedLists for which the denormalizable contains the label for.
      * @param denormalizable
      */
     public synchronized void addDenormalizable(Denormalizable denormalizable) {
@@ -94,16 +91,16 @@ public class DenormalizedDataSet implements Denormalizable {
         for (int i = 0; i < labels.size(); i++) {
             int label = labels.get(i);
 
-            if (!lists.containsKey(label)) {
-                lists.put(label, new ArrayList<Denormalizable>(upperBoundNumberDenormalizablesPerLabel));
+            if (!denormalizedLists.containsKey(label)) {
+                denormalizedLists.put(label, new ArrayList<Denormalizable>(upperBoundNumberDenormalizablesPerLabel));
             }
 
-            lists.get(label).add(denormalizable);
+            denormalizedLists.get(label).add(denormalizable);
         }
     }
 
     /**
-     * Removes the denormalizable from all lists for which it is labeled for
+     * Removes the denormalizable from all denormalizedLists for which it is labeled for
      * @param denormalizable
      */
     public synchronized void removeDenormalizable(Denormalizable denormalizable) {
@@ -113,8 +110,8 @@ public class DenormalizedDataSet implements Denormalizable {
 
             int label = labels.get(i);
 
-            if (lists.contains(label)) {
-                lists.get(label).remove(denormalizable);
+            if (denormalizedLists.contains(label)) {
+                denormalizedLists.get(label).remove(denormalizable);
             }
         }
     }

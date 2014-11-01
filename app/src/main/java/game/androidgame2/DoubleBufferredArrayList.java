@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class DoubleBufferredArrayList<E> {
 	
-	// TODO: Make these array lists into rewritable arrays
+	// TODO: Make these array denormalizedLists into rewritable arrays
 	private ArrayList<E> buffer1;
 	private ArrayList<E> buffer2;
 		
