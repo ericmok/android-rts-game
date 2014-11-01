@@ -470,6 +470,7 @@ public class GameLoop implements Runnable {
 
 	public boolean gestureOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		Log.i("gestureOnScroll", "gestureOnScroll");
+        //Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
 		gestures.put(GESTURE_ON_SCROLL, true);
 		return true;
 	}
@@ -487,6 +488,7 @@ public class GameLoop implements Runnable {
 
     public boolean onScale(ScaleGestureDetector detector) {
         Log.i("onScale", "onScale");
+        //Log.i("onScale", "onScale scaleFactor [" + detector.getScaleFactor() + "]");
         gestures.put(GESTURE_ON_SCALE, true);
         return true;
     }
