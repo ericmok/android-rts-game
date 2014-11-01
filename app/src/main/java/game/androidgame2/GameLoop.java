@@ -188,7 +188,7 @@ public class GameLoop implements Runnable {
         ArrayList<Denormalizable> cameraEntities = game.engine.entitiesByComponents.lists.get(Entity.LOGIC_CAMERA);
         Entity cameraEntity = ((Entity)cameraEntities.get(0).getContainer());
 
-        CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.data.get(CameraSettingsComponent.class);
+        CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.cData.get(CameraSettingsComponent.class);
 
         if (gestures.containsKey(GESTURE_ON_SCROLL)) {
             csm.x += 0.001f * gestureScrollValueX;
@@ -209,7 +209,7 @@ public class GameLoop implements Runnable {
 
         for (int i = 0; i < entitiesToDraw.size(); i++) {
             Entity entity = (Entity)entitiesToDraw.get(i).getContainer();
-            PositionComponent pc = (PositionComponent)entity.data.get(PositionComponent.class);
+            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
 
             DrawList2DItem drawItem = drawItems.takeNextWritable();
             drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;

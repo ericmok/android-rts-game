@@ -50,7 +50,7 @@ public class LevelLoader {
                     engine.addEntity(troop);
 
                     PositionComponent pc =
-                            ((PositionComponent)troop.data.get(PositionComponent.class));
+                            ((PositionComponent)troop.cData.get(PositionComponent.class));
                     pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 }
 
@@ -65,7 +65,7 @@ public class LevelLoader {
                     engine.addEntity(troop);
 
                     PositionComponent pc =
-                            ((PositionComponent)troop.data.get(PositionComponent.class));
+                            ((PositionComponent)troop.cData.get(PositionComponent.class));
                     pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 }
             }

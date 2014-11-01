@@ -37,7 +37,10 @@ public class Entity {
     private ArrayList<Integer> components = new ArrayList<Integer>(16);
     private ArrayList<Integer> tags = new ArrayList<Integer>(16);
 
-    public Hashtable<Class<? extends Component>, Component> data = new Hashtable<Class<? extends Component>, Component>(64);
+    /**
+     * A map from Component classes to the component the entity has of that class
+     */
+    public Hashtable<Class<? extends Component>, Component> cData = new Hashtable<Class<? extends Component>, Component>(64);
 
     private Denormalizable componentLabeler = new Denormalizable() {
         public Object getContainer() { return self; }

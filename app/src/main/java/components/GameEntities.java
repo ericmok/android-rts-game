@@ -14,7 +14,7 @@ public class GameEntities {
     public static Entity buildTroop(int owner, int leader) {
         Entity troop = new Entity();
         PositionComponent positionComponent = new PositionComponent();
-        troop.data.put(PositionComponent.class, positionComponent);
+        troop.cData.put(PositionComponent.class, positionComponent);
 
         troop.getComponentLabeler().getLabels().add(Entity.LOGIC_UNIT_DRAW);
         troop.getComponentLabeler().getLabels().add(Entity.LOGIC_SELECTION);
@@ -29,7 +29,7 @@ public class GameEntities {
     public static Entity buildCamera() {
         Entity camera = new Entity();
         CameraSettingsComponent csm = new CameraSettingsComponent();
-        camera.data.put(CameraSettingsComponent.class, csm);
+        camera.cData.put(CameraSettingsComponent.class, csm);
 
         camera.getComponentLabeler().getLabels().add(Entity.LOGIC_CAMERA);
 
