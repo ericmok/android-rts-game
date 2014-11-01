@@ -205,7 +205,7 @@ public class GameLoop implements Runnable {
         drawItems.resetWriteIndex();
 
          // Get the list that has the draw stuff
-        ArrayList<Denormalizable> entitiesToDraw = game.engine.entitiesByComponents.lists.get(Entity.LOGIC_TROOP_DRAW);
+        ArrayList<Denormalizable> entitiesToDraw = game.engine.entitiesByComponents.lists.get(Entity.LOGIC_UNIT_DRAW);
 
         for (int i = 0; i < entitiesToDraw.size(); i++) {
             Entity entity = (Entity)entitiesToDraw.get(i).getContainer();

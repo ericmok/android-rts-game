@@ -15,7 +15,7 @@ public class Entity {
     public static final int LOGIC_FIELD_MOVEMENT = 2;
     public static final int LOGIC_FORCE_INTEGRATOR = 3;
     public static final int LOGIC_BATTLE = 4;
-    public static final int LOGIC_TROOP_DRAW = 5;
+    public static final int LOGIC_UNIT_DRAW = 5;
     public static final int LOGIC_ORIENTATION = 6;
     public static final int LOGIC_SELECTION = 7;
 
