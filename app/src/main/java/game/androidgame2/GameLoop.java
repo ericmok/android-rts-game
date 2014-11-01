@@ -42,11 +42,13 @@ public class GameLoop implements Runnable {
 	private long tickDifference = 0;
 	private long startTime = 0;
 	
-	private MotionEvent motionEvent; // Pointer
+	private MotionEvent motionEvent = null; // Pointer
 	private float touchX = 0;
 	private float touchY = 0;
+    public float gestureScrollValueX = 0.0f;
+    public float gestureScrollValueY = 0.0f;
+    public float gestureScaleValue = 1.0f;
 
-	
 	private Hashtable<Integer, Boolean> gestures = new Hashtable<Integer, Boolean>(16);
 	public static final int GESTURE_ON_DOWN = 0;
 	public static final int GESTURE_ON_SHOW_PRESS = 1;
@@ -57,10 +59,7 @@ public class GameLoop implements Runnable {
 
     public static final int GESTURE_ON_SCALE = 6;
 
-    public float gestureScrollValueX = 0.0f;
-    public float gestureScrollValueY = 0.0f;
-    public float gestureScaleValue = 1.0f;
-	
+
 	private FieldMovementSystem fieldMovementSystem;
 	
 	private OrientationSystem orientationSystem = new OrientationSystem(this.game);
@@ -460,17 +459,20 @@ public class GameLoop implements Runnable {
 	
 	public boolean gestureOnDown(MotionEvent e) {
 		Log.i("gestureOnDown", "gestureOnDown");
+        motionEvent = e;
 		gestures.put(GESTURE_ON_DOWN, true);
 		return true;
 	}
 
 	public void gestureOnShowPress(MotionEvent e) {
 		Log.i("gestureOnShowPress", "gestureOnShowPress");
+        motionEvent = e;
 		gestures.put(GESTURE_ON_SHOW_PRESS, true);
 	}
 
 	public boolean gestureOnSingleTapUp(MotionEvent e) {
 		Log.i("gestureOnSingleTapUp", "gestureOnSingleTapUp");
+        motionEvent = e;
 		gestures.put(GESTURE_ON_SINGLE_TAP_UP, true);
 		return true;
 	}
@@ -486,6 +488,7 @@ public class GameLoop implements Runnable {
 	public boolean gestureOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		Log.i("gestureOnScroll", "gestureOnScroll");
         //Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
+        motionEvent = e1;
 		gestures.put(GESTURE_ON_SCROLL, true);
 
         gestureScrollValueX = distanceX;
@@ -496,11 +499,13 @@ public class GameLoop implements Runnable {
 
 	public void gestureOnLongPress(MotionEvent e) {
 		Log.i("gestureOnLongPress", "gestureOnLongPress");
+        motionEvent = e;
 		gestures.put(GESTURE_ON_LONG_PRESS, true);
 	}
 
 	public boolean gestureOnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		Log.i("gestureOnFling", "gestureOnFling");
+        motionEvent = e1;
 		gestures.put(GESTURE_ON_FLING, true);
 		return true;
 	}
