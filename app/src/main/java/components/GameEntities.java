@@ -20,6 +20,7 @@ public class GameEntities {
 
         troop.getTagLabeler().getLabels().add(owner);
         troop.getTagLabeler().getLabels().add(leader);
+        troop.getTagLabeler().getLabels().add(Entity.TAG_TROOP_TYPE);
 
         return troop;
     }

@@ -27,6 +27,8 @@ public class Entity {
     public static final int TAG_LEADER = 3;
     public static final int TAG_FOLLOWER = 4;
 
+    public static final int TAG_TROOP_TYPE = 5;
+
     public Entity self = this;
 
     private static int NEXT_UNIQUE_ID = 1;
