@@ -194,7 +194,7 @@ public class GameLoop implements Runnable {
             csm.y += 0.001f * gestureScrollValueY;
         }
         if (gestures.containsKey(GESTURE_ON_SCALE)) {
-            csm.scale += 2 * (gestureScaleValue - 1.0f) / gestureScaleValue;
+            csm.scale *= gestureScaleValue;
         }
 
         game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
