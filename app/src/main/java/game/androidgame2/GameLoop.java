@@ -488,11 +488,17 @@ public class GameLoop implements Runnable {
 	public boolean gestureOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		Log.i("gestureOnScroll", "gestureOnScroll");
         //Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
+
+        CameraSettingsComponent csm =
+                (CameraSettingsComponent) game.engine.entityDenormalizer
+                        .getListForLabel(Entity.LOGIC_CAMERA).get(0)
+                        .cData.get(CameraSettingsComponent.class);
+
         motionEvent = e1;
 		gestures.put(GESTURE_ON_SCROLL, true);
 
-        gestureScrollValueX = distanceX;
-        gestureScrollValueY = -distanceY;
+        gestureScrollValueX = distanceX / csm.scale;
+        gestureScrollValueY = -distanceY / csm.scale;
 
 		return true;
 	}
