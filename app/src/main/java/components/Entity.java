@@ -8,7 +8,7 @@ import game.androidgame2.Vector3;
 /**
  * Created by eric on 10/30/14.
  */
-public class Entity {
+public class Entity implements Denormalizable {
 
     public static final int LOGIC_FORMATION = 0;
     public static final int LOGIC_SEPARATION = 1;
@@ -34,34 +34,19 @@ public class Entity {
     private static int NEXT_UNIQUE_ID = 1;
     private int id;
 
-    private ArrayList<Integer> components = new ArrayList<Integer>(16);
-    private ArrayList<Integer> tags = new ArrayList<Integer>(16);
+    private ArrayList<Integer> labels = new ArrayList<Integer>(16);
 
     /**
      * A map from Component classes to the component the entity has of that class
      */
     public Hashtable<Class<? extends Component>, Component> cData = new Hashtable<Class<? extends Component>, Component>(64);
 
-    private Denormalizable componentLabeler = new Denormalizable() {
-        public Object getContainer() { return self; }
-        public ArrayList<Integer> getLabels() { return components; }
-    };
-
-    private Denormalizable tagLabeler = new Denormalizable() {
-        public Object getContainer() { return self; }
-        public ArrayList<Integer> getLabels() { return tags; }
-    };
-
     public Entity() {
         id = NEXT_UNIQUE_ID;
         NEXT_UNIQUE_ID += 1;
     }
 
-    public Denormalizable getComponentLabeler() {
-        return componentLabeler;
-    }
-
-    public Denormalizable getTagLabeler() {
-        return tagLabeler;
+    public ArrayList<Integer> getLabels() {
+        return labels;
     }
 }

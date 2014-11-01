@@ -184,8 +184,8 @@ public class GameLoop implements Runnable {
 
 		// TODO: Allow scrolling of the screen
 
-        ArrayList<Denormalizable> cameraEntities = game.engine.componentsDenormalizer.denormalizedLists.get(Entity.LOGIC_CAMERA);
-        Entity cameraEntity = ((Entity)cameraEntities.get(0).getContainer());
+        ArrayList<Entity> cameraEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_CAMERA);
+        Entity cameraEntity = cameraEntities.get(0);
 
         CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.cData.get(CameraSettingsComponent.class);
 
@@ -204,16 +204,16 @@ public class GameLoop implements Runnable {
         drawItems.resetWriteIndex();
 
          // Get the list that has the draw stuff
-        ArrayList<Denormalizable> entitiesToDraw = game.engine.componentsDenormalizer.denormalizedLists.get(Entity.LOGIC_UNIT_DRAW);
+        ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_UNIT_DRAW);
 
         for (int i = 0; i < entitiesToDraw.size(); i++) {
-            Entity entity = (Entity)entitiesToDraw.get(i).getContainer();
+            Entity entity = entitiesToDraw.get(i);
             PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
 
             DrawList2DItem drawItem = drawItems.takeNextWritable();
             drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
 
-            if (entity.getTagLabeler().getLabels().contains(Entity.TAG_ENEMY_OWNED)) {
+            if (entity.getLabels().contains(Entity.TAG_ENEMY_OWNED)) {
                 drawItem.animationName = DrawList2DItem.ANIMATION_ENEMY_TROOPS_IDLING;
             }
             drawItem.position.x = pc.x;

@@ -16,12 +16,12 @@ public class GameEntities {
         PositionComponent positionComponent = new PositionComponent();
         troop.cData.put(PositionComponent.class, positionComponent);
 
-        troop.getComponentLabeler().getLabels().add(Entity.LOGIC_UNIT_DRAW);
-        troop.getComponentLabeler().getLabels().add(Entity.LOGIC_SELECTION);
+        troop.getLabels().add(Entity.LOGIC_UNIT_DRAW);
+        troop.getLabels().add(Entity.LOGIC_SELECTION);
 
-        troop.getTagLabeler().getLabels().add(owner);
-        troop.getTagLabeler().getLabels().add(leader);
-        troop.getTagLabeler().getLabels().add(Entity.TAG_TROOP_TYPE);
+        troop.getLabels().add(owner);
+        troop.getLabels().add(leader);
+        troop.getLabels().add(Entity.TAG_TROOP_TYPE);
 
         return troop;
     }
@@ -31,7 +31,7 @@ public class GameEntities {
         CameraSettingsComponent csm = new CameraSettingsComponent();
         camera.cData.put(CameraSettingsComponent.class, csm);
 
-        camera.getComponentLabeler().getLabels().add(Entity.LOGIC_CAMERA);
+        camera.getLabels().add(Entity.LOGIC_CAMERA);
 
         return camera;
     }
