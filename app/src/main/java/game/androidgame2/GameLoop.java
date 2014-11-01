@@ -185,7 +185,7 @@ public class GameLoop implements Runnable {
 
 		// TODO: Allow scrolling of the screen
 
-        ArrayList<Denormalizable> cameraEntities = game.engine.entitiesByComponents.denormalizedLists.get(Entity.LOGIC_CAMERA);
+        ArrayList<Denormalizable> cameraEntities = game.engine.componentsDenormalizer.denormalizedLists.get(Entity.LOGIC_CAMERA);
         Entity cameraEntity = ((Entity)cameraEntities.get(0).getContainer());
 
         CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.cData.get(CameraSettingsComponent.class);
@@ -205,7 +205,7 @@ public class GameLoop implements Runnable {
         drawItems.resetWriteIndex();
 
          // Get the list that has the draw stuff
-        ArrayList<Denormalizable> entitiesToDraw = game.engine.entitiesByComponents.denormalizedLists.get(Entity.LOGIC_UNIT_DRAW);
+        ArrayList<Denormalizable> entitiesToDraw = game.engine.componentsDenormalizer.denormalizedLists.get(Entity.LOGIC_UNIT_DRAW);
 
         for (int i = 0; i < entitiesToDraw.size(); i++) {
             Entity entity = (Entity)entitiesToDraw.get(i).getContainer();

@@ -8,25 +8,25 @@ public class Engine {
     /**
      * Entities organized by logic-y stuff
      */
-    public DenormalizedDataSet entitiesByComponents;
+    public DenormalizedDataSet componentsDenormalizer;
 
     /**
      * Entities organized by metadata and category-ish stuff, like troops, tanks, player type
      */
-    public DenormalizedDataSet entitiesByTags;
+    public DenormalizedDataSet tagsDenormalizer;
 
     public Engine() {
-        entitiesByComponents = new DenormalizedDataSet(16, 300);
-        entitiesByTags = new DenormalizedDataSet(16, 300);
+        componentsDenormalizer = new DenormalizedDataSet(16, 300);
+        tagsDenormalizer = new DenormalizedDataSet(16, 300);
     }
 
     public void addEntity(Entity entity) {
-        entitiesByComponents.addDenormalizable(entity.getComponentLabeler());
-        entitiesByTags.addDenormalizable(entity.getTagLabeler());
+        componentsDenormalizer.addDenormalizable(entity.getComponentLabeler());
+        tagsDenormalizer.addDenormalizable(entity.getTagLabeler());
     }
 
     public void removeEntity(Entity entity) {
-        entitiesByComponents.removeDenormalizable(entity.getComponentLabeler());
-        entitiesByTags.removeDenormalizable(entity.getTagLabeler());
+        componentsDenormalizer.removeDenormalizable(entity.getComponentLabeler());
+        tagsDenormalizer.removeDenormalizable(entity.getTagLabeler());
     }
 }
