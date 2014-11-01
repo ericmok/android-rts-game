@@ -17,6 +17,7 @@ public class GameEntities {
         troop.data.put(PositionComponent.class, positionComponent);
 
         troop.getComponentLabeler().getLabels().add(Entity.LOGIC_UNIT_DRAW);
+        troop.getComponentLabeler().getLabels().add(Entity.LOGIC_SELECTION);
 
         troop.getTagLabeler().getLabels().add(owner);
         troop.getTagLabeler().getLabels().add(leader);
