@@ -497,8 +497,8 @@ public class GameLoop implements Runnable {
         motionEvent = e1;
 		gestures.put(GESTURE_ON_SCROLL, true);
 
-        gestureScrollValueX = distanceX / csm.scale;
-        gestureScrollValueY = -distanceY / csm.scale;
+        gestureScrollValueX = 1.7f * distanceX / csm.scale;
+        gestureScrollValueY = 1.7f * -distanceY / csm.scale;
 
 		return true;
 	}
