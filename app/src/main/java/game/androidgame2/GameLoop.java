@@ -190,8 +190,8 @@ public class GameLoop implements Runnable {
         CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.cData.get(CameraSettingsComponent.class);
 
         if (gestures.containsKey(GESTURE_ON_SCROLL)) {
-            csm.x += 0.001f * gestureScrollValueX;
-            csm.y += 0.001f * gestureScrollValueY;
+            csm.x += gestureScrollValueX;
+            csm.y += gestureScrollValueY;
         }
         if (gestures.containsKey(GESTURE_ON_SCALE)) {
             csm.scale *= gestureScaleValue;
@@ -486,8 +486,8 @@ public class GameLoop implements Runnable {
      * @return
      */
 	public boolean gestureOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		Log.i("gestureOnScroll", "gestureOnScroll");
-        //Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
+		//Log.i("gestureOnScroll", "gestureOnScroll");
+        Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
 
         CameraSettingsComponent csm =
                 (CameraSettingsComponent) game.engine.entityDenormalizer
@@ -497,8 +497,8 @@ public class GameLoop implements Runnable {
         motionEvent = e1;
 		gestures.put(GESTURE_ON_SCROLL, true);
 
-        gestureScrollValueX = 1.7f * distanceX / csm.scale;
-        gestureScrollValueY = 1.7f * -distanceY / csm.scale;
+        gestureScrollValueX = (2 * distanceX / game.getGLSurfaceView().getWidth()) * game.getGameRenderer().getAspectRatio() / csm.scale;
+        gestureScrollValueY = -(2 * distanceY / game.getGLSurfaceView().getHeight()) / csm.scale;
 
 		return true;
 	}
