@@ -33,15 +33,7 @@ public class Orientation extends Vector2 {
 		this.y = y;
 		this.setNormalized();		
 	}
-	
-	public void setNormalized() {
-		double norm = Math.sqrt(x * x + y * y);
-		if (norm != 0) {
-			x = x / norm;
-			y = y / norm;
-		}
-	}
-	
+
 	/**
 	 * Will normalize direction given
 	 * @param direction
@@ -171,8 +163,10 @@ public class Orientation extends Vector2 {
 	}
 	
 	public void getPerpendicular(Vector2 output) {
-		double pointX = (-y / x);
-		
+        double pointX = 0;
+        if (x == 0) {
+            pointX = (-y / x);
+        }
 		output.x = pointX;
 		output.y = 1;
 		output.setNormalized();
