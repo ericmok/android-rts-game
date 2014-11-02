@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 
 import components.CameraSettingsComponent;
 import components.PositionComponent;
@@ -39,24 +37,6 @@ public class GameLoop implements Runnable {
 	private long previousTick = 0;
 	private long tickDifference = 0;
 	private long startTime = 0;
-	
-//	private MotionEvent motionEvent = null; // Pointer
-//	private float touchX = 0;
-//	private float touchY = 0;
-//    public float gestureScrollValueX = 0.0f;
-//    public float gestureScrollValueY = 0.0f;
-//    public float gestureScaleValue = 1.0f;
-//
-//	private Hashtable<Integer, Boolean> gestures = new Hashtable<Integer, Boolean>(16);
-//	public static final int GESTURE_ON_DOWN = 0;
-//	public static final int GESTURE_ON_SHOW_PRESS = 1;
-//	public static final int GESTURE_ON_SINGLE_TAP_UP = 2;
-//	public static final int GESTURE_ON_SCROLL = 3;
-//	public static final int GESTURE_ON_LONG_PRESS = 4;
-//	public static final int GESTURE_ON_FLING = 5;
-//
-//    public static final int GESTURE_ON_SCALE = 6;
-
 
 	private FieldMovementSystem fieldMovementSystem;
 	
