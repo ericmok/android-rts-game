@@ -40,10 +40,14 @@ public class SelectionProcessor {
             PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
             SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
-            Log.i("SelectionProcessor", "E[" + pc.x + "," + pc.y + "] Touch[" + touchX / csm.scale + "," + touchY / csm.scale + "]");
-            double sqDist = Math.sqrt(square(pc.x - (1/csm.scale) * touchX) + square(pc.y - (1/csm.scale) * touchY));
+            float worldCoordX = (touchX / csm.scale) + csm.x;
+            float worldCoordY = (touchY  / csm.scale) + csm.y;
 
-            if (sqDist < 4 * (1/csm.scale)) {
+            //Log.i("SelectionProcessor", "select? " + pc.x + "," + pc.y + " when [" + worldCoordX + "," + worldCoordY + "]");
+
+            double sqDist = Math.sqrt(square(pc.x - worldCoordX) + square(pc.y - worldCoordY));
+
+            if (sqDist < 2) {
                 userSelection.add(entity);
                 sc.isSelected = true;
             }

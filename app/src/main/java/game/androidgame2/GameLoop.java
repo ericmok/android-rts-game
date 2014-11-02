@@ -185,9 +185,10 @@ public class GameLoop implements Runnable {
         game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
         game.graphics.flushCameraModifications();
 
-        if (gestures.containsKey(GESTURE_ON_SINGLE_TAP_UP)) {
+        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
             ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
-            selectionProcessor.process(selectableEntities, cameraEntity, touchX, touchY);
+            selectionProcessor.process(selectableEntities, cameraEntity,
+                    (float)game.gameInput.touchPosition.x, (float)game.gameInput.touchPosition.y);
         }
 
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
