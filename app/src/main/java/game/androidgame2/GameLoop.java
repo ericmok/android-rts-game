@@ -1,7 +1,6 @@
 package game.androidgame2;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
 import components.CameraSettingsComponent;
-import components.Denormalizable;
 import components.PositionComponent;
 import components.Entity;
 
@@ -42,22 +40,22 @@ public class GameLoop implements Runnable {
 	private long tickDifference = 0;
 	private long startTime = 0;
 	
-	private MotionEvent motionEvent = null; // Pointer
-	private float touchX = 0;
-	private float touchY = 0;
-    public float gestureScrollValueX = 0.0f;
-    public float gestureScrollValueY = 0.0f;
-    public float gestureScaleValue = 1.0f;
-
-	private Hashtable<Integer, Boolean> gestures = new Hashtable<Integer, Boolean>(16);
-	public static final int GESTURE_ON_DOWN = 0;
-	public static final int GESTURE_ON_SHOW_PRESS = 1;
-	public static final int GESTURE_ON_SINGLE_TAP_UP = 2;
-	public static final int GESTURE_ON_SCROLL = 3;
-	public static final int GESTURE_ON_LONG_PRESS = 4;
-	public static final int GESTURE_ON_FLING = 5;
-
-    public static final int GESTURE_ON_SCALE = 6;
+//	private MotionEvent motionEvent = null; // Pointer
+//	private float touchX = 0;
+//	private float touchY = 0;
+//    public float gestureScrollValueX = 0.0f;
+//    public float gestureScrollValueY = 0.0f;
+//    public float gestureScaleValue = 1.0f;
+//
+//	private Hashtable<Integer, Boolean> gestures = new Hashtable<Integer, Boolean>(16);
+//	public static final int GESTURE_ON_DOWN = 0;
+//	public static final int GESTURE_ON_SHOW_PRESS = 1;
+//	public static final int GESTURE_ON_SINGLE_TAP_UP = 2;
+//	public static final int GESTURE_ON_SCROLL = 3;
+//	public static final int GESTURE_ON_LONG_PRESS = 4;
+//	public static final int GESTURE_ON_FLING = 5;
+//
+//    public static final int GESTURE_ON_SCALE = 6;
 
 
 	private FieldMovementSystem fieldMovementSystem;
@@ -189,12 +187,15 @@ public class GameLoop implements Runnable {
 
         CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.cData.get(CameraSettingsComponent.class);
 
-        if (gestures.containsKey(GESTURE_ON_SCROLL)) {
-            csm.x += gestureScrollValueX;
-            csm.y += gestureScrollValueY;
+        int currentGesture = game.gameInput.takeCurrentGesture();
+
+        if (currentGesture == GameInput.GESTURE_ON_SCROLL) {
+            csm.x += game.gameInput.touchScrollDeltas.x / csm.scale;
+            csm.y += game.gameInput.touchScrollDeltas.y / csm.scale;
         }
-        if (gestures.containsKey(GESTURE_ON_SCALE)) {
-            csm.scale *= gestureScaleValue;
+
+        if (currentGesture == GameInput.GESTURE_ON_SCALE) {
+            csm.scale *= game.gameInput.touchScale;
         }
 
         game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
@@ -383,7 +384,7 @@ public class GameLoop implements Runnable {
 //
 //		}
 		
-		gestures.clear();
+		//gestures.clear();
 	}
 	
 	
@@ -414,115 +415,124 @@ public class GameLoop implements Runnable {
 		}
 	}
 	
-	public void onTouchEvent(MotionEvent event, float x, float y) {
-		motionEvent = event;
-		touchX = x;
-		touchY = y;
-		
-//		touchX = 2.0f * x / 1080;
-//		touchY = 2.0f * y / 1920 * (1920.0f / 1080);
-//		
-		//Log.i("GameLoop TouchEvent", "Touch at: " + x + "," + y);
-		
-//		if (activeTriggerField == null) {
-//			activeTriggerField = game.gamePool.triggerFields.fetchMemory();
-//		}
-//		if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
-//			activeTriggerField.source.x = touchX;
-//			activeTriggerField.source.y = touchY;
-//			activeTriggerField.dest.x = touchX;
-//			activeTriggerField.dest.y = touchY + 0.1;
-//		}
-//		if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
-//			if (activeTriggerField.dest.x == touchX && activeTriggerField.dest.y == touchY) {
-//				activeTriggerField.dest.x = touchX;
-//				activeTriggerField.dest.y = touchY + 0.1;
-//			}
-//			else  {
-//				activeTriggerField.dest.x = touchX;
-//				activeTriggerField.dest.y = touchY;
-//			}
-//		}
-//		if ( event.getAction() == MotionEvent.ACTION_UP ) {
-//			if (activeTriggerField.dest.x != activeTriggerField.source.x && activeTriggerField.dest.y != activeTriggerField.source.y) {
-//				activeTriggerField.dest.x = touchX;
-//				activeTriggerField.dest.y = touchY;
-//				game.stage.players.get(0).fields.add(activeTriggerField);
-//			}
+//	public void onTouchEvent(MotionEvent event) {
+//		motionEvent = event;
 //
-//			activeAnimation.resetProgress();
-//			activeTriggerField = null;
-//		}
+//        Vector2 vec = game.gamePool.vector2s.fetchMemory();
+//		game.gameInput.getCoordsTranslatedToCenterOfScreen(vec, event);
+//        touchX = (float)vec.x;
+//        touchY = (float)vec.y;
+//        game.gamePool.vector2s.recycleMemory(vec);
 //
-	}
-
-	
-	public boolean gestureOnDown(MotionEvent e) {
-		Log.i("gestureOnDown", "gestureOnDown");
-        motionEvent = e;
-		gestures.put(GESTURE_ON_DOWN, true);
-		return true;
-	}
-
-	public void gestureOnShowPress(MotionEvent e) {
-		Log.i("gestureOnShowPress", "gestureOnShowPress");
-        motionEvent = e;
-		gestures.put(GESTURE_ON_SHOW_PRESS, true);
-	}
-
-	public boolean gestureOnSingleTapUp(MotionEvent e) {
-		Log.i("gestureOnSingleTapUp", "gestureOnSingleTapUp");
-        motionEvent = e;
-		gestures.put(GESTURE_ON_SINGLE_TAP_UP, true);
-		return true;
-	}
-
-    /**
-     * Since drawing y axis is actually inverted, the vertical scroll we be inverted
-     * @param e1
-     * @param e2
-     * @param distanceX
-     * @param distanceY
-     * @return
-     */
-	public boolean gestureOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		//Log.i("gestureOnScroll", "gestureOnScroll");
-        Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
-
-        CameraSettingsComponent csm =
-                (CameraSettingsComponent) game.engine.entityDenormalizer
-                        .getListForLabel(Entity.LOGIC_CAMERA).get(0)
-                        .cData.get(CameraSettingsComponent.class);
-
-        motionEvent = e1;
-		gestures.put(GESTURE_ON_SCROLL, true);
-
-        gestureScrollValueX = (2 * distanceX / game.getGLSurfaceView().getWidth()) * game.getGameRenderer().getAspectRatio() / csm.scale;
-        gestureScrollValueY = -(2 * distanceY / game.getGLSurfaceView().getHeight()) / csm.scale;
-
-		return true;
-	}
-
-	public void gestureOnLongPress(MotionEvent e) {
-		Log.i("gestureOnLongPress", "gestureOnLongPress");
-        motionEvent = e;
-		gestures.put(GESTURE_ON_LONG_PRESS, true);
-	}
-
-	public boolean gestureOnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		Log.i("gestureOnFling", "gestureOnFling");
-        motionEvent = e1;
-		gestures.put(GESTURE_ON_FLING, true);
-		return true;
-	}
-
-    public boolean onScale(ScaleGestureDetector detector) {
-        Log.i("onScale", "onScale");
-        //Log.i("onScale", "onScale scaleFactor [" + detector.getScaleFactor() + "]");
-        gestures.put(GESTURE_ON_SCALE, true);
-
-        gestureScaleValue = detector.getScaleFactor();
-
-        return true;
-    }
+////		touchX = 2.0f * x / 1080;
+////		touchY = 2.0f * y / 1920 * (1920.0f / 1080);
+////
+//		//Log.i("GameLoop TouchEvent", "Touch at: " + x + "," + y);
+//
+////		if (activeTriggerField == null) {
+////			activeTriggerField = game.gamePool.triggerFields.fetchMemory();
+////		}
+////		if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
+////			activeTriggerField.source.x = touchX;
+////			activeTriggerField.source.y = touchY;
+////			activeTriggerField.dest.x = touchX;
+////			activeTriggerField.dest.y = touchY + 0.1;
+////		}
+////		if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
+////			if (activeTriggerField.dest.x == touchX && activeTriggerField.dest.y == touchY) {
+////				activeTriggerField.dest.x = touchX;
+////				activeTriggerField.dest.y = touchY + 0.1;
+////			}
+////			else  {
+////				activeTriggerField.dest.x = touchX;
+////				activeTriggerField.dest.y = touchY;
+////			}
+////		}
+////		if ( event.getAction() == MotionEvent.ACTION_UP ) {
+////			if (activeTriggerField.dest.x != activeTriggerField.source.x && activeTriggerField.dest.y != activeTriggerField.source.y) {
+////				activeTriggerField.dest.x = touchX;
+////				activeTriggerField.dest.y = touchY;
+////				game.stage.players.get(0).fields.add(activeTriggerField);
+////			}
+////
+////			activeAnimation.resetProgress();
+////			activeTriggerField = null;
+////		}
+////
+//	}
+//
+//
+//	public boolean gestureOnDown(MotionEvent e) {
+//		Log.i("gestureOnDown", "gestureOnDown");
+//        motionEvent = e;
+//		gestures.put(GESTURE_ON_DOWN, true);
+//		return true;
+//	}
+//
+//	public void gestureOnShowPress(MotionEvent e) {
+//		Log.i("gestureOnShowPress", "gestureOnShowPress");
+//        motionEvent = e;
+//		gestures.put(GESTURE_ON_SHOW_PRESS, true);
+//	}
+//
+//	public boolean gestureOnSingleTapUp(MotionEvent e) {
+//		Log.i("gestureOnSingleTapUp", "gestureOnSingleTapUp");
+//        motionEvent = e;
+//		gestures.put(GESTURE_ON_SINGLE_TAP_UP, true);
+//		return true;
+//	}
+//
+//    /**
+//     * Since drawing y axis is actually inverted, the vertical scroll we be inverted
+//     * @param e1
+//     * @param e2
+//     * @param distanceX
+//     * @param distanceY
+//     * @return
+//     */
+//	public boolean gestureOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+//		//Log.i("gestureOnScroll", "gestureOnScroll");
+//        Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
+//
+//        CameraSettingsComponent csm =
+//                (CameraSettingsComponent) game.engine.entityDenormalizer
+//                        .getListForLabel(Entity.LOGIC_CAMERA).get(0)
+//                        .cData.get(CameraSettingsComponent.class);
+//
+//        motionEvent = e1;
+//		gestures.put(GESTURE_ON_SCROLL, true);
+//
+//        Vector2 vec = game.gamePool.vector2s.fetchMemory();
+//        game.gameInput.getCoordsTranslatedToCenterOfScreen(vec, e1);
+//        gestureScrollValueX = (float)vec.x / csm.scale;
+//        gestureScrollValueY = (float)vec.y / csm.scale;
+//        game.gamePool.vector2s.recycleMemory(vec);
+//        //gestureScrollValueX = (2 * distanceX / game.getGLSurfaceView().getWidth()) * game.getGameRenderer().getAspectRatio() / csm.scale;
+//        //gestureScrollValueY = -(2 * distanceY / game.getGLSurfaceView().getHeight()) / csm.scale;
+//
+//		return true;
+//	}
+//
+//	public void gestureOnLongPress(MotionEvent e) {
+//		Log.i("gestureOnLongPress", "gestureOnLongPress");
+//        motionEvent = e;
+//		gestures.put(GESTURE_ON_LONG_PRESS, true);
+//	}
+//
+//	public boolean gestureOnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+//		Log.i("gestureOnFling", "gestureOnFling");
+//        motionEvent = e1;
+//		gestures.put(GESTURE_ON_FLING, true);
+//		return true;
+//	}
+//
+//    public boolean onScale(ScaleGestureDetector detector) {
+//        Log.i("onScale", "onScale");
+//        //Log.i("onScale", "onScale scaleFactor [" + detector.getScaleFactor() + "]");
+//        gestures.put(GESTURE_ON_SCALE, true);
+//
+//        gestureScaleValue = detector.getScaleFactor();
+//
+//        return true;
+//    }
 }

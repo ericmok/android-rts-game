@@ -72,13 +72,19 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	}
 
     /**
-     * Sets up projection matrix
+     * Does screen size calculations:
+     * <ul>
+     *     <li>Sets up projection matrix</li>
+     *     <li>Sets up game input callibrations</li>
+     * </ul>
      * @param width
      * @param height
      */
 	public void setupViewport(int width, int height) {
 		// Set the OpenGL viewport to the same size as the surface.
 		GLES20.glViewport(0, 0, width, height);
+
+        game.gameInput.setScreenDimensions(width, height);
 
         /*
          * Landscape and portrait mode will change how big a unit length looks on the screen.

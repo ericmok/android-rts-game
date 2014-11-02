@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import game.androidgame2.Game;
+import game.androidgame2.GameInput;
 import game.androidgame2.GameLoop;
 import game.androidgame2.Vector3;
 import tenth.system.SystemNode.NodeType;
@@ -32,8 +33,8 @@ public class SelectionSystem {
 	 * @param selected
 	 * @param elapsedTime
 	 */
-	public void update(ArrayList<SystemNode> nodes, ArrayList<SystemNode> selected, float touchX, float touchY, Hashtable<Integer, Boolean> gestures, long elapsedTime) {
-		if (gestures.containsKey(GameLoop.GESTURE_ON_SINGLE_TAP_UP) && 
+	public void update(ArrayList<SystemNode> nodes, ArrayList<SystemNode> selected, float touchX, float touchY, int currentGesture, long elapsedTime) {
+		if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP &&
 				this.selectionState == SelectionState.SELECT_UNIT) {
 
 			selected.clear();

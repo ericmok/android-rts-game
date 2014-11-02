@@ -1,30 +1,15 @@
 package game.androidgame2;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-
 import components.CameraSettingsComponent;
 import components.Entity;
 import components.GameEntities;
-import components.PositionComponent;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import components.Engine;
 
-public class Game extends ScaleGestureDetector.SimpleOnScaleGestureListener
-                  implements OnGestureListener {
+public class Game {
 
     public Engine engine = new Engine();
 
@@ -38,6 +23,8 @@ public class Game extends ScaleGestureDetector.SimpleOnScaleGestureListener
 
 	private Thread gameThread;
 	private GameLoop gameLoop;
+
+    public GameInput gameInput;
 	
 	/**
 	 * Stores pre-loaded heap memory allocations of game objects 
@@ -67,22 +54,23 @@ public class Game extends ScaleGestureDetector.SimpleOnScaleGestureListener
 	public Game(Activity parentActivity) {
 		context = parentActivity;
 		gameState = State.UNINITIALIZED;
-		
+
+        gameInput = new GameInput();
+
 		gameGLSurfaceView = new GameGLSurfaceView(context, this);
 		gameRenderer = new GameRenderer(parentActivity, this);
 		
 		gameGLSurfaceView.setRenderer(gameRenderer);
-		
-		gameGLSurfaceView.setRenderMode(GameGLSurfaceView.RENDERMODE_CONTINUOUSLY);		
-		
+		gameGLSurfaceView.setRenderMode(GameGLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
 		gameLoop = new GameLoop(this);
 		gameThread = new Thread(gameLoop);
-		
+
 		gamePool = new GamePool();
 		gamePool.allocate();
 		
 		graphics = new Graphics(parentActivity);
-		
+
 		this.setGameState(State.LOADING);
 		loadLevel();
 		this.setGameState(State.LOADED);
@@ -317,92 +305,7 @@ public class Game extends ScaleGestureDetector.SimpleOnScaleGestureListener
 	public void onSurfaceReady() {
 		((GameActivity)context).onSurfaceReady();
 	}
-	
-	/**
-	 * Called by UI thread
-	 * @param event
-	 */
-	public void onTouchEvent(MotionEvent event) {
-		//DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-//		
-//		float x = event.getX() - gameGLSurfaceView.getWidth() / 2;
-//		float y = gameGLSurfaceView.getHeight() - event.getY() - gameGLSurfaceView.getHeight() / 2;
-//		x = (x / gameGLSurfaceView.getWidth() ) * 32;
-//		y = gameRenderer.getAspectRatio() * 16 * y / (gameGLSurfaceView.getHeight() / 2);
-//		
-//		//x = x / 16;
-//		//y = y / 16;
-//		//x = x - 16;
-//		//y = y - 16 * getGameRenderer().getAspectRatio();
-//		Log.i("Touch: ", Float.toString(x) + "," + Float.toString(y));
-//		
-//		Troop troop = new Troop();
-//		troop.setPosition(x, y);
-//		
-//		if (x < 0) {
-//			y = -y;
-//		}
-//		troop.getOrientation().setDegrees(Math.atan(y / x));
-		
-		/*
-		 * Normalized to -1 to 1
-		 */
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		
-		float mx = event.getX() - (gameGLSurfaceView.getWidth() / 2);
-		float my = ( gameGLSurfaceView.getHeight() - event.getY() ) - (gameGLSurfaceView.getHeight() / 2); 
-		
-		// From [-.5, .5] to [-1, 1]
-		// Orientation Landscape
-		if (gameGLSurfaceView.getWidth() > gameGLSurfaceView.getHeight()) {
-			mx = gameRenderer.getAspectRatio() * (2 * mx / gameGLSurfaceView.getWidth());
-			my = (2 * my / gameGLSurfaceView.getHeight());
-		}
-		else {
-			mx = (2 * mx / gameGLSurfaceView.getWidth());
-			my = gameRenderer.getAspectRatio() * (2 * my / gameGLSurfaceView.getHeight());	
-		}
-		
-//		Log.i("GAME M", "GAME M: " + gameRenderer.getAspectRatio());
-//		Log.i("GAME M", "GAME M: " + mx + "/" + gameGLSurfaceView.getWidth() + "," + my + "/" + gameGLSurfaceView.getHeight());
 
-		gameLoop.onTouchEvent(event, mx, my);
-	}
-	
-	public Context getContext() { return context; }
+    public Context getContext() { return context; }
 
-	@Override
-	public boolean onDown(MotionEvent e) {
-		return gameLoop.gestureOnDown(e);
-	}
-
-	@Override
-	public void onShowPress(MotionEvent e) {
-		gameLoop.gestureOnShowPress(e);
-	}
-
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		return gameLoop.gestureOnSingleTapUp(e);
-	}
-
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		return gameLoop.gestureOnScroll(e1, e2, distanceX, distanceY);
-	}
-
-	@Override
-	public void onLongPress(MotionEvent e) {
-		gameLoop.gestureOnLongPress(e);
-	}
-
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		return gameLoop.gestureOnFling(e1, e2, velocityX, velocityY);
-	}
-
-    @Override
-    public boolean onScale(ScaleGestureDetector detector) {
-        return gameLoop.onScale(detector);
-    }
 }

@@ -1,7 +1,6 @@
 package game.androidgame2;
 
 import android.content.Context;
-import android.gesture.Gesture;
 import android.opengl.GLSurfaceView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -18,14 +17,14 @@ public class GameGLSurfaceView extends GLSurfaceView {
 	private GestureDetector gestureDetector;
 
     private ScaleGestureDetector scaleGestureDetector;
-	
+
 	public GameGLSurfaceView(Context context, Game game) {
 		super(context);
 		
 		this.game = game;
 
-		gestureDetector = new GestureDetector(this.getContext(), game);
-		scaleGestureDetector = new ScaleGestureDetector(this.getContext(), game);
+		gestureDetector = new GestureDetector(this.getContext(), game.gameInput);
+		scaleGestureDetector = new ScaleGestureDetector(this.getContext(), game.gameInput);
 
 		this.setEGLContextClientVersion(2);
 	}
@@ -47,28 +46,30 @@ public class GameGLSurfaceView extends GLSurfaceView {
 		//if (event.getAction() == MotionEvent.ACTION_DOWN) {
 //			queueEvent(new Runnable() {
 //				public void run() {
-//					
+//
 //				}
 //			});
 		//}
-		
+
 		//float x = event.getX() - this.getWidth() / 2;
-			
+
 		//float x = (event.getX() - this.getWidth() / 2);
 		//float y = event.getY() - this.getHeight() / 2;
-		
+
 		// What is this?
 //		float y = this.getHeight() - event.getY() - this.getHeight() / 2;
 //		x = (x / this.getWidth() ) * 32;
 //		y = game.getGameRenderer().getAspectRatio() * 16 * y / (this.getHeight() / 2);
-		
+
 		//Log.i("GameGLSurfaceView TouchEvent", "Touch at: " + x + "," + y);
-		
-		super.onTouchEvent(event);
-		
-		game.onTouchEvent(event);
-		gestureDetector.onTouchEvent(event);
+
+        super.onTouchEvent(event);
+
+//		game.onTouchEvent(event);
+
+        gestureDetector.onTouchEvent(event);
         scaleGestureDetector.onTouchEvent(event);
+
 
 		return true;
 	}
