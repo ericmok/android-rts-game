@@ -20,7 +20,9 @@ import game.androidgame2.TextureLoader.LetterTexture;
 public class GameRenderer implements GLSurfaceView.Renderer  {
 
 	private GameRenderer m = this;
-	
+
+    public static float INTIAL_ASPECT_RATIO_VALUE = (1920.0f / 1080);
+
 	private Context context;
 	private Game game;
 	
@@ -29,15 +31,23 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
     private float[] tempMatrix;
 	//private float[] cameraMatrix;
 	private float[] projectionMatrix;
-	
-	private float aspectRatio = 1.0f;
-	
+
 	public Object drawingMutex = new Object();
 	
 	private boolean surfaceIsReady = false;
 
 	private long previousTick = 0;
 	private long tickDifference = 0;
+
+    private float aspectRatio = INTIAL_ASPECT_RATIO_VALUE;
+
+    private float leftBounds = -INTIAL_ASPECT_RATIO_VALUE;
+    private float rightBounds = INTIAL_ASPECT_RATIO_VALUE;
+    private float bottomBounds = -1;
+    private float topBounds = 1;
+    private float near = 1;
+    private float far = 1000;
+    private float scale = 1.0f;
 	
 	public GameRenderer(Context parentActivity, Game game) {
 		this.context = parentActivity;
@@ -52,10 +62,6 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		return game.graphics;
 	}
 	
-	public float getAspectRatio() {
-		return aspectRatio;
-	}
-	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
@@ -64,23 +70,15 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		game.graphics.load();
 
 	}
-	
+
+    /**
+     * Sets up projection matrix
+     * @param width
+     * @param height
+     */
 	public void setupViewport(int width, int height) {
 		// Set the OpenGL viewport to the same size as the surface.
 		GLES20.glViewport(0, 0, width, height);
-
-		// Set up projectionMatrix
-		// The smallest width is used
-		float left;
-		float right;
-		float bottom;
-		float top;
-		float near;
-		float far;
-
-        // Treat scale as "unit" size
-		//float scale = 16; // 1024 is a power of 2
-		float scale = 1.0f;
 
         /*
          * Landscape and portrait mode will change how big a unit length looks on the screen.
@@ -100,26 +98,26 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
         if (aspectRatio > 1.0f) {
 
             // Landscape
-            left = aspectRatio * -1.0f * scale;
-            right = aspectRatio * 1.0f * scale;
+            leftBounds = aspectRatio * -1.0f * scale;
+            rightBounds = aspectRatio * 1.0f * scale;
 
-            bottom = -1.0f * scale;
-            top = 1.0f * scale;
+            bottomBounds = -1.0f * scale;
+            topBounds = 1.0f * scale;
         }
         else {
 
             // Portrait
-            bottom= aspectRatio * -1.0f * scale;
-            top = aspectRatio * 1.0f * scale;
+            bottomBounds = aspectRatio * -1.0f * scale;
+            topBounds = aspectRatio * 1.0f * scale;
 
-            left = -1.0f * scale;
-            right = 1.0f * scale;
+            leftBounds = -1.0f * scale;
+            rightBounds = 1.0f * scale;
         }
 
         near = 1.0f;
         far = 1000.0f;
 
-        Matrix.orthoM(projectionMatrix, 0, left, right, bottom, top, near, far);
+        Matrix.orthoM(projectionMatrix, 0, leftBounds, rightBounds, bottomBounds, topBounds, near, far);
 
 		// Set up cameraMatrix
 		//Matrix.setIdentityM(cameraMatrix, 0);
@@ -128,8 +126,18 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
         // TODO: Do this calculation in the shader!
         //Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
 	}
-	
-	
+
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+    public float getLeftBounds() { return leftBounds; }
+    public float rightBounds() { return rightBounds; }
+    public float getBottomBounds() { return bottomBounds; }
+    public float getTopBounds() { return topBounds; }
+    public float getNear() { return near; }
+    public float getFar() { return far; }
+    public float getScale() { return scale; }
+
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		setupViewport(width, height);
