@@ -47,7 +47,7 @@ public class SelectionProcessor {
 
             //Log.i("SelectionProcessor", "select? " + pc.x + "," + pc.y + " when [" + worldCoordX + "," + worldCoordY + "]");
 
-            double sqDist = Math.sqrt(square(pc.x - worldCoordX) + square(pc.y - worldCoordY));
+            double sqDist = Math.sqrt(square(pc.pos.x - worldCoordX) + square(pc.pos.y - worldCoordY));
 
             /*
             If you zoom out, your selection circle will actually be bigger.

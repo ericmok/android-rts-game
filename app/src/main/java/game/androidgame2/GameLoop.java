@@ -210,8 +210,8 @@ public class GameLoop implements Runnable {
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
             }
 
-            drawItem.position.x = pc.x;
-            drawItem.position.y = pc.y;
+            drawItem.position.x = pc.pos.x;
+            drawItem.position.y = pc.pos.y;
             drawItem.angle = 0;
             drawItem.width = 1.0f;
             drawItem.height = 1.0f;
@@ -221,8 +221,8 @@ public class GameLoop implements Runnable {
             if (sc.isSelected) {
                 drawItem = drawItems.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SELECTED;
-                drawItem.position.x = pc.x;
-                drawItem.position.y = pc.y;
+                drawItem.position.x = pc.pos.x;
+                drawItem.position.y = pc.pos.y;
                 drawItem.angle = 0;
                 drawItem.width = 1.2f;
                 drawItem.height = 1.2f;
