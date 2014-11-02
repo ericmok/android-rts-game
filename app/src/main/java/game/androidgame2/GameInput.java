@@ -29,6 +29,7 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
     private float screenHeight = INITIAL_HEIGHT;
 
     // Direct Access
+    public MotionEvent motionEvent = null;
     public boolean touchDown = false;
     public Vector2 touchPosition = new Vector2();
     public Vector2 touchScrollDeltas = new Vector2();
@@ -113,6 +114,7 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
 
     public void onTouchEvent(MotionEvent event) {
         //gameLoop.onTouchEvent(event);
+        motionEvent = event;
         getCoordsTranslatedAndNormalized(touchPosition, event.getX(), event.getY());
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
