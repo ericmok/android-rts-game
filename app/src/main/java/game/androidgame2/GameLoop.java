@@ -160,8 +160,6 @@ public class GameLoop implements Runnable {
 	
 	private void performGameLogic(long elapsedTime) {
 
-		// TODO: Allow scrolling of the screen
-
         ArrayList<Entity> cameraEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_CAMERA);
         Entity cameraEntity = cameraEntities.get(0);
 
