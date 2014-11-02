@@ -28,9 +28,7 @@ public class Entity implements Denormalizable {
     public static final int TAG_FOLLOWER = 4;
 
     public static final int TAG_TROOP_TYPE = 5;
-
-    public static final int TAG_SELECTED = 6;
-
+    
     public Entity self = this;
 
     private static int NEXT_UNIQUE_ID = 1;
