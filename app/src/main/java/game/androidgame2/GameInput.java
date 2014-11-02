@@ -48,7 +48,7 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
 
     public void getCoordsTranslatedAndNormalized(Vector2 coords, float ex, float ey) {
         getCoordsTranslatedToCenterOfScreen(coords, ex, ey);
-        getCoordsNormalizedToScreen(coords, ex, ey);
+        getCoordsNormalizedToScreen(coords, (float)coords.x, (float)coords.y);
     }
 
     /**
