@@ -9,6 +9,8 @@ import components.CameraSettingsComponent;
 import components.PositionComponent;
 import components.Entity;
 
+import components.SelectionComponent;
+import processors.SelectionProcessor;
 import tenth.system.BattleSystem;
 import tenth.system.CleanDeadUnitSystem;
 import tenth.system.FieldMovementSystem;
@@ -58,6 +60,8 @@ public class GameLoop implements Runnable {
 	private ForceIntegratorSystem forceIntegratorSystem;
 	
 	private SelectionSystem selectionSystem;
+
+    private SelectionProcessor selectionProcessor;
 	
 	private TriggerField activeTriggerField = null;
 	private TimedProgress activeAnimation;
@@ -91,6 +95,8 @@ public class GameLoop implements Runnable {
 		forceIntegratorSystem = new ForceIntegratorSystem(game);
 		
 		selectionSystem = new SelectionSystem(game);
+
+        selectionProcessor = new SelectionProcessor(game);
 
 		pauseLock = new Object();
 		
@@ -179,6 +185,11 @@ public class GameLoop implements Runnable {
         game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
         game.graphics.flushCameraModifications();
 
+        if (gestures.containsKey(GESTURE_ON_SINGLE_TAP_UP)) {
+            ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
+            selectionProcessor.process(selectableEntities, cameraEntity, touchX, touchY);
+        }
+
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         drawItems.resetWriteIndex();
 
@@ -190,16 +201,31 @@ public class GameLoop implements Runnable {
             PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
 
             DrawList2DItem drawItem = drawItems.takeNextWritable();
-            drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
 
             if (entity.getLabels().contains(Entity.TAG_ENEMY_OWNED)) {
                 drawItem.animationName = DrawList2DItem.ANIMATION_ENEMY_TROOPS_IDLING;
             }
+            else {
+                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
+            }
+
             drawItem.position.x = pc.x;
             drawItem.position.y = pc.y;
             drawItem.angle = 0;
             drawItem.width = 1.0f;
             drawItem.height = 1.0f;
+
+            SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
+
+            if (sc.isSelected) {
+                drawItem = drawItems.takeNextWritable();
+                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SELECTED;
+                drawItem.position.x = pc.x;
+                drawItem.position.y = pc.y;
+                drawItem.angle = 0;
+                drawItem.width = 1.2f;
+                drawItem.height = 1.2f;
+            }
         }
 
         game.graphics.drawLists.regularSprites.unlockWritableBuffer();

@@ -16,6 +16,9 @@ public class GameEntities {
         PositionComponent positionComponent = new PositionComponent();
         troop.cData.put(PositionComponent.class, positionComponent);
 
+        SelectionComponent selectionComponent = new SelectionComponent();
+        troop.cData.put(SelectionComponent.class, selectionComponent);
+
         troop.getLabels().add(Entity.LOGIC_UNIT_DRAW);
         troop.getLabels().add(Entity.LOGIC_SELECTION);
 
