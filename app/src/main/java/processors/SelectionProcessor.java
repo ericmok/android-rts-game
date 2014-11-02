@@ -19,6 +19,8 @@ import game.androidgame2.GameSettings;
  */
 public class SelectionProcessor {
 
+    public static final int SELECTION_WIDTH = 3;
+
     private Game game;
     public ArrayList<Entity> userSelection = new ArrayList<Entity>(64);
 
@@ -47,7 +49,11 @@ public class SelectionProcessor {
 
             double sqDist = Math.sqrt(square(pc.x - worldCoordX) + square(pc.y - worldCoordY));
 
-            if (sqDist < 2) {
+            /*
+            If you zoom out, your selection circle will actually be bigger.
+            If the camera is at default, you'd expect all multipliers to cancel each other
+             */
+            if (sqDist < GameSettings.UNIT_LENGTH_MULTIPLIER * (SELECTION_WIDTH / csm.scale)) {
                 userSelection.add(entity);
                 sc.isSelected = true;
             }
