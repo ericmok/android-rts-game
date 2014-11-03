@@ -18,17 +18,18 @@ public class Entity implements Denormalizable {
     public static final int LOGIC_UNIT_DRAW = 5;
     public static final int LOGIC_ORIENTATION = 6;
     public static final int LOGIC_SELECTION = 7;
+    public static final int LOGIC_DESTINATION_MOVEMENT = 8;
 
-    public static final int LOGIC_CAMERA = 8;
+    public static final int LOGIC_CAMERA = 9;
 
-    public static final int TAG_PLAYER_OWNED = 0;
-    public static final int TAG_ALLIED_OWNED = 1;
-    public static final int TAG_ENEMY_OWNED = 2;
-    public static final int TAG_LEADER = 3;
-    public static final int TAG_FOLLOWER = 4;
+    public static final int TAG_PLAYER_OWNED = 100;
+    public static final int TAG_ALLIED_OWNED = 101;
+    public static final int TAG_ENEMY_OWNED = 102;
+    public static final int TAG_LEADER = 103;
+    public static final int TAG_FOLLOWER = 104;
 
-    public static final int TAG_TROOP_TYPE = 5;
-    
+    public static final int TAG_TROOP_TYPE = 105;
+
     public Entity self = this;
 
     private static int NEXT_UNIQUE_ID = 1;
