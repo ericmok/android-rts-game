@@ -25,6 +25,8 @@ public class Game {
 
     public GameInput gameInput;
 
+    public UIOverlay uiOverlay = new UIOverlay();
+
 	/**
 	 * Stores pre-loaded heap memory allocations of game objects 
 	 */
@@ -103,6 +105,9 @@ public class Game {
 
         LevelLoader levelLoader = new LevelLoader(this.context);
         levelLoader.load(engine, "level0.json");
+
+        uiOverlay.buttons.add(GameEntities.buildAttackButton());
+        uiOverlay.buttons.add(GameEntities.buildAttackButton());
 
 ////
 //		stage = new Stage();

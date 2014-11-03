@@ -1,5 +1,7 @@
 package components;
 
+import game.androidgame2.DrawList2DItem;
+
 /**
  * Created by eric on 10/30/14.
  */
@@ -35,6 +37,20 @@ public class GameEntities {
         ac.abilities.add(Abilities.SPECIAL_ATTACK);
 
         return troop;
+    }
+
+    public static Entity buildAttackButton() {
+        Entity button = new Entity();
+
+        ButtonComponent bc = new ButtonComponent(Buttons.ATTACK);
+        bc.position = 0;
+        bc.texture = DrawList2DItem.ANIMATION_BUTTONS_ATTACK;
+
+        button.cData.put(ButtonComponent.class, bc);
+
+        button.getLabels().add(Entity.UI_BUTTON);
+
+        return button;
     }
 
 }

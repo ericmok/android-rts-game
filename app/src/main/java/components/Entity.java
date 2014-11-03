@@ -30,6 +30,8 @@ public class Entity implements Denormalizable {
 
     public static final int TAG_TROOP_TYPE = 105;
 
+    public static final int UI_BUTTON = 500;
+
     public Entity self = this;
 
     private static int NEXT_UNIQUE_ID = 1;

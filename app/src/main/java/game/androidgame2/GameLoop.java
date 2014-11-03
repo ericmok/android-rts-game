@@ -7,6 +7,7 @@ import android.util.Log;
 
 import components.DenormalizedDataSet;
 import components.DestinationComponent;
+import components.GameEntities;
 import components.PositionComponent;
 import components.Entity;
 
@@ -245,8 +246,15 @@ public class GameLoop implements Runnable {
                     game.gameInput.touchPosition);
         }
 
+
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         drawItems.resetWriteIndex();
+
+        if (selectionProcessor.userSelection.size() > 0) {
+            // expose abilities
+            game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_ABILITIES);
+            game.uiOverlay.draw(gameCamera, drawItems);
+        }
 
          // Get the list that has the draw stuff
         ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_UNIT_DRAW);
