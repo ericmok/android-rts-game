@@ -55,7 +55,7 @@ public class Vector2 {
 
     public static void add(Vector2 output, Vector2 lhs, Vector2 rhs) {
         output.x = lhs.x + rhs.x;
-        output.y = rhs.x + rhs.y;
+        output.y = rhs.y + rhs.y;
     }
 
 	public static void subtract(Vector2 output, Vector2 lhs, Vector2 rhs) {
