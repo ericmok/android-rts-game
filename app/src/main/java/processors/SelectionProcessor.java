@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import components.CameraSettingsComponent;
 import components.Denormalizable;
 import components.PositionComponent;
 import components.SelectionComponent;

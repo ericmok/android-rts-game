@@ -20,8 +20,6 @@ public class Entity implements Denormalizable {
     public static final int LOGIC_SELECTION = 7;
     public static final int LOGIC_DESTINATION_MOVEMENT = 8;
 
-    public static final int LOGIC_CAMERA = 9;
-
     public static final int TAG_PLAYER_OWNED = 100;
     public static final int TAG_ALLIED_OWNED = 101;
     public static final int TAG_ENEMY_OWNED = 102;

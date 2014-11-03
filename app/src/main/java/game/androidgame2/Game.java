@@ -1,6 +1,5 @@
 package game.androidgame2;
 
-import components.CameraSettingsComponent;
 import components.Entity;
 import components.GameEntities;
 
@@ -25,7 +24,7 @@ public class Game {
 	private GameLoop gameLoop;
 
     public GameInput gameInput;
-	
+
 	/**
 	 * Stores pre-loaded heap memory allocations of game objects 
 	 */
@@ -101,13 +100,6 @@ public class Game {
 	public void loadLevel() {
 
         engine = new Engine();
-
-        Entity cameraEntity = GameEntities.buildCamera();
-        engine.addEntity(cameraEntity);
-
-        CameraSettingsComponent csm = (CameraSettingsComponent)cameraEntity.cData.get(CameraSettingsComponent.class);
-        csm.reset();
-        csm.scale = csm.scale * GameSettings.UNIT_LENGTH_MULTIPLIER;
 
         LevelLoader levelLoader = new LevelLoader(this.context);
         levelLoader.load(engine, "level0.json");

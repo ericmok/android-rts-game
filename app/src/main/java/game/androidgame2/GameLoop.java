@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.os.SystemClock;
 import android.util.Log;
 
-import components.CameraSettingsComponent;
 import components.DenormalizedDataSet;
 import components.DestinationComponent;
 import components.PositionComponent;
