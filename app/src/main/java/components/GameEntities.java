@@ -31,6 +31,9 @@ public class GameEntities {
 
         troop.getLabels().add(Entity.TAG_TROOP_TYPE);
 
+        AbilityComponent ac = new AbilityComponent();
+        ac.abilities.add("MOVE");
+
         return troop;
     }
 
