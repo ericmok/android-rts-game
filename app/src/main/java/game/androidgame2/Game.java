@@ -110,7 +110,7 @@ public class Game {
         csm.scale = csm.scale * GameSettings.UNIT_LENGTH_MULTIPLIER;
 
         LevelLoader levelLoader = new LevelLoader(this.context);
-        levelLoader.load(engine, "level0.json");
+        for (int i = 0; i < 300; i++) levelLoader.load(engine, "level0.json");
 
 ////
 //		stage = new Stage();

@@ -18,12 +18,17 @@ public class GameEntities {
 
         SelectionComponent selectionComponent = new SelectionComponent();
         troop.cData.put(SelectionComponent.class, selectionComponent);
+        troop.getLabels().add(Entity.LOGIC_SELECTION);
+
+        DestinationComponent destinationComponent = new DestinationComponent();
+        troop.cData.put(DestinationComponent.class, destinationComponent);
+        troop.getLabels().add(Entity.LOGIC_DESTINATION_MOVEMENT);
 
         troop.getLabels().add(Entity.LOGIC_UNIT_DRAW);
-        troop.getLabels().add(Entity.LOGIC_SELECTION);
 
         troop.getLabels().add(owner);
         troop.getLabels().add(leader);
+
         troop.getLabels().add(Entity.TAG_TROOP_TYPE);
 
         return troop;

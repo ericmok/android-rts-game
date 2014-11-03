@@ -6,6 +6,8 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import components.CameraSettingsComponent;
+import components.DenormalizedDataSet;
+import components.DestinationComponent;
 import components.PositionComponent;
 import components.Entity;
 
@@ -189,6 +191,25 @@ public class GameLoop implements Runnable {
             ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
             selectionProcessor.process(selectableEntities, cameraEntity,
                     (float)game.gameInput.touchPosition.x, (float)game.gameInput.touchPosition.y);
+        }
+
+        ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
+
+        for (int i = 0; i < destinedEntities.size(); i++) {
+            Entity entity = destinedEntities.get(i);
+            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
+            DestinationComponent dc = (DestinationComponent)entity.cData.get(DestinationComponent.class);
+            Vector2 temp = game.gamePool.vector2s.fetchMemory();
+
+            Vector2.subtract(temp, dc.dest, pc.pos);
+            temp.setNormalized();
+            temp.scale(GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime, GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime);
+
+            pc.pos.translate(temp.x, temp.y);
+
+            dc.dest.translate(2 * Math.random() - 1, 2 * Math.random() - 1);
+
+            game.gamePool.vector2s.recycleMemory(temp);
         }
 
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
