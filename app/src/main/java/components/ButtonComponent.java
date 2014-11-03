@@ -10,7 +10,7 @@ public class ButtonComponent extends Component {
     public int position = 0;
     public String texture;
 
-    public Vector2 size = new Vector2(0.1, 0.1);
+    public Vector2 size = new Vector2(1, 1);
 
     public ButtonComponent(String name) {
         this.name = name;

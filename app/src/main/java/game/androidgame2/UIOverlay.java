@@ -13,6 +13,7 @@ import components.Entity;
 public class UIOverlay {
 
     public static final float PADDING = 1.1f;
+    public static final float SIZE_NORMALIZER = 0.2f;
 
     public ArrayList<Entity> buttons = new ArrayList<Entity>(8);
 
@@ -29,12 +30,12 @@ public class UIOverlay {
             sprite.animationName = bc.texture;
             sprite.position.x = 0 + gameCamera.x;
             sprite.position.y = 0 + gameCamera.y + (initialY / (float)gameCamera.scale) + offset * i;
-            sprite.width = (float)bc.size.x / (float)gameCamera.scale;
-            sprite.height = (float)bc.size.y / (float)gameCamera.scale;
+            sprite.width = SIZE_NORMALIZER * (float)bc.size.x / (float)gameCamera.scale;
+            sprite.height = SIZE_NORMALIZER * (float)bc.size.y / (float)gameCamera.scale;
             sprite.animationProgress = 0;
             sprite.color = Color.WHITE;
 
-            offset += PADDING * bc.size.y / (float)gameCamera.scale;
+            offset += SIZE_NORMALIZER * PADDING * bc.size.y / (float)gameCamera.scale;
         }
     }
 }
