@@ -42,9 +42,25 @@ public class GameEntities {
     public static Entity buildAttackButton() {
         Entity button = new Entity();
 
-        ButtonComponent bc = new ButtonComponent(Buttons.ATTACK);
+        ButtonComponent bc = new ButtonComponent(Buttons.S_ATTACK);
         bc.position = 0;
         bc.texture = DrawList2DItem.ANIMATION_BUTTONS_ATTACK;
+        bc.size.y = 0.5f;
+
+        button.cData.put(ButtonComponent.class, bc);
+
+        button.getLabels().add(Entity.UI_BUTTON);
+
+        return button;
+    }
+
+    public static Entity buildDefendButton() {
+        Entity button = new Entity();
+
+        ButtonComponent bc = new ButtonComponent(Buttons.DEFEND);
+        bc.position = 1;
+        bc.texture = DrawList2DItem.ANIMATION_BUTTONS_DEFEND;
+        bc.size.y = 0.5f;
 
         button.cData.put(ButtonComponent.class, bc);
 

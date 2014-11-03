@@ -12,20 +12,22 @@ import components.Entity;
  */
 public class UIOverlay {
 
-    public static final float PADDING = 1.1f;
-    public static final float SIZE_NORMALIZER = 0.2f;
+    public static final float FRACTIONAL_PADDING = 0.1f;
+    public static final float PADDING = 1.0f + FRACTIONAL_PADDING;
+    public static final float SIZE_NORMALIZER = 0.5f;
 
     public ArrayList<Entity> buttons = new ArrayList<Entity>(8);
 
     public void draw(GameCamera gameCamera, RewriteOnlyArray<DrawList2DItem> sprites) {
 
-        float initialX = -0.9f * (float)gameCamera.aspectRatio;
-        float initialY = -0.9f;
         float offset = 0;
 
         for (int i = 0; i < buttons.size(); i++) {
             Entity button = buttons.get(i);
             ButtonComponent bc = (ButtonComponent)button.cData.get(ButtonComponent.class);
+
+            float initialX = -(float)gameCamera.aspectRatio + ((float)bc.size.x/2);
+            float initialY = -1 + ((float)bc.size.y/2);
 
             DrawList2DItem sprite = sprites.takeNextWritable();
             sprite.animationName = bc.texture;

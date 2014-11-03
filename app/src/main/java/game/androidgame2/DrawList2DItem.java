@@ -31,6 +31,8 @@ public class DrawList2DItem {
 	
 	public static final String ANIMATION_BUTTONS_MOVE = "Animations/Buttons/Move";
 	public static final String ANIMATION_BUTTONS_ATTACK = "Animations/Buttons/Attack";
+
+    public static final String ANIMATION_BUTTONS_DEFEND = "Animations/Buttons/Defend";
 	
 	public Vector3 position = new Vector3();
 	

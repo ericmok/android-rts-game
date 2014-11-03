@@ -108,7 +108,7 @@ public class Game {
         levelLoader.load(engine, "level0.json");
 
         uiOverlay.buttons.add(GameEntities.buildAttackButton());
-        uiOverlay.buttons.add(GameEntities.buildAttackButton());
+        uiOverlay.buttons.add(GameEntities.buildDefendButton());
 
 ////
 //		stage = new Stage();
