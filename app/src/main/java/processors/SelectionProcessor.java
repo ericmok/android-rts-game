@@ -11,8 +11,10 @@ import components.SelectionComponent;
 import game.androidgame2.Game;
 import components.Entity;
 import components.Engine;
+import game.androidgame2.GameCamera;
 import game.androidgame2.GameLoop;
 import game.androidgame2.GameSettings;
+import game.androidgame2.Vector2;
 
 /**
  * Created by eric on 10/31/14.
@@ -24,6 +26,9 @@ public class SelectionProcessor {
     private Game game;
     public ArrayList<Entity> userSelection = new ArrayList<Entity>(64);
 
+    private Vector2 temp = new Vector2();
+    private Vector2 temp2 = new Vector2();
+
     public SelectionProcessor(Game game) {
         this.game = game;
     }
@@ -32,28 +37,28 @@ public class SelectionProcessor {
         return Math.pow(x, 2);
     }
 
-    public void process(ArrayList<Entity> selectableEntities, Entity cameraEntity, float touchX, float touchY) {
+    public void process(ArrayList<Entity> selectableEntities, GameCamera gameCamera, Vector2 touchPosition) {
         userSelection.clear();
-
-        CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.cData.get(CameraSettingsComponent.class);
 
         for (int i = 0; i < selectableEntities.size(); i++) {
             Entity entity = selectableEntities.get(i);
             PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
             SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
-            float worldCoordX = (touchX / csm.scale) + csm.x;
-            float worldCoordY = (touchY  / csm.scale) + csm.y;
+            Vector2 worldCoords = temp;
+            gameCamera.getTouchToWorldCords(worldCoords, touchPosition);
 
             //Log.i("SelectionProcessor", "select? " + pc.x + "," + pc.y + " when [" + worldCoordX + "," + worldCoordY + "]");
 
-            double sqDist = Math.sqrt(square(pc.pos.x - worldCoordX) + square(pc.pos.y - worldCoordY));
+            Vector2 ray = temp2;
+            Vector2.subtract(ray, pc.pos, worldCoords);
+            double sqDist = ray.magnitude();
 
             /*
             If you zoom out, your selection circle will actually be bigger.
             If the camera is at default, you'd expect all multipliers to cancel each other
              */
-            if (sqDist < GameSettings.UNIT_LENGTH_MULTIPLIER * (SELECTION_WIDTH / csm.scale)) {
+            if (sqDist < GameSettings.UNIT_LENGTH_MULTIPLIER * (SELECTION_WIDTH / gameCamera.scale)) {
                 userSelection.add(entity);
                 sc.isSelected = true;
             }

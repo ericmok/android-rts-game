@@ -77,7 +77,8 @@ public class GameLoop implements Runnable {
 	public ArrayList<SystemNode> tempList = new ArrayList<SystemNode>(Player.MAX_UNITS);
 	public ArrayList<SystemNode> tempList2 = new ArrayList<SystemNode>(Player.MAX_UNITS);
 	
-	
+	public GameCamera gameCamera = new GameCamera();
+
 	public GameLoop(Game game) {
 		this.game = game;
 		
@@ -168,23 +169,18 @@ public class GameLoop implements Runnable {
 	
 	private void performGameLogic(long elapsedTime) {
 
-        ArrayList<Entity> cameraEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_CAMERA);
-        Entity cameraEntity = cameraEntities.get(0);
-
-        CameraSettingsComponent csm = (CameraSettingsComponent) cameraEntity.cData.get(CameraSettingsComponent.class);
-
         int currentGesture = game.gameInput.takeCurrentGesture();
 
         if (currentGesture == GameInput.GESTURE_ON_SCROLL) {
-            csm.x += game.gameInput.touchScrollDeltas.x / csm.scale;
-            csm.y += game.gameInput.touchScrollDeltas.y / csm.scale;
+            gameCamera.x += game.gameInput.touchScrollDeltas.x / gameCamera.scale;
+            gameCamera.y += game.gameInput.touchScrollDeltas.y / gameCamera.scale;
         }
 
         if (currentGesture == GameInput.GESTURE_ON_SCALE) {
-            csm.scale *= game.gameInput.touchScale;
+            gameCamera.scale *= game.gameInput.touchScale;
         }
 
-        game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
+        game.graphics.setCameraPositionAndScale((float)gameCamera.x, (float)gameCamera.y, (float)gameCamera.scale);
         game.graphics.flushCameraModifications();
 
         ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
@@ -227,8 +223,15 @@ public class GameLoop implements Runnable {
                 SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
                 if (sc.isSelected) {
                     DestinationComponent dc = (DestinationComponent)entity.cData.get(DestinationComponent.class);
-                    dc.dest.x = game.gameInput.touchPosition.x / csm.scale + csm.x;
-                    dc.dest.y = game.gameInput.touchPosition.y / csm.scale + csm.y;
+
+                    Vector2 vec2 = game.gamePool.vector2s.fetchMemory();
+
+                    gameCamera.getTouchToWorldCords(vec2, game.gameInput.touchPosition);
+
+                    dc.dest.copy(vec2);
+
+                    game.gamePool.vector2s.recycleMemory(vec2);
+
                     dc.hasDestination = true;
                     sc.isSelected = false;
                 }
@@ -239,8 +242,8 @@ public class GameLoop implements Runnable {
 
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP && selectionProcessor.userSelection.isEmpty()) {
             ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
-            selectionProcessor.process(selectableEntities, cameraEntity,
-                    (float)game.gameInput.touchPosition.x, (float)game.gameInput.touchPosition.y);
+            selectionProcessor.process(selectableEntities, gameCamera,
+                    game.gameInput.touchPosition);
         }
 
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
