@@ -116,6 +116,6 @@ public class Vector2 {
     }
 
     public String toString() {
-        return "(" + x + "," + y + ")";
+        return "(" + String.format("%.3f", x) + "," + String.format("%.3f", y) + ")";
     }
 }
