@@ -19,6 +19,7 @@ public class UIOverlay {
 
     public void draw(GameCamera gameCamera, RewriteOnlyArray<DrawList2DItem> sprites) {
 
+        float initialX = -0.9f;
         float initialY = -0.9f;
         float offset = 0;
 
@@ -28,8 +29,8 @@ public class UIOverlay {
 
             DrawList2DItem sprite = sprites.takeNextWritable();
             sprite.animationName = bc.texture;
-            sprite.position.x = 0 + gameCamera.x;
-            sprite.position.y = 0 + gameCamera.y + (initialY / (float)gameCamera.scale) + offset * i;
+            sprite.position.x = 0 + gameCamera.x + (initialX / (float)gameCamera.scale);
+            sprite.position.y = 0 + gameCamera.y - (initialY / (float)gameCamera.scale) - offset * i;
             sprite.width = SIZE_NORMALIZER * (float)bc.size.x / (float)gameCamera.scale;
             sprite.height = SIZE_NORMALIZER * (float)bc.size.y / (float)gameCamera.scale;
             sprite.animationProgress = 0;
