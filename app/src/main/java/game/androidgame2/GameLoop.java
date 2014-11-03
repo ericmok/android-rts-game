@@ -187,29 +187,60 @@ public class GameLoop implements Runnable {
         game.graphics.setCameraPositionAndScale(csm.x, csm.y, csm.scale);
         game.graphics.flushCameraModifications();
 
-        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
-            ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
-            selectionProcessor.process(selectableEntities, cameraEntity,
-                    (float)game.gameInput.touchPosition.x, (float)game.gameInput.touchPosition.y);
-        }
-
         ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
 
         for (int i = 0; i < destinedEntities.size(); i++) {
+
             Entity entity = destinedEntities.get(i);
-            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
             DestinationComponent dc = (DestinationComponent)entity.cData.get(DestinationComponent.class);
+
+            if (!dc.hasDestination) {
+                continue;
+            }
+
+            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
+            SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
+
             Vector2 temp = game.gamePool.vector2s.fetchMemory();
 
             Vector2.subtract(temp, dc.dest, pc.pos);
+
+            // Reached destination
+            if (temp.magnitude() < 0.01) {
+                dc.hasDestination = false;
+            }
+
             temp.setNormalized();
             temp.scale(GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime, GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime);
 
             pc.pos.translate(temp.x, temp.y);
 
-            dc.dest.translate(2 * Math.random() - 1, 2 * Math.random() - 1);
-
             game.gamePool.vector2s.recycleMemory(temp);
+
+        }
+
+        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP && !selectionProcessor.userSelection.isEmpty()) {
+            ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
+
+            for (int i = 0; i < selectableEntities.size(); i++) {
+                Entity entity = selectableEntities.get(i);
+                SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
+                if (sc.isSelected) {
+                    DestinationComponent dc = (DestinationComponent)entity.cData.get(DestinationComponent.class);
+                    dc.dest.x = game.gameInput.touchPosition.x / csm.scale + csm.x;
+                    dc.dest.y = game.gameInput.touchPosition.y / csm.scale + csm.y;
+                    dc.hasDestination = true;
+                    sc.isSelected = false;
+                }
+            }
+
+            selectionProcessor.userSelection.clear();
+        }
+
+        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP && selectionProcessor.userSelection.isEmpty()) {
+            ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
+            selectionProcessor.process(selectableEntities, cameraEntity,
+                    (float)game.gameInput.touchPosition.x, (float)game.gameInput.touchPosition.y);
         }
 
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
