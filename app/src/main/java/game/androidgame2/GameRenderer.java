@@ -84,6 +84,9 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		// Set the OpenGL viewport to the same size as the surface.
 		GLES20.glViewport(0, 0, width, height);
 
+        aspectRatio = (float) width / height;
+
+        game.gameCamera.aspectRatio = aspectRatio;
         game.gameInput.setScreenDimensions(width, height);
 
         /*
@@ -99,8 +102,6 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
          * Left and right bounds: [-1, +1]
          * Bottom and top bounds: [-asp, +asp]
          */
-        aspectRatio = (float) width / height;
-
         if (aspectRatio > 1.0f) {
 
             // Landscape

@@ -76,8 +76,7 @@ public class GameLoop implements Runnable {
 	
 	public ArrayList<SystemNode> tempList = new ArrayList<SystemNode>(Player.MAX_UNITS);
 	public ArrayList<SystemNode> tempList2 = new ArrayList<SystemNode>(Player.MAX_UNITS);
-	
-	public GameCamera gameCamera = new GameCamera();
+
 
 	public GameLoop(Game game) {
 		this.game = game;
@@ -172,15 +171,15 @@ public class GameLoop implements Runnable {
         int currentGesture = game.gameInput.takeCurrentGesture();
 
         if (currentGesture == GameInput.GESTURE_ON_SCROLL) {
-            gameCamera.x += game.gameInput.touchScrollDeltas.x / gameCamera.scale;
-            gameCamera.y += game.gameInput.touchScrollDeltas.y / gameCamera.scale;
+            game.gameCamera.x += game.gameInput.touchScrollDeltas.x / game.gameCamera.scale;
+            game.gameCamera.y += game.gameInput.touchScrollDeltas.y / game.gameCamera.scale;
         }
 
         if (currentGesture == GameInput.GESTURE_ON_SCALE) {
-            gameCamera.scale *= game.gameInput.touchScale;
+            game.gameCamera.scale *= game.gameInput.touchScale;
         }
 
-        game.graphics.setCameraPositionAndScale((float)gameCamera.x, (float)gameCamera.y, (float)gameCamera.scale);
+        game.graphics.setCameraPositionAndScale((float)game.gameCamera.x, (float)game.gameCamera.y, (float)game.gameCamera.scale);
         game.graphics.flushCameraModifications();
 
         ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
@@ -226,7 +225,7 @@ public class GameLoop implements Runnable {
 
                     Vector2 vec2 = game.gamePool.vector2s.fetchMemory();
 
-                    gameCamera.getTouchToWorldCords(vec2, game.gameInput.touchPosition);
+                    game.gameCamera.getTouchToWorldCords(vec2, game.gameInput.touchPosition);
 
                     dc.dest.copy(vec2);
 
@@ -242,7 +241,7 @@ public class GameLoop implements Runnable {
 
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP && selectionProcessor.userSelection.isEmpty()) {
             ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
-            selectionProcessor.process(selectableEntities, gameCamera,
+            selectionProcessor.process(selectableEntities, game.gameCamera,
                     game.gameInput.touchPosition);
         }
 
@@ -253,7 +252,7 @@ public class GameLoop implements Runnable {
         if (selectionProcessor.userSelection.size() > 0) {
             // expose abilities
             game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_ABILITIES);
-            game.uiOverlay.draw(gameCamera, drawItems);
+            game.uiOverlay.draw(game.gameCamera, drawItems);
         }
 
          // Get the list that has the draw stuff

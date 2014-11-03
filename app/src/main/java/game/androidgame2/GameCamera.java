@@ -5,6 +5,7 @@ package game.androidgame2;
  */
 public class GameCamera extends Vector2 {
     public double scale = GameSettings.UNIT_LENGTH_MULTIPLIER;
+    public double aspectRatio = 1.0;
 
     private Vector2 temp = new Vector2();
 
