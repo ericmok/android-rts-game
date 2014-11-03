@@ -14,6 +14,12 @@ public class Vector2 {
 		this.y = e;
 	}
 
+    public Vector2 copy(Vector2 other) {
+        this.x = other.x;
+        this.y = other.y;
+        return this;
+    }
+
     public Vector2 set(double[] vec) {
         x = vec[0];
         y = vec[0];
