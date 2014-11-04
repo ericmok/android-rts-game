@@ -18,7 +18,7 @@ public class MapScrollFunction {
      * @param gameInput
      * @param gameCamera
      */
-    public static void process(int currentGesture, GameInput gameInput, GameCamera gameCamera) {
+    public static void apply(int currentGesture, GameInput gameInput, GameCamera gameCamera) {
         if (currentGesture == GameInput.GESTURE_ON_SCROLL) {
             gameCamera.x += gameInput.touchScrollDeltas.x / gameCamera.scale;
             gameCamera.y += gameInput.touchScrollDeltas.y / gameCamera.scale;

@@ -3,11 +3,8 @@ package game.androidgame2;
 import java.util.ArrayList;
 
 import android.os.SystemClock;
-import android.util.Log;
 
-import components.DenormalizedDataSet;
 import components.DestinationComponent;
-import components.GameEntities;
 import components.PositionComponent;
 import components.Entity;
 
@@ -172,7 +169,7 @@ public class GameLoop implements Runnable {
 
         int currentGesture = game.gameInput.takeCurrentGesture();
 
-        MapScrollFunction.process(currentGesture, game.gameInput, game.gameCamera);
+        MapScrollFunction.apply(currentGesture, game.gameInput, game.gameCamera);
 
         ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
         MoveTowardDestinationFunction.apply(destinedEntities, elapsedTime);
