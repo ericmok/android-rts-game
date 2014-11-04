@@ -70,23 +70,55 @@ public class Orientation extends Vector2 {
 	public double getDegrees() {
         if (cacheDirty) {
             cacheDirty = false;
-            return cacheDegrees = Orientation.getDegrees(0, 0, this.x, this.y);
+            return cacheDegrees = Orientation.getDegreesBaseX(this.x, this.y);
         }
         else {
             return cacheDegrees;
         }
 	}
-	
+
+    public static double getDegrees(Vector2 base, Vector2 v2) {
+        return Orientation.getDegrees(base.x, base.y, v2.x, v2.y);
+    }
 	
 	public static double getDegrees(Vector2 v1) {
-		return Orientation.getDegrees(0, 0, v1.x, v1.y);
+		return Orientation.getDegrees(1, 0, v1.x, v1.y);
 	}
 
     public static double getDegrees(Vector3 v1) {
-        return Orientation.getDegrees(0, 0, v1.x, v1.y);
+        return Orientation.getDegrees(1, 0, v1.x, v1.y);
     }
 
-	/** 
+    /**
+     * Gets degrees against standard vector (1,0).
+     * This assumption makes it easier to faster to compute degrees by skipping
+     * certain calculations.
+     *
+     * @param x1
+     * @param y1
+     * @return
+     */
+    public static double getDegreesBaseX(double x1, double y1) {
+        double magnitude = Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2));
+
+        if (magnitude == 0) {
+            return 0;
+        }
+
+        // inverse cosine of result: [ v1 * (1,0) ] / [ magnitude v1 * (1) ]
+
+        double ret = x1 / magnitude;
+        ret = Math.toDegrees( Math.acos(ret) );
+
+        if (y1 > 0) {
+            return ret;
+        }
+        else {
+            return -ret;
+        }
+    }
+
+	/**
 	 * Update: No longer need to normalize to use this method
      *
 	 * @param x1
@@ -96,20 +128,19 @@ public class Orientation extends Vector2 {
 	 * @return
 	 */
 	public static double getDegrees(double x1, double y1, double x2, double y2) {
-		double xDelta = x2 - x1;
-		double yDelta = y2 - y1; 
+        double magnitude1 = Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2));
+        double magnitude2 = Math.sqrt(Math.pow(x2, 2) + Math.pow(y2, 2));
 
-        double magnitude = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
-
-        if (magnitude == 0) {
+        if (magnitude1 == 0 || magnitude2 == 0) {
             return 0;
         }
 
-        // inverse cosine of result: [ (xD, yD) * (0, 1) ] / [ magnitude (xD,yD) * (1) ]
+        // inverse cosine of result: [ v1 * v2 ] / [ magnitude v1 * magnitude v2 ]
 
-        double ret = Math.toDegrees( Math.acos(xDelta / magnitude) );
+        double ret = (x1 * x2 + y1 * y2) / (magnitude1 * magnitude2);
+        ret = Math.toDegrees( Math.acos(ret) );
 
-        if (yDelta > 0) {
+        if (y2 - y1 > 0) {
             return ret;
         }
         else {
