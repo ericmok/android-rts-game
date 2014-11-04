@@ -144,6 +144,7 @@ public class Orientation extends Vector2 {
 	 */
 	public void copy(Orientation orientation) {
 		this.cacheDegrees = orientation.getDegrees();
+        this.cacheDirty = false;
 		this.x = orientation.x;
 		this.y = orientation.y;
 	}
