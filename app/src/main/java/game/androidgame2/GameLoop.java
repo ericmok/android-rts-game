@@ -4,12 +4,8 @@ import java.util.ArrayList;
 
 import android.os.SystemClock;
 
-import components.DestinationComponent;
-import components.PositionComponent;
 import components.Entity;
 
-import components.SelectionComponent;
-import processors.Functional;
 import processors.MapScrollFunction;
 import processors.MoveTowardDestinationFunction;
 import processors.SelectionProcessor;

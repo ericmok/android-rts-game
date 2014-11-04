@@ -1,17 +1,12 @@
 package processors;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
-import components.Denormalizable;
-import components.PositionComponent;
+import components.WorldComponent;
 import components.SelectionComponent;
 import game.androidgame2.Game;
 import components.Entity;
-import components.Engine;
 import game.androidgame2.GameCamera;
-import game.androidgame2.GameLoop;
 import game.androidgame2.GameSettings;
 import game.androidgame2.Vector2;
 import utils.VoidFunc;
@@ -47,7 +42,7 @@ public class SelectionProcessor {
 
         for (int i = 0; i < selectableEntities.size(); i++) {
             Entity entity = selectableEntities.get(i);
-            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
+            WorldComponent pc = (WorldComponent)entity.cData.get(WorldComponent.class);
             SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
             Vector2 worldCoords = temp;

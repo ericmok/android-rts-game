@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import components.DestinationComponent;
 import components.Entity;
-import components.PositionComponent;
+import components.WorldComponent;
 import components.SelectionComponent;
 import game.androidgame2.GameSettings;
 import game.androidgame2.Vector2;
@@ -27,10 +27,10 @@ public class MoveTowardDestinationFunction {
                 continue;
             }
 
-            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
+            WorldComponent wc = (WorldComponent)entity.cData.get(WorldComponent.class);
             SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
-            Vector2.subtract(temp, dc.dest, pc.pos);
+            Vector2.subtract(temp, dc.dest, wc.pos);
 
             // Reached destination
             if (temp.magnitude() < 0.01) {
@@ -40,7 +40,8 @@ public class MoveTowardDestinationFunction {
             temp.setNormalized();
             temp.scale(GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime, GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime);
 
-            pc.pos.translate(temp.x, temp.y);
+            wc.pos.translate(temp.x, temp.y);
+            wc.rot.setDirection(temp);
         }
     }
 }

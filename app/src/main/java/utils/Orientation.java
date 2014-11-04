@@ -101,10 +101,6 @@ public class Orientation extends Vector2 {
 			yDelta /= norm;
 		}
 		
-		if (xDelta < 0) {
-			//xDelta = -xDelta;
-		}
-		
 		if (xDelta == 0) {
 			if (yDelta > 0) {
 				return 90;
@@ -120,14 +116,8 @@ public class Orientation extends Vector2 {
 		
 		if (xDelta < 0) {
 			ret = -(180 - ret);
-//			if (yDelta < 0) {
-//				ret = (90 - ret) + 90;
-//			}
-//			else {
-//				ret = 180 - ret;
-//			}
 		}
-		
+
 		return ret;
 	}
 	

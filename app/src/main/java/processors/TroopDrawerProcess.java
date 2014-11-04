@@ -2,7 +2,7 @@ package processors;
 
 import java.util.ArrayList;
 
-import components.PositionComponent;
+import components.WorldComponent;
 import components.SelectionComponent;
 import game.androidgame2.DrawList2DItem;
 import game.androidgame2.RewriteOnlyArray;
@@ -16,7 +16,7 @@ public class TroopDrawerProcess {
     public static final void process(RewriteOnlyArray<DrawList2DItem> spriteAllocater, ArrayList<Entity> troopsToDraw, long elapsedTime) {
         for (int i = 0; i < troopsToDraw.size(); i++) {
             Entity entity = troopsToDraw.get(i);
-            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
+            WorldComponent wc = (WorldComponent)entity.cData.get(WorldComponent.class);
 
             DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
 
@@ -27,9 +27,9 @@ public class TroopDrawerProcess {
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
             }
 
-            drawItem.position.x = pc.pos.x;
-            drawItem.position.y = pc.pos.y;
-            drawItem.angle = 0;
+            drawItem.position.x = wc.pos.x;
+            drawItem.position.y = wc.pos.y;
+            drawItem.angle = (float)wc.rot.getDegrees();
             drawItem.width = 1.0f;
             drawItem.height = 1.0f;
 
@@ -38,9 +38,9 @@ public class TroopDrawerProcess {
             if (sc.isSelected) {
                 drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SELECTED;
-                drawItem.position.x = pc.pos.x;
-                drawItem.position.y = pc.pos.y;
-                drawItem.angle = 0;
+                drawItem.position.x = wc.pos.x;
+                drawItem.position.y = wc.pos.y;
+                drawItem.angle = (float)wc.rot.getDegrees();
                 drawItem.width = 1.3f;
                 drawItem.height = 1.3f;
             }

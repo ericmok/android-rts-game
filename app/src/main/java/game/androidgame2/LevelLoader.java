@@ -12,7 +12,7 @@ import java.io.InputStream;
 
 import components.Entity;
 import components.GameEntities;
-import components.PositionComponent;
+import components.WorldComponent;
 import components.Engine;
 
 /**
@@ -49,8 +49,8 @@ public class LevelLoader {
                             Entity.TAG_PLAYER_OWNED, Entity.TAG_FOLLOWER);
                     engine.addEntity(troop);
 
-                    PositionComponent pc =
-                            ((PositionComponent)troop.cData.get(PositionComponent.class));
+                    WorldComponent pc =
+                            ((WorldComponent)troop.cData.get(WorldComponent.class));
                     pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 }
 
@@ -64,8 +64,8 @@ public class LevelLoader {
                             Entity.TAG_ENEMY_OWNED, Entity.TAG_FOLLOWER);
                     engine.addEntity(troop);
 
-                    PositionComponent pc =
-                            ((PositionComponent)troop.cData.get(PositionComponent.class));
+                    WorldComponent pc =
+                            ((WorldComponent)troop.cData.get(WorldComponent.class));
                     pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 }
             }

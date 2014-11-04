@@ -15,8 +15,8 @@ public class GameEntities {
      */
     public static Entity buildTroop(int owner, int leader) {
         Entity troop = new Entity();
-        PositionComponent positionComponent = new PositionComponent();
-        troop.cData.put(PositionComponent.class, positionComponent);
+        WorldComponent worldComponent = new WorldComponent();
+        troop.cData.put(WorldComponent.class, worldComponent);
 
         SelectionComponent selectionComponent = new SelectionComponent();
         troop.cData.put(SelectionComponent.class, selectionComponent);
