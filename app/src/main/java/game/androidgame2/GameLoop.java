@@ -9,9 +9,11 @@ import components.PositionComponent;
 import components.Entity;
 
 import components.SelectionComponent;
+import processors.Functional;
 import processors.MapScrollFunction;
 import processors.MoveTowardDestinationFunction;
 import processors.SelectionProcessor;
+import processors.UserChooseNewDestinationFunction;
 import tenth.system.BattleSystem;
 import tenth.system.CleanDeadUnitSystem;
 import tenth.system.FieldMovementSystem;
@@ -176,38 +178,17 @@ public class GameLoop implements Runnable {
 
         game.uiOverlay.processInput(game.gameCamera, currentGesture, game.gameInput);
 
-        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP && !selectionProcessor.userSelection.isEmpty()) {
-
-            ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
-
-            for (int i = 0; i < selectableEntities.size(); i++) {
-                Entity entity = selectableEntities.get(i);
-                SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
-                if (sc.isSelected) {
-                    DestinationComponent dc = (DestinationComponent)entity.cData.get(DestinationComponent.class);
-
-                    Vector2 vec2 = game.gamePool.vector2s.fetchMemory();
-
-                    game.gameCamera.getTouchToWorldCords(vec2, game.gameInput.touchPosition);
-
-                    dc.dest.copy(vec2);
-
-                    game.gamePool.vector2s.recycleMemory(vec2);
-
-                    dc.hasDestination = true;
-                    sc.isSelected = false;
-                }
+        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
+            if (selectionProcessor.userSelection.isEmpty()) {
+                ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
+                selectionProcessor.process(selectableEntities, game.gameCamera,
+                        game.gameInput.touchPosition);
             }
-
-            selectionProcessor.userSelection.clear();
+            else {
+                UserChooseNewDestinationFunction.apply(selectionProcessor.userSelection, game.gameCamera, game.gameInput, SelectionProcessor.FN_DESELECT);
+                selectionProcessor.userSelection.clear();
+            }
         }
-
-        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP && selectionProcessor.userSelection.isEmpty()) {
-            ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
-            selectionProcessor.process(selectableEntities, game.gameCamera,
-                    game.gameInput.touchPosition);
-        }
-
 
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         drawItems.resetWriteIndex();

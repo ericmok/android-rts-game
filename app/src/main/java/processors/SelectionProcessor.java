@@ -14,6 +14,7 @@ import game.androidgame2.GameCamera;
 import game.androidgame2.GameLoop;
 import game.androidgame2.GameSettings;
 import game.androidgame2.Vector2;
+import utils.VoidFunc;
 
 /**
  * Created by eric on 10/31/14.
@@ -36,8 +37,13 @@ public class SelectionProcessor {
         return Math.pow(x, 2);
     }
 
+    /**
+     * Given input, mark entities selected if they fall inside the selection width
+     * @param selectableEntities
+     * @param gameCamera
+     * @param touchPosition
+     */
     public void process(ArrayList<Entity> selectableEntities, GameCamera gameCamera, Vector2 touchPosition) {
-        userSelection.clear();
 
         for (int i = 0; i < selectableEntities.size(); i++) {
             Entity entity = selectableEntities.get(i);
@@ -61,9 +67,20 @@ public class SelectionProcessor {
                 userSelection.add(entity);
                 sc.isSelected = true;
             }
-            else {
-                sc.isSelected = false;
-            }
         }
     }
+
+    public static final VoidFunc<Entity> FN_SELECT = new VoidFunc<Entity>() {
+        public void apply(Entity element) {
+            SelectionComponent sc = (SelectionComponent)element.cData.get(SelectionComponent.class);
+            sc.isSelected = true;
+        }
+    };
+
+    public static final VoidFunc<Entity> FN_DESELECT = new VoidFunc<Entity>() {
+        public void apply(Entity element) {
+            SelectionComponent sc = (SelectionComponent)element.cData.get(SelectionComponent.class);
+            sc.isSelected = false;
+        }
+    };
 }
