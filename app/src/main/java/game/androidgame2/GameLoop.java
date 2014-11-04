@@ -12,6 +12,7 @@ import components.PositionComponent;
 import components.Entity;
 
 import components.SelectionComponent;
+import processors.MapScrollFunction;
 import processors.SelectionProcessor;
 import tenth.system.BattleSystem;
 import tenth.system.CleanDeadUnitSystem;
@@ -169,15 +170,8 @@ public class GameLoop implements Runnable {
 	private void performGameLogic(long elapsedTime) {
 
         int currentGesture = game.gameInput.takeCurrentGesture();
-
-        if (currentGesture == GameInput.GESTURE_ON_SCROLL) {
-            game.gameCamera.x += game.gameInput.touchScrollDeltas.x / game.gameCamera.scale;
-            game.gameCamera.y += game.gameInput.touchScrollDeltas.y / game.gameCamera.scale;
-        }
-
-        if (currentGesture == GameInput.GESTURE_ON_SCALE) {
-            game.gameCamera.scale *= game.gameInput.touchScale;
-        }
+        
+        MapScrollFunction.process(currentGesture, game.gameInput, game.gameCamera);
 
         game.graphics.setCameraPositionAndScale((float)game.gameCamera.x, (float)game.gameCamera.y, (float)game.gameCamera.scale);
         game.graphics.flushCameraModifications();
