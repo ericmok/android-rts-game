@@ -52,7 +52,7 @@ public class Vector2 {
     }
 
     public double distanceTo(Vector2 other) {
-        return Math.sqrt(this.x * other.x + this.y * other.y);
+        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
     }
 
     public double squaredDistanceTo(Vector2 other) {
