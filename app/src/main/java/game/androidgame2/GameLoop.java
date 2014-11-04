@@ -170,11 +170,8 @@ public class GameLoop implements Runnable {
 	private void performGameLogic(long elapsedTime) {
 
         int currentGesture = game.gameInput.takeCurrentGesture();
-        
-        MapScrollFunction.process(currentGesture, game.gameInput, game.gameCamera);
 
-        game.graphics.setCameraPositionAndScale((float)game.gameCamera.x, (float)game.gameCamera.y, (float)game.gameCamera.scale);
-        game.graphics.flushCameraModifications();
+        MapScrollFunction.process(currentGesture, game.gameInput, game.gameCamera);
 
         ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
 
@@ -288,6 +285,10 @@ public class GameLoop implements Runnable {
 
         game.graphics.drawLists.regularSprites.unlockWritableBuffer();
         game.graphics.drawLists.regularSprites.finalizeUpdate();
+
+        game.graphics.setCameraPositionAndScale((float)game.gameCamera.x, (float)game.gameCamera.y, (float)game.gameCamera.scale);
+        game.graphics.flushCameraModifications();
+
 
         //game.graphics.flushCameraModifications(false);
 
