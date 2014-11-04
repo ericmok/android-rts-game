@@ -2,7 +2,7 @@ package game.androidgame2;
 
 public class Vector2 {
 
-    public static final Vector2 LEFT = new Vector2(1, 0);
+    public static final Vector2 RIGHT = new Vector2(1, 0);
     public static final Vector2 UP = new Vector2(0, 1);
 
 	public double x;
