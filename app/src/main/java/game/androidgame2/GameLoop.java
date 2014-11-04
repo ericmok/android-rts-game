@@ -191,6 +191,9 @@ public class GameLoop implements Runnable {
         ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
         MoveTowardDestinationFunction.apply(destinedEntities, elapsedTime);
 
+        // Begin graphics mutations
+        // (The mutations don't take affect immediately until explicit finalizations)
+
         RewriteOnlyArray<DrawList2DItem> spriteAllocater = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         spriteAllocater.resetWriteIndex();
 
@@ -200,6 +203,8 @@ public class GameLoop implements Runnable {
         // Draw troops
         ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_UNIT_DRAW);
         TroopDrawerProcess.process(spriteAllocater, entitiesToDraw, elapsedTime);
+
+        // Flush graphics at the same time so settings are sync'd
 
         game.graphics.drawLists.regularSprites.unlockWritableBuffer();
         game.graphics.drawLists.regularSprites.finalizeUpdate();
