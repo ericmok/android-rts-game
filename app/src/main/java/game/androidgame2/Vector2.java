@@ -56,7 +56,11 @@ public class Vector2 {
     }
 
     public double squaredDistanceTo(Vector2 other) {
-        return (this.x * other.x + this.y * other.y);
+        return Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2);
+    }
+
+    public double dotProduct(Vector2 other) {
+        return this.x * other.x + this.y * other.y;
     }
 
     public static void add(Vector2 output, Vector2 lhs, Vector2 rhs) {
