@@ -214,7 +214,10 @@ public class GameLoop implements Runnable {
 
         }
 
+        game.uiOverlay.processInput(game.gameCamera, currentGesture, game.gameInput);
+
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP && !selectionProcessor.userSelection.isEmpty()) {
+
             ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
 
             for (int i = 0; i < selectableEntities.size(); i++) {
@@ -249,11 +252,10 @@ public class GameLoop implements Runnable {
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         drawItems.resetWriteIndex();
 
-        if (selectionProcessor.userSelection.size() > 0) {
+
             // expose abilities
-            game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_ABILITIES);
             game.uiOverlay.draw(game.gameCamera, drawItems);
-        }
+
 
          // Get the list that has the draw stuff
         ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_UNIT_DRAW);

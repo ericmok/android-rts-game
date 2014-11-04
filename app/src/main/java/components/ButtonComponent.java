@@ -10,6 +10,8 @@ public class ButtonComponent extends Component {
     public int position = 0;
     public String texture;
 
+    public Vector2 touchPoint = new Vector2();
+
     public Vector2 size = new Vector2(1, 1);
 
     public ButtonComponent(String name) {

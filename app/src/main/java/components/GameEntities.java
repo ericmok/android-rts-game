@@ -45,7 +45,7 @@ public class GameEntities {
         ButtonComponent bc = new ButtonComponent(Buttons.S_ATTACK);
         bc.position = 0;
         bc.texture = DrawList2DItem.ANIMATION_BUTTONS_ATTACK;
-        bc.size.y = 0.5f;
+        bc.size.y = 0.6f;
 
         button.cData.put(ButtonComponent.class, bc);
 
@@ -60,7 +60,7 @@ public class GameEntities {
         ButtonComponent bc = new ButtonComponent(Buttons.DEFEND);
         bc.position = 1;
         bc.texture = DrawList2DItem.ANIMATION_BUTTONS_DEFEND;
-        bc.size.y = 0.5f;
+        bc.size.y = 0.6f;
 
         button.cData.put(ButtonComponent.class, bc);
 
