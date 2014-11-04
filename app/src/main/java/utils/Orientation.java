@@ -4,22 +4,33 @@ import game.androidgame2.Vector2;
 import game.androidgame2.Vector3;
 
 /**
- * TODO: Make fields private
- * TODO: Zero degrees problem
- *
+ * Provides mutations that will normalize the vector.
+ * Calling getDegrees() will cache the restule.
+ * Using appropriate orientation mutators will mark the
+ * internal cache as dirty.
  */
 public class Orientation extends Vector2 {
-	
-	private double degrees;
+
+    /**
+     * Though mathematically redundant, subsequent calls to getDegrees
+     * will return cache instead as long as cacheDirty is not true.
+     */
+	private double cacheDegrees;
+
+    /**
+     * Mutations to orientation set this to true, so eager
+     * mutations don't trigger premature calculation of degrees
+     */
+    private boolean cacheDirty = false;
 	
 	public Orientation() {
-		this.degrees = 0.0;
+		this.cacheDegrees = 0.0;
 		this.x = 0.0;
 		this.y = 1.0;
 	}
 	
 	public Orientation(double degree) {
-		this.degrees = degree;
+		this.cacheDegrees = degree;
 		this.setDegrees(degree);
 	}
 	
@@ -31,7 +42,8 @@ public class Orientation extends Vector2 {
 	public void setDirection(double x, double y) {
 		this.x = x;
 		this.y = y;
-		this.setNormalized();		
+		this.setNormalized();
+        cacheDirty = true;
 	}
 
 	/**
@@ -39,17 +51,15 @@ public class Orientation extends Vector2 {
 	 * @param direction
 	 */
 	public void setDirection(Vector2 direction) {
-		double norm = Math.sqrt(direction.x * direction.x) + (direction.y * direction.y);
-		if (norm != 0) {
-			this.x = direction.x / norm;
-			this.y = direction.y / norm;
-		}
+		this.copy(direction).setNormalized();
+        cacheDirty = true;
 	}
 	
 	public void setDegrees(double degrees) {
-		this.degrees = degrees;
 		this.x = Math.cos(Math.toRadians(degrees));
 		this.y = Math.sin(Math.toRadians(degrees));
+        this.cacheDegrees = degrees;
+        cacheDirty = false;
 	}
 	
 	public static void setVectorToDegree(Vector2 vectorToSet, double degrees) {
@@ -58,33 +68,27 @@ public class Orientation extends Vector2 {
 	}
 	
 	public double getDegrees() {
-//		if (this.x == 0) {
-//			if (this.y > 0) {
-//				return 90;
-//			}
-//			if (this.y < 0) {
-//				return 270;
-//			}
-//			if (this.y == 0) {
-//				return 0;
-//			}
-//		}
-//		double ret = Math.toDegrees( Math.atan(this.y / this.x) );
-//		if (this.x < 0) {
-//			return ret - 180;
-//		}
-//		return ret;
-		return Orientation.getDegrees(0, 0, this.x, this.y);
+        if (cacheDirty) {
+            cacheDirty = false;
+            return cacheDegrees = Orientation.getDegrees(0, 0, this.x, this.y);
+        }
+        else {
+            return cacheDegrees;
+        }
 	}
 	
 	
-	public static double getDegrees(Vector3 v1) {
+	public static double getDegrees(Vector2 v1) {
 		return Orientation.getDegrees(0, 0, v1.x, v1.y);
 	}
-	
+
+    public static double getDegrees(Vector3 v1) {
+        return Orientation.getDegrees(0, 0, v1.x, v1.y);
+    }
+
 	/** 
-	 * TODO: Use acos instead of atan!!!
-	 * Static version...
+	 * Update: No longer need to normalize to use this method
+     *
 	 * @param x1
 	 * @param y1
 	 * @param x2
@@ -139,14 +143,14 @@ public class Orientation extends Vector2 {
 	 * @param orientation
 	 */
 	public void copy(Orientation orientation) {
-		this.degrees = orientation.degrees;
+		this.cacheDegrees = orientation.getDegrees();
 		this.x = orientation.x;
 		this.y = orientation.y;
 	}
 	
 	public void getPerpendicular(Vector2 output) {
         double pointX = 0;
-        if (x == 0) {
+        if (x != 0) {
             pointX = (-y / x);
         }
 		output.x = pointX;
