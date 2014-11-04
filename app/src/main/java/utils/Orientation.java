@@ -52,7 +52,7 @@ public class Orientation extends Vector2 {
 		this.y = Math.sin(Math.toRadians(degrees));
 	}
 	
-	public static void setVectorToDegree(Vector3 vectorToSet, double degrees) {
+	public static void setVectorToDegree(Vector2 vectorToSet, double degrees) {
 		vectorToSet.x = vectorToSet.x * Math.cos(Math.toRadians(degrees)) - vectorToSet.y * Math.sin(Math.toRadians(degrees));
 		vectorToSet.y = vectorToSet.x * Math.sin(Math.toRadians(degrees)) + vectorToSet.y * Math.cos(Math.toRadians(degrees));
 	}
