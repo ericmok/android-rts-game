@@ -107,7 +107,7 @@ public class Vector2 {
     }
 
     public double magnitude() {
-       return dotProduct(this);
+       return Math.sqrt(dotProduct(this));
     }
 
     public void withClampMagnitude(double clamp) {
