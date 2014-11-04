@@ -13,6 +13,7 @@ import processors.Functional;
 import processors.MapScrollFunction;
 import processors.MoveTowardDestinationFunction;
 import processors.SelectionProcessor;
+import processors.TroopDrawerProcess;
 import processors.UserChooseNewDestinationFunction;
 import tenth.system.BattleSystem;
 import tenth.system.CleanDeadUnitSystem;
@@ -190,48 +191,15 @@ public class GameLoop implements Runnable {
         ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
         MoveTowardDestinationFunction.apply(destinedEntities, elapsedTime);
 
-        RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
-        drawItems.resetWriteIndex();
+        RewriteOnlyArray<DrawList2DItem> spriteAllocater = game.graphics.drawLists.regularSprites.lockWritableBuffer();
+        spriteAllocater.resetWriteIndex();
 
+        // Draw buttons when abilities are available
+        game.uiOverlay.draw(game.gameCamera, spriteAllocater);
 
-            // expose abilities
-            game.uiOverlay.draw(game.gameCamera, drawItems);
-
-
-         // Get the list that has the draw stuff
+        // Draw troops
         ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_UNIT_DRAW);
-
-        for (int i = 0; i < entitiesToDraw.size(); i++) {
-            Entity entity = entitiesToDraw.get(i);
-            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
-
-            DrawList2DItem drawItem = drawItems.takeNextWritable();
-
-            if (entity.getLabels().contains(Entity.TAG_ENEMY_OWNED)) {
-                drawItem.animationName = DrawList2DItem.ANIMATION_ENEMY_TROOPS_IDLING;
-            }
-            else {
-                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
-            }
-
-            drawItem.position.x = pc.pos.x;
-            drawItem.position.y = pc.pos.y;
-            drawItem.angle = 0;
-            drawItem.width = 1.0f;
-            drawItem.height = 1.0f;
-
-            SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
-
-            if (sc.isSelected) {
-                drawItem = drawItems.takeNextWritable();
-                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SELECTED;
-                drawItem.position.x = pc.pos.x;
-                drawItem.position.y = pc.pos.y;
-                drawItem.angle = 0;
-                drawItem.width = 1.2f;
-                drawItem.height = 1.2f;
-            }
-        }
+        TroopDrawerProcess.process(spriteAllocater, entitiesToDraw, elapsedTime);
 
         game.graphics.drawLists.regularSprites.unlockWritableBuffer();
         game.graphics.drawLists.regularSprites.finalizeUpdate();
