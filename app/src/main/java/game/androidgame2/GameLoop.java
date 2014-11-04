@@ -13,6 +13,7 @@ import components.Entity;
 
 import components.SelectionComponent;
 import processors.MapScrollFunction;
+import processors.MoveTowardDestinationFunction;
 import processors.SelectionProcessor;
 import tenth.system.BattleSystem;
 import tenth.system.CleanDeadUnitSystem;
@@ -174,36 +175,7 @@ public class GameLoop implements Runnable {
         MapScrollFunction.process(currentGesture, game.gameInput, game.gameCamera);
 
         ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
-
-        for (int i = 0; i < destinedEntities.size(); i++) {
-
-            Entity entity = destinedEntities.get(i);
-            DestinationComponent dc = (DestinationComponent)entity.cData.get(DestinationComponent.class);
-
-            if (!dc.hasDestination) {
-                continue;
-            }
-
-            PositionComponent pc = (PositionComponent)entity.cData.get(PositionComponent.class);
-            SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
-
-            Vector2 temp = game.gamePool.vector2s.fetchMemory();
-
-            Vector2.subtract(temp, dc.dest, pc.pos);
-
-            // Reached destination
-            if (temp.magnitude() < 0.01) {
-                dc.hasDestination = false;
-            }
-
-            temp.setNormalized();
-            temp.scale(GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime, GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime);
-
-            pc.pos.translate(temp.x, temp.y);
-
-            game.gamePool.vector2s.recycleMemory(temp);
-
-        }
+        MoveTowardDestinationFunction.apply(destinedEntities, elapsedTime);
 
         game.uiOverlay.processInput(game.gameCamera, currentGesture, game.gameInput);
 
