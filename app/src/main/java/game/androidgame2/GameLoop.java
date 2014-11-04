@@ -173,9 +173,6 @@ public class GameLoop implements Runnable {
 
         MapScrollFunction.apply(currentGesture, game.gameInput, game.gameCamera);
 
-        ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
-        MoveTowardDestinationFunction.apply(destinedEntities, elapsedTime);
-
         game.uiOverlay.processInput(game.gameCamera, currentGesture, game.gameInput);
 
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
@@ -189,6 +186,9 @@ public class GameLoop implements Runnable {
                 selectionProcessor.userSelection.clear();
             }
         }
+
+        ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
+        MoveTowardDestinationFunction.apply(destinedEntities, elapsedTime);
 
         RewriteOnlyArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         drawItems.resetWriteIndex();
