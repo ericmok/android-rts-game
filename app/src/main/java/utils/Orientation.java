@@ -82,11 +82,11 @@ public class Orientation extends Vector2 {
     }
 	
 	public static double getDegrees(Vector2 v1) {
-		return Orientation.getDegrees(1, 0, v1.x, v1.y);
+		return Orientation.getDegreesBaseX(v1.x, v1.y);
 	}
 
     public static double getDegrees(Vector3 v1) {
-        return Orientation.getDegrees(1, 0, v1.x, v1.y);
+        return Orientation.getDegreesBaseX(v1.x, v1.y);
     }
 
     /**
