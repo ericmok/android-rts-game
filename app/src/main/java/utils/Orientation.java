@@ -5,7 +5,7 @@ import game.androidgame2.Vector3;
 
 /**
  * Provides mutations that will normalize the vector.
- * Calling getDegrees() will cache the restule.
+ * Calling getDegrees() will cache the result.
  * Using appropriate orientation mutators will mark the
  * internal cache as dirty.
  */
