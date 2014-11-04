@@ -107,7 +107,7 @@ public class Vector2 {
     }
 
     public double magnitude() {
-       return this.distanceTo(this);
+       return dotProduct(this);
     }
 
     public void withClampMagnitude(double clamp) {
