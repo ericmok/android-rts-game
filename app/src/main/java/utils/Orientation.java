@@ -94,31 +94,23 @@ public class Orientation extends Vector2 {
 	public static double getDegrees(double x1, double y1, double x2, double y2) {
 		double xDelta = x2 - x1;
 		double yDelta = y2 - y1; 
-		
-		double norm = Math.pow(xDelta, 2)+ Math.pow(yDelta, 2);
-		if (norm != 0) {
-			xDelta /= norm;
-			yDelta /= norm;
-		}
-		
-		if (xDelta == 0) {
-			if (yDelta > 0) {
-				return 90;
-			}
-			if (yDelta < 0) {
-				return 270;
-			}
-			if (yDelta == 0) {
-				return 0;
-			}
-		}
-		double ret = Math.toDegrees( Math.atan(yDelta / xDelta) );
-		
-		if (xDelta < 0) {
-			ret = -(180 - ret);
-		}
 
-		return ret;
+        double magnitude = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
+
+        if (magnitude == 0) {
+            return 0;
+        }
+
+        // inverse cosine of result: [ (xD, yD) * (0, 1) ] / [ magnitude (xD,yD) * (1) ]
+
+        double ret = Math.toDegrees( Math.acos(xDelta / magnitude) );
+
+        if (yDelta > 0) {
+            return ret;
+        }
+        else {
+            return -ret;
+        }
 	}
 	
 	/**
