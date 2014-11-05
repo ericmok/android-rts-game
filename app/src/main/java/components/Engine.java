@@ -10,6 +10,8 @@ public class Engine {
      */
     public DenormalizedDataSet<Entity> entityDenormalizer;
 
+    public double gameTime = 0;
+
     public Engine() {
         entityDenormalizer = new DenormalizedDataSet<Entity>(32, 300);
     }

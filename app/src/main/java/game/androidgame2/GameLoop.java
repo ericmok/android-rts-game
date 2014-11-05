@@ -35,10 +35,10 @@ public class GameLoop implements Runnable {
 	private boolean isPaused = false;
 	
 	public final static long TARGET_MILLISEC_PER_FRAME = 12;
-	
+
+    private long originTick = 0;
 	private long previousTick = 0;
 	private long tickDifference = 0;
-	private long startTime = 0;
 
     private SelectionProcessor selectionProcessor;
 	
@@ -58,27 +58,24 @@ public class GameLoop implements Runnable {
 	 */
 	public void run() {
 		debugLog("GameLoop", "Running");
-		previousTick = SystemClock.uptimeMillis();
-		
-			startTime = SystemClock.uptimeMillis();
+
+        originTick = SystemClock.uptimeMillis();
+        previousTick = SystemClock.uptimeMillis();
 		
 		while(!isFinished) {
 			
-			long startTick = SystemClock.uptimeMillis();
-			tickDifference = startTick - previousTick;			
-			previousTick = startTick; // Update previous tick
-			
+			long currentTick = SystemClock.uptimeMillis();
+			tickDifference = currentTick - previousTick;
+			previousTick = currentTick; // Update previous tick
+
 			//allocation unsafe!
 			//debugLog("DELTA TIME", Long.toString(tickDifference));
 
-			
 			// Game calculations go here
-			this.performGameLogic(tickDifference); 
-			
-			
+			this.performGameLogic(currentTick, tickDifference);
 			
 			long finishedTick = SystemClock.uptimeMillis();
-			long timeOfCalculation = (finishedTick - startTick);
+			long timeOfCalculation = (finishedTick - currentTick);
 			//allocation unsafe!
 			//debugLog("GameLoop", "Time Of Calculation: " + Long.toString(timeOfCalculation));
 			
@@ -113,7 +110,12 @@ public class GameLoop implements Runnable {
 		debugLog("GameLoop", "Is finished.");
 	}
 	
-	private void performGameLogic(long elapsedTime) {
+	private void performGameLogic(long currentTick, long elapsedTime) {
+
+        double ct = currentTick * GameSettings.UNIT_TIME_MULTIPLIER;
+        double dt = elapsedTime * GameSettings.UNIT_TIME_MULTIPLIER;
+
+        game.engine.gameTime = ct;
 
         int currentGesture = game.gameInput.takeCurrentGesture();
 
