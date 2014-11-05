@@ -1,6 +1,7 @@
 package components;
 
 import game.androidgame2.DrawList2DItem;
+import game.androidgame2.Player;
 
 /**
  * Created by eric on 10/30/14.
@@ -36,6 +37,10 @@ public class GameEntities {
         AbilityComponent ac = new AbilityComponent();
         ac.abilities.add(Abilities.SPECIAL_ATTACK);
         troop.cData.put(AbilityComponent.class, ac);
+
+        PlayerComponent pc = new PlayerComponent();
+        pc.name = "Player" + owner;
+        troop.cData.put(PlayerComponent.class, pc);
 
         return troop;
     }
