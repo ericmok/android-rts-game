@@ -141,20 +141,20 @@ public class GameLoop implements Runnable {
         // Begin graphics mutations
         // (The mutations don't take affect immediately until explicit finalizations)
 
-        RewriteOnlyArray<DrawList2DItem> spriteAllocater = game.graphics.drawLists.regularSprites.lockWritableBuffer();
-        spriteAllocater.resetWriteIndex();
+            RewriteOnlyArray<DrawList2DItem> spriteAllocater = game.graphics.drawLists.regularSprites.lockWritableBuffer();
+            spriteAllocater.resetWriteIndex();
 
-        // Draw buttons when abilities are available
-        game.uiOverlay.draw(game.gameCamera, spriteAllocater);
+            // Draw buttons when abilities are available
+            game.uiOverlay.draw(game.gameCamera, spriteAllocater);
 
-        // Draw troops
-        ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_UNIT_DRAW);
-        TroopDrawerProcess.process(spriteAllocater, entitiesToDraw, dt);
+            // Draw troops
+            ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_UNIT_DRAW);
+            TroopDrawerProcess.process(spriteAllocater, entitiesToDraw, dt);
 
-        // Flush graphics at the same time so settings are sync'd
+            // Flush graphics at the same time so settings are sync'd
 
-        game.graphics.drawLists.regularSprites.unlockWritableBuffer();
-        game.graphics.drawLists.regularSprites.finalizeUpdate();
+            game.graphics.drawLists.regularSprites.unlockWritableBuffer();
+            game.graphics.drawLists.regularSprites.finalizeUpdate();
 
         game.graphics.setCameraPositionAndScale((float)game.gameCamera.x, (float)game.gameCamera.y, (float)game.gameCamera.scale);
         game.graphics.flushCameraModifications();
