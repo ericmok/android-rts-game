@@ -35,6 +35,7 @@ public class GameEntities {
 
         AbilityComponent ac = new AbilityComponent();
         ac.abilities.add(Abilities.SPECIAL_ATTACK);
+        troop.cData.put(AbilityComponent.class, ac);
 
         return troop;
     }
