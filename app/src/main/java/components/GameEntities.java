@@ -1,7 +1,6 @@
 package components;
 
 import game.androidgame2.DrawList2DItem;
-import game.androidgame2.Player;
 
 /**
  * Created by eric on 10/30/14.
@@ -21,18 +20,18 @@ public class GameEntities {
 
         SelectionComponent selectionComponent = new SelectionComponent();
         troop.cData.put(SelectionComponent.class, selectionComponent);
-        troop.getLabels().add(Entity.LOGIC_SELECTION);
+        troop.getLabels().add(Entity.NODE_SELECTION);
 
         DestinationComponent destinationComponent = new DestinationComponent();
         troop.cData.put(DestinationComponent.class, destinationComponent);
-        troop.getLabels().add(Entity.LOGIC_DESTINATION_MOVEMENT);
+        troop.getLabels().add(Entity.NODE_MOVE_TOWARD_DESTINATION);
 
-        troop.getLabels().add(Entity.LOGIC_UNIT_DRAW);
+        troop.getLabels().add(Entity.NODE_TROOP_DRAWER);
 
         troop.getLabels().add(owner);
         troop.getLabels().add(leader);
 
-        troop.getLabels().add(Entity.TAG_TROOP_TYPE);
+        troop.getLabels().add(Entity.UNIT_TROOP);
 
         AbilityComponent ac = new AbilityComponent();
         ac.abilities.add(Abilities.SPECIAL_ATTACK);

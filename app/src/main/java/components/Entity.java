@@ -10,17 +10,18 @@ import game.androidgame2.Vector3;
  */
 public class Entity implements Denormalizable<Integer> {
 
-    public static final int LOGIC_FORMATION = 0;
-    public static final int LOGIC_SEPARATION = 1;
-    public static final int LOGIC_FIELD_MOVEMENT = 2;
-    public static final int LOGIC_FORCE_INTEGRATOR = 3;
-    public static final int LOGIC_BATTLE = 4;
-    public static final int LOGIC_UNIT_DRAW = 5;
-    public static final int LOGIC_ORIENTATION = 6;
-    public static final int LOGIC_SELECTION = 7;
-    public static final int LOGIC_DESTINATION_MOVEMENT = 8;
+    //public static final int LOGIC_FORMATION = 0;
+    //public static final int LOGIC_SEPARATION = 1;
+    //public static final int LOGIC_FIELD_MOVEMENT = 2;
+    //public static final int LOGIC_FORCE_INTEGRATOR = 3;
+    //public static final int LOGIC_BATTLE = 4;
+    //public static final int LOGIC_ORIENTATION = 6;
 
-    public static final int LOGIC_ABILITIES = 9;
+    public static final int NODE_TROOP_DRAWER = 5;
+    public static final int NODE_SELECTION = 7;
+    public static final int NODE_MOVE_TOWARD_DESTINATION = 8;
+
+    public static final int NODE_ABILITIES = 9;
 
     public static final int TAG_PLAYER_OWNED = 100;
     public static final int TAG_ALLIED_OWNED = 101;
@@ -28,7 +29,7 @@ public class Entity implements Denormalizable<Integer> {
     public static final int TAG_LEADER = 103;
     public static final int TAG_FOLLOWER = 104;
 
-    public static final int TAG_TROOP_TYPE = 105;
+    public static final int UNIT_TROOP = 105;
 
     public static final int UI_BUTTON = 500;
 

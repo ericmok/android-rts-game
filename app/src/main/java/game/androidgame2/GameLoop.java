@@ -11,19 +11,6 @@ import processors.MoveTowardDestinationFunction;
 import processors.SelectionProcessor;
 import processors.TroopDrawerProcess;
 import processors.UserChooseNewDestinationFunction;
-import tenth.system.BattleSystem;
-import tenth.system.CleanDeadUnitSystem;
-import tenth.system.FieldMovementSystem;
-import tenth.system.ForceIntegratorSystem;
-import tenth.system.FormationSystem;
-import tenth.system.GenerateTroopsInSquadPositionsSystem;
-import tenth.system.OrientationSystem;
-import tenth.system.SelectionSystem;
-import tenth.system.SeparationSystem;
-import tenth.system.ShipDrawSystem;
-import tenth.system.StateProgressUpdateSystem;
-import tenth.system.SystemNode;
-import tenth.system.TroopDrawSystem;
 
 public class GameLoop implements Runnable {
 	
@@ -125,7 +112,7 @@ public class GameLoop implements Runnable {
 
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
             if (selectionProcessor.userSelection.isEmpty()) {
-                ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_SELECTION);
+                ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_SELECTION);
                 selectionProcessor.process(selectableEntities, game.gameCamera,
                         game.gameInput.touchPosition);
             }
@@ -135,7 +122,7 @@ public class GameLoop implements Runnable {
             }
         }
 
-        ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_DESTINATION_MOVEMENT);
+        ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_MOVE_TOWARD_DESTINATION);
         MoveTowardDestinationFunction.apply(destinedEntities, dt);
 
         // Begin graphics mutations
@@ -148,7 +135,7 @@ public class GameLoop implements Runnable {
             game.uiOverlay.draw(game.gameCamera, spriteAllocater);
 
             // Draw troops
-            ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.LOGIC_UNIT_DRAW);
+            ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_TROOP_DRAWER);
             TroopDrawerProcess.process(spriteAllocater, entitiesToDraw, dt);
 
             // Flush graphics at the same time so settings are sync'd
