@@ -13,7 +13,7 @@ import components.Entity;
  * Created by eric on 11/3/14.
  */
 public class TroopDrawerProcess {
-    public static final void process(RewriteOnlyArray<DrawList2DItem> spriteAllocater, ArrayList<Entity> troopsToDraw, long elapsedTime) {
+    public static final void process(RewriteOnlyArray<DrawList2DItem> spriteAllocater, ArrayList<Entity> troopsToDraw, double dt) {
         for (int i = 0; i < troopsToDraw.size(); i++) {
             Entity entity = troopsToDraw.get(i);
             WorldComponent wc = (WorldComponent)entity.cData.get(WorldComponent.class);

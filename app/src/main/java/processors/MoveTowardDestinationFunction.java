@@ -16,7 +16,7 @@ public class MoveTowardDestinationFunction {
 
     private static Vector2 temp = new Vector2();
 
-    public static void apply(ArrayList<Entity> entitiesThatNeedMoving, long elapsedTime) {
+    public static void apply(ArrayList<Entity> entitiesThatNeedMoving, double dt) {
 
         for (int i = 0; i < entitiesThatNeedMoving.size(); i++) {
 
@@ -38,7 +38,7 @@ public class MoveTowardDestinationFunction {
             }
 
             temp.setNormalized();
-            temp.scale(GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime, GameSettings.UNIT_TIME_MULTIPLIER * elapsedTime);
+            temp.scale(dt, dt);
 
             wc.pos.translate(temp.x, temp.y);
             wc.rot.setDirection(temp);
