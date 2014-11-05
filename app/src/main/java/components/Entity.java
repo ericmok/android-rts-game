@@ -8,7 +8,7 @@ import game.androidgame2.Vector3;
 /**
  * Created by eric on 10/30/14.
  */
-public class Entity implements Denormalizable {
+public class Entity implements Denormalizable<Integer> {
 
     public static final int LOGIC_FORMATION = 0;
     public static final int LOGIC_SEPARATION = 1;
