@@ -8,12 +8,12 @@ public class Engine {
     /**
      * Entities organized by logic-y stuff
      */
-    public DenormalizedDataSet<Entity> entityDenormalizer;
+    public DenormalizedDataSet<Entity, Integer> entityDenormalizer;
 
     public double gameTime = 0;
 
     public Engine() {
-        entityDenormalizer = new DenormalizedDataSet<Entity>(32, 300);
+        entityDenormalizer = new DenormalizedDataSet<Entity, Integer>(32, 300);
     }
 
     public void addEntity(Entity entity) {

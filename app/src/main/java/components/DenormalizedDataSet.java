@@ -47,7 +47,7 @@ import java.util.Hashtable;
  * Entities are duplicated across 'processing denormalizedLists' given the processing components they contain.
  * </p>
  */
-public class DenormalizedDataSet<E extends Denormalizable> implements Denormalizable {
+public class DenormalizedDataSet<E extends Denormalizable, F> implements Denormalizable<Integer> {
 
     /**
      * <p>
@@ -60,7 +60,7 @@ public class DenormalizedDataSet<E extends Denormalizable> implements Denormaliz
      *     are selectable.
      * </p>
      */
-    public Hashtable<Integer, ArrayList<E>> denormalizedLists;
+    public Hashtable<F, ArrayList<E>> denormalizedLists;
 
     private ArrayList<Integer> labels = new ArrayList<Integer>();
 
@@ -73,7 +73,7 @@ public class DenormalizedDataSet<E extends Denormalizable> implements Denormaliz
     public DenormalizedDataSet(int upperBoundNumberLabels, int upperBoundNumberDenormalizablesPerLabel) {
         this.upperBoundNumberDenormalizablesPerLabel = upperBoundNumberDenormalizablesPerLabel;
 
-        denormalizedLists = new Hashtable<Integer, ArrayList<E>>(upperBoundNumberLabels);
+        denormalizedLists = new Hashtable<F, ArrayList<E>>(upperBoundNumberLabels);
 
 //        Iterator<Map.Entry<Integer, ArrayList<Denormalizable>>> itr = denormalizedLists.entrySet().iterator();
 //        while (itr.hasNext()) {
@@ -86,10 +86,10 @@ public class DenormalizedDataSet<E extends Denormalizable> implements Denormaliz
      * @param denormalizable
      */
     public synchronized void addDenormalizable(E denormalizable) {
-        ArrayList<Integer> labels = denormalizable.getLabels();
+        ArrayList<F> labels = denormalizable.getLabels();
 
         for (int i = 0; i < labels.size(); i++) {
-            int label = labels.get(i);
+            F label = labels.get(i);
 
             if (!denormalizedLists.containsKey(label)) {
                 denormalizedLists.put(label, new ArrayList<E>(upperBoundNumberDenormalizablesPerLabel));
@@ -104,11 +104,11 @@ public class DenormalizedDataSet<E extends Denormalizable> implements Denormaliz
      * @param denormalizable
      */
     public synchronized void removeDenormalizable(E denormalizable) {
-        ArrayList<Integer> labels = denormalizable.getLabels();
+        ArrayList<F> labels = denormalizable.getLabels();
 
         for (int i = 0; i < labels.size(); i++) {
 
-            int label = labels.get(i);
+            F label = labels.get(i);
 
             if (denormalizedLists.contains(label)) {
                 denormalizedLists.get(label).remove(denormalizable);
