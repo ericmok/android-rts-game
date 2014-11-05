@@ -38,9 +38,14 @@ public class LevelLoader {
             Log.i("LEVEL JSON", json);
             try {
                 JSONObject jObj = new JSONObject(json);
-                JSONObject playerObj = jObj.getJSONObject("player");
 
-                JSONArray troopArr = playerObj.getJSONArray("troop");
+                engine.gameTime = jObj.getDouble("time");
+
+                JSONObject playersObj = jObj.getJSONObject("players");
+
+                JSONObject meObj = playersObj.getJSONObject("me");
+
+                JSONArray troopArr = meObj.getJSONArray("troop");
 
                 for (int i = 0; i < troopArr.length(); i++) {
                     JSONObject jEntity = troopArr.getJSONObject(i);
@@ -54,8 +59,8 @@ public class LevelLoader {
                     pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 }
 
-                playerObj = jObj.getJSONObject("enemy");
-                troopArr = playerObj.getJSONArray("troop");
+                JSONObject enemyObject = playersObj.getJSONObject("enemy");
+                troopArr = enemyObject.getJSONArray("troop");
 
                 for (int i = 0; i < troopArr.length(); i++) {
                     JSONObject jEntity = troopArr.getJSONObject(i);
