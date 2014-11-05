@@ -46,6 +46,9 @@ import java.util.Hashtable;
  * This programming pattern can be found in Entity Component System frameworks.
  * Entities are duplicated across 'processing denormalizedLists' given the processing components they contain.
  * </p>
+ *
+ * @param <E> The type of the denormalizable that has the labels
+ * @param <F> The type of the labels the denormalizable is tagged with. Make sure equality checks are efficient
  */
 public class DenormalizedDataSet<E extends Denormalizable, F> implements Denormalizable<Integer> {
 
