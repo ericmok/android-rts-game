@@ -30,12 +30,16 @@ public class UIOverlay {
             for (int i = 0; i < buttons.size(); i++) {
                 ButtonComponent bc = (ButtonComponent)buttons.get(i).cData.get(ButtonComponent.class);
 
-                temp.x = gameInput.touchPosition.x / gameCamera.scale + gameCamera.x;
-                temp.y = gameInput.touchPosition.y / gameCamera.scale + gameCamera.y;
+                Vector2 screenToWorldCoords = temp;
+                screenToWorldCoords.x = gameInput.touchPosition.x / gameCamera.scale + gameCamera.x;
+                screenToWorldCoords.y = gameInput.touchPosition.y / gameCamera.scale + gameCamera.y;
 
                 //Log.i("BUTTON", "" + "," + bc.name + " " + bc.touchPoint + " touchPosition[" + temp + "]");
                 //Log.i("BUTTON", "dist " + bc.touchPoint.distanceTo(temp) + " again: " + temp.distanceTo(bc.touchPoint));
-                if (bc.touchPoint.distanceTo(temp) < 4) {
+
+                // The button's trigger box is bigger as the camera zooms out
+                if (Math.abs(screenToWorldCoords.x - bc.touchPoint.x) < 0.5 * SIZE_NORMALIZER * bc.size.x / gameCamera.scale &&
+                        Math.abs(screenToWorldCoords.y - bc.touchPoint.y) < 0.5 * SIZE_NORMALIZER * bc.size.y / gameCamera.scale) {
                     Log.i("BUTTON", "ACTIVATE " + "," + bc.name + "," + bc.touchPoint + " touchPosition[" + gameInput.touchPosition + "]");
                 }
             }
