@@ -40,68 +40,17 @@ public class GameLoop implements Runnable {
 	private long tickDifference = 0;
 	private long startTime = 0;
 
-	private FieldMovementSystem fieldMovementSystem;
-	
-	private OrientationSystem orientationSystem = new OrientationSystem(this.game);
-	
-	private StateProgressUpdateSystem stateProgressUpdateSystem;
-	private TroopDrawSystem troopDrawSystem;
-	private ShipDrawSystem shipDrawSystem = new ShipDrawSystem(game);
-
-	private GenerateTroopsInSquadPositionsSystem generateTroopsInSquadPositionsSystem;
-	
-	private BattleSystem battleResolutionSystem;
-	
-	private CleanDeadUnitSystem cleanDeadUnitSystem;
-	
-	private FormationSystem formationSystem;
-	private SeparationSystem separationSystem;
-	
-	private ForceIntegratorSystem forceIntegratorSystem;
-	
-	private SelectionSystem selectionSystem;
-
     private SelectionProcessor selectionProcessor;
-	
-	private TriggerField activeTriggerField = null;
-	private TimedProgress activeAnimation;
 	
 	private final void debugLog(String a, String b) {
 		//Log.i(a, b);
 	}
-	
-	public ArrayList<SystemNode> selected = new ArrayList<SystemNode>(Player.MAX_UNITS);
-	
-	public ArrayList<SystemNode> tempList = new ArrayList<SystemNode>(Player.MAX_UNITS);
-	public ArrayList<SystemNode> tempList2 = new ArrayList<SystemNode>(Player.MAX_UNITS);
-
 
 	public GameLoop(Game game) {
 		this.game = game;
-		
-		fieldMovementSystem = new FieldMovementSystem(game);
-		stateProgressUpdateSystem = new StateProgressUpdateSystem(game);
-		troopDrawSystem = new TroopDrawSystem(game);
-		
-		generateTroopsInSquadPositionsSystem = new GenerateTroopsInSquadPositionsSystem(game);
-		
-		battleResolutionSystem = new BattleSystem(game);
-		
-		cleanDeadUnitSystem = new CleanDeadUnitSystem(game);
-		
-		formationSystem = new FormationSystem(game);
-		separationSystem = new SeparationSystem(game);
-		
-		forceIntegratorSystem = new ForceIntegratorSystem(game);
-		
-		selectionSystem = new SelectionSystem(game);
 
         selectionProcessor = new SelectionProcessor(game);
-
 		pauseLock = new Object();
-		
-		activeAnimation = new TimedProgress();
-		activeAnimation.duration = 4000;
 	}
 	
 	/**
@@ -442,79 +391,5 @@ public class GameLoop implements Runnable {
 ////		}
 ////
 //	}
-//
-//
-//	public boolean gestureOnDown(MotionEvent e) {
-//		Log.i("gestureOnDown", "gestureOnDown");
-//        motionEvent = e;
-//		gestures.put(GESTURE_ON_DOWN, true);
-//		return true;
-//	}
-//
-//	public void gestureOnShowPress(MotionEvent e) {
-//		Log.i("gestureOnShowPress", "gestureOnShowPress");
-//        motionEvent = e;
-//		gestures.put(GESTURE_ON_SHOW_PRESS, true);
-//	}
-//
-//	public boolean gestureOnSingleTapUp(MotionEvent e) {
-//		Log.i("gestureOnSingleTapUp", "gestureOnSingleTapUp");
-//        motionEvent = e;
-//		gestures.put(GESTURE_ON_SINGLE_TAP_UP, true);
-//		return true;
-//	}
-//
-//    /**
-//     * Since drawing y axis is actually inverted, the vertical scroll we be inverted
-//     * @param e1
-//     * @param e2
-//     * @param distanceX
-//     * @param distanceY
-//     * @return
-//     */
-//	public boolean gestureOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//		//Log.i("gestureOnScroll", "gestureOnScroll");
-//        Log.i("gestureOnScroll", "gestureOnScroll [" + distanceX + ", " + distanceY + "]");
-//
-//        CameraSettingsComponent csm =
-//                (CameraSettingsComponent) game.engine.entityDenormalizer
-//                        .getListForLabel(Entity.LOGIC_CAMERA).get(0)
-//                        .cData.get(CameraSettingsComponent.class);
-//
-//        motionEvent = e1;
-//		gestures.put(GESTURE_ON_SCROLL, true);
-//
-//        Vector2 vec = game.gamePool.vector2s.fetchMemory();
-//        game.gameInput.getCoordsTranslatedToCenterOfScreen(vec, e1);
-//        gestureScrollValueX = (float)vec.x / csm.scale;
-//        gestureScrollValueY = (float)vec.y / csm.scale;
-//        game.gamePool.vector2s.recycleMemory(vec);
-//        //gestureScrollValueX = (2 * distanceX / game.getGLSurfaceView().getWidth()) * game.getGameRenderer().getAspectRatio() / csm.scale;
-//        //gestureScrollValueY = -(2 * distanceY / game.getGLSurfaceView().getHeight()) / csm.scale;
-//
-//		return true;
-//	}
-//
-//	public void gestureOnLongPress(MotionEvent e) {
-//		Log.i("gestureOnLongPress", "gestureOnLongPress");
-//        motionEvent = e;
-//		gestures.put(GESTURE_ON_LONG_PRESS, true);
-//	}
-//
-//	public boolean gestureOnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//		Log.i("gestureOnFling", "gestureOnFling");
-//        motionEvent = e1;
-//		gestures.put(GESTURE_ON_FLING, true);
-//		return true;
-//	}
-//
-//    public boolean onScale(ScaleGestureDetector detector) {
-//        Log.i("onScale", "onScale");
-//        //Log.i("onScale", "onScale scaleFactor [" + detector.getScaleFactor() + "]");
-//        gestures.put(GESTURE_ON_SCALE, true);
-//
-//        gestureScaleValue = detector.getScaleFactor();
-//
-//        return true;
-//    }
+
 }
