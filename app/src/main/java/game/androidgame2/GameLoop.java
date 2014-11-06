@@ -6,6 +6,7 @@ import android.os.SystemClock;
 
 import components.Entity;
 
+import processors.EngineSimulator;
 import processors.MapScrollFunction;
 import processors.MoveTowardDestinationFunction;
 import processors.SelectionProcessor;
@@ -123,8 +124,7 @@ public class GameLoop implements Runnable {
             }
         }
 
-        ArrayList<Entity> destinedEntities = game.engine.currentPlayer.denorms.getListForLabel(Entity.NODE_MOVE_TOWARD_DESTINATION);
-        MoveTowardDestinationFunction.apply(destinedEntities, dt);
+        EngineSimulator.simulate(game.engine, dt);
 
         // Begin graphics mutations
         // (The mutations don't take affect immediately until explicit finalizations)
