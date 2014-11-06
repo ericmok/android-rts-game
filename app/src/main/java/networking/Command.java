@@ -13,7 +13,7 @@ public class Command {
     public static final String NONE = "none";
     public static final String MOVE = "move";
 
-    public float timeStamp = 0;
+    public double timeStamp = 0;
 
     public String command = NONE;
     public ArrayList<Entity> selection = new ArrayList<Entity>(300);
