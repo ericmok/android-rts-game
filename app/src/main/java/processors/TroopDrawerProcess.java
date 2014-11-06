@@ -24,7 +24,7 @@ public class TroopDrawerProcess {
             DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
 
             drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
-
+            drawItem.color = player.color();
             drawItem.position.x = wc.pos.x;
             drawItem.position.y = wc.pos.y;
             drawItem.angle = (float)wc.rot.getDegrees();
@@ -36,6 +36,7 @@ public class TroopDrawerProcess {
             if (sc.isSelected) {
                 drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SELECTED;
+                drawItem.color = player.color();
                 drawItem.position.x = wc.pos.x;
                 drawItem.position.y = wc.pos.y;
                 drawItem.angle = (float)wc.rot.getDegrees();
