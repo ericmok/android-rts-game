@@ -1,6 +1,9 @@
 package networking;
 
+import java.util.ArrayList;
+
 import game.androidgame2.Vector2;
+import components.Entity;
 
 /**
  * Created by eric on 11/5/14.
@@ -13,6 +16,6 @@ public class Command {
     public float timeStamp = 0;
 
     public String command = NONE;
-    public int unitId = 0;
+    public ArrayList<Entity> selection = new ArrayList<Entity>(300);
     public Vector2 vec = new Vector2();
 }
