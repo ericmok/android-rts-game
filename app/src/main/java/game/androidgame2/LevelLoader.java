@@ -74,22 +74,6 @@ public class LevelLoader {
                         player.denorms.addDenormalizable(troop);
                     }
                 }
-//
-//                JSONObject enemyObject = playersObj.getJSONObject("enemy");
-//                troopArr = enemyObject.getJSONArray("troop");
-//
-//                for (int i = 0; i < troopArr.length(); i++) {
-//                    JSONObject jEntity = troopArr.getJSONObject(i);
-//
-//                    Entity troop = GameEntities.buildTroop(
-//                            PlayerComponent.TAG_ENEMY_OWNED, Entity.TAG_FOLLOWER);
-//                    engine.players.get(1).denorms.addDenormalizable(troop);
-//                    //engine.addEntity(troop);
-//
-//                    WorldComponent pc =
-//                            ((WorldComponent)troop.cData.get(WorldComponent.class));
-//                    pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
-//                }
             }
             catch (JSONException e) {
                 Log.e("JSON", e.getMessage());
