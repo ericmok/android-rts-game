@@ -44,7 +44,7 @@ public class CommandHistory {
         lastAck = time;
 
         for (int i = 0; i < commands.size(); i++) {
-            if (commands.get(i).timeStamp < time) {
+            if (commands.get(i).timeStamp <= time) {
                 game.gamePool.commands.recycleMemory(commands.remove(i));
                 i = i - 1;
             }
