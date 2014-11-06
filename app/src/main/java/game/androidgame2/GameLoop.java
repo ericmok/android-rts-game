@@ -6,6 +6,7 @@ import android.os.SystemClock;
 
 import components.Entity;
 
+import networking.Command;
 import processors.EngineSimulator;
 import processors.MapScrollFunction;
 import processors.MoveTowardDestinationFunction;
@@ -124,7 +125,7 @@ public class GameLoop implements Runnable {
             }
         }
 
-        EngineSimulator.simulate(game.engine, dt);
+        EngineSimulator.simulate(game.engine, game.commandHistory, dt);
 
         // Begin graphics mutations
         // (The mutations don't take affect immediately until explicit finalizations)

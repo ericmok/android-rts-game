@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import components.Engine;
+import networking.CommandHistory;
 
 public class Game {
 
@@ -27,6 +28,8 @@ public class Game {
 
     public GameCamera gameCamera = new GameCamera();
     public UIOverlay uiOverlay = new UIOverlay();
+
+    public CommandHistory commandHistory = new CommandHistory();
 
 	/**
 	 * Stores pre-loaded heap memory allocations of game objects 
