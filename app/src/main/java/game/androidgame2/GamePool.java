@@ -28,11 +28,11 @@ public class GamePool {
 	}
 	
 	public void allocate() {
-		troops = new MemoryPool<Troop>(Troop.class, 1024);
+		troops = new MemoryPool<Troop>(Troop.class, 3);
 
-		drawItems = new MemoryPool<DrawList2DItem>(DrawList2DItem.class, 2048);
+		drawItems = new MemoryPool<DrawList2DItem>(DrawList2DItem.class, 1024);
 		
-		temporaryDrawItems = new MemoryPool<TemporaryDrawList2DItem>(TemporaryDrawList2DItem.class, 2048);
+		temporaryDrawItems = new MemoryPool<TemporaryDrawList2DItem>(TemporaryDrawList2DItem.class, 1024);
 		
 		triggerFields = new MemoryPool<TriggerField>(TriggerField.class, 512);
 
@@ -50,7 +50,7 @@ public class GamePool {
 	 * @param objectToRecycle
 	 */
 	public void recycle(Object objectToRecycle, Class cls) {
-		
+
 		// TODO: String allocations
 		//if (cls.getSimpleName().equalsIgnoreCase( Troop.class.getSimpleName())) {
 		if (cls.getName().equalsIgnoreCase( Troop.class.getName())) {
