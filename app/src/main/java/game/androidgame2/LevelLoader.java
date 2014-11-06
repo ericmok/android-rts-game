@@ -43,16 +43,22 @@ public class LevelLoader {
 
                 engine.gameTime = jObj.getDouble("time");
 
-                JSONObject playersObj = jObj.getJSONObject("players");
+                JSONArray playersArr = jObj.getJSONArray("players");
 
-                int playerIndex = 0;
-                Iterator itr = playersObj.keys();
-                while (itr.hasNext()) {
-                    String playerName = (String)itr.next();
+                for (int jp = 0; jp < playersArr.length(); jp++) {
 
-                    JSONObject jPlayerObj = playersObj.getJSONObject(playerName);
-                    Player player = new Player(playerName);
+                    JSONObject jPlayerObj = playersArr.getJSONObject(jp);
+
+                    Player player = new Player(jPlayerObj.getString("name"));
+                    player.team = jPlayerObj.getInt("team");
+
                     engine.addPlayer(player);
+
+                    if (player.name.equals("self")) {
+                        engine.currentPlayer = player;
+                    } else {
+                        // Allied or enemy team
+                    }
 
                     JSONArray troopArr = jPlayerObj.getJSONArray("troop");
 
@@ -61,24 +67,13 @@ public class LevelLoader {
 
                         Entity troop = GameEntities.buildTroop();
 
-                        if (playerName.equals("self")) {
-                            engine.currentPlayer = player;
-                        }
-                        else {
-                            // Allied or enemy team
-                        }
-                        //engine.addEntity(troop);
-
                         WorldComponent pc =
-                                ((WorldComponent)troop.cData.get(WorldComponent.class));
+                                ((WorldComponent) troop.cData.get(WorldComponent.class));
                         pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
 
-                        engine.players.get(playerIndex).denorms.addDenormalizable(troop);
+                        player.denorms.addDenormalizable(troop);
                     }
-
-                    playerIndex += 1;
                 }
-
 //
 //                JSONObject enemyObject = playersObj.getJSONObject("enemy");
 //                troopArr = enemyObject.getJSONArray("troop");

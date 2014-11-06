@@ -1,26 +1,32 @@
 {
     time: 0,
-    players: {
-        self: {
+    players: [
+        {
+            name: self,
+            team: 0,
             troop: [
                 { x: 0, y: -2, r: 90 },
                 { x: -1, y: -2, r: 90 },
                 { x: 1, y: -2, r: 90 }
             ]
         },
-        enemy: {
+        {
+            name: enemy,
+            team: 1,
             troop: [
                 { x: 0, y: 2, r: 90 },
                 { x: -1, y: 1, r: 90 },
                 { x: 1, y: 1, r: 90 }
             ]
         },
-        evilempire: {
+        {
+            name: evilempire,
+            team: 2,
             troop: [
                 { x: -5, y: -2, r: 90 },
                 { x: -5, y: 0, r: 90 },
                 { x: -5, y: 2, r: 90 }
             ]
         }
-    }
+    ]
 }
