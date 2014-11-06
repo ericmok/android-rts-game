@@ -10,9 +10,9 @@ public class CommandHistory {
 
     public ArrayList<Command> commands = new ArrayList<Command>(NUMBER_COMMANDS_IN_A_GAME);
 
-    public float lastAck = 0;
+    public double lastAck = 0;
 
-    private float mostRecentAckTime = 0;
+    private double mostRecentAckTime = 0;
 
     /**
      * <p>
@@ -27,7 +27,7 @@ public class CommandHistory {
      *
      * @param time
      */
-    public void ack(int time) {
+    public void ack(double time) {
         lastAck = time;
 
         for (int i = 0; i < commands.size(); i++) {
