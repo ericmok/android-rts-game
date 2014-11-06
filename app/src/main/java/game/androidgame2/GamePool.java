@@ -2,6 +2,9 @@ package game.androidgame2;
 
 import android.util.Log;
 
+import networking.Command;
+import networking.CommandHistory;
+
 public class GamePool {
 	
 	public MemoryPool<Troop> troops;
@@ -17,6 +20,8 @@ public class GamePool {
 	public MemoryPool<Vector3> vector3s;
 	
 	public MemoryPool<TimedProgress> timedProgresses;
+
+    public MemoryPool<Command> commands;
 
 	public GamePool() {
 
@@ -36,7 +41,8 @@ public class GamePool {
 		vector3s = new MemoryPool<Vector3>(Vector3.class, 512);
 		
 		timedProgresses = new MemoryPool<TimedProgress>(TimedProgress.class, 512);
-		
+
+        commands = new MemoryPool<Command>(Command.class, CommandHistory.NUMBER_COMMANDS_IN_A_GAME);
 	}
 	
 	/**
