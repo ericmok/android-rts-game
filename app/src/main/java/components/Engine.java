@@ -1,5 +1,7 @@
 package components;
 
+import java.util.ArrayList;
+
 /**
  * Created by eric on 10/30/14.
  */
@@ -8,19 +10,22 @@ public class Engine {
     /**
      * Entities organized by logic-y stuff
      */
-    public DenormalizedDataSet<Entity, Integer> entityDenormalizer;
+    public ArrayList<Player> players = new ArrayList<Player>(16);
+
+    //public DenormalizedDataSet<Entity, Integer> entityDenormalizer;
+
+    public Player currentPlayer = new Player("self");
 
     public double gameTime = 0;
 
     public Engine() {
-        entityDenormalizer = new DenormalizedDataSet<Entity, Integer>(32, 300);
     }
 
-    public void addEntity(Entity entity) {
-        entityDenormalizer.addDenormalizable(entity);
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 
-    public void removeEntity(Entity entity) {
-        entityDenormalizer.removeDenormalizable(entity);
+    public void removePlayer(Player player) {
+        players.remove(player);
     }
 }

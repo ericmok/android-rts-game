@@ -112,7 +112,8 @@ public class GameLoop implements Runnable {
 
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
             if (selectionProcessor.userSelection.isEmpty()) {
-                ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_SELECTION);
+                //ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_SELECTION);
+                ArrayList<Entity> selectableEntities = game.engine.players.get(0).denorms.getListForLabel(Entity.NODE_SELECTION);
                 selectionProcessor.process(selectableEntities, game.gameCamera,
                         game.gameInput.touchPosition);
             }
@@ -122,7 +123,7 @@ public class GameLoop implements Runnable {
             }
         }
 
-        ArrayList<Entity> destinedEntities = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_MOVE_TOWARD_DESTINATION);
+        ArrayList<Entity> destinedEntities = game.engine.players.get(0).denorms.getListForLabel(Entity.NODE_MOVE_TOWARD_DESTINATION);
         MoveTowardDestinationFunction.apply(destinedEntities, dt);
 
         // Begin graphics mutations
@@ -135,7 +136,7 @@ public class GameLoop implements Runnable {
             game.uiOverlay.draw(game.gameCamera, spriteAllocater);
 
             // Draw troops
-            ArrayList<Entity> entitiesToDraw = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_TROOP_DRAWER);
+            ArrayList<Entity> entitiesToDraw = game.engine.players.get(0).denorms.getListForLabel(Entity.NODE_TROOP_DRAWER);
             TroopDrawerProcess.process(spriteAllocater, entitiesToDraw, dt);
 
             // Flush graphics at the same time so settings are sync'd

@@ -1,7 +1,7 @@
 {
     time: 0,
     players: {
-        me: {
+        self: {
             troop: [
                 { x: 0, y: -2, r: 90 },
                 { x: -1, y: -2, r: 90 },
