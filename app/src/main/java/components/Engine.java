@@ -14,7 +14,7 @@ public class Engine {
 
     //public DenormalizedDataSet<Entity, Integer> entityDenormalizer;
 
-    public Player currentPlayer = new Player("self");
+    public Player currentPlayer;
 
     public double gameTime = 0;
 

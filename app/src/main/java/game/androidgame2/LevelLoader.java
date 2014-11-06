@@ -13,7 +13,6 @@ import java.util.Iterator;
 
 import components.Entity;
 import components.GameEntities;
-import components.PlayerComponent;
 import components.WorldComponent;
 import components.Engine;
 import components.Player;
@@ -63,7 +62,7 @@ public class LevelLoader {
                         Entity troop = GameEntities.buildTroop();
 
                         if (playerName.equals("self")) {
-                            // More logic here
+                            engine.currentPlayer = player;
                         }
                         else {
                             // Allied or enemy team
@@ -77,6 +76,7 @@ public class LevelLoader {
                         engine.players.get(playerIndex).denorms.addDenormalizable(troop);
                     }
 
+                    playerIndex += 1;
                 }
 
 //
