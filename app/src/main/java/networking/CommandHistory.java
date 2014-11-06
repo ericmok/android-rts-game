@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by eric on 11/5/14.
  */
 public class CommandHistory {
-    public static final int NUMBER_COMMANDS_IN_A_GAME = 8 * 60 * 10 * 100; // 8 taps/sec for 10 minutes * 100 units
+    public static final int NUMBER_COMMANDS_IN_A_GAME = 8 * 60 * 10 * 10; // 8 taps/sec for 10 minutes * 10 units
 
     public ArrayList<Command> commands = new ArrayList<Command>(NUMBER_COMMANDS_IN_A_GAME);
 

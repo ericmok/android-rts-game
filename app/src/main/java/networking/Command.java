@@ -16,6 +16,6 @@ public class Command {
     public double timeStamp = 0;
 
     public String command = NONE;
-    public ArrayList<Entity> selection = new ArrayList<Entity>(300);
+    public ArrayList<Entity> selection = new ArrayList<Entity>(100);
     public Vector2 vec = new Vector2();
 }
