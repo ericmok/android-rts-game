@@ -12,6 +12,7 @@ import java.io.InputStream;
 
 import components.Entity;
 import components.GameEntities;
+import components.PlayerComponent;
 import components.WorldComponent;
 import components.Engine;
 
@@ -51,7 +52,7 @@ public class LevelLoader {
                     JSONObject jEntity = troopArr.getJSONObject(i);
 
                     Entity troop = GameEntities.buildTroop(
-                            Entity.TAG_PLAYER_OWNED, Entity.TAG_FOLLOWER);
+                            PlayerComponent.TAG_PLAYER_OWNED, Entity.TAG_FOLLOWER);
                     engine.addEntity(troop);
 
                     WorldComponent pc =
@@ -66,7 +67,7 @@ public class LevelLoader {
                     JSONObject jEntity = troopArr.getJSONObject(i);
 
                     Entity troop = GameEntities.buildTroop(
-                            Entity.TAG_ENEMY_OWNED, Entity.TAG_FOLLOWER);
+                            PlayerComponent.TAG_ENEMY_OWNED, Entity.TAG_FOLLOWER);
                     engine.addEntity(troop);
 
                     WorldComponent pc =

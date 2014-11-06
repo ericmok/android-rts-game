@@ -2,6 +2,7 @@ package processors;
 
 import java.util.ArrayList;
 
+import components.PlayerComponent;
 import components.WorldComponent;
 import components.SelectionComponent;
 import game.androidgame2.DrawList2DItem;
@@ -20,7 +21,7 @@ public class TroopDrawerProcess {
 
             DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
 
-            if (entity.getLabels().contains(Entity.TAG_ENEMY_OWNED)) {
+            if (entity.getLabels().contains(PlayerComponent.TAG_ENEMY_OWNED)) {
                 drawItem.animationName = DrawList2DItem.ANIMATION_ENEMY_TROOPS_IDLING;
             }
             else {

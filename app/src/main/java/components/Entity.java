@@ -23,9 +23,6 @@ public class Entity implements Denormalizable<Integer> {
 
     public static final int NODE_ABILITIES = 9;
 
-    public static final int TAG_PLAYER_OWNED = 100;
-    public static final int TAG_ALLIED_OWNED = 101;
-    public static final int TAG_ENEMY_OWNED = 102;
     public static final int TAG_LEADER = 103;
     public static final int TAG_FOLLOWER = 104;
 

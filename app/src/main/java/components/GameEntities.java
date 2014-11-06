@@ -9,12 +9,20 @@ public class GameEntities {
 
     /**
      * Construct an entity representing a troop
-     * @param owner For example, Engine.TAG_PLAYER_OWNED
+     * @param team
      * @param leader For example, Engine.TAG_LEADER
      * @return
      */
-    public static Entity buildTroop(int owner, int leader) {
+    public static Entity buildTroop(int team, int leader) {
+
         Entity troop = new Entity();
+        troop.getLabels().add(Entity.UNIT_TROOP);
+
+        PlayerComponent pc = new PlayerComponent();
+        pc.name = "default";
+        pc.team = team;
+        troop.cData.put(PlayerComponent.class, pc);
+
         WorldComponent worldComponent = new WorldComponent();
         troop.cData.put(WorldComponent.class, worldComponent);
 
@@ -28,18 +36,12 @@ public class GameEntities {
 
         troop.getLabels().add(Entity.NODE_TROOP_DRAWER);
 
-        troop.getLabels().add(owner);
-        troop.getLabels().add(leader);
-
-        troop.getLabels().add(Entity.UNIT_TROOP);
-
         AbilityComponent ac = new AbilityComponent();
         ac.abilities.add(Abilities.SPECIAL_ATTACK);
         troop.cData.put(AbilityComponent.class, ac);
 
-        PlayerComponent pc = new PlayerComponent();
-        pc.name = "Player" + owner;
-        troop.cData.put(PlayerComponent.class, pc);
+        troop.getLabels().add(team);
+        troop.getLabels().add(leader);
 
         return troop;
     }
