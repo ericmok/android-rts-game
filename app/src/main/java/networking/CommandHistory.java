@@ -2,17 +2,30 @@ package networking;
 
 import java.util.ArrayList;
 
+import game.androidgame2.Game;
+
 /**
  * Created by eric on 11/5/14.
  */
 public class CommandHistory {
     public static final int NUMBER_COMMANDS_IN_A_GAME = 8 * 60 * 10 * 10; // 8 taps/sec for 10 minutes * 10 units
 
+    public Game game;
+
     public ArrayList<Command> commands = new ArrayList<Command>(NUMBER_COMMANDS_IN_A_GAME);
 
     public double lastAck = 0;
 
     private double mostRecentAckTime = 0;
+
+    /**
+     * Needs access to game pool to recycle commands
+     * @param game
+     * @return
+     */
+    public CommandHistory (Game game) {
+        this.game = game;
+    }
 
     /**
      * <p>
@@ -32,7 +45,7 @@ public class CommandHistory {
 
         for (int i = 0; i < commands.size(); i++) {
             if (commands.get(i).timeStamp < time) {
-                commands.remove(i);
+                game.gamePool.commands.recycleMemory(commands.remove(i));
                 i = i - 1;
             }
         }
