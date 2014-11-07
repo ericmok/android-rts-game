@@ -151,26 +151,35 @@ public class GameLoop implements Runnable {
             game.commandHistory.commands.add(newCommand);
         }
 
-        // Replay all commands in the history that were not ackd
-        // TODO: Don't replay past commands if the engine state was not server modified
+        // If server updated the engine, then replay all commands in the history.
+        // Then ack the commands that come before the servers time frame as these
+        // commands are officially processed by the server
 
-        double replayTime = game.engine.gameTime;
+        // Since we have no network right now, the engine is never diff'd
+        if (1 == 0) {
 
-        for (int i = 0; i < game.commandHistory.commands.size(); i++) {
-            Command replayCommand = game.commandHistory.commands.get(i);
+            // Engine got updated with new state, time to "rebase"
+            double replayTime = game.engine.gameTime;
 
-            EngineSimulator.changeModelWithCommand(game.engine, replayCommand);
+            for (int i = 0; i < game.commandHistory.commands.size(); i++) {
+                Command replayCommand = game.commandHistory.commands.get(i);
 
-            // Interpolate between the command's timeStamp and engine's current time
-            EngineSimulator.interpolate(game.engine, replayCommand.timeStamp,
-                    replayCommand.timeStamp - replayTime);
+                EngineSimulator.changeModelWithCommand(game.engine, replayCommand);
 
-            // Move time forward towards the command's time (possibly to current Time)
-            replayTime = replayCommand.timeStamp;
+                // Interpolate between the command's timeStamp and engine's current time
+                EngineSimulator.interpolate(game.engine, replayCommand.timeStamp,
+                        replayCommand.timeStamp - replayTime);
+
+                // Move time forward towards the command's time (possibly to current Time)
+                replayTime = replayCommand.timeStamp;
+            }
         }
+        else {
 
-        // But if there was no command, we still want an interpolation!
-        if (game.commandHistory.commands.isEmpty()) {
+            // Engine has no server update, continue running naively
+            if (newCommand != null) EngineSimulator.changeModelWithCommand(game.engine, newCommand);
+
+            // If there was no command, we still want an interpolation after all
             EngineSimulator.interpolate(game.engine, ct, dt);
         }
 
