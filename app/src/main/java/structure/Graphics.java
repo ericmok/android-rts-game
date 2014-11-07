@@ -73,7 +73,7 @@ public class Graphics {
 
 			textureLoader.loadAllAssetsInFolder("Animations", true);
 			textureLoader.loadLetterTextures();
-            
+
 //			textureLoader.loadTextureFromAssets(TROOPS_ASSETS, true);
 //			textureLoader.loadTexture(UNIT1_TEXTURE, R.drawable.sprite1, true);
 
