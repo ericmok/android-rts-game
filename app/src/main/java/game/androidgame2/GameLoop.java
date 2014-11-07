@@ -9,10 +9,8 @@ import components.Entity;
 import networking.Command;
 import processors.EngineSimulator;
 import processors.MapScrollFunction;
-import processors.MoveTowardDestinationFunction;
 import processors.SelectionProcessor;
 import processors.TroopDrawerProcess;
-import processors.UserChooseNewDestinationFunction;
 
 public class GameLoop implements Runnable {
 	
@@ -104,9 +102,9 @@ public class GameLoop implements Runnable {
         double ct = currentTick * GameSettings.UNIT_TIME_MULTIPLIER;
         double dt = elapsedTime * GameSettings.UNIT_TIME_MULTIPLIER;
 
-        game.engine.gameTime = ct;
-
         int currentGesture = game.gameInput.takeCurrentGesture();
+
+        Command newCommand = null;
 
         MapScrollFunction.apply(currentGesture, game.gameInput, game.gameCamera);
 
@@ -117,15 +115,75 @@ public class GameLoop implements Runnable {
                 //ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_SELECTION);
                 ArrayList<Entity> selectableEntities = game.engine.currentPlayer.denorms.getListForLabel(Entity.NODE_SELECTION);
                 selectionProcessor.process(selectableEntities, game.gameCamera,
-                        game.gameInput.touchPosition);
+                        game.gameInput.touchPosition, SelectionProcessor.FN_SELECT);
             }
             else {
-                UserChooseNewDestinationFunction.apply(selectionProcessor.userSelection, game.gameCamera, game.gameInput, SelectionProcessor.FN_DESELECT);
+                //UserChooseNewDestinationFunction.apply(selectionProcessor.userSelection, game.gameCamera, game.gameInput, SelectionProcessor.FN_DESELECT);
+
+                // Construct move command
+                Vector2 temp = game.gamePool.vector2s.fetchMemory();
+                game.gameCamera.getTouchToWorldCords(temp, game.gameInput.touchPosition);
+
+                newCommand = game.gamePool.commands.fetchMemory();
+
+                newCommand.command = Command.MOVE;
+                newCommand.timeStamp = ct;
+
+                newCommand.selection.clear();
+
+                // Copy the selection, (we might have to replay the command)
+                for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
+                    newCommand.selection.add(selectionProcessor.userSelection.get(i));
+                }
+                newCommand.vec = temp;
+
+                game.gamePool.vector2s.recycleMemory(temp);
+
+                // This has to go somewhere
                 selectionProcessor.userSelection.clear();
             }
         }
 
-        EngineSimulator.simulate(game.engine, game.commandHistory, dt);
+        if (newCommand != null) {
+
+            // There was a command, so we need to send a network request
+            // and affect local copy of state
+            game.commandHistory.commands.add(newCommand);
+        }
+
+        // Replay all commands in the history that were not ackd
+
+        double replayTime = game.engine.gameTime;
+
+        for (int i = 0; i < game.commandHistory.commands.size(); i++) {
+            Command replayCommand = game.commandHistory.commands.get(i);
+
+            EngineSimulator.changeModelWithCommand(game.engine, replayCommand);
+
+            // Interpolate between the command's timeStamp and engine's current time
+            EngineSimulator.interpolate(game.engine, replayCommand.timeStamp,
+                    replayCommand.timeStamp - replayTime);
+
+            // Move time forward towards the command's time (possibly to current Time)
+            replayTime = replayCommand.timeStamp;
+        }
+
+        // But if there was no command, we still want an interpolation!
+        if (game.commandHistory.commands.isEmpty()) {
+            EngineSimulator.interpolate(game.engine, ct, dt);
+        }
+
+        game.engine.gameTime = ct;
+
+        // When the network returns the state, commands will be considered ack'd or not
+        // Non-ack'd commands will have to be replayed on the networks version of the engine state
+        // Since there is no network, we'll consider commands ack'd immediately
+        while (!game.commandHistory.commands.isEmpty()) {
+            game.commandHistory.ack(ct);
+        }
+
+        // TODO: Set the engine state to the network state
+
 
         // Begin graphics mutations
         // (The mutations don't take affect immediately until explicit finalizations)

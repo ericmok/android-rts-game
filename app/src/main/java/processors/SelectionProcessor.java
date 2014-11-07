@@ -38,7 +38,7 @@ public class SelectionProcessor {
      * @param gameCamera
      * @param touchPosition
      */
-    public void process(ArrayList<Entity> selectableEntities, GameCamera gameCamera, Vector2 touchPosition) {
+    public void process(ArrayList<Entity> selectableEntities, GameCamera gameCamera, Vector2 touchPosition, VoidFunc<Entity> selectedFunc) {
 
         for (int i = 0; i < selectableEntities.size(); i++) {
             Entity entity = selectableEntities.get(i);
@@ -60,7 +60,8 @@ public class SelectionProcessor {
              */
             if (sqDist < GameSettings.UNIT_LENGTH_MULTIPLIER * (SELECTION_WIDTH / gameCamera.scale)) {
                 userSelection.add(entity);
-                sc.isSelected = true;
+                //sc.isSelected = true;
+                selectedFunc.apply(entity);
             }
         }
     }

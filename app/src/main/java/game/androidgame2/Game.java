@@ -29,7 +29,7 @@ public class Game {
     public GameCamera gameCamera = new GameCamera();
     public UIOverlay uiOverlay = new UIOverlay();
 
-    public CommandHistory commandHistory = new CommandHistory();
+    public CommandHistory commandHistory = new CommandHistory(this);
 
 	/**
 	 * Stores pre-loaded heap memory allocations of game objects 
