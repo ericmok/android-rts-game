@@ -152,6 +152,7 @@ public class GameLoop implements Runnable {
         }
 
         // Replay all commands in the history that were not ackd
+        // TODO: Don't replay past commands if the engine state was not server modified
 
         double replayTime = game.engine.gameTime;
 
