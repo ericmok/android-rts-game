@@ -70,18 +70,13 @@ public class Graphics {
 		try {
 			simpleShader.initializeResources();
 			simpleSpriteBatch.load();
-//			textureLoader.loadTextureFromAssets(TROOPS_ASSETS, true);
-//			textureLoader.loadTextureFromAssets(ENEMY_TROOPS_ASSETS, true);
-//			textureLoader.loadTextureFromAssets(TRIGGER_FIELDS_ASSETS, true);
-//			textureLoader.loadTextureFromAssets(CAPITAL_SHIPS_ASSETS, true);
-			
+
 			textureLoader.loadAllAssetsInFolder("Animations", true);
 			textureLoader.loadLetterTextures();
-			
+            
+//			textureLoader.loadTextureFromAssets(TROOPS_ASSETS, true);
 //			textureLoader.loadTexture(UNIT1_TEXTURE, R.drawable.sprite1, true);
-//			textureLoader.loadTexture(UNIT2_TEXTURE, R.drawable.sprite2, true);
-//			textureLoader.loadTexture(UNIT3_TEXTURE, R.drawable.sprite3, true);
-//			textureLoader.loadTexture(UNIT4_TEXTURE, R.drawable.sprite4, true);
+
 			isLoaded = true;
 			Runtime rc = Runtime.getRuntime();
 			rc.gc();
