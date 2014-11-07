@@ -5,6 +5,8 @@ import java.nio.FloatBuffer;
 import android.graphics.Color;
 import android.opengl.Matrix;
 
+import utils.Vector3;
+
 /**
  * A 2D quad with single z value. 
  * If I omit z values...Crap.

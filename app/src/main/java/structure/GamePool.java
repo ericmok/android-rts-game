@@ -2,6 +2,8 @@ package structure;
 
 import networking.Command;
 import networking.CommandHistory;
+import utils.Vector2;
+import utils.Vector3;
 
 public class GamePool {
 

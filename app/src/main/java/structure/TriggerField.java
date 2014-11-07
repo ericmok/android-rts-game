@@ -1,6 +1,7 @@
 package structure;
 
 import utils.Orientation;
+import utils.Vector3;
 
 public class TriggerField {
 	public Vector3 source;

@@ -2,7 +2,7 @@ package networking;
 
 import java.util.ArrayList;
 
-import structure.Vector2;
+import utils.Vector2;
 import components.Entity;
 
 /**

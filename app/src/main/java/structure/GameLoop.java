@@ -11,6 +11,7 @@ import processors.EngineSimulator;
 import processors.MapScrollFunction;
 import processors.SelectionProcessor;
 import processors.TroopDrawerProcess;
+import utils.Vector2;
 
 public class GameLoop implements Runnable {
 	

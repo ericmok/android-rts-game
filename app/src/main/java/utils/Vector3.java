@@ -1,4 +1,4 @@
-package structure;
+package utils;
 
 public class Vector3 {
 	public double x = 0;

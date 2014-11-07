@@ -1,6 +1,6 @@
 package components;
 
-import structure.Vector2;
+import utils.Vector2;
 import utils.Orientation;
 
 /**

@@ -1,4 +1,4 @@
-package structure;
+package utils;
 
 public class Vector4 {
 	public float x;

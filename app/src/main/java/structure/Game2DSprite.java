@@ -1,5 +1,7 @@
 package structure;
 
+import utils.Vector3;
+
 /**
  * Data structure for a 2d sprite.
  *

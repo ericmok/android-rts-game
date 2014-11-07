@@ -1,8 +1,5 @@
 package utils;
 
-import structure.Vector2;
-import structure.Vector3;
-
 /**
  * Provides mutations that will normalize the vector.
  * Calling getDegrees() will cache the result.

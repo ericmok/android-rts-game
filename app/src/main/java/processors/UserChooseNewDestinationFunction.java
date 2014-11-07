@@ -7,7 +7,7 @@ import structure.GameCamera;
 import structure.GameInput;
 
 import components.Entity;
-import structure.Vector2;
+import utils.Vector2;
 import utils.VoidFunc;
 
 /**

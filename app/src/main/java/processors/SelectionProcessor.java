@@ -8,7 +8,7 @@ import structure.Game;
 import components.Entity;
 import structure.GameCamera;
 import structure.GameSettings;
-import structure.Vector2;
+import utils.Vector2;
 import utils.VoidFunc;
 
 /**

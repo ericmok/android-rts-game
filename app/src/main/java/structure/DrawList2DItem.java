@@ -2,6 +2,8 @@ package structure;
 
 import android.graphics.Color;
 
+import utils.Vector3;
+
 /**
  * An item to be renderable by the SimpleShaderBatch draw2d function <br/>
  * <strong>Pending Refactor</strong>: Should the graphics or the game loop be responsible for deciding the texture and sprites? <br/>

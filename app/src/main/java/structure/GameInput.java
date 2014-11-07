@@ -4,6 +4,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
+import utils.Vector2;
+
 /**
  * Created by eric on 11/1/14.
  * Preprocesses and routes glSurfaceView UI events to the game loop

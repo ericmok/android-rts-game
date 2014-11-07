@@ -1,5 +1,7 @@
 package structure;
 
+import utils.Vector3;
+
 public class KinematicPosition {
 	public Vector3 position;
 	public Vector3 velocity;

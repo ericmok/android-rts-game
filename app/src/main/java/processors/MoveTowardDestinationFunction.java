@@ -6,7 +6,7 @@ import components.DestinationComponent;
 import components.Entity;
 import components.WorldComponent;
 import components.SelectionComponent;
-import structure.Vector2;
+import utils.Vector2;
 
 /**
  * Created by eric on 11/3/14.

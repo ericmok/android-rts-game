@@ -1,5 +1,7 @@
 package structure;
 
+import utils.Vector2;
+
 /**
  * Created by eric on 11/3/14.
  */
