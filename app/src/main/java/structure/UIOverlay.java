@@ -5,8 +5,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import components.ButtonComponent;
-import components.Entity;
+import model.ButtonComponent;
+import model.Entity;
 import utils.Vector2;
 
 /**

@@ -1,11 +1,11 @@
 package structure;
 
-import components.GameEntities;
+import model.GameEntities;
 
 import android.app.Activity;
 import android.content.Context;
 
-import components.Engine;
+import model.Engine;
 import networking.CommandHistory;
 
 public class Game {

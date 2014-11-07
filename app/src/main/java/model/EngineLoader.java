@@ -1,6 +1,4 @@
-package components;
-
-import android.util.Log;
+package model;
 
 import org.json.JSONArray;
 import org.json.JSONException;

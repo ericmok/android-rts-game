@@ -3,7 +3,7 @@ package networking;
 import java.util.ArrayList;
 
 import utils.Vector2;
-import components.Entity;
+import model.Entity;
 
 /**
  * Created by eric on 11/5/14.

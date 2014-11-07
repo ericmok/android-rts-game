@@ -1,4 +1,4 @@
-package components;
+package model;
 
 import utils.Vector2;
 

@@ -3,20 +3,13 @@ package structure;
 import android.content.Context;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 
-import components.EngineLoader;
-import components.Entity;
-import components.GameEntities;
-import components.WorldComponent;
-import components.Engine;
-import components.Player;
+import model.EngineLoader;
+import model.Engine;
 
 /**
  * Created by eric on 10/31/14.

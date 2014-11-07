@@ -2,11 +2,11 @@ package processors;
 
 import java.util.ArrayList;
 
-import components.DestinationComponent;
+import model.DestinationComponent;
 import structure.GameCamera;
 import structure.GameInput;
 
-import components.Entity;
+import model.Entity;
 import utils.Vector2;
 import utils.VoidFunc;
 

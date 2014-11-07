@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import android.os.SystemClock;
 
-import components.Entity;
+import model.Entity;
 
 import networking.Command;
 import processors.EngineSimulator;

@@ -1,7 +1,6 @@
 package processors;
 
-import components.SelectionComponent;
-import components.Entity;
+import model.Entity;
 import utils.VoidFunc;
 
 /**

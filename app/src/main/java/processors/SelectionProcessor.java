@@ -2,10 +2,10 @@ package processors;
 
 import java.util.ArrayList;
 
-import components.WorldComponent;
-import components.SelectionComponent;
+import model.WorldComponent;
+import model.SelectionComponent;
 import structure.Game;
-import components.Entity;
+import model.Entity;
 import structure.GameCamera;
 import structure.GameSettings;
 import utils.Vector2;

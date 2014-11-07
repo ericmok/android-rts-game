@@ -1,4 +1,4 @@
-package components;
+package model;
 
 /**
  * Created by eric on 11/3/14.

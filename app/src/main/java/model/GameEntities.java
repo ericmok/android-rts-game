@@ -1,4 +1,4 @@
-package components;
+package model;
 
 import structure.DrawList2DItem;
 

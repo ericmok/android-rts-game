@@ -2,13 +2,13 @@ package processors;
 
 import java.util.ArrayList;
 
-import components.Player;
-import components.WorldComponent;
-import components.SelectionComponent;
+import model.Player;
+import model.WorldComponent;
+import model.SelectionComponent;
 import structure.DrawList2DItem;
 import structure.RewriteOnlyArray;
 
-import components.Entity;
+import model.Entity;
 
 /**
  * Created by eric on 11/3/14.
