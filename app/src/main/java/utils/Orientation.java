@@ -1,7 +1,7 @@
 package utils;
 
-import game.androidgame2.Vector2;
-import game.androidgame2.Vector3;
+import structure.Vector2;
+import structure.Vector3;
 
 /**
  * Provides mutations that will normalize the vector.

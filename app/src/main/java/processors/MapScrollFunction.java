@@ -1,7 +1,7 @@
 package processors;
 
-import game.androidgame2.GameCamera;
-import game.androidgame2.GameInput;
+import structure.GameCamera;
+import structure.GameInput;
 
 /**
  * Created by eric on 11/3/14.

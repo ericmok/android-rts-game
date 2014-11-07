@@ -2,7 +2,7 @@ package networking;
 
 import java.util.ArrayList;
 
-import game.androidgame2.Vector2;
+import structure.Vector2;
 import components.Entity;
 
 /**

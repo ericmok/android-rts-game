@@ -3,12 +3,11 @@ package processors;
 import java.util.ArrayList;
 
 import components.DestinationComponent;
-import components.SelectionComponent;
-import game.androidgame2.GameCamera;
-import game.androidgame2.GameInput;
+import structure.GameCamera;
+import structure.GameInput;
 
 import components.Entity;
-import game.androidgame2.Vector2;
+import structure.Vector2;
 import utils.VoidFunc;
 
 /**

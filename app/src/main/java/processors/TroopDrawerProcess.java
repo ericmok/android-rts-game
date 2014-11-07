@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import components.Player;
 import components.WorldComponent;
 import components.SelectionComponent;
-import game.androidgame2.DrawList2DItem;
-import game.androidgame2.RewriteOnlyArray;
+import structure.DrawList2DItem;
+import structure.RewriteOnlyArray;
 
 import components.Entity;
 

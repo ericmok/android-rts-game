@@ -6,8 +6,7 @@ import components.DestinationComponent;
 import components.Entity;
 import components.WorldComponent;
 import components.SelectionComponent;
-import game.androidgame2.GameSettings;
-import game.androidgame2.Vector2;
+import structure.Vector2;
 
 /**
  * Created by eric on 11/3/14.

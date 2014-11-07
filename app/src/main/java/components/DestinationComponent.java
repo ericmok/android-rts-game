@@ -1,6 +1,6 @@
 package components;
 
-import game.androidgame2.Vector2;
+import structure.Vector2;
 
 /**
  * Created by eric on 11/2/14.

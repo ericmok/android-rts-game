@@ -2,7 +2,7 @@ package networking;
 
 import java.util.ArrayList;
 
-import game.androidgame2.Game;
+import structure.Game;
 
 /**
  * Created by eric on 11/5/14.

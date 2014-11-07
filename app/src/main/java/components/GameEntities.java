@@ -1,6 +1,6 @@
 package components;
 
-import game.androidgame2.DrawList2DItem;
+import structure.DrawList2DItem;
 
 /**
  * Created by eric on 10/30/14.
