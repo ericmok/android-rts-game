@@ -1,4 +1,4 @@
-package game.androidgame2;
+package structure;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
