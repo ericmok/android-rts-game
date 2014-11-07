@@ -6,9 +6,7 @@ import networking.Command;
 import networking.CommandHistory;
 
 public class GamePool {
-	
-	public MemoryPool<Troop> troops;
-	
+
 	public MemoryPool<TriggerField> triggerFields;
 	
 	public MemoryPool<DrawList2DItem> drawItems;
@@ -28,7 +26,6 @@ public class GamePool {
 	}
 	
 	public void allocate() {
-		troops = new MemoryPool<Troop>(Troop.class, 3);
 
 		drawItems = new MemoryPool<DrawList2DItem>(DrawList2DItem.class, 1024);
 		
@@ -51,12 +48,12 @@ public class GamePool {
 	 */
 	public void recycle(Object objectToRecycle, Class cls) {
 
-		// TODO: String allocations
-		//if (cls.getSimpleName().equalsIgnoreCase( Troop.class.getSimpleName())) {
-		if (cls.getName().equalsIgnoreCase( Troop.class.getName())) {
-			//Log.i("RECYCLED", "RECYCLED");
-			troops.recycleMemory((Troop)objectToRecycle);
-		}
+//		// TODO: String allocations
+//		//if (cls.getSimpleName().equalsIgnoreCase( Troop.class.getSimpleName())) {
+//		if (cls.getName().equalsIgnoreCase( Troop.class.getName())) {
+//			//Log.i("RECYCLED", "RECYCLED");
+//			troops.recycleMemory((Troop)objectToRecycle);
+//		}
 	}
 	
 }

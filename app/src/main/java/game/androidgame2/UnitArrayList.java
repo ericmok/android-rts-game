@@ -3,8 +3,6 @@ package game.androidgame2;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import tenth.system.SystemNode;
-
 /**
  * ArrayList wrapper that adds functional filter capability.
  * Each iteration.next() call returns a unit that passes the condition.
@@ -16,7 +14,7 @@ import tenth.system.SystemNode;
  *
  * TODO: Deprecate usage, it is allocation unsafe
  */
-public class UnitArrayList extends ArrayList<SystemNode> {
+public class UnitArrayList<T> extends ArrayList<T> {
 	
 	public UnitArrayList(int maxUnits) {
 		super(maxUnits);
@@ -25,7 +23,7 @@ public class UnitArrayList extends ArrayList<SystemNode> {
 	public Iterator iterator(final Filterable filter) {
 		final UnitArrayList self = this;
 		
-		return new Iterator<SystemNode>() {
+		return new Iterator<T>() {
 
 				private int counter = -1;
 				
@@ -65,10 +63,10 @@ public class UnitArrayList extends ArrayList<SystemNode> {
 				 * Call hasNext first to filter!
 				 */
 				@Override
-				public SystemNode next() {
+				public T next() {
 					tested = false;
 					if (cachedHasNext) {
-						return self.get(nextHit);
+						return (T)self.get(nextHit);
 					}
 					return null;  
 				}
@@ -89,7 +87,7 @@ public class UnitArrayList extends ArrayList<SystemNode> {
 		};
 	}
 	
-	public interface Filterable {
-		public SystemNode filter(SystemNode toFilter);
+	public interface Filterable<T> {
+		public T filter(T toFilter);
 	}
 }

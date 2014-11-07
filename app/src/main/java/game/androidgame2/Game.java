@@ -37,11 +37,6 @@ public class Game {
 	public GamePool gamePool;
 	
 	/**
-	 * Stores all game objects. Public access to save access time.
-	 */
-	public Stage stage;
-	
-	/**
 	 * Direct access for speed
 	 */
 	public Graphics graphics;
