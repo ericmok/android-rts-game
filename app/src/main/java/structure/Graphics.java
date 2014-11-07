@@ -14,11 +14,6 @@ public class Graphics {
 	private SimpleSpriteBatch simpleSpriteBatch;
 	private TextureLoader textureLoader;
 	private boolean isLoaded = false;
-	
-	public final static String TROOPS_ASSETS = "Troops";
-	public final static String ENEMY_TROOPS_ASSETS = "EnemyTroops";
-	public final static String TRIGGER_FIELDS_ASSETS = "TriggerFields";
-	public final static String CAPITAL_SHIPS_ASSETS = "CapitalShips";
 
     /**
      * Camera matrix
