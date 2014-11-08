@@ -8,6 +8,7 @@ import java.util.ArrayList;
  * Created by eric on 11/5/14.
  */
 public class Player {
+
     public static ArrayList<Integer> TeamColors = new ArrayList<Integer>() {{
        this.add(Color.argb(240, 0, 201, 255));
        this.add(Color.argb(240, 198, 71, 132));
@@ -19,6 +20,9 @@ public class Player {
        this.add(Color.argb(240, 155, 89, 182)); // Amethyst
        this.add(Color.argb(240, 241, 196, 15)); // Sunflower
     }};
+
+    public ArrayList<Entity> added = new ArrayList<Entity>(300);
+    public ArrayList<Entity> removed = new ArrayList<Entity>(300);
 
     public String name = "player_" + Math.floor(Math.random() * 10000);
     public int team = 0;
@@ -38,5 +42,15 @@ public class Player {
 
     public static int colorForTeam(int team) {
         return TeamColors.get(team % TeamColors.size());
+    }
+
+    public void queueAdded(Entity entity) {
+        entity.event = Entity.Event.ADDED;
+        this.added.add(entity);
+    }
+
+    public void queueRemoved(Entity entity) {
+        entity.event = Entity.Event.REMOVED;
+        this.removed.add(entity);
     }
 }

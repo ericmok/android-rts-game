@@ -245,21 +245,16 @@ public class GameLoop implements Runnable {
         for (int i = 0; i < game.engine.players.size(); i++) {
 
             Player player = game.engine.players.get(i);
-            ArrayList<Entity> entities = player.denorms.getListForLabel(Entity.UNIT_TROOP);
 
-            for (int j = 0; j < entities.size(); j++) {
+            for (int j = 0; j < player.removed.size(); j++) {
+                Entity toRemove = player.removed.get(j);
 
-                Entity entity = entities.get(j);
-
-                if (entity.event == Entity.Event.REMOVED) {
-
-                    // Remove the entity from denormalization mechanism
-                    if (player.denorms.removeDenormalizable(entity)) {
-                        j = j - 1;
-                        GameEntities.troopsMemoryPool.recycleMemory(entity);
-                    }
-                }
+                // Remove entity from denormalization mechanism
+                player.denorms.removeDenormalizable(toRemove);
+                GameEntities.troopsMemoryPool.recycleMemory(toRemove);
             }
+
+            player.removed.clear();
         }
 
         //game.graphics.flushCameraModifications(false);

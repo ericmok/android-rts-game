@@ -39,8 +39,8 @@ public class BattleResolution {
                             lc1.hitPoints = 0;
                             lc2.hitPoints = 0;
 
-                            troops1.get(s).event = Entity.Event.REMOVED;
-                            troops2.get(t).event = Entity.Event.REMOVED;
+                            player1.queueRemoved(troops1.get(s));
+                            player2.queueRemoved(troops2.get(t));
                         }
                     }
                 }
