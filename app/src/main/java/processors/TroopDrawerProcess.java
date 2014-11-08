@@ -1,21 +1,30 @@
 package processors;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import model.LivingComponent;
 import model.Player;
 import model.WorldComponent;
 import model.SelectionComponent;
 import structure.DrawList2DItem;
+import structure.GamePool;
 import structure.RewriteOnlyArray;
 
 import model.Entity;
+import structure.TemporaryDrawList2DItem;
 
 /**
  * Created by eric on 11/3/14.
  */
 public class TroopDrawerProcess {
-    public static final void process(RewriteOnlyArray<DrawList2DItem> spriteAllocater, Player player, double dt) {
+    public static final void process(RewriteOnlyArray<DrawList2DItem> spriteAllocater,
+                                     List<TemporaryDrawList2DItem> tempSprites,
+                                     GamePool gamePool,
+                                     Player player,
+                                     double dt) {
         ArrayList<Entity> troopsToDraw = player.denorms.getListForLabel(Entity.NODE_TROOP_DRAWER);
 
         for (int i = 0; i < troopsToDraw.size(); i++) {
@@ -28,6 +37,16 @@ public class TroopDrawerProcess {
             drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
             if (lc.hitPoints <= 0) {
                 drawItem.color = Player.colorForTeam(4);
+                TemporaryDrawList2DItem tempSprite = gamePool.temporaryDrawItems.fetchMemory();
+                tempSprite.color = Color.argb(240, 255, 255, 255);
+                tempSprite.progress.progress = 0;
+                tempSprite.angle = 90;
+                tempSprite.animationName = DrawList2DItem.ANIMATION_TROOPS_DYING;
+                tempSprite.width = 1;
+                tempSprite.height = 1;
+                tempSprite.position.x = wc.pos.x;
+                tempSprite.position.y = wc.pos.y;
+                tempSprites.add(tempSprite);
             }
             else {
                 drawItem.color = player.color();

@@ -1,6 +1,7 @@
 package structure;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.SystemClock;
 
@@ -218,6 +219,7 @@ public class GameLoop implements Runnable {
 
         // Begin graphics mutations
         // (The mutations don't take affect immediately until explicit finalizations)
+            List<TemporaryDrawList2DItem> tempSprites = game.graphics.drawLists.temporarySprites;
 
             RewriteOnlyArray<DrawList2DItem> spriteAllocater = game.graphics.drawLists.regularSprites.lockWritableBuffer();
             spriteAllocater.resetWriteIndex();
@@ -228,7 +230,7 @@ public class GameLoop implements Runnable {
             // Draw troops
             //ArrayList<Entity> entitiesToDraw = game.engine.currentPlayer.denorms.getListForLabel(Entity.NODE_TROOP_DRAWER);
             for (int i = 0; i < game.engine.players.size(); i++) {
-                TroopDrawerProcess.process(spriteAllocater, game.engine.players.get(i), dt);
+                TroopDrawerProcess.process(spriteAllocater, tempSprites, game.gamePool, game.engine.players.get(i), dt);
             }
 
             // Flush graphics at the same time so settings are sync'd
