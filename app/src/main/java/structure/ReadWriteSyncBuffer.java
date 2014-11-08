@@ -2,6 +2,8 @@ package structure;
 
 import java.util.ArrayList;
 
+import utils.MemoryPool;
+
 /**
  * Circular Buffer. Writing tries to cycle through
  * buffers if possible. This allows graphics to access most
