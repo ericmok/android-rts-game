@@ -24,10 +24,16 @@ public class UIOverlay {
     private Vector2 temp2 = new Vector2();
     private Vector2 temp3 = new Vector2();
 
+    public Entity currentButton = null;
+
     public void processInput(GameCamera gameCamera,
                              int currentGesture, GameInput gameInput) {
 
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
+
+            currentButton = null;
+
+            // For each button, see if touch point is inside button's area
             for (int i = 0; i < buttons.size(); i++) {
                 ButtonComponent bc = (ButtonComponent)buttons.get(i).cData.get(ButtonComponent.class);
 
@@ -40,7 +46,10 @@ public class UIOverlay {
                 // The button's trigger box is bigger as the camera zooms out
                 if (Math.abs(touchToWorldCoords.x - bc.touchPoint.x) < 0.5 * SIZE_NORMALIZER * bc.size.x / gameCamera.scale &&
                         Math.abs(touchToWorldCoords.y - bc.touchPoint.y) < 0.5 * SIZE_NORMALIZER * bc.size.y / gameCamera.scale) {
+
                     Log.i("BUTTON", "ACTIVATE " + "," + bc.name + "," + bc.touchPoint + " touchPosition[" + gameInput.touchPosition + "]");
+                    currentButton = buttons.get(i);
+
                 }
             }
         }
