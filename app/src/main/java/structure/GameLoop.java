@@ -6,6 +6,7 @@ import android.os.SystemClock;
 
 import model.Entity;
 
+import model.GameEntities;
 import model.Player;
 import networking.Command;
 import processors.EngineSimulator;
@@ -250,10 +251,10 @@ public class GameLoop implements Runnable {
 
                 if (entity.event == Entity.Event.REMOVED) {
 
-                    // TODO: Garbage collect
-                    // Remove but... it is denormalized
+                    // Remove the entity from denormalization mechanism
                     if (player.denorms.removeDenormalizable(entity)) {
                         j = j - 1;
+                        GameEntities.troopsMemoryPool.recycleMemory(entity);
                     }
                 }
             }
