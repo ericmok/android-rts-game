@@ -1,11 +1,14 @@
 package model;
 
 import structure.DrawList2DItem;
+import utils.MemoryPool;
 
 /**
  * Created by eric on 10/30/14.
  */
 public class GameEntities {
+
+    public static MemoryPool<Entity> troopsMemoryPool = new MemoryPool<Entity>(Entity.class, 1024);
 
     /**
      * Construct an entity representing a troop
@@ -13,7 +16,8 @@ public class GameEntities {
      */
     public static Entity buildTroop() {
 
-        Entity troop = new Entity();
+        //Entity troop = new Entity();
+        Entity troop = troopsMemoryPool.fetchMemory();
         troop.getLabels().add(Entity.UNIT_TROOP);
 //
 //        PlayerComponent pc = new PlayerComponent();
@@ -45,6 +49,10 @@ public class GameEntities {
 //        troop.getLabels().add(leader);
 
         return troop;
+    }
+
+    public static void recycleTroop(Entity toRecycle) {
+        troopsMemoryPool.recycleMemory(toRecycle);
     }
 
     public static Entity buildAttackButton() {
