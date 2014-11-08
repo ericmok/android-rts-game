@@ -106,17 +106,22 @@ public class DenormalizedDataSet<E extends Denormalizable, F> implements Denorma
      * Removes the denormalizable from all denormalizedLists for which it is labeled for
      * @param denormalizable
      */
-    public synchronized void removeDenormalizable(E denormalizable) {
+    public synchronized boolean removeDenormalizable(E denormalizable) {
         ArrayList<F> labels = denormalizable.getLabels();
+
+        boolean anyRemoved = false;
 
         for (int i = 0; i < labels.size(); i++) {
 
             F label = labels.get(i);
 
-            if (denormalizedLists.contains(label)) {
-                denormalizedLists.get(label).remove(denormalizable);
+            // Get the list responsible for the label and remove
+            if (denormalizedLists.get(label).remove(denormalizable)) {
+                anyRemoved = true;
             }
         }
+
+        return anyRemoved;
     }
 
     public ArrayList<E> getListForLabel(int label) {
