@@ -24,6 +24,8 @@ public class GameLoop implements Runnable {
 	
 	public final static long TARGET_MILLISEC_PER_FRAME = 12;
 
+    public double accumulator = 0;
+
     private long originTick = 0;
 	private long previousTick = 0;
 	private long tickDifference = 0;
@@ -59,11 +61,27 @@ public class GameLoop implements Runnable {
 			//allocation unsafe!
 			//debugLog("DELTA TIME", Long.toString(tickDifference));
 
-			// Game calculations go here
-			this.performGameLogic(currentTick, tickDifference);
-			
+            // Refer to:
+            // http://gafferongames.com/game-physics/fix-your-timestep/
+
+            // Produce time, the "faster" the frame, the less time produced
+            accumulator += tickDifference;
+
+            // Consume time in segments
+            if (accumulator > TARGET_MILLISEC_PER_FRAME) {
+
+                // Variable step
+                //this.performGameLogic(currentTick, tickDifference);
+
+                // Semi-fixed step
+                this.performGameLogic(currentTick, TARGET_MILLISEC_PER_FRAME);
+
+                // Chew! Chew! Accumulator Yum!
+                accumulator -= TARGET_MILLISEC_PER_FRAME;
+            }
+
 			long finishedTick = SystemClock.uptimeMillis();
-			long timeOfCalculation = (finishedTick - currentTick);
+			long timeOfCalculation = (finishedTick - currentTick) + 1;
 			//allocation unsafe!
 			//debugLog("GameLoop", "Time Of Calculation: " + Long.toString(timeOfCalculation));
 			
