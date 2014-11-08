@@ -21,7 +21,7 @@ public class Orientation extends Vector2 {
     private boolean cacheDirty = false;
 	
 	public Orientation() {
-		this.cacheDegrees = 0.0;
+		this.cacheDegrees = 90.0;
 		this.x = 0.0;
 		this.y = 1.0;
 	}
