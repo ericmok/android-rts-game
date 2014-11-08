@@ -29,15 +29,15 @@ public class GamePool {
 	public void allocate() {
 
 		drawItems = new MemoryPool<DrawList2DItem>(DrawList2DItem.class, 1024);
-		
+
 		temporaryDrawItems = new MemoryPool<TemporaryDrawList2DItem>(TemporaryDrawList2DItem.class, 1024);
-		
+
 		triggerFields = new MemoryPool<TriggerField>(TriggerField.class, 512);
 
         vector2s = new MemoryPool<Vector2>(Vector2.class, 512);
 
-		vector3s = new MemoryPool<Vector3>(Vector3.class, 512);
-		
+        vector3s = new MemoryPool<Vector3>(Vector3.class, 512);
+
 		timedProgresses = new MemoryPool<TimedProgress>(TimedProgress.class, 512);
 
         commands = new MemoryPool<Command>(Command.class, CommandHistory.NUMBER_COMMANDS_IN_A_GAME);
