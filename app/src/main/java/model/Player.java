@@ -53,4 +53,25 @@ public class Player {
         entity.event = Entity.Event.REMOVED;
         this.removed.add(entity);
     }
+
+    public void addQueued() {
+        for (int j = 0; j < added.size(); j++) {
+            Entity toAdd = added.get(j);
+
+            // Add entity to denormalization mechanism
+            this.denorms.addDenormalizable(toAdd);
+        }
+        added.clear();
+    }
+
+    public void removeQueued() {
+        for (int j = 0; j < removed.size(); j++) {
+            Entity toRemove = removed.get(j);
+
+            // Remove entity from denormalization mechanism
+            this.denorms.removeDenormalizable(toRemove);
+            GameEntities.troopsMemoryPool.recycleMemory(toRemove);
+        }
+        removed.clear();
+    }
 }

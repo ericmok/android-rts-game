@@ -126,6 +126,8 @@ public class GameLoop implements Runnable {
 
         int currentGesture = game.gameInput.takeCurrentGesture();
 
+        game.engine.eachPlayerProcessAdded();
+
         Command newCommand = null;
 
         MapScrollFunction.apply(currentGesture, game.gameInput, game.gameCamera);
@@ -242,20 +244,7 @@ public class GameLoop implements Runnable {
         game.graphics.flushCameraModifications();
 
 
-        for (int i = 0; i < game.engine.players.size(); i++) {
-
-            Player player = game.engine.players.get(i);
-
-            for (int j = 0; j < player.removed.size(); j++) {
-                Entity toRemove = player.removed.get(j);
-
-                // Remove entity from denormalization mechanism
-                player.denorms.removeDenormalizable(toRemove);
-                GameEntities.troopsMemoryPool.recycleMemory(toRemove);
-            }
-
-            player.removed.clear();
-        }
+        game.engine.eachPlayerProcessRemoved();
 
         //game.graphics.flushCameraModifications(false);
 
