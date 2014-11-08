@@ -144,24 +144,42 @@ public class GameLoop implements Runnable {
             else {
                 //UserChooseNewDestinationFunction.apply(selectionProcessor.userSelection, game.gameCamera, game.gameInput, SelectionProcessor.FN_DESELECT);
 
-                // Construct move command
-                Vector2 temp = game.gamePool.vector2s.fetchMemory();
-                game.gameCamera.getTouchToWorldCords(temp, game.gameInput.touchPosition);
+                if (game.uiOverlay.currentButton != null) {
+                    // Construct fire command
+                    Vector2 temp = game.gamePool.vector2s.fetchMemory();
+                    game.gameCamera.getTouchToWorldCords(temp, game.gameInput.touchPosition);
 
-                newCommand = game.gamePool.commands.fetchMemory();
+                    newCommand = game.gamePool.commands.fetchMemory();
 
-                newCommand.command = Command.MOVE;
-                newCommand.timeStamp = ct;
+                    newCommand.command = Command.FIRE;
+                    newCommand.timeStamp = ct;
+                    for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
+                        newCommand.selection.add(selectionProcessor.userSelection.get(i));
+                    }
+                    newCommand.vec.copy(temp);
 
-                newCommand.selection.clear();
-
-                // Copy the selection, (we might have to replay the command)
-                for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
-                    newCommand.selection.add(selectionProcessor.userSelection.get(i));
+                    game.gamePool.vector2s.recycleMemory(temp);
                 }
-                newCommand.vec = temp;
+                else {
+                    // Construct move command
+                    Vector2 temp = game.gamePool.vector2s.fetchMemory();
+                    game.gameCamera.getTouchToWorldCords(temp, game.gameInput.touchPosition);
 
-                game.gamePool.vector2s.recycleMemory(temp);
+                    newCommand = game.gamePool.commands.fetchMemory();
+
+                    newCommand.command = Command.MOVE;
+                    newCommand.timeStamp = ct;
+
+                    newCommand.selection.clear();
+
+                    // Copy the selection, (we might have to replay the command)
+                    for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
+                        newCommand.selection.add(selectionProcessor.userSelection.get(i));
+                    }
+                    newCommand.vec.copy(temp);
+
+                    game.gamePool.vector2s.recycleMemory(temp);
+                }
 
                 // This has to go somewhere
                 selectionProcessor.userSelection.clear();

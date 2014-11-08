@@ -12,6 +12,7 @@ public class Command {
 
     public static final String NONE = "none";
     public static final String MOVE = "move";
+    public static final String FIRE = "fire";
 
     public double timeStamp = 0;
 
