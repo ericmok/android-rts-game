@@ -37,6 +37,9 @@ public class GameEntities {
         AbilityComponent ac = new AbilityComponent();
         ac.abilities.add(Abilities.SPECIAL_ATTACK);
         troop.cData.put(AbilityComponent.class, ac);
+
+        LivingComponent lc = new LivingComponent();
+        troop.cData.put(LivingComponent.class, lc);
 //
 //        troop.getLabels().add(team);
 //        troop.getLabels().add(leader);

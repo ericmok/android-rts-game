@@ -2,6 +2,7 @@ package processors;
 
 import java.util.ArrayList;
 
+import model.LivingComponent;
 import model.Player;
 import model.WorldComponent;
 import model.SelectionComponent;
@@ -20,11 +21,17 @@ public class TroopDrawerProcess {
         for (int i = 0; i < troopsToDraw.size(); i++) {
             Entity entity = troopsToDraw.get(i);
             WorldComponent wc = (WorldComponent)entity.cData.get(WorldComponent.class);
+            LivingComponent lc = (LivingComponent)entity.cData.get(LivingComponent.class);
 
             DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
 
             drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
-            drawItem.color = player.color();
+            if (lc.hitPoints <= 0) {
+                drawItem.color = Player.colorForTeam(4);
+            }
+            else {
+                drawItem.color = player.color();
+            }
             drawItem.position.x = wc.pos.x;
             drawItem.position.y = wc.pos.y;
             drawItem.angle = (float)wc.rot.getDegrees();
