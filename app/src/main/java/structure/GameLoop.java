@@ -6,6 +6,7 @@ import android.os.SystemClock;
 
 import model.Entity;
 
+import model.Player;
 import networking.Command;
 import processors.EngineSimulator;
 import processors.MapScrollFunction;
@@ -237,6 +238,26 @@ public class GameLoop implements Runnable {
         game.graphics.setCameraPositionAndScale((float)game.gameCamera.x, (float)game.gameCamera.y, (float)game.gameCamera.scale);
         game.graphics.flushCameraModifications();
 
+
+        for (int i = 0; i < game.engine.players.size(); i++) {
+
+            Player player = game.engine.players.get(i);
+            ArrayList<Entity> entities = player.denorms.getListForLabel(Entity.UNIT_TROOP);
+
+            for (int j = 0; j < entities.size(); j++) {
+
+                Entity entity = entities.get(j);
+
+                if (entity.event == Entity.Event.REMOVED) {
+
+                    // TODO: Garbage collect
+                    // Remove but... it is denormalized
+                    if (player.denorms.removeDenormalizable(entity)) {
+                        j = j - 1;
+                    }
+                }
+            }
+        }
 
         //game.graphics.flushCameraModifications(false);
 

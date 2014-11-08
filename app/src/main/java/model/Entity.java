@@ -40,6 +40,12 @@ public class Entity implements Denormalizable<Integer> {
      */
     public Hashtable<Class<? extends Component>, Component> cData = new Hashtable<Class<? extends Component>, Component>(64);
 
+    public static enum Event {
+        NONE, ADDED, REMOVED, CHANGED
+    }
+
+    public Event event = Event.NONE;
+
     public Entity() {
         id = NEXT_UNIQUE_ID;
         NEXT_UNIQUE_ID += 1;

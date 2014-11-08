@@ -38,6 +38,9 @@ public class BattleResolution {
                             LivingComponent lc2 = (LivingComponent)troops2.get(t).cData.get(LivingComponent.class);
                             lc1.hitPoints = 0;
                             lc2.hitPoints = 0;
+
+                            troops1.get(s).event = Entity.Event.REMOVED;
+                            troops2.get(t).event = Entity.Event.REMOVED;
                         }
                     }
                 }
