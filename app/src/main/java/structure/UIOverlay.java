@@ -47,7 +47,7 @@ public class UIOverlay {
                 if (Math.abs(touchToWorldCoords.x - bc.touchPoint.x) < 0.5 * SIZE_NORMALIZER * bc.size.x / gameCamera.scale &&
                         Math.abs(touchToWorldCoords.y - bc.touchPoint.y) < 0.5 * SIZE_NORMALIZER * bc.size.y / gameCamera.scale) {
 
-                    Log.i("BUTTON", "ACTIVATE " + "," + bc.name + "," + bc.touchPoint + " touchPosition[" + gameInput.touchPosition + "]");
+                    //Log.i("BUTTON", "ACTIVATE " + "," + bc.name + "," + bc.touchPoint + " touchPosition[" + gameInput.touchPosition + "]");
                     currentButton = buttons.get(i);
 
                 }
