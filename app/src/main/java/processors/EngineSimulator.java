@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import model.DestinationComponent;
 import model.Entity;
 import model.Engine;
+import model.GameEntities;
+import model.WorldComponent;
 import networking.Command;
 
 /**
@@ -28,6 +30,15 @@ public class EngineSimulator {
                 SelectionProcessor.FN_DESELECT.apply(entity);
             }
         }
+
+//        if (command.command == Command.FIRE) {
+//            Entity newTroop = GameEntities.troopsMemoryPool.fetchMemory();
+//
+//            WorldComponent wc = (WorldComponent)newTroop.cData.get(WorldComponent.class);
+//            wc.pos.zero();
+//
+//            engine.currentPlayer.queueAdded(newTroop);
+//        }
     }
 
     public static void interpolate(Engine engine, double ct, double dt) {
