@@ -29,7 +29,7 @@ public class UserChooseNewDestinationFunction {
             Entity entity = unitsToChange.get(i);
             DestinationComponent dc = (DestinationComponent) entity.cData.get(DestinationComponent.class);
 
-            gameCamera.getTouchToWorldCords(temp, gameInput.touchPosition);
+            gameCamera.getScreenToWorldCoords(temp, gameInput.touchPosition);
 
             dc.dest.copy(temp);
             dc.hasDestination = true;

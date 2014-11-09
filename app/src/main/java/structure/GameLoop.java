@@ -7,8 +7,6 @@ import android.os.SystemClock;
 
 import model.Entity;
 
-import model.GameEntities;
-import model.Player;
 import networking.Command;
 import processors.EngineSimulator;
 import processors.MapScrollFunction;
@@ -147,7 +145,7 @@ public class GameLoop implements Runnable {
                 if (game.uiOverlay.currentButton != null) {
                     // Construct fire command
                     Vector2 temp = game.gamePool.vector2s.fetchMemory();
-                    game.gameCamera.getTouchToWorldCords(temp, game.gameInput.touchPosition);
+                    game.gameCamera.getScreenToWorldCoords(temp, game.gameInput.touchPosition);
 
                     newCommand = game.gamePool.commands.fetchMemory();
 
@@ -163,7 +161,7 @@ public class GameLoop implements Runnable {
                 else {
                     // Construct move command
                     Vector2 temp = game.gamePool.vector2s.fetchMemory();
-                    game.gameCamera.getTouchToWorldCords(temp, game.gameInput.touchPosition);
+                    game.gameCamera.getScreenToWorldCoords(temp, game.gameInput.touchPosition);
 
                     newCommand = game.gamePool.commands.fetchMemory();
 

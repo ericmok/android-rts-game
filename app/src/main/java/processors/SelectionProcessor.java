@@ -46,7 +46,7 @@ public class SelectionProcessor {
             SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
             Vector2 worldCoords = temp;
-            gameCamera.getTouchToWorldCords(worldCoords, touchPosition);
+            gameCamera.getScreenToWorldCoords(worldCoords, touchPosition);
 
             //Log.i("SelectionProcessor", "select? " + pc.x + "," + pc.y + " when [" + worldCoordX + "," + worldCoordY + "]");
 

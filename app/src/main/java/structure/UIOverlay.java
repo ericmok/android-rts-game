@@ -38,7 +38,7 @@ public class UIOverlay {
                 ButtonComponent bc = (ButtonComponent)buttons.get(i).cData.get(ButtonComponent.class);
 
                 Vector2 touchToWorldCoords = temp;
-                gameCamera.getTouchToWorldCords(touchToWorldCoords, gameInput.touchPosition);
+                gameCamera.getScreenToWorldCoords(touchToWorldCoords, gameInput.touchPosition);
 
                 //Log.i("BUTTON", "" + "," + bc.name + " " + bc.touchPoint + " touchPosition[" + temp + "]");
                 //Log.i("BUTTON", "dist " + bc.touchPoint.distanceTo(temp) + " again: " + temp.distanceTo(bc.touchPoint));
@@ -73,7 +73,7 @@ public class UIOverlay {
 
             buttonInScreenCoords.set(screenOriginX, screenOriginY);
 
-            gameCamera.getTouchToWorldCords(buttonInWorldCoords, buttonInScreenCoords);
+            gameCamera.getScreenToWorldCoords(buttonInWorldCoords, buttonInScreenCoords);
 
             buttonWorldSize.set(bc.size.x * SIZE_NORMALIZER / gameCamera.scale,
                                 bc.size.y * SIZE_NORMALIZER / gameCamera.scale);
