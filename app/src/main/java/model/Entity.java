@@ -51,7 +51,7 @@ public class Entity implements Denormalizable<Integer> {
         NEXT_UNIQUE_ID += 1;
     }
 
-    public ArrayList<Integer> getLabels() {
+    public ArrayList<Integer> labels() {
         return labels;
     }
 }

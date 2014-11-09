@@ -275,13 +275,13 @@ public class GameLoop implements Runnable {
 //            tempList.clear();
 //            for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
 //                SystemNode node = game.stage.players.get(0).units.get(i);
-//                if (node.getLabels().contains(SystemNode.Label.Troop)) {
+//                if (node.labels().contains(SystemNode.Label.Troop)) {
 //                    tempList2.add((Troop) node);
 //                }
 //            }
 //            for (int i = 0; i < game.stage.players.get(1).units.size(); i++) {
 //                SystemNode node = game.stage.players.get(1).units.get(i);
-//                if (node.getLabels().contains(SystemNode.Label.Troop)) {
+//                if (node.labels().contains(SystemNode.Label.Troop)) {
 //                    tempList2.add((Troop) node);
 //                }
 //            }

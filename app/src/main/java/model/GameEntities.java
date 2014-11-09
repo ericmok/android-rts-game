@@ -18,7 +18,7 @@ public class GameEntities {
 
         //Entity troop = new Entity();
         Entity troop = troopsMemoryPool.fetchMemory();
-        troop.getLabels().add(Entity.UNIT_TROOP);
+        troop.labels().add(Entity.UNIT_TROOP);
 //
 //        PlayerComponent pc = new PlayerComponent();
 //        pc.name = "default";
@@ -30,13 +30,13 @@ public class GameEntities {
 
         SelectionComponent selectionComponent = new SelectionComponent();
         troop.cData.put(SelectionComponent.class, selectionComponent);
-        troop.getLabels().add(Entity.NODE_SELECTION);
+        troop.labels().add(Entity.NODE_SELECTION);
 
         DestinationComponent destinationComponent = new DestinationComponent();
         troop.cData.put(DestinationComponent.class, destinationComponent);
-        troop.getLabels().add(Entity.NODE_MOVE_TOWARD_DESTINATION);
+        troop.labels().add(Entity.NODE_MOVE_TOWARD_DESTINATION);
 
-        troop.getLabels().add(Entity.NODE_TROOP_DRAWER);
+        troop.labels().add(Entity.NODE_TROOP_DRAWER);
 
         AbilityComponent ac = new AbilityComponent();
         ac.abilities.add(Abilities.SPECIAL_ATTACK);
@@ -45,8 +45,8 @@ public class GameEntities {
         LivingComponent lc = new LivingComponent();
         troop.cData.put(LivingComponent.class, lc);
 //
-//        troop.getLabels().add(team);
-//        troop.getLabels().add(leader);
+//        troop.labels().add(team);
+//        troop.labels().add(leader);
 
         return troop;
     }
@@ -65,7 +65,7 @@ public class GameEntities {
 
         button.cData.put(ButtonComponent.class, bc);
 
-        button.getLabels().add(Entity.UI_BUTTON);
+        button.labels().add(Entity.UI_BUTTON);
 
         return button;
     }
@@ -80,7 +80,7 @@ public class GameEntities {
 
         button.cData.put(ButtonComponent.class, bc);
 
-        button.getLabels().add(Entity.UI_BUTTON);
+        button.labels().add(Entity.UI_BUTTON);
 
         return button;
     }

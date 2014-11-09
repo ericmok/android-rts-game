@@ -89,7 +89,7 @@ public class DenormalizedDataSet<E extends Denormalizable, F> implements Denorma
      * @param denormalizable
      */
     public synchronized void addDenormalizable(E denormalizable) {
-        ArrayList<F> labels = denormalizable.getLabels();
+        ArrayList<F> labels = denormalizable.labels();
 
         for (int i = 0; i < labels.size(); i++) {
             F label = labels.get(i);
@@ -107,7 +107,7 @@ public class DenormalizedDataSet<E extends Denormalizable, F> implements Denorma
      * @param denormalizable
      */
     public synchronized boolean removeDenormalizable(E denormalizable) {
-        ArrayList<F> labels = denormalizable.getLabels();
+        ArrayList<F> labels = denormalizable.labels();
 
         boolean anyRemoved = false;
 
@@ -128,7 +128,7 @@ public class DenormalizedDataSet<E extends Denormalizable, F> implements Denorma
         return denormalizedLists.get(label);
     }
 
-    public ArrayList<Integer> getLabels() {
+    public ArrayList<Integer> labels() {
         return labels;
     }
 }
