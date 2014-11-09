@@ -1,0 +1,70 @@
+/**
+Refer to
+http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
+
+It has to be easy to diff!
+For each state entry, we look for the unit, and store the diff. The diffs prompt animations.
+
+The time frame of the state sent from the server is in the past,
+so the commands on the client which are timestamped after that
+are played on top of the state sent from the server.
+*/
+
+// GET
+{
+    time: 24,
+    players: {
+        asdf234: {
+            troop: [
+                {id:21,p:[434,35],r:32,p_control:[23,23]},
+                {id:22,p:[234,235],r:32,dest:[23,23]},
+                {id:23,p:[234,235],r:32,dest:[23,23]},
+                {id:24,p:[234,235],r:32,p_diff:[23,23]},
+            ],
+            tank: [
+                {id:23,p:[234,235],r:32,dest:[23,23]},
+                {id:23,p:[234,235],r:32,dest:[23,23]},
+            ],
+            capital: [{p:[234,235],r:32,dest:[23,23]}]
+        },
+        aowj325: {
+            troop: [
+                {id:25,p:[234,235],r:32,dest:[23,23]},
+                {id:34,p:[234,235],r:32,dest:[23,23]},
+                {id:123,p:[234,235],r:32,dest:[23,23]},
+                {id:634,p:[234,235],r:32,dest:[23,23]},
+            ],
+            tank: [],
+            capital: [{id:23,p:[234,235],r:32,dest:[23,23]}]
+        },
+    }
+}
+
+// POST
+{
+    commands: [
+        {frame:1,c:"move", id:23, v:[2.234,346.3], t:32},
+        {frame:2,c:"move", id:23, v:[2.234,346.3], t:33},
+        {frame:3,c:"move", id:23, v:[2.234,346.3], t:34}
+    ]
+}
+
+//CREATE troop u:player p:0,0 r:0.2 t:0.3
+//CREATE troop u:player p:0,0 r:0.2 t:0.3
+//MOVE troop id:1 p:234,1253 r:0.34 t:2684
+//MOVE troop id:1 p:234,1253 r:0.34 t:2684
+//SUPERATK troop id:1 p:234,1253 r:0.34 t:2684
+//DEFENSE troop id:1 p:234,1253 r:0.34 t:2684
+
+
+//troop id:1 p:234,1253 r:0.34 dest:213,235 t:2684
+//troop id:2 p:734,1253 r:0.34 dest:213,235 t:2685
+//troop id:3 p:434,1253 r:0.34 dest:213,235 t:2686
+//troop id:4 p:334,1253 r:0.34 dest:213,235 t:2687
+
+//troop id:1 p:234,1253 r:0.34 dest:213,235 t:2684
+//troop id:2 p:734,1253 r:0.34 dest:213,235 t:2685
+//troop id:3 p:434,1253 r:0.34 dest:213,235 t:2686
+//troop id:4 p:334,1253 r:0.34 dest:213,235 t:2687
+
+
