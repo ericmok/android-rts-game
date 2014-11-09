@@ -16,6 +16,8 @@ public class GameCamera extends Vector2 {
      * @param screenCoords
      */
     public void setScreenAsWorldCoords(Vector2 screenCoords) {
+
+        // Reminder: The scale is less than 1.0 (ex. 0.007)
         screenCoords.scale(1.0 / this.scale, 1.0 / this.scale);
         screenCoords.translate(this.x, this.y);
     }
@@ -27,8 +29,6 @@ public class GameCamera extends Vector2 {
      * @param screenCoords
      */
     public void getScreenToWorldCoords(Vector2 output, Vector2 screenCoords) {
-
-        // Reminder: The scale is less than 1.0 (ex. 0.007)
         output.copy(screenCoords);
         setScreenAsWorldCoords(output);
     }
