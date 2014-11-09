@@ -70,7 +70,8 @@ public class Player {
 
             // Remove entity from denormalization mechanism
             this.denorms.removeDenormalizable(toRemove);
-            GameEntities.troopsMemoryPool.recycleMemory(toRemove);
+
+            GameEntities.recycle(toRemove);
         }
         removed.clear();
     }

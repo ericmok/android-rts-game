@@ -54,4 +54,8 @@ public class Entity implements Denormalizable<Integer> {
     public ArrayList<Integer> labels() {
         return labels;
     }
+
+    public Class<? extends Component> component(Class<? extends Component> component) {
+        return null;
+    }
 }

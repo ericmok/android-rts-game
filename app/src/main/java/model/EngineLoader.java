@@ -37,7 +37,7 @@ public class EngineLoader {
             for (int i = 0; i < troopArr.length(); i++) {
                 JSONObject jEntity = troopArr.getJSONObject(i);
 
-                Entity troop = GameEntities.buildTroop();
+                Entity troop = GameEntities.troopsMemoryPool.fetchMemory();
 
                 WorldComponent pc =
                         ((WorldComponent) troop.cData.get(WorldComponent.class));
