@@ -104,8 +104,8 @@ public class Game {
         LevelLoader levelLoader = new LevelLoader(this.context);
         levelLoader.load(engine, "level0.json");
 
-        uiOverlay.buttons.add(GameEntities.buildAttackButton());
-        uiOverlay.buttons.add(GameEntities.buildDefendButton());
+        uiOverlay.buttons.add(GameEntities.attackButtonPool.fetchMemory());
+        uiOverlay.buttons.add(GameEntities.defendButtonPool.fetchMemory());
 
 //		// TODO: Clean this up
 //		FormationSystem fs = new FormationSystem(this);
