@@ -27,7 +27,7 @@ public class MoveTowardDestinationFunction {
             }
 
             WorldComponent wc = (WorldComponent)entity.cData.get(WorldComponent.class);
-            SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
+            //SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
             Vector2.subtract(temp, dc.dest, wc.pos);
 

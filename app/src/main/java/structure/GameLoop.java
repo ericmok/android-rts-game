@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import model.Entity;
 
 import networking.Command;
 import processors.EngineSimulator;
 import processors.MapScrollFunction;
+import processors.ProjectileDrawerProcess;
 import processors.SelectionProcessor;
 import processors.TroopDrawerProcess;
 import utils.Vector2;
@@ -143,6 +145,7 @@ public class GameLoop implements Runnable {
                 //UserChooseNewDestinationFunction.apply(selectionProcessor.userSelection, game.gameCamera, game.gameInput, SelectionProcessor.FN_DESELECT);
 
                 if (game.uiOverlay.currentButton != null) {
+
                     // Construct fire command
                     Vector2 temp = game.gamePool.vector2s.fetchMemory();
                     game.gameCamera.getScreenToWorldCoords(temp, game.gameInput.touchPosition);
@@ -249,6 +252,7 @@ public class GameLoop implements Runnable {
             //ArrayList<Entity> entitiesToDraw = game.engine.currentPlayer.denorms.getListForLabel(Entity.NODE_TROOP_DRAWER);
             for (int i = 0; i < game.engine.players.size(); i++) {
                 TroopDrawerProcess.process(spriteAllocater, tempSprites, game.gamePool, game.engine.players.get(i), dt);
+                ProjectileDrawerProcess.process(spriteAllocater, tempSprites, game.gamePool, game.engine.players.get(i), dt);
             }
 
             // Flush graphics at the same time so settings are sync'd

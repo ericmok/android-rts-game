@@ -124,8 +124,15 @@ public class DenormalizedDataSet<E extends Denormalizable, F> implements Denorma
         return anyRemoved;
     }
 
-    public ArrayList<E> getListForLabel(int label) {
-        return denormalizedLists.get(label);
+    public ArrayList<E> getListForLabel(F label) {
+        ArrayList<E> ret = denormalizedLists.get(label);
+        if (ret == null) {
+            denormalizedLists.put(label, new ArrayList<E>(upperBoundNumberDenormalizablesPerLabel));
+            ret = denormalizedLists.get(label);
+        }
+
+        return ret;
+
     }
 
     public ArrayList<Integer> labels() {

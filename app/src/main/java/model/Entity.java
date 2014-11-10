@@ -25,6 +25,7 @@ public class Entity implements Denormalizable<Integer> {
     public static final int TAG_FOLLOWER = 104;
 
     public static final int UNIT_TROOP = 105;
+    public static final int UNIT_BASIC_PROJECTILE = 106;
 
     public static final int UI_BUTTON = 500;
 

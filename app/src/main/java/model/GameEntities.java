@@ -12,6 +12,8 @@ public class GameEntities {
      * Already scaffolded troops you can fetch and use.
      */
     public static MemoryPool<Troop> troopsMemoryPool = new MemoryPool<Troop>(Troop.class, 1024);
+    public static MemoryPool<Projectile> projectilesMemoryPool = new MemoryPool<Projectile>(Projectile.class, 1024);
+
     public static MemoryPool<Buttons.AttackButton> attackButtonPool =
             new MemoryPool<Buttons.AttackButton>(Buttons.AttackButton.class, 1);
 
@@ -21,6 +23,9 @@ public class GameEntities {
     public static void recycle(Entity entity) {
         if (entity.labels().contains(Entity.UNIT_TROOP)) {
             troopsMemoryPool.recycleMemory((Troop) entity);
+        }
+        if (entity.labels().contains(Entity.UNIT_BASIC_PROJECTILE)) {
+            projectilesMemoryPool.recycleMemory((Projectile)entity);
         }
     }
 }

@@ -31,14 +31,14 @@ public class EngineSimulator {
             }
         }
 
-//        if (command.command == Command.FIRE) {
-//            Entity newTroop = GameEntities.troopsMemoryPool.fetchMemory();
-//
-//            WorldComponent wc = (WorldComponent)newTroop.cData.get(WorldComponent.class);
-//            wc.pos.zero();
-//
-//            engine.currentPlayer.queueAdded(newTroop);
-//        }
+        if (command.command == Command.FIRE) {
+            Entity projectile = GameEntities.projectilesMemoryPool.fetchMemory();
+
+            WorldComponent wc = (WorldComponent)projectile.cData.get(WorldComponent.class);
+            wc.pos.zero();
+
+            engine.currentPlayer.queueAdded(projectile);
+        }
     }
 
     public static void interpolate(Engine engine, double ct, double dt) {
