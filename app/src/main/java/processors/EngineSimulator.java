@@ -32,12 +32,22 @@ public class EngineSimulator {
         }
 
         if (command.command == Command.FIRE) {
-            Entity projectile = GameEntities.projectilesMemoryPool.fetchMemory();
+            for (int j = 0; j < command.selection.size(); j++) {
+                Entity projectile = GameEntities.projectilesMemoryPool.fetchMemory();
+                Entity caster = command.selection.get(j);
 
-            WorldComponent wc = (WorldComponent)projectile.cData.get(WorldComponent.class);
-            wc.pos.zero();
+                WorldComponent casterPos = (WorldComponent) caster.cData.get(WorldComponent.class);
+                WorldComponent wc = (WorldComponent) projectile.cData.get(WorldComponent.class);
 
-            engine.currentPlayer.queueAdded(projectile);
+                wc.pos.copy(casterPos.pos);
+
+                DestinationComponent dc = (DestinationComponent) projectile.cData.get(DestinationComponent.class);
+                dc.dest.x = (casterPos.pos.x + 1);
+                dc.dest.y = (casterPos.pos.y + 1);
+                dc.hasDestination = true;
+
+                engine.currentPlayer.queueAdded(projectile);
+            }
         }
     }
 
