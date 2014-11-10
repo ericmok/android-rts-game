@@ -52,7 +52,7 @@ public class EngineSimulator {
     }
 
     public static void interpolate(Engine engine, double ct, double dt) {
-        ArrayList<Entity> destinedEntities = engine.currentPlayer.denorms.getListForLabel(Entity.NODE_MOVE_TOWARD_DESTINATION);
+        ArrayList<Entity> destinedEntities = engine.currentPlayer.denorms.getListForLabel(Entity.BEHAVIOR_MOVES_TOWARD_DESTINATION);
         MoveTowardDestinationFunction.apply(destinedEntities, dt);
         BattleResolution.process(engine, dt);
     }

@@ -25,7 +25,7 @@ public class TroopDrawerProcess {
                                      GamePool gamePool,
                                      Player player,
                                      double dt) {
-        ArrayList<Entity> troopsToDraw = player.denorms.getListForLabel(Entity.NODE_TROOP_DRAWER);
+        ArrayList<Entity> troopsToDraw = player.denorms.getListForLabel(Entity.BEHAVIOR_DRAWN_AS_TROOP);
 
         for (int i = 0; i < troopsToDraw.size(); i++) {
             Entity entity = troopsToDraw.get(i);

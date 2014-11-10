@@ -11,7 +11,7 @@ public class Projectile extends Entity {
         WorldComponent worldComponent = new WorldComponent();
         this.cData.put(WorldComponent.class, worldComponent);
 
-        this.labels().add(Entity.NODE_MOVE_TOWARD_DESTINATION);
+        this.labels().add(Entity.BEHAVIOR_MOVES_TOWARD_DESTINATION);
         DestinationComponent destinationComponent = new DestinationComponent();
         this.cData.put(DestinationComponent.class, destinationComponent);
     }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.SystemClock;
-import android.util.Log;
 
 import model.Entity;
 
@@ -136,8 +135,8 @@ public class GameLoop implements Runnable {
 
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
             if (selectionProcessor.userSelection.isEmpty()) {
-                //ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.NODE_SELECTION);
-                ArrayList<Entity> selectableEntities = game.engine.currentPlayer.denorms.getListForLabel(Entity.NODE_SELECTION);
+                //ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.BEHAVIOR_GETS_SELECTED);
+                ArrayList<Entity> selectableEntities = game.engine.currentPlayer.denorms.getListForLabel(Entity.BEHAVIOR_GETS_SELECTED);
                 selectionProcessor.process(selectableEntities, game.gameCamera,
                         game.gameInput.touchPosition, SelectionProcessor.FN_SELECT);
             }
@@ -249,7 +248,7 @@ public class GameLoop implements Runnable {
             game.uiOverlay.draw(game.gameCamera, spriteAllocater);
 
             // Draw troops
-            //ArrayList<Entity> entitiesToDraw = game.engine.currentPlayer.denorms.getListForLabel(Entity.NODE_TROOP_DRAWER);
+            //ArrayList<Entity> entitiesToDraw = game.engine.currentPlayer.denorms.getListForLabel(Entity.BEHAVIOR_DRAWN_AS_TROOP);
             for (int i = 0; i < game.engine.players.size(); i++) {
                 TroopDrawerProcess.process(spriteAllocater, tempSprites, game.gamePool, game.engine.players.get(i), dt);
                 ProjectileDrawerProcess.process(spriteAllocater, tempSprites, game.gamePool, game.engine.players.get(i), dt);

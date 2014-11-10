@@ -15,14 +15,15 @@ public class Entity implements Denormalizable<Integer> {
     //public static final int LOGIC_BATTLE = 4;
     //public static final int LOGIC_ORIENTATION = 6;
 
-    public static final int NODE_TROOP_DRAWER = 5;
-    public static final int NODE_SELECTION = 7;
-    public static final int NODE_MOVE_TOWARD_DESTINATION = 8;
+    public static final int BEHAVIOR_DRAWN_AS_TROOP = 5;
+    public static final int BEHAVIOR_GETS_SELECTED = 7;
 
-    public static final int NODE_ABILITIES = 9;
+    public static final int BEHAVIOR_MOVES_TOWARD_DESTINATION = 8;
 
-    public static final int TAG_LEADER = 103;
-    public static final int TAG_FOLLOWER = 104;
+    public static final int BEHAVIOR_CASTS_ABILITIES = 9;
+
+    public static final int BEHAVIOR_LEADER = 103;
+    public static final int BEHAVIOR_FOLLOWER = 104;
 
     public static final int UNIT_TROOP = 105;
     public static final int UNIT_BASIC_PROJECTILE = 106;
