@@ -35,10 +35,10 @@ public class ProjectileDrawerProcess {
             DrawList2DItem item = spriteAllocater.takeNextWritable();
             item.position.x = worldComponent.pos.x;
             item.position.y = worldComponent.pos.y;
-            item.animationName = DrawList2DItem.ANIMATION_BUTTONS_ATTACK;
-            item.width = (float)0.01 * GameSettings.UNIT_LENGTH_MULTIPLIER;
-            item.height = (float)0.01 * GameSettings.UNIT_LENGTH_MULTIPLIER;
-            item.animationProgress = (int)(Math.random() * 100);
+            item.animationName = DrawList2DItem.ANIMATION_RETICLE_TAP;
+            item.width = 1;
+            item.height = 1;
+            item.animationProgress = 0;
             item.color = Color.WHITE;
             item.angle = (float)Math.random() * 360;
         }
