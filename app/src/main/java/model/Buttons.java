@@ -19,7 +19,7 @@ public class Buttons {
 
             this.cData.put(ButtonComponent.class, bc);
 
-            this.labels().add(Entity.UI_BUTTON);
+            this.labels().add(Behaviors.UI_BUTTON);
         }
 
     }
@@ -34,7 +34,7 @@ public class Buttons {
 
             this.cData.put(ButtonComponent.class, bc);
 
-            this.labels().add(Entity.UI_BUTTON);
+            this.labels().add(Behaviors.UI_BUTTON);
 
         }
     }

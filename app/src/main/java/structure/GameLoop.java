@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.os.SystemClock;
 
+import model.Behaviors;
 import model.Entity;
 
 import networking.Command;
@@ -136,7 +137,7 @@ public class GameLoop implements Runnable {
         if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
             if (selectionProcessor.userSelection.isEmpty()) {
                 //ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.BEHAVIOR_GETS_SELECTED);
-                ArrayList<Entity> selectableEntities = game.engine.currentPlayer.denorms.getListForLabel(Entity.BEHAVIOR_GETS_SELECTED);
+                ArrayList<Entity> selectableEntities = game.engine.currentPlayer.denorms.getListForLabel(Behaviors.BEHAVIOR_GETS_SELECTED);
                 selectionProcessor.process(selectableEntities, game.gameCamera,
                         game.gameInput.touchPosition, SelectionProcessor.FN_SELECT);
             }

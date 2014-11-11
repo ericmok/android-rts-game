@@ -6,12 +6,12 @@ package model;
 public class Projectile extends Entity {
 
     public Projectile() {
-        this.labels().add(Entity.UNIT_BASIC_PROJECTILE);
+        this.labels().add(Behaviors.UNIT_BASIC_PROJECTILE);
 
         WorldComponent worldComponent = new WorldComponent();
         this.cData.put(WorldComponent.class, worldComponent);
 
-        this.labels().add(Entity.BEHAVIOR_MOVES_TOWARD_DESTINATION);
+        this.labels().add(Behaviors.BEHAVIOR_MOVES_TOWARD_DESTINATION);
         DestinationComponent destinationComponent = new DestinationComponent();
         this.cData.put(DestinationComponent.class, destinationComponent);
     }

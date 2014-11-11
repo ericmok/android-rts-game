@@ -1,6 +1,5 @@
 package model;
 
-import structure.DrawList2DItem;
 import utils.MemoryPool;
 
 /**
@@ -21,10 +20,10 @@ public class GameEntities {
             new MemoryPool<Buttons.DefendButton>(Buttons.DefendButton.class, 1);
 
     public static void recycle(Entity entity) {
-        if (entity.labels().contains(Entity.UNIT_TROOP)) {
+        if (entity.labels().contains(Behaviors.UNIT_TROOP)) {
             troopsMemoryPool.recycleMemory((Troop) entity);
         }
-        if (entity.labels().contains(Entity.UNIT_BASIC_PROJECTILE)) {
+        if (entity.labels().contains(Behaviors.UNIT_BASIC_PROJECTILE)) {
             projectilesMemoryPool.recycleMemory((Projectile)entity);
         }
     }

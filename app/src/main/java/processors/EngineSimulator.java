@@ -2,6 +2,7 @@ package processors;
 
 import java.util.ArrayList;
 
+import model.Behaviors;
 import model.DestinationComponent;
 import model.Entity;
 import model.Engine;
@@ -52,7 +53,7 @@ public class EngineSimulator {
     }
 
     public static void interpolate(Engine engine, double ct, double dt) {
-        ArrayList<Entity> destinedEntities = engine.currentPlayer.denorms.getListForLabel(Entity.BEHAVIOR_MOVES_TOWARD_DESTINATION);
+        ArrayList<Entity> destinedEntities = engine.currentPlayer.denorms.getListForLabel(Behaviors.BEHAVIOR_MOVES_TOWARD_DESTINATION);
         MoveTowardDestinationFunction.apply(destinedEntities, dt);
         BattleResolution.process(engine, dt);
     }

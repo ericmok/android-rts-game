@@ -2,6 +2,7 @@ package processors;
 
 import java.util.ArrayList;
 
+import model.Behaviors;
 import model.Engine;
 import model.Entity;
 import model.LivingComponent;
@@ -21,7 +22,7 @@ public class BattleResolution {
         for (int i = 0; i < engine.players.size(); i++) {
             Player player1 = engine.players.get(i);
 
-            ArrayList<Entity> troops1 = player1.denorms.getListForLabel(Entity.UNIT_TROOP);
+            ArrayList<Entity> troops1 = player1.denorms.getListForLabel(Behaviors.UNIT_TROOP);
 
             for (int j = 0; j < engine.players.size(); j++) {
 
@@ -29,7 +30,7 @@ public class BattleResolution {
 
                 Player player2 = engine.players.get(j);
 
-                ArrayList<Entity> troops2 = player2.denorms.getListForLabel(Entity.UNIT_TROOP);
+                ArrayList<Entity> troops2 = player2.denorms.getListForLabel(Behaviors.UNIT_TROOP);
 
                 for (int s = 0; s < troops1.size(); s++) {
                     for (int t = 0; t < troops2.size(); t++) {

@@ -5,13 +5,12 @@ import android.graphics.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Behaviors;
 import model.Entity;
 import model.Player;
-import model.Projectile;
 import model.WorldComponent;
 import structure.DrawList2DItem;
 import structure.GamePool;
-import structure.GameSettings;
 import structure.RewriteOnlyArray;
 import structure.TemporaryDrawList2DItem;
 
@@ -26,7 +25,7 @@ public class ProjectileDrawerProcess {
                                      Player player,
                                      double dt) {
 
-        ArrayList<Entity> projectiles = player.denorms.getListForLabel(Entity.UNIT_BASIC_PROJECTILE);
+        ArrayList<Entity> projectiles = player.denorms.getListForLabel(Behaviors.UNIT_BASIC_PROJECTILE);
 
         for (int i = 0; i < projectiles.size(); i++) {
             Entity projectile = projectiles.get(i);

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Behaviors;
 import model.LivingComponent;
 import model.Player;
 import model.WorldComponent;
@@ -25,7 +26,7 @@ public class TroopDrawerProcess {
                                      GamePool gamePool,
                                      Player player,
                                      double dt) {
-        ArrayList<Entity> troopsToDraw = player.denorms.getListForLabel(Entity.BEHAVIOR_DRAWN_AS_TROOP);
+        ArrayList<Entity> troopsToDraw = player.denorms.getListForLabel(Behaviors.BEHAVIOR_DRAWN_AS_TROOP);
 
         for (int i = 0; i < troopsToDraw.size(); i++) {
             Entity entity = troopsToDraw.get(i);
