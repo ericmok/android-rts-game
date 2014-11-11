@@ -36,14 +36,14 @@ public class EngineSimulator {
                 Entity projectile = GameEntities.projectilesMemoryPool.fetchMemory();
                 Entity caster = command.selection.get(j);
 
-                WorldComponent casterPos = (WorldComponent) caster.cData.get(WorldComponent.class);
+                WorldComponent casterWorld = (WorldComponent) caster.cData.get(WorldComponent.class);
                 WorldComponent wc = (WorldComponent) projectile.cData.get(WorldComponent.class);
 
-                wc.pos.copy(casterPos.pos);
+                wc.pos.copy(casterWorld.pos);
 
                 DestinationComponent dc = (DestinationComponent) projectile.cData.get(DestinationComponent.class);
-                dc.dest.x = (casterPos.pos.x + 1);
-                dc.dest.y = (casterPos.pos.y + 1);
+                dc.dest.x = 3 * (casterWorld.rot.x) + casterWorld.pos.x;
+                dc.dest.y = 3 * (casterWorld.rot.y) + casterWorld.pos.y;
                 dc.hasDestination = true;
 
                 engine.currentPlayer.queueAdded(projectile);
