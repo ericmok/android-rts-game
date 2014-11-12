@@ -7,6 +7,7 @@ import model.DestinationComponent;
 import model.Entity;
 import model.Engine;
 import model.GameEntities;
+import model.ProjectileCasterComponent;
 import model.WorldComponent;
 import networking.Command;
 
@@ -27,13 +28,12 @@ public class EngineSimulator {
                 DestinationComponent dc = (DestinationComponent) entity.cData.get(DestinationComponent.class);
                 dc.dest.copy(command.vec);
                 dc.hasDestination = true;
-
-                SelectionProcessor.FN_DESELECT.apply(entity);
             }
         }
 
         if (command.command == Command.FIRE) {
             for (int j = 0; j < command.selection.size(); j++) {
+
                 Entity projectile = GameEntities.projectilesMemoryPool.fetchMemory();
                 Entity caster = command.selection.get(j);
 
