@@ -154,6 +154,9 @@ public class GameLoop implements Runnable {
 
                     newCommand.command = Command.FIRE;
                     newCommand.timeStamp = ct;
+
+                    newCommand.selection.clear();
+
                     for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
                         newCommand.selection.add(selectionProcessor.userSelection.get(i));
                     }
@@ -180,6 +183,11 @@ public class GameLoop implements Runnable {
                     newCommand.vec.copy(temp);
 
                     game.gamePool.vector2s.recycleMemory(temp);
+                }
+
+                for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
+                    Entity entity = selectionProcessor.userSelection.get(i);
+                    SelectionProcessor.FN_DESELECT.apply(entity);
                 }
 
                 // This has to go somewhere
