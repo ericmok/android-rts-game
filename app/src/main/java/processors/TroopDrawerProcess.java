@@ -70,6 +70,28 @@ public class TroopDrawerProcess {
                 drawItem.width = 1.3f;
                 drawItem.height = 1.3f;
             }
+
+            MeleeAttackComponent mac = (MeleeAttackComponent)entity.cData.get(MeleeAttackComponent.class);
+            if (mac.event == MeleeAttackComponent.Event.COOLDOWN) {
+                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+                drawItem.animationName = DrawList2DItem.ANIMATION_RETICLE_TAP;
+                drawItem.color = Color.BLUE;
+                drawItem.position.x = wc.pos.x;
+                drawItem.position.y = wc.pos.y;
+                drawItem.angle = (float)wc.rot.getDegrees();
+                drawItem.width = 1.4f;
+                drawItem.height = 1.4f;
+            }
+            if (mac.event == MeleeAttackComponent.Event.ATTACKING_TARGET) {
+                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+                drawItem.animationName = DrawList2DItem.ANIMATION_BUTTONS_ATTACK;
+                drawItem.color = player.color();
+                drawItem.position.x = wc.pos.x;
+                drawItem.position.y = wc.pos.y;
+                drawItem.angle = (float)0;
+                drawItem.width = 1.4f;
+                drawItem.height = 1f;
+            }
         }
 
     }

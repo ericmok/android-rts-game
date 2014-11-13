@@ -12,6 +12,13 @@ public class Troop extends Entity {
         WorldComponent worldComponent = new WorldComponent();
         this.cData.put(WorldComponent.class, worldComponent);
 
+        RadiusComponent radiusComponent = new RadiusComponent();
+        this.cData.put(RadiusComponent.class, radiusComponent);
+
+        this.labels().add(Behaviors.BEHAVIOR_AQUIRES_TARGET_IN_RANGE);
+        this.labels().add(Behaviors.BEHAVIOR_TAKES_DAMAGE_ON_COLLISION);
+        this.cData.put(MeleeAttackComponent.class, new MeleeAttackComponent());
+
         this.labels().add(Behaviors.BEHAVIOR_GETS_SELECTED);
         SelectionComponent selectionComponent = new SelectionComponent();
         this.cData.put(SelectionComponent.class, selectionComponent);
