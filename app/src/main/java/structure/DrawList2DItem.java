@@ -16,7 +16,12 @@ public class DrawList2DItem {
 	public static final String ANIMATION_TROOPS_MOVING = "Animations/Troops/Moving";
 	public static final String ANIMATION_TROOPS_DYING = "Animations/Troops/Dying";
 	public static final String ANIMATION_TROOPS_SELECTED = "Animations/Troops/Selected";
-	
+
+    public static final String ANIMATION_TROOPS_TARGETED = "Animations/Troops/Targeted";
+
+    public static final String ANIMATION_TROOPS_SWING = "Animations/Troops/Swing";
+    public static final String ANIMATION_TROOPS_COOLDOWN = "Animations/Troops/Cooldown";
+
 	public static final String ANIMATION_ENEMY_TROOPS_IDLING = "Animations/EnemyTroops/Idling";
 	public static final String ANIMATION_ENEMY_TROOPS_MOVING = "Animations/EnemyTroops/Moving";
 	
@@ -28,7 +33,7 @@ public class DrawList2DItem {
 	public static final String ANIMATION_RETICLE_TAP = "Animations/Reticle/Tap";
 	
 	public static final String ANIMATION_WAYPOINTS_MOVE = "Animations/Waypoints/Move";
-	
+
 	public static final String ANIMATION_BUTTONS_MOVE = "Animations/Buttons/Move";
 	public static final String ANIMATION_BUTTONS_ATTACK = "Animations/Buttons/Attack";
 

@@ -29,7 +29,7 @@ public class AttackTargetInRangeProcess {
                 MeleeAttackComponent cc = (MeleeAttackComponent)troop.cData.get(MeleeAttackComponent.class);
 
                 if (cc.event == MeleeAttackComponent.Event.COOLDOWN) {
-                    cc.attackCooldown = cc.attackCooldown - 15;
+                    cc.attackCooldown = cc.attackCooldown - dt;
                     if (cc.attackCooldown <= 0) {
                         cc.event = MeleeAttackComponent.Event.READY;
                         cc.attackSwingProgress = 0;
@@ -57,7 +57,7 @@ public class AttackTargetInRangeProcess {
                 }
 
                 if (cc.event == MeleeAttackComponent.Event.ATTACKING_TARGET) {
-                    cc.attackSwingProgress += 5;
+                    cc.attackSwingProgress += dt;
 
                     if (cc.attackSwingProgress >= cc.attackSwingTime) {
 
@@ -65,7 +65,7 @@ public class AttackTargetInRangeProcess {
                         lc.takeDamage(cc.attackStrength);
 
                         cc.event = MeleeAttackComponent.Event.COOLDOWN;
-                        cc.attackCooldown = 1500;
+                        cc.attackCooldown = 2;
                         cc.attackSwingProgress = 0;
                     }
                 }

@@ -22,11 +22,18 @@ import structure.TemporaryDrawList2DItem;
  * Created by eric on 11/3/14.
  */
 public class TroopDrawerProcess {
+
+    public static int progress = 0;
+
     public static final void process(RewriteOnlyArray<DrawList2DItem> spriteAllocater,
                                      List<TemporaryDrawList2DItem> tempSprites,
                                      GamePool gamePool,
                                      Player player,
                                      double dt) {
+
+        TroopDrawerProcess.progress += 1;
+        TroopDrawerProcess.progress %= 100;
+
         ArrayList<Entity> troopsToDraw = player.denorms.getListForLabel(Behaviors.BEHAVIOR_DRAWN_AS_TROOP);
 
         for (int i = 0; i < troopsToDraw.size(); i++) {
@@ -37,9 +44,9 @@ public class TroopDrawerProcess {
             if (lc.hitPoints <= 0) {
                 TemporaryDrawList2DItem tempSprite = gamePool.temporaryDrawItems.fetchMemory();
                 tempSprite.color = Color.argb(240, 255, 255, 255);
-                tempSprite.progress.progress = 0;
                 tempSprite.angle = 90;
                 tempSprite.animationName = DrawList2DItem.ANIMATION_TROOPS_DYING;
+                tempSprite.progress.progress = 0;
                 tempSprite.width = 1;
                 tempSprite.height = 1;
                 tempSprite.position.x = wc.pos.x;
@@ -50,6 +57,7 @@ public class TroopDrawerProcess {
                 DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
 
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
+                drawItem.animationProgress = 0;
                 drawItem.color = player.color();
                 drawItem.position.x = wc.pos.x;
                 drawItem.position.y = wc.pos.y;
@@ -63,6 +71,7 @@ public class TroopDrawerProcess {
             if (sc.isSelected) {
                 DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SELECTED;
+                drawItem.animationProgress = TroopDrawerProcess.progress;
                 drawItem.color = player.color();
                 drawItem.position.x = wc.pos.x;
                 drawItem.position.y = wc.pos.y;
@@ -74,23 +83,39 @@ public class TroopDrawerProcess {
             MeleeAttackComponent mac = (MeleeAttackComponent)entity.cData.get(MeleeAttackComponent.class);
             if (mac.event == MeleeAttackComponent.Event.COOLDOWN) {
                 DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
-                drawItem.animationName = DrawList2DItem.ANIMATION_RETICLE_TAP;
-                drawItem.color = Color.BLUE;
-                drawItem.position.x = wc.pos.x;
-                drawItem.position.y = wc.pos.y;
-                drawItem.angle = (float)wc.rot.getDegrees();
-                drawItem.width = 1.4f;
-                drawItem.height = 1.4f;
-            }
-            if (mac.event == MeleeAttackComponent.Event.ATTACKING_TARGET) {
-                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
-                drawItem.animationName = DrawList2DItem.ANIMATION_BUTTONS_ATTACK;
+                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_COOLDOWN;
+                drawItem.animationProgress = 0;
                 drawItem.color = player.color();
                 drawItem.position.x = wc.pos.x;
                 drawItem.position.y = wc.pos.y;
-                drawItem.angle = (float)0;
-                drawItem.width = 1.4f;
-                drawItem.height = 1f;
+                drawItem.angle = (float)wc.rot.getDegrees();
+                drawItem.width = 0.6f;
+                drawItem.height = 0.9f;
+            }
+            if (mac.event == MeleeAttackComponent.Event.ATTACKING_TARGET) {
+                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SWING;
+                drawItem.animationProgress = (int)(100 * (mac.attackSwingProgress / mac.attackSwingTime));
+                drawItem.color = Color.argb((int)(128 * Math.pow(2, (mac.attackSwingProgress / mac.attackSwingTime))), 255, 255, 255);
+                drawItem.position.x = wc.pos.x;
+                drawItem.position.y = wc.pos.y;
+                drawItem.angle = (float)wc.rot.getDegrees();
+                drawItem.width = 0.6f;
+                drawItem.height = 0.9f;
+            }
+
+            if (!mac.targetsInRange.isEmpty()) {
+                WorldComponent targetedWC = (WorldComponent)mac.targetsInRange.get(0).cData.get(WorldComponent.class);
+
+                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_TARGETED;
+                drawItem.animationProgress = TroopDrawerProcess.progress;
+                drawItem.color = player.color();
+                drawItem.position.x = targetedWC.pos.x;
+                drawItem.position.y = targetedWC.pos.y;
+                drawItem.angle = (float)0; //wc.rot.getDegrees();
+                drawItem.width = 1.7f;
+                drawItem.height = 1.7f;
             }
         }
 
