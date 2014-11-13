@@ -7,6 +7,7 @@ import java.util.List;
 
 import model.Behaviors;
 import model.LivingComponent;
+import model.MeleeAttackComponent;
 import model.Player;
 import model.WorldComponent;
 import model.SelectionComponent;
@@ -33,11 +34,7 @@ public class TroopDrawerProcess {
             WorldComponent wc = (WorldComponent)entity.cData.get(WorldComponent.class);
             LivingComponent lc = (LivingComponent)entity.cData.get(LivingComponent.class);
 
-            DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
-
-            drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
             if (lc.hitPoints <= 0) {
-                drawItem.color = Player.colorForTeam(4);
                 TemporaryDrawList2DItem tempSprite = gamePool.temporaryDrawItems.fetchMemory();
                 tempSprite.color = Color.argb(240, 255, 255, 255);
                 tempSprite.progress.progress = 0;
@@ -50,18 +47,21 @@ public class TroopDrawerProcess {
                 tempSprites.add(tempSprite);
             }
             else {
+                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+
+                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
                 drawItem.color = player.color();
+                drawItem.position.x = wc.pos.x;
+                drawItem.position.y = wc.pos.y;
+                drawItem.angle = (float)wc.rot.getDegrees();
+                drawItem.width = 1.0f;
+                drawItem.height = 1.0f;
             }
-            drawItem.position.x = wc.pos.x;
-            drawItem.position.y = wc.pos.y;
-            drawItem.angle = (float)wc.rot.getDegrees();
-            drawItem.width = 1.0f;
-            drawItem.height = 1.0f;
 
             SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
             if (sc.isSelected) {
-                drawItem = spriteAllocater.takeNextWritable();
+                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SELECTED;
                 drawItem.color = player.color();
                 drawItem.position.x = wc.pos.x;
