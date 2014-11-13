@@ -12,6 +12,9 @@ public class Troop extends Entity {
         WorldComponent worldComponent = new WorldComponent();
         this.cData.put(WorldComponent.class, worldComponent);
 
+        VelocityComponent vc = new VelocityComponent();
+        this.cData.put(VelocityComponent.class, vc);
+
         RadiusComponent radiusComponent = new RadiusComponent();
         this.cData.put(RadiusComponent.class, radiusComponent);
 

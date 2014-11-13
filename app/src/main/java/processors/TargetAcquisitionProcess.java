@@ -3,12 +3,15 @@ package processors;
 import java.util.ArrayList;
 
 import model.Behaviors;
+import model.LivingComponent;
 import model.MeleeAttackComponent;
 import model.Engine;
 import model.Entity;
 import model.Player;
 import model.RadiusComponent;
+import model.VelocityComponent;
 import model.WorldComponent;
+import utils.Vector2;
 
 /**
  * Created by eric on 11/12/14.
@@ -21,6 +24,8 @@ public class TargetAcquisitionProcess {
     }
 
     public ArrayList<CollisionPair> collisionPairs = new ArrayList<CollisionPair>(300);
+
+    public static Vector2 temp = new Vector2();
 
     public static void process(Engine engine, double dt) {
 
@@ -70,12 +75,22 @@ public class TargetAcquisitionProcess {
 
                         double range = wc1.pos.distanceTo(wc2.pos);
 
+                        Vector2.subtract(temp, wc2.pos, wc1.pos);
+                        temp.setNormalized();
+
                         if (range < cc1.targetAcquisitionRange) {
-                            cc1.targetsInRange.add(entity2);
+                            if (wc1.rot.dotProduct(temp) > 0.4) {
+                                cc1.targetsInRange.add(entity2);
+                            }
                         }
 
+                        temp.set(-temp.x, -temp.y);
+
                         if (range < cc2.targetAcquisitionRange) {
-                            cc2.targetsInRange.add(entity1);
+                            if (wc2.rot.dotProduct(temp) > 0.4) {
+                                cc2.targetsInRange.add(entity1);
+                            }
+
                         }
                     }
                 }

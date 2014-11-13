@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import model.DestinationComponent;
 import model.Entity;
+import model.VelocityComponent;
 import model.WorldComponent;
 import model.SelectionComponent;
 import utils.Vector2;
@@ -27,20 +28,21 @@ public class MoveTowardDestinationFunction {
             }
 
             WorldComponent wc = (WorldComponent)entity.cData.get(WorldComponent.class);
+            VelocityComponent vc = (VelocityComponent)entity.cData.get(VelocityComponent.class);
             //SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
-            Vector2.subtract(temp, dc.dest, wc.pos);
+            Vector2.subtract(vc.velocity, dc.dest, wc.pos);
 
             // Reached destination
-            if (temp.magnitude() < 0.01) {
+            if (vc.velocity.magnitude() < 0.01) {
                 dc.hasDestination = false;
             }
 
-            temp.setNormalized();
-            temp.scale(dt, dt);
+            vc.velocity.setNormalized();
+            vc.velocity.scale(vc.moveSpeed * dt, vc.moveSpeed * dt);
 
-            wc.pos.translate(temp.x, temp.y);
-            wc.rot.setDirection(temp);
+            wc.pos.translate(vc.velocity.x, vc.velocity.y);
+            wc.rot.setDirection(vc.velocity);
         }
     }
 }

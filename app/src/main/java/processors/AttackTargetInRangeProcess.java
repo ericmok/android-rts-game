@@ -8,6 +8,7 @@ import model.Engine;
 import model.Entity;
 import model.LivingComponent;
 import model.Player;
+import model.VelocityComponent;
 import utils.Vector2;
 
 /**
@@ -69,7 +70,6 @@ public class AttackTargetInRangeProcess {
                         cc.attackSwingProgress = 0;
                     }
                 }
-
 
             }
         }
