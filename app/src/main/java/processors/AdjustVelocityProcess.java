@@ -30,11 +30,11 @@ public class AdjustVelocityProcess {
                 vc.moveSpeed = 1;
 
                 if (mac.targetsInRange.size() > 0) {
-                    vc.moveSpeed = 0.5;
+                    vc.moveSpeed = 0.3;
                 }
 
                 if (mac.attackSwingProgress > 0) {
-                    vc.moveSpeed = 0.1;
+                    vc.moveSpeed = 0.2;
                 }
             }
         }

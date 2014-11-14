@@ -17,6 +17,7 @@ import structure.RewriteOnlyArray;
 
 import model.Entity;
 import structure.TemporaryDrawList2DItem;
+import utils.Orientation;
 
 /**
  * Created by eric on 11/3/14.
@@ -76,8 +77,8 @@ public class TroopDrawerProcess {
                 drawItem.position.x = wc.pos.x;
                 drawItem.position.y = wc.pos.y;
                 drawItem.angle = (float)wc.rot.getDegrees();
-                drawItem.width = 1.3f;
-                drawItem.height = 1.3f;
+                drawItem.width = 1.4f;
+                drawItem.height = 1.4f;
             }
 
             MeleeAttackComponent mac = (MeleeAttackComponent)entity.cData.get(MeleeAttackComponent.class);
@@ -96,7 +97,7 @@ public class TroopDrawerProcess {
                 DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SWING;
                 drawItem.animationProgress = (int)(100 * (mac.attackSwingProgress / mac.attackSwingTime));
-                drawItem.color = Color.argb((int)(128 * Math.pow(2, (mac.attackSwingProgress / mac.attackSwingTime))), 255, 255, 255);
+                drawItem.color = player.color();//Color.argb((int)(128 * Math.pow(2, (mac.attackSwingProgress / mac.attackSwingTime))), 255, 255, 255);
                 drawItem.position.x = wc.pos.x;
                 drawItem.position.y = wc.pos.y;
                 drawItem.angle = (float)wc.rot.getDegrees();
@@ -119,20 +120,21 @@ public class TroopDrawerProcess {
 
                 // Show projectiles
 
+                double swingProgress = (mac.attackSwingProgress / mac.attackSwingTime);
+
                 drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_PROJECTILE;
-                drawItem.animationProgress = 0;
-                drawItem.color = Color.WHITE;
+                drawItem.animationProgress = (int) (100 * swingProgress);
+                drawItem.color = Color.argb(240, 240, 210, 120);
                 //drawItem.position.x = targetedWC.pos.x;
                 //drawItem.position.y = targetedWC.pos.y;
-                double swingProgress = (mac.attackSwingProgress / mac.attackSwingTime);
-                double interpolatedX = swingProgress * (targetedWC.pos.x - wc.pos.x) + wc.pos.x;
-                double interpolatedY = swingProgress * (targetedWC.pos.y - wc.pos.y) + wc.pos.y;
+                double interpolatedX = (0.3 * swingProgress + 0.3) * (targetedWC.pos.x - wc.pos.x) + wc.pos.x;
+                double interpolatedY = (0.3 * swingProgress + 0.3) * (targetedWC.pos.y - wc.pos.y) + wc.pos.y;
                 drawItem.position.x = interpolatedX;
                 drawItem.position.y = interpolatedY;
-                drawItem.angle = (float)0; //wc.rot.getDegrees();
-                drawItem.width = 0.2f;
-                drawItem.height = 0.2f;
+                drawItem.angle = (float) Orientation.getDegrees(1, 0, targetedWC.pos.x - wc.pos.x, targetedWC.pos.y - wc.pos.y);
+                drawItem.width = 0.5f;
+                drawItem.height = 0.5f;
             }
 
         }
