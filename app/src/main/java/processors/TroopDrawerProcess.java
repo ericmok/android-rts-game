@@ -82,25 +82,30 @@ public class TroopDrawerProcess {
             }
 
             MeleeAttackComponent mac = (MeleeAttackComponent)entity.cData.get(MeleeAttackComponent.class);
+
             if (mac.event == MeleeAttackComponent.Event.COOLDOWN) {
                 DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_COOLDOWN;
                 drawItem.animationProgress = 0;
                 drawItem.color = player.color();
-                drawItem.position.x = wc.pos.x;
-                drawItem.position.y = wc.pos.y;
-                drawItem.angle = (float)wc.rot.getDegrees();
+                drawItem.position.x = wc.pos.x - 0.97 * wc.rot.x;
+                drawItem.position.y = wc.pos.y - 0.97 * wc.rot.y;
+                drawItem.angle = 90;//(float)wc.rot.getDegrees();
                 drawItem.width = 0.6f;
                 drawItem.height = 0.9f;
             }
+
             if (mac.event == MeleeAttackComponent.Event.ATTACKING_TARGET) {
+
+                // Show Attack Swing
+
                 DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SWING;
                 drawItem.animationProgress = (int)(100 * (mac.attackSwingProgress / mac.attackSwingTime));
                 drawItem.color = player.color();//Color.argb((int)(128 * Math.pow(2, (mac.attackSwingProgress / mac.attackSwingTime))), 255, 255, 255);
-                drawItem.position.x = wc.pos.x;
-                drawItem.position.y = wc.pos.y;
-                drawItem.angle = (float)wc.rot.getDegrees();
+                drawItem.position.x = wc.pos.x - 0.97 * wc.rot.x;
+                drawItem.position.y = wc.pos.y - 0.97 * wc.rot.y;
+                drawItem.angle = 90; //(float)wc.rot.getDegrees();
                 drawItem.width = 0.6f;
                 drawItem.height = 0.9f;
 
