@@ -28,7 +28,6 @@ public class AttackTargetInRangeProcess {
             for (int j = 0; j < troops.size(); j++) {
                 Entity troop = troops.get(j);
                 MeleeAttackComponent cc = (MeleeAttackComponent)troop.cData.get(MeleeAttackComponent.class);
-
                 if (cc.event == MeleeAttackComponent.Event.COOLDOWN) {
                     cc.attackCooldown = cc.attackCooldown - dt;
                     if (cc.attackCooldown <= 0) {
