@@ -26,11 +26,11 @@ public class MeleeAttackComponent extends Component {
 
     public int attackStrength = 1;
 
-    public double attackSwingTime = 2;
+    public double attackSwingTime = 0.4;
 
     public double attackSwingProgress = 0;
 
-    public double attackCooldown = 2;
+    public double attackCooldown = 1;
 
     public VoidFunc<Entity> script = Functional.FN_NOOP;
 }

@@ -83,7 +83,7 @@ public class AttackTargetInRangeProcess {
                         lc.takeDamage(cc.attackStrength);
 
                         cc.event = MeleeAttackComponent.Event.COOLDOWN;
-                        cc.attackCooldown = 2;
+                        cc.attackCooldown = 1;
                         cc.attackSwingProgress = 0;
                     }
                 }
