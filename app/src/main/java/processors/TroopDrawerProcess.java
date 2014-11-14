@@ -102,21 +102,39 @@ public class TroopDrawerProcess {
                 drawItem.angle = (float)wc.rot.getDegrees();
                 drawItem.width = 0.6f;
                 drawItem.height = 0.9f;
-            }
 
-            if (!mac.targetsInRange.isEmpty()) {
+                // Show selected
+
                 WorldComponent targetedWC = (WorldComponent)mac.targetsInRange.get(0).cData.get(WorldComponent.class);
 
-                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+                drawItem = spriteAllocater.takeNextWritable();
                 drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_TARGETED;
-                drawItem.animationProgress = TroopDrawerProcess.progress;
+                drawItem.animationProgress = 0;
                 drawItem.color = player.color();
                 drawItem.position.x = targetedWC.pos.x;
                 drawItem.position.y = targetedWC.pos.y;
                 drawItem.angle = (float)0; //wc.rot.getDegrees();
                 drawItem.width = 1.7f;
                 drawItem.height = 1.7f;
+
+                // Show projectiles
+
+                drawItem = spriteAllocater.takeNextWritable();
+                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_PROJECTILE;
+                drawItem.animationProgress = 0;
+                drawItem.color = Color.WHITE;
+                //drawItem.position.x = targetedWC.pos.x;
+                //drawItem.position.y = targetedWC.pos.y;
+                double swingProgress = (mac.attackSwingProgress / mac.attackSwingTime);
+                double interpolatedX = swingProgress * (targetedWC.pos.x - wc.pos.x) + wc.pos.x;
+                double interpolatedY = swingProgress * (targetedWC.pos.y - wc.pos.y) + wc.pos.y;
+                drawItem.position.x = interpolatedX;
+                drawItem.position.y = interpolatedY;
+                drawItem.angle = (float)0; //wc.rot.getDegrees();
+                drawItem.width = 0.2f;
+                drawItem.height = 0.2f;
             }
+
         }
 
     }
