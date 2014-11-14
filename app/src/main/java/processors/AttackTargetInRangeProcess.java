@@ -9,6 +9,7 @@ import model.Entity;
 import model.LivingComponent;
 import model.Player;
 import model.VelocityComponent;
+import model.WorldComponent;
 import utils.Vector2;
 
 /**
@@ -41,10 +42,27 @@ public class AttackTargetInRangeProcess {
                     if (cc.event == MeleeAttackComponent.Event.ATTACKING_TARGET) {
                         cc.event = MeleeAttackComponent.Event.COOLDOWN;
                     }
+                    cc.targetLock = null;
                     continue;
                 }
 
-                Entity toAttack = cc.targetsInRange.get(0);
+                Entity toAttack;
+
+                // If possible, we want to attack the previous target.
+                // If units get destroyed and added, the target acquisition might not be stable!
+                if (cc.targetLock != null) {
+                    toAttack = cc.targetLock;
+
+                    WorldComponent toAttackWC = (WorldComponent)toAttack.cData.get(WorldComponent.class);
+                    WorldComponent troopWC = (WorldComponent)troop.cData.get(WorldComponent.class);
+
+                    if ( toAttackWC.pos.distanceTo(troopWC.pos) > cc.targetAcquisitionRange ) {
+                        toAttack = cc.targetsInRange.get(0);
+                    }
+                }
+                else {
+                    cc.targetLock = toAttack = cc.targetsInRange.get(0);
+                }
 
                 if (!toAttack.labels().contains(Behaviors.BEHAVIOR_TAKES_DAMAGE_ON_COLLISION)) {
                     continue;

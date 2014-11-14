@@ -22,6 +22,8 @@ public class MeleeAttackComponent extends Component {
 
     public ArrayList<Entity> targetsInRange = new ArrayList<Entity>(8);
 
+    public Entity targetLock = null;
+
     public int attackStrength = 1;
 
     public double attackSwingTime = 2;
