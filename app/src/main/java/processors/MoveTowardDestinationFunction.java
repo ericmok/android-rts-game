@@ -36,6 +36,7 @@ public class MoveTowardDestinationFunction {
             // Reached destination
             if (vc.velocity.magnitude() < 0.01) {
                 dc.hasDestination = false;
+                dc.onDestinationReached.apply(entity);
             }
 
             vc.velocity.setNormalized();

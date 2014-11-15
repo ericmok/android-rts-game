@@ -18,6 +18,8 @@ public class Behaviors {
 
     public static final int BEHAVIOR_TAKES_DAMAGE_ON_COLLISION = 12;
 
+    public static final int BEHAVIOR_DIES_ON_NO_HP = 13;
+
     public static final int BEHAVIOR_LEADER = 103;
     public static final int BEHAVIOR_FOLLOWER = 104;
 

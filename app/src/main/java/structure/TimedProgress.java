@@ -61,7 +61,7 @@ public class TimedProgress {
 	/**
 	 * Update the progress by a rate given by the duration for the progress to finish
 	 * If progress goes over 100, then loop over.
-	 * The update is continuous.
+	 * The process is continuous.
 	 * 
 	 * @param elapsedTime
 	 * @return

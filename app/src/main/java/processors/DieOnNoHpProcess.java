@@ -18,7 +18,7 @@ public class DieOnNoHpProcess {
         for (int p = 0; p < engine.players.size(); p++) {
             Player player = engine.players.get(p);
 
-            ArrayList<Entity> entitiesToDie = player.denorms.getListForLabel(Behaviors.BEHAVIOR_TAKES_DAMAGE_ON_COLLISION);
+            ArrayList<Entity> entitiesToDie = player.denorms.getListForLabel(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
 
             for (int i = 0; i < entitiesToDie.size(); i++) {
                 Entity toDie = entitiesToDie.get(i);

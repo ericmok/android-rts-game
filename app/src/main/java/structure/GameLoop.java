@@ -227,7 +227,7 @@ public class GameLoop implements Runnable {
         }
         else {
 
-            // Engine has no server update, continue running naively
+            // Engine has no server process, continue running naively
             if (newCommand != null) EngineSimulator.changeModelWithCommand(game.engine, newCommand);
 
             // If there was no command, we still want an interpolation after all
@@ -279,10 +279,10 @@ public class GameLoop implements Runnable {
 //		if (game.getGameState() == Game.State.RUNNING) {
 //
 //			// Team 0
-//			fieldMovementSystem.update(game.stage.players.get(0).units, game.stage.players.get(0).fields, elapsedTime);
+//			fieldMovementSystem.process(game.stage.players.get(0).units, game.stage.players.get(0).fields, elapsedTime);
 //
 //			// Team 1
-//			fieldMovementSystem.update(game.stage.players.get(1).units, game.stage.players.get(1).fields, elapsedTime);
+//			fieldMovementSystem.process(game.stage.players.get(1).units, game.stage.players.get(1).fields, elapsedTime);
 //
 //            tempList.clear();
 //            for (int i = 0; i < game.stage.players.get(0).units.size(); i++) {
@@ -297,27 +297,27 @@ public class GameLoop implements Runnable {
 //                    tempList2.add((Troop) node);
 //                }
 //            }
-//            separationSystem.update(tempList, elapsedTime);
-//            forceIntegratorSystem.update(tempList, elapsedTime);
+//            separationSystem.process(tempList, elapsedTime);
+//            forceIntegratorSystem.process(tempList, elapsedTime);
 //
 //
-//			orientationSystem.update(game.stage.players.get(0).units, elapsedTime);
-//			orientationSystem.update(game.stage.players.get(1).units, elapsedTime);
+//			orientationSystem.process(game.stage.players.get(0).units, elapsedTime);
+//			orientationSystem.process(game.stage.players.get(1).units, elapsedTime);
 //
-//			battleResolutionSystem.update(game.stage.players.get(0).units, game.stage.players.get(1).units, elapsedTime);
+//			battleResolutionSystem.process(game.stage.players.get(0).units, game.stage.players.get(1).units, elapsedTime);
 //
 //
-//			selectionSystem.update(game.stage.players.get(0).units, selected, touchX, touchY, gestures, elapsedTime);
+//			selectionSystem.process(game.stage.players.get(0).units, selected, touchX, touchY, gestures, elapsedTime);
 //
 //
 //			RewritableArray<DrawList2DItem> drawItems = game.graphics.drawLists.regularSprites.lockWritableBuffer();
 //			drawItems.resetWriteIndex();
 //
-//			troopDrawSystem.update(drawItems, game.graphics.drawLists.temporarySprites, game.stage.players.get(0).units, elapsedTime);
-//			troopDrawSystem.update(drawItems, game.graphics.drawLists.temporarySprites, game.stage.players.get(1).units, elapsedTime);
+//			troopDrawSystem.process(drawItems, game.graphics.drawLists.temporarySprites, game.stage.players.get(0).units, elapsedTime);
+//			troopDrawSystem.process(drawItems, game.graphics.drawLists.temporarySprites, game.stage.players.get(1).units, elapsedTime);
 //
-//			shipDrawSystem.update(drawItems, game.stage.players.get(0).units, elapsedTime);
-//			shipDrawSystem.update(drawItems, game.stage.players.get(1).units, elapsedTime);
+//			shipDrawSystem.process(drawItems, game.stage.players.get(0).units, elapsedTime);
+//			shipDrawSystem.process(drawItems, game.stage.players.get(1).units, elapsedTime);
 //
 //
 //			if (activeTriggerField != null) {
@@ -330,7 +330,7 @@ public class GameLoop implements Runnable {
 //				triggerField.angle = (float) Orientation.getDegrees(activeTriggerField.source.x, activeTriggerField.source.y,
 //											activeTriggerField.dest.x, activeTriggerField.dest.y);
 //				triggerField.animationName = DrawList2DItem.ANIMATION_TRIGGER_FIELDS_EXISTING;
-//				activeAnimation.update(elapsedTime);
+//				activeAnimation.process(elapsedTime);
 //				triggerField.animationProgress = (int)activeAnimation.progress;
 //			}
 //
@@ -408,8 +408,8 @@ public class GameLoop implements Runnable {
 //
 //
 //
-//			cleanDeadUnitSystem.update(game.stage.players.get(0).units, elapsedTime);
-//			cleanDeadUnitSystem.update(game.stage.players.get(1).units, elapsedTime);
+//			cleanDeadUnitSystem.process(game.stage.players.get(0).units, elapsedTime);
+//			cleanDeadUnitSystem.process(game.stage.players.get(1).units, elapsedTime);
 //
 //			if (gestures.containsKey(GESTURE_ON_SINGLE_TAP_UP)) {
 //				Log.i("Make tap sprite", "Make tap sprite");

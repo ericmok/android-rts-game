@@ -7,7 +7,6 @@ import utils.Vector2;
  */
 public class ProjectileCasterComponent extends Component {
     public Vector2 castPoint = new Vector2();
-    public Projectile projectile = new Projectile();
 
     public static enum Phase {
         READY,
@@ -17,5 +16,42 @@ public class ProjectileCasterComponent extends Component {
 
     public Phase phase = Phase.READY;
 
-    public double coolDown = 0;
+    public double shootingTime = 1;
+    public double shootingProgress = 0;
+
+    public double coolDownTime = 1;
+    public double coolDownProgress = 0;
+
+    /**
+     * Update the state machine. If the action phase succeeds, process returns true
+     * @param dt
+     * @return
+     */
+    public boolean update(double dt) {
+
+        if (phase == Phase.READY) {
+            //phase = Phase.SHOOTING;
+        }
+
+        if (phase == Phase.SHOOTING) {
+            shootingProgress += dt;
+
+            if (shootingProgress >= shootingTime) {
+                phase = Phase.COOLDOWN;
+                shootingProgress = 0;
+                return true;
+            }
+        }
+
+        if (phase == Phase.COOLDOWN) {
+            coolDownProgress += dt;
+
+            if (coolDownProgress >= coolDownTime) {
+                phase = Phase.READY;
+                coolDownProgress = 0;
+            }
+        }
+
+        return false;
+    }
 }

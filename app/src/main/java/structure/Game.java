@@ -112,10 +112,10 @@ public class Game {
 //		fs.setupSquadPositions(stage.players.get(0).units, 1);
 //
 //		GenerateTroopsInSquadPositionsSystem gtsps = new GenerateTroopsInSquadPositionsSystem(this);
-//		gtsps.update(0, this.stage.players.get(0).units);
+//		gtsps.process(0, this.stage.players.get(0).units);
 //
 //		fs.setupSquadPositions(stage.players.get(1).units, 1);
-//		gtsps.update(1, this.stage.players.get(1).units);
+//		gtsps.process(1, this.stage.players.get(1).units);
 //
 //
 //		TriggerField test = this.gamePool.triggerFields.fetchMemory();

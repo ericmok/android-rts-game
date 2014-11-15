@@ -6,8 +6,7 @@ import model.Behaviors;
 import model.DestinationComponent;
 import model.Entity;
 import model.Engine;
-import model.GameEntities;
-import model.WorldComponent;
+import model.ProjectileCasterComponent;
 import networking.Command;
 
 /**
@@ -33,20 +32,16 @@ public class EngineSimulator {
         if (command.command == Command.FIRE) {
             for (int j = 0; j < command.selection.size(); j++) {
 
-                Entity projectile = GameEntities.projectilesMemoryPool.fetchMemory();
                 Entity caster = command.selection.get(j);
 
-                WorldComponent casterWorld = (WorldComponent) caster.cData.get(WorldComponent.class);
-                WorldComponent wc = (WorldComponent) projectile.cData.get(WorldComponent.class);
+                if (caster.labels().contains(Behaviors.BEHAVIOR_CASTS_PROJECTILE)) {
 
-                wc.pos.copy(casterWorld.pos);
+                    ProjectileCasterComponent pcc = (ProjectileCasterComponent) caster.cData.get(ProjectileCasterComponent.class);
 
-                DestinationComponent dc = (DestinationComponent) projectile.cData.get(DestinationComponent.class);
-                dc.dest.x = 3 * (casterWorld.rot.x) + casterWorld.pos.x;
-                dc.dest.y = 3 * (casterWorld.rot.y) + casterWorld.pos.y;
-                dc.hasDestination = true;
-
-                engine.currentPlayer.queueAdded(projectile);
+                    if (pcc.phase == ProjectileCasterComponent.Phase.READY) {
+                        pcc.phase = ProjectileCasterComponent.Phase.SHOOTING;
+                    }
+                }
             }
         }
     }
@@ -54,11 +49,16 @@ public class EngineSimulator {
     public static void interpolate(Engine engine, double ct, double dt) {
         ArrayList<Entity> destinedEntities = engine.currentPlayer.denorms.getListForLabel(Behaviors.BEHAVIOR_MOVES_TOWARD_DESTINATION);
 
+        CastingProjectileCooldownProcess.process(engine, dt);
+
         AdjustVelocityProcess.process(engine, dt);
         MoveTowardDestinationFunction.apply(destinedEntities, dt);
         //BattleResolution.process(engine, dt);
         TargetAcquisitionProcess.process(engine, dt);
         AttackTargetInRangeProcess.process(engine, dt);
+
+        ProjectileExplodeProcess.process(engine, dt);
+
         DieOnNoHpProcess.process(engine, dt);
     }
 }

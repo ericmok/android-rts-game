@@ -180,7 +180,7 @@ public class Quad {
 	
 	/**
 	 * Sets the color of the color vertices of the quad.<br/>
-	 * You should call <strong>bufferColorData()</strong> to update the associated VBOs
+	 * You should call <strong>bufferColorData()</strong> to process the associated VBOs
 	 * @param color
 	 */
 	public void setColor(int color) {

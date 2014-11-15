@@ -1,6 +1,7 @@
 package model;
 
 import utils.Vector2;
+import utils.VoidFunc;
 
 /**
  * Created by eric on 11/2/14.
@@ -15,6 +16,15 @@ public class DestinationComponent extends Component {
      * Maybe there is no destination
      */
     public boolean hasDestination = false;
+
+    public static final VoidFunc<Entity> DEFAULT_DESTINATION_REACHED = new VoidFunc<Entity>() {
+        @Override
+        public void apply(Entity element) {
+            // NOTHING
+        }
+    };
+
+    public VoidFunc<Entity> onDestinationReached = DEFAULT_DESTINATION_REACHED;
 
     public void reset() {
         dest.zero();

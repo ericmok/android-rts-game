@@ -20,7 +20,11 @@ public class Troop extends Entity {
 
         this.labels().add(Behaviors.BEHAVIOR_AQUIRES_TARGET_IN_RANGE);
         this.labels().add(Behaviors.BEHAVIOR_TAKES_DAMAGE_ON_COLLISION);
+        this.labels().add(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
         this.cData.put(MeleeAttackComponent.class, new MeleeAttackComponent());
+
+        this.labels().add(Behaviors.BEHAVIOR_CASTS_PROJECTILE);
+        this.cData.put(ProjectileCasterComponent.class, new ProjectileCasterComponent());
 
         this.labels().add(Behaviors.BEHAVIOR_GETS_SELECTED);
         SelectionComponent selectionComponent = new SelectionComponent();
