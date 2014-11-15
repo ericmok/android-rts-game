@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Behaviors;
+import model.DestinationComponent;
 import model.Entity;
 import model.Player;
 import model.WorldComponent;
@@ -13,6 +14,7 @@ import structure.DrawList2DItem;
 import structure.GamePool;
 import structure.RewriteOnlyArray;
 import structure.TemporaryDrawList2DItem;
+import utils.Orientation;
 
 /**
  * Created by eric on 11/9/14.
@@ -30,16 +32,18 @@ public class ProjectileDrawerProcess {
         for (int i = 0; i < projectiles.size(); i++) {
             Entity projectile = projectiles.get(i);
             WorldComponent worldComponent = (WorldComponent)projectile.cData.get(WorldComponent.class);
+            DestinationComponent dc = (DestinationComponent)projectile.cData.get(DestinationComponent.class);
 
             DrawList2DItem item = spriteAllocater.takeNextWritable();
             item.position.x = worldComponent.pos.x;
             item.position.y = worldComponent.pos.y;
-            item.animationName = DrawList2DItem.ANIMATION_RETICLE_TAP;
+            item.animationName = DrawList2DItem.ANIMATION_PROJECTILE_BASIC;
             item.width = 1;
             item.height = 1;
             item.animationProgress = 0;
-            item.color = Color.WHITE;
-            item.angle = (float)Math.random() * 360;
+            item.color = player.color();
+            item.angle = (float)Orientation.getDegreesBaseX(dc.dest.x - worldComponent.pos.x,
+                                                            dc.dest.y - worldComponent.pos.y);
         }
 
     }
