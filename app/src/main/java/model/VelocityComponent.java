@@ -11,4 +11,6 @@ public class VelocityComponent extends Component {
 
     public Vector2 velocity = new Vector2();
     public double deltaDegrees = 0;
+
+    public Vector2 acceleration = new Vector2();
 }
