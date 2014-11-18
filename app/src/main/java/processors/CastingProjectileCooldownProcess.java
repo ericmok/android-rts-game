@@ -41,8 +41,8 @@ public class CastingProjectileCooldownProcess {
                     lc.hitPoints = 1;
 
                     DestinationComponent dc = (DestinationComponent) projectile.cData.get(DestinationComponent.class);
-                    dc.dest.x = 5 * (casterWorld.rot.x) + casterWorld.pos.x;
-                    dc.dest.y = 5 * (casterWorld.rot.y) + casterWorld.pos.y;
+                    dc.dest.x = 15 * (casterWorld.rot.x) + casterWorld.pos.x;
+                    dc.dest.y = 15 * (casterWorld.rot.y) + casterWorld.pos.y;
                     dc.hasDestination = true;
 
                     engine.currentPlayer.queueAdded(projectile);

@@ -60,8 +60,9 @@ public class Orientation extends Vector2 {
 	}
 	
 	public static void setVectorToDegree(Vector2 vectorToSet, double degrees) {
+        double tempX = vectorToSet.x;
 		vectorToSet.x = vectorToSet.x * Math.cos(Math.toRadians(degrees)) - vectorToSet.y * Math.sin(Math.toRadians(degrees));
-		vectorToSet.y = vectorToSet.x * Math.sin(Math.toRadians(degrees)) + vectorToSet.y * Math.cos(Math.toRadians(degrees));
+		vectorToSet.y = tempX * Math.sin(Math.toRadians(degrees)) + vectorToSet.y * Math.cos(Math.toRadians(degrees));
 	}
 	
 	public double getDegrees() {

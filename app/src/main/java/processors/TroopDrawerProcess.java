@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Behaviors;
+import model.DestinationComponent;
 import model.LivingComponent;
 import model.MeleeAttackComponent;
 import model.Player;
@@ -160,6 +161,21 @@ public class TroopDrawerProcess {
                 drawItem.height = 0.5f;
             }
 
+
+            // For debugging!
+            DestinationComponent dc = (DestinationComponent)entity.cData.get(DestinationComponent.class);
+            if (dc.hasDestination) {
+                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+
+                drawItem.animationName = DrawList2DItem.ANIMATION_RETICLE_TAP;
+                drawItem.animationProgress = 0;
+                drawItem.color = player.color();
+                drawItem.position.x = dc.dest.x;
+                drawItem.position.y = dc.dest.y;
+                drawItem.angle = (float) wc.rot.getDegrees();
+                drawItem.width = 1.0f;
+                drawItem.height = 1.0f;
+            }
         }
 
     }
