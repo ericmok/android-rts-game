@@ -47,10 +47,6 @@ public class EngineSimulator {
         this.add(new Vector2(2*FORMATION_OFFSET, -2*FORMATION_OFFSET));
         this.add(new Vector2(2*FORMATION_OFFSET, 3*FORMATION_OFFSET));
         this.add(new Vector2(2*FORMATION_OFFSET, -3*FORMATION_OFFSET));
-        this.add(new Vector2(2*FORMATION_OFFSET, 4*FORMATION_OFFSET));
-        this.add(new Vector2(2*FORMATION_OFFSET, -4*FORMATION_OFFSET));
-        this.add(new Vector2(2*FORMATION_OFFSET, 5*FORMATION_OFFSET));
-        this.add(new Vector2(2*FORMATION_OFFSET, -5*FORMATION_OFFSET));
     }};
 
     public static ArrayList<Integer> taken = new ArrayList<Integer>(32);
