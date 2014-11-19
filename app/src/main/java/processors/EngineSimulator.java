@@ -40,10 +40,6 @@ public class EngineSimulator {
         this.add(new Vector2(FORMATION_OFFSET, -2*FORMATION_OFFSET));
         this.add(new Vector2(FORMATION_OFFSET, 3*FORMATION_OFFSET));
         this.add(new Vector2(FORMATION_OFFSET, -3*FORMATION_OFFSET));
-        this.add(new Vector2(FORMATION_OFFSET, 4*FORMATION_OFFSET));
-        this.add(new Vector2(FORMATION_OFFSET, -4*FORMATION_OFFSET));
-        this.add(new Vector2(FORMATION_OFFSET, 5*FORMATION_OFFSET));
-        this.add(new Vector2(FORMATION_OFFSET, -5*FORMATION_OFFSET));
         this.add(new Vector2(2*FORMATION_OFFSET, 0));
         this.add(new Vector2(2*FORMATION_OFFSET, FORMATION_OFFSET));
         this.add(new Vector2(2*FORMATION_OFFSET, -FORMATION_OFFSET));
@@ -138,13 +134,11 @@ public class EngineSimulator {
 
 
                 //double degrees = Orientation.getDegreesBaseX(vectorToDestFromCogX, vectorToDestFromCogY);
-                double transformedFormationX = Math.cos(Math.toRadians(degrees)) * formationPoints.get(j).x - Math.sin(Math.toRadians(degrees)) * formationPoints.get(j).y;
-                double transformedFormationY = Math.sin(Math.toRadians(degrees)) * formationPoints.get(j).x + Math.cos(Math.toRadians(degrees)) * formationPoints.get(j).y;
+//                double transformedFormationX = Math.cos(Math.toRadians(degrees)) * formationPoints.get(j).x - Math.sin(Math.toRadians(degrees)) * formationPoints.get(j).y;
+//                double transformedFormationY = Math.sin(Math.toRadians(degrees)) * formationPoints.get(j).x + Math.cos(Math.toRadians(degrees)) * formationPoints.get(j).y;
 
-                temp.set(formationPoints.get(j).x, formationPoints.get(j).y);
+                temp.set(formationPoints.get(minIndex).x, formationPoints.get(minIndex).y);
                 Orientation.setVectorToDegree(temp, degrees);
-
-                Log.i("DEBUG", "transformed[" + transformedFormationX + "," + transformedFormationY + "] temp[" + temp.x + "," + temp.y + "]");
 
 //                dc.dest.set(vectorToDestFromCogX + cog.x + transformedFormationX,
 //                            vectorToDestFromCogY + cog.y + transformedFormationY);
