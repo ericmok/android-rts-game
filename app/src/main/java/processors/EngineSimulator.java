@@ -76,21 +76,12 @@ public class EngineSimulator {
 
             double degrees = Orientation.getDegreesBaseX(vectorToDestFromCogX, vectorToDestFromCogY);
 
-            double mag = vectorToDestFromCogX * vectorToDestFromCogX + vectorToDestFromCogY * vectorToDestFromCogY;
-            mag = Math.sqrt(mag);
-
-//            tempRot.set(vectorToDestFromCogX, vectorToDestFromCogY);
-//            tempRot.getPerpendicular(temp);
-
-
             for (int j = 0; j < command.selection.size(); j++) {
                 Entity entity = command.selection.get(j);
 
                 WorldComponent wc = (WorldComponent) entity.cData.get(WorldComponent.class);
                 DestinationComponent dc = (DestinationComponent) entity.cData.get(DestinationComponent.class);
 
-                double pointInFormationX = wc.pos.x - cog.x;
-                double pointInFormationY = wc.pos.y - cog.y;
 
                 double minTransformedFormationX = 0;
                 double minTransformedFormationY = 0;
@@ -101,70 +92,24 @@ public class EngineSimulator {
                 for (int f = 0; f < formationPoints.size(); f++) {
                     Vector2 candidate = formationPoints.get(f);
 
-                    //double degrees = Orientation.getDegreesBaseX(candidate.x, candidate.y);
-                    //double transformedFormationX = temp.x * candidate.x;
-                    //double transformedFormationX = Math.cos(Math.toRadians(degrees)) * candidate.x - Math.sin(Math.toRadians(degrees)) * candidate.y;
-                    //double transformedFormationY = temp.y * candidate.y;
-                    //double transformedFormationY = Math.sin(Math.toRadians(degrees)) * candidate.x + Math.cos(Math.toRadians(degrees)) * candidate.y;
-
                     temp.set(candidate.x, candidate.y);
                     Orientation.setVectorToDegree(temp, degrees);
-//                    double sqDist = Math.pow((transformedFormationX - pointInFormationX),2) +
-//                                    Math.pow((transformedFormationY - pointInFormationY),2);
 
                     double sqDist = Math.pow((command.vec.x + temp.x - wc.pos.x),2) +
                                     Math.pow((command.vec.y + temp.y - wc.pos.y),2);
 
                     if (sqDist < minDistance && !taken.contains(f)) {
                         minDistance = sqDist;
-                        minIndex = f; // TODO: Not re-use already taken formations
-                        taken.add(f);
-                        //minTransformedFormationX = transformedFormationX;
-                        //minTransformedFormationY = transformedFormationY;
+                        minIndex = f;
                         minTransformedFormationX = temp.x;
                         minTransformedFormationY = temp.y;
+                        taken.add(f);
                     }
                 }
 
-                // After getting the closest point to the rotated formation,
-                // offset formation point by the ammount
+                dc.dest.set(vectorToDestFromCogX + cog.x + minTransformedFormationX,
+                            vectorToDestFromCogY + cog.y + minTransformedFormationY);
 
-//                dc.dest.set(pointInFormationX + vectorToDestFromCogX + cog.x + minTransformedFormationX,
-//                        pointInFormationY + vectorToDestFromCogY + cog.y + minTransformedFormationY);
-
-
-                //double degrees = Orientation.getDegreesBaseX(vectorToDestFromCogX, vectorToDestFromCogY);
-//                double transformedFormationX = Math.cos(Math.toRadians(degrees)) * formationPoints.get(j).x - Math.sin(Math.toRadians(degrees)) * formationPoints.get(j).y;
-//                double transformedFormationY = Math.sin(Math.toRadians(degrees)) * formationPoints.get(j).x + Math.cos(Math.toRadians(degrees)) * formationPoints.get(j).y;
-
-                temp.set(formationPoints.get(minIndex).x, formationPoints.get(minIndex).y);
-                Orientation.setVectorToDegree(temp, degrees);
-
-//                dc.dest.set(vectorToDestFromCogX + cog.x + transformedFormationX,
-//                            vectorToDestFromCogY + cog.y + transformedFormationY);
-                dc.dest.set(vectorToDestFromCogX + cog.x + temp.x,
-                            vectorToDestFromCogY + cog.y + temp.y);
-
-//                dc.dest.set(vectorToDestFromCogX + cog.x + transformedFormationX ,
-//                        vectorToDestFromCogY + cog.y + transformedFormationY);
-
-                // This one uses the x of the formation points 2 times.
-                // We just scale the perpendicular vector
-                // On the other hand the y value is the vector to dest
-//                dc.dest.set(vectorToDestFromCogX + cog.x + temp.x * formationPoints.get(minIndex).x,
-//                        vectorToDestFromCogY + cog.y + temp.y * formationPoints.get(minIndex).x);
-
-
-//                double offsetX = vectorToDestFromCogX + formationPoints.get(minIndex).x;
-//                double offsetY = vectorToDestFromCogY + formationPoints.get(minIndex).y;
-
-                //dc.dest.set(command.vec.x - wc.pos.x, command.vec.y - wc.pos.y);
-//                dc.dest.set(offsetX, offsetY);
-//
-//                dc.dest.setNormalized();
-//
-//                dc.dest.scale(mag, mag);
-//                dc.dest.translate(wc.pos.x, wc.pos.y);
 
                 dc.hasDestination = true;
             }
