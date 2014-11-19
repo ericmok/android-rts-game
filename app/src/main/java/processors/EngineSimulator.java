@@ -55,80 +55,84 @@ public class EngineSimulator {
 
     public static ArrayList<Integer> taken = new ArrayList<Integer>(32);
 
+    // TODO: Replay commands in order by their time stamps
+
     public static void changeModelWithCommand(Engine engine, Command command) {
-
-        // TODO: Sort command history by timeStamp
-        // Replay commands taking into account their timeStamps
-
         if (command.command == Command.MOVE) {
-
-            cog.zero();
-
-            for (int j = 0; j < command.selection.size(); j++) {
-                WorldComponent wc = (WorldComponent)command.selection.get(j).cData.get(WorldComponent.class);
-                cog.translate(wc.pos.x, wc.pos.y);
-            }
-            double divide = 1.0/command.selection.size();
-            cog.scale(divide, divide);
-
-            double vectorToDestFromCogX = command.vec.x - cog.x;
-            double vectorToDestFromCogY = command.vec.y - cog.y;
-
-            double degrees = Orientation.getDegreesBaseX(vectorToDestFromCogX, vectorToDestFromCogY);
-
-            for (int j = 0; j < command.selection.size(); j++) {
-                Entity entity = command.selection.get(j);
-
-                WorldComponent wc = (WorldComponent) entity.cData.get(WorldComponent.class);
-                DestinationComponent dc = (DestinationComponent) entity.cData.get(DestinationComponent.class);
-
-
-                double minTransformedFormationX = 0;
-                double minTransformedFormationY = 0;
-
-                int minIndex = 0;
-                double minDistance = 10000000;
-
-                for (int f = 0; f < formationPoints.size(); f++) {
-                    Vector2 candidate = formationPoints.get(f);
-
-                    temp.set(candidate.x, candidate.y);
-                    Orientation.setVectorToDegree(temp, degrees);
-
-                    double sqDist = Math.pow((command.vec.x + temp.x - wc.pos.x),2) +
-                                    Math.pow((command.vec.y + temp.y - wc.pos.y),2);
-
-                    if (sqDist < minDistance && !taken.contains(f)) {
-                        minDistance = sqDist;
-                        minIndex = f;
-                        minTransformedFormationX = temp.x;
-                        minTransformedFormationY = temp.y;
-                        taken.add(f);
-                    }
-                }
-
-                dc.dest.set(vectorToDestFromCogX + cog.x + minTransformedFormationX,
-                            vectorToDestFromCogY + cog.y + minTransformedFormationY);
-
-
-                dc.hasDestination = true;
-            }
-
-            taken.clear();
+            moveCommand(engine, command);
         }
 
         if (command.command == Command.FIRE) {
-            for (int j = 0; j < command.selection.size(); j++) {
+            fireCommand(engine, command);
+        }
+    }
 
-                Entity caster = command.selection.get(j);
+    public static void moveCommand(Engine engine, Command command) {
 
-                if (caster.labels().contains(Behaviors.BEHAVIOR_CASTS_PROJECTILE)) {
+        cog.zero();
 
-                    ProjectileCasterComponent pcc = (ProjectileCasterComponent) caster.cData.get(ProjectileCasterComponent.class);
+        for (int j = 0; j < command.selection.size(); j++) {
+            WorldComponent wc = (WorldComponent)command.selection.get(j).cData.get(WorldComponent.class);
+            cog.translate(wc.pos.x, wc.pos.y);
+        }
+        double divide = 1.0/command.selection.size();
+        cog.scale(divide, divide);
 
-                    if (pcc.phase == ProjectileCasterComponent.Phase.READY) {
-                        pcc.phase = ProjectileCasterComponent.Phase.SHOOTING;
-                    }
+        double vectorToDestFromCogX = command.vec.x - cog.x;
+        double vectorToDestFromCogY = command.vec.y - cog.y;
+
+        double degrees = Orientation.getDegreesBaseX(vectorToDestFromCogX, vectorToDestFromCogY);
+
+        for (int j = 0; j < command.selection.size(); j++) {
+            Entity entity = command.selection.get(j);
+
+            WorldComponent wc = (WorldComponent) entity.cData.get(WorldComponent.class);
+            DestinationComponent dc = (DestinationComponent) entity.cData.get(DestinationComponent.class);
+
+            double minTransformedFormationX = 0;
+            double minTransformedFormationY = 0;
+
+            int minIndex = 0;
+            double minDistance = 10000000;
+
+            for (int f = 0; f < formationPoints.size(); f++) {
+                Vector2 candidate = formationPoints.get(f);
+
+                temp.set(candidate.x, candidate.y);
+                Orientation.setVectorToDegree(temp, degrees);
+
+                double sqDist = Math.pow((command.vec.x + temp.x - wc.pos.x),2) +
+                        Math.pow((command.vec.y + temp.y - wc.pos.y),2);
+
+                if (sqDist < minDistance && !taken.contains(f)) {
+                    minDistance = sqDist;
+                    minIndex = f;
+                    minTransformedFormationX = temp.x;
+                    minTransformedFormationY = temp.y;
+                    taken.add(f);
+                }
+            }
+
+            dc.dest.set(vectorToDestFromCogX + cog.x + minTransformedFormationX,
+                    vectorToDestFromCogY + cog.y + minTransformedFormationY);
+
+            dc.hasDestination = true;
+        }
+
+        taken.clear();
+    }
+
+    public static void fireCommand(Engine engine, Command command) {
+        for (int j = 0; j < command.selection.size(); j++) {
+
+            Entity caster = command.selection.get(j);
+
+            if (caster.labels().contains(Behaviors.BEHAVIOR_CASTS_PROJECTILE)) {
+
+                ProjectileCasterComponent pcc = (ProjectileCasterComponent) caster.cData.get(ProjectileCasterComponent.class);
+
+                if (pcc.phase == ProjectileCasterComponent.Phase.READY) {
+                    pcc.phase = ProjectileCasterComponent.Phase.SHOOTING;
                 }
             }
         }
