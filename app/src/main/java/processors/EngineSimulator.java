@@ -55,15 +55,15 @@ public class EngineSimulator {
 
     public static void changeModelWithCommand(Engine engine, Command command) {
         if (command.command == Command.MOVE) {
-            moveCommand(engine, command);
+            handleMoveCommand(engine, command);
         }
 
         if (command.command == Command.FIRE) {
-            fireCommand(engine, command);
+            handleFireCommand(engine, command);
         }
     }
 
-    public static void moveCommand(Engine engine, Command command) {
+    public static void handleMoveCommand(Engine engine, Command command) {
 
         cog.zero();
 
@@ -118,7 +118,7 @@ public class EngineSimulator {
         taken.clear();
     }
 
-    public static void fireCommand(Engine engine, Command command) {
+    public static void handleFireCommand(Engine engine, Command command) {
         for (int j = 0; j < command.selection.size(); j++) {
 
             Entity caster = command.selection.get(j);
