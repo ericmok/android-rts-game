@@ -25,6 +25,7 @@ public class DrawList2DItem {
     public static final String ANIMATION_TROOPS_PROJECTILE = "Animations/Troops/Projectile";
 
     public static final String ANIMATION_PROJECTILE_BASIC = "Animations/Projectiles/Basic";
+    public static final String ANIMATION_PROJECTILE_EXPLOSION = "Animations/Projectiles/Explosion";
 
 	public static final String ANIMATION_ENEMY_TROOPS_IDLING = "Animations/EnemyTroops/Idling";
 	public static final String ANIMATION_ENEMY_TROOPS_MOVING = "Animations/EnemyTroops/Moving";

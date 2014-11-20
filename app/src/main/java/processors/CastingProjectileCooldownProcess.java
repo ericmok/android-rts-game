@@ -10,6 +10,7 @@ import model.LivingComponent;
 import model.Player;
 import model.Entity;
 import model.ProjectileCasterComponent;
+import model.VelocityComponent;
 import model.WorldComponent;
 
 /**
@@ -39,6 +40,9 @@ public class CastingProjectileCooldownProcess {
 
                     LivingComponent lc = (LivingComponent) projectile.cData.get(LivingComponent.class);
                     lc.hitPoints = 1;
+
+                    VelocityComponent vc = (VelocityComponent)projectile.cData.get(VelocityComponent.class);
+                    vc.moveSpeed = 2;
 
                     DestinationComponent dc = (DestinationComponent) projectile.cData.get(DestinationComponent.class);
                     dc.dest.x = 15 * (casterWorld.rot.x) + casterWorld.pos.x;

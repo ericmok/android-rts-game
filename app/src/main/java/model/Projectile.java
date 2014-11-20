@@ -1,5 +1,6 @@
 package model;
 
+import utils.Vector2;
 import utils.VoidFunc;
 
 /**
@@ -25,7 +26,6 @@ public class Projectile extends Entity {
 
         VelocityComponent vc = new VelocityComponent();
         this.cData.put(VelocityComponent.class, vc);
-        vc.moveSpeed = 2;
 
         LivingComponent lc = new LivingComponent();
         this.cData.put(LivingComponent.class, lc);
@@ -36,5 +36,22 @@ public class Projectile extends Entity {
         destinationComponent.onDestinationReached = Projectile.DIE_ON_DESTINATION_REACHED;
 
         this.labels().add(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
+
+        reset();
+    }
+
+    public void reset() {
+        WorldComponent wc = (WorldComponent)cData.get(WorldComponent.class);
+        wc.pos.zero();
+        wc.rot.setDegrees(0);
+
+        VelocityComponent vc = (VelocityComponent)cData.get(VelocityComponent.class);
+        vc.moveSpeed = 2;
+
+        LivingComponent lc = (LivingComponent)cData.get(LivingComponent.class);
+        lc.hitPoints = 1;
+
+        DestinationComponent dc = (DestinationComponent)cData.get(DestinationComponent.class);
+        dc.hasDestination = false;
     }
 }

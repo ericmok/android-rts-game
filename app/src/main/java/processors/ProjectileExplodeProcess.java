@@ -39,15 +39,18 @@ public class ProjectileExplodeProcess {
                         WorldComponent wc = (WorldComponent)collided.cData.get(WorldComponent.class);
                         WorldComponent projectileWc = (WorldComponent)projectile.cData.get(WorldComponent.class);
 
+                        LivingComponent projectileLC = (LivingComponent)projectile.cData.get(LivingComponent.class);
+
                         RadiusComponent rc = (RadiusComponent)collided.cData.get(RadiusComponent.class);
 
                         if (wc.pos.distanceTo(projectileWc.pos) < rc.radius) {
 
                             LivingComponent lc = (LivingComponent)collided.cData.get(LivingComponent.class);
-
                             lc.takeDamage(1);
 
-                            player1.queueRemoved(projectile);
+                            projectileLC.takeDamage(100);
+
+                            //player1.queueRemoved(projectile);
                         }
                     }
                 }
