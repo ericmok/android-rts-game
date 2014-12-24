@@ -35,6 +35,13 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
     public boolean touchDown = false;
     public Vector2 touchPosition = new Vector2();
     public Vector2 touchScrollDeltas = new Vector2();
+
+    /** The touch position recorded when a tap down last occurred */
+    public Vector2 lastTouchDown = new Vector2();
+
+    /** The touch position recorded when a touch up last occurred */
+    public Vector2 lastTouchUp = new Vector2();
+
     public float touchScale= 1.0f;
 
     private int currentGesture = GESTURE_NONE;
@@ -121,11 +128,17 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             touchDown = true;
+            lastTouchDown.copy(touchPosition);
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_SCROLL) {
+            touchDown = true;
         }
 
         // Unclear if other actions will trigger flag to false
         if (event.getAction() == MotionEvent.ACTION_UP) {
             touchDown = false;
+            lastTouchUp.copy(touchPosition);
         }
     }
 
