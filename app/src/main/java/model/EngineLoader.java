@@ -41,7 +41,9 @@ public class EngineLoader {
 
                 WorldComponent pc =
                         ((WorldComponent) troop.cData.get(WorldComponent.class));
+
                 pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
+                pc.rot.setDegrees(jEntity.getDouble("r"));
 
                 player.denorms.addDenormalizable(troop);
             }
