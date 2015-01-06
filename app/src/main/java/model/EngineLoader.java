@@ -45,6 +45,16 @@ public class EngineLoader {
                 pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 pc.rot.setDegrees(jEntity.getDouble("r"));
 
+                // Destination deserialization
+                JSONObject jDest = jEntity.getJSONObject("dest");
+                if (jDest != null) {
+                    DestinationComponent dc = (DestinationComponent) troop.cData.get(DestinationComponent.class);
+                    double destX = jDest.getDouble("x");
+                    double destY = jDest.getDouble("y");
+                    dc.dest.set(destX, destY);
+                    dc.hasDestination = true;
+                }
+
                 player.denorms.addDenormalizable(troop);
             }
         }

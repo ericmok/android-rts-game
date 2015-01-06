@@ -135,12 +135,16 @@ public class EngineSimulator {
     }
 
     public static void interpolate(Engine engine, double ct, double dt) {
-        ArrayList<Entity> destinedEntities = engine.currentPlayer.denorms.getListForLabel(Behaviors.BEHAVIOR_MOVES_TOWARD_DESTINATION);
-
         CastingProjectileCooldownProcess.process(engine, dt);
 
         AdjustVelocityProcess.process(engine, dt);
-        MoveTowardDestinationFunction.apply(destinedEntities, dt);
+
+        for (int i = 0; i < engine.players.size(); i++) {
+            //ArrayList<Entity> destinedEntities = engine.currentPlayer.denorms.getListForLabel(Behaviors.BEHAVIOR_MOVES_TOWARD_DESTINATION);
+            ArrayList<Entity> destinedEntities = engine.players.get(i).denorms.getListForLabel(Behaviors.BEHAVIOR_MOVES_TOWARD_DESTINATION);
+            MoveTowardDestinationFunction.apply(destinedEntities, dt);
+        }
+
         //BattleResolution.process(engine, dt);
         TargetAcquisitionProcess.process(engine, dt);
         AttackTargetInRangeProcess.process(engine, dt);
