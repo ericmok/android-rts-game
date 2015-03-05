@@ -1,15 +1,13 @@
 package processors;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
-import model.Behaviors;
-import model.DestinationComponent;
+import behaviors.Behaviors;
+import behaviors.DestinationComponent;
 import model.Entity;
 import model.Engine;
-import model.ProjectileCasterComponent;
-import model.WorldComponent;
+import behaviors.ProjectileCasterComponent;
+import behaviors.WorldComponent;
 import networking.Command;
 import utils.Orientation;
 import utils.Vector2;

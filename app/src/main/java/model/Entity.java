@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import behaviors.Component;
+
 /**
  * Created by eric on 10/30/14.
  */

@@ -5,7 +5,7 @@ import java.util.List;
 
 import android.os.SystemClock;
 
-import model.Behaviors;
+import behaviors.Behaviors;
 import model.Entity;
 
 import networking.Command;

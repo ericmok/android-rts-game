@@ -4,6 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import behaviors.DestinationComponent;
+import behaviors.WorldComponent;
+
 /**
  * Created by eric on 11/6/14.
  */

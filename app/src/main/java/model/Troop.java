@@ -1,5 +1,17 @@
 package model;
 
+import behaviors.AbilityComponent;
+import behaviors.Behaviors;
+import behaviors.DestinationComponent;
+import behaviors.LivingComponent;
+import behaviors.MeleeAttackComponent;
+import behaviors.MoveTowardsDestinationBehavior;
+import behaviors.ProjectileCasterComponent;
+import behaviors.RadiusComponent;
+import behaviors.SelectionComponent;
+import behaviors.VelocityComponent;
+import behaviors.WorldComponent;
+
 /**
  * Created by eric on 11/9/14.
  */
@@ -30,9 +42,7 @@ public class Troop extends Entity {
         SelectionComponent selectionComponent = new SelectionComponent();
         this.cData.put(SelectionComponent.class, selectionComponent);
 
-        this.labels().add(Behaviors.BEHAVIOR_MOVES_TOWARD_DESTINATION);
-        DestinationComponent destinationComponent = new DestinationComponent();
-        this.cData.put(DestinationComponent.class, destinationComponent);
+        MoveTowardsDestinationBehavior.mixin(this);
 
         AbilityComponent abilityComponent = new AbilityComponent();
         abilityComponent.abilities.add(Abilities.SPECIAL_ATTACK);

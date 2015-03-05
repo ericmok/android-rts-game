@@ -1,6 +1,8 @@
-package model;
+package behaviors;
 
 import java.util.ArrayList;
+
+import model.Abilities;
 
 /**
  * Created by eric on 11/3/14.

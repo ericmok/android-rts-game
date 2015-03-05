@@ -1,5 +1,7 @@
 package model;
 
+import behaviors.Behaviors;
+import behaviors.ButtonComponent;
 import structure.DrawList2DItem;
 
 /**

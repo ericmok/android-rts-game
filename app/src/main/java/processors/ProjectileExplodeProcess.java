@@ -2,13 +2,13 @@ package processors;
 
 import java.util.ArrayList;
 
-import model.Behaviors;
+import behaviors.Behaviors;
 import model.Engine;
-import model.LivingComponent;
+import behaviors.LivingComponent;
 import model.Player;
 import model.Entity;
-import model.RadiusComponent;
-import model.WorldComponent;
+import behaviors.RadiusComponent;
+import behaviors.WorldComponent;
 
 /**
  * Created by eric on 11/14/14.

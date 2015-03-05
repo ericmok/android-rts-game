@@ -1,5 +1,6 @@
-package model;
+package behaviors;
 
+import model.Entity;
 import utils.Vector2;
 import utils.VoidFunc;
 

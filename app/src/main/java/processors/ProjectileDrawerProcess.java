@@ -5,12 +5,12 @@ import android.graphics.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Behaviors;
-import model.DestinationComponent;
+import behaviors.Behaviors;
+import behaviors.DestinationComponent;
 import model.Entity;
-import model.LivingComponent;
+import behaviors.LivingComponent;
 import model.Player;
-import model.WorldComponent;
+import behaviors.WorldComponent;
 import structure.DrawList2DItem;
 import structure.GamePool;
 import structure.RewriteOnlyArray;

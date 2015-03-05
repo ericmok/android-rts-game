@@ -1,5 +1,6 @@
 package model;
 
+import behaviors.Behaviors;
 import utils.MemoryPool;
 
 /**

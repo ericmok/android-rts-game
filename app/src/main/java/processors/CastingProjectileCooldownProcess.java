@@ -2,16 +2,16 @@ package processors;
 
 import java.util.ArrayList;
 
-import model.Behaviors;
-import model.DestinationComponent;
+import behaviors.Behaviors;
+import behaviors.DestinationComponent;
 import model.Engine;
 import model.GameEntities;
-import model.LivingComponent;
+import behaviors.LivingComponent;
 import model.Player;
 import model.Entity;
-import model.ProjectileCasterComponent;
-import model.VelocityComponent;
-import model.WorldComponent;
+import behaviors.ProjectileCasterComponent;
+import behaviors.VelocityComponent;
+import behaviors.WorldComponent;
 
 /**
  * Created by eric on 11/14/14.

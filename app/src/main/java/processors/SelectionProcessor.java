@@ -2,8 +2,8 @@ package processors;
 
 import java.util.ArrayList;
 
-import model.WorldComponent;
-import model.SelectionComponent;
+import behaviors.WorldComponent;
+import behaviors.SelectionComponent;
 import structure.Game;
 import model.Entity;
 import structure.GameCamera;

@@ -1,4 +1,4 @@
-package model;
+package behaviors;
 
 /**
  * Created by eric on 11/7/14.

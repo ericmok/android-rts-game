@@ -1,11 +1,10 @@
 package structure;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import java.util.ArrayList;
 
-import model.ButtonComponent;
+import behaviors.ButtonComponent;
 import model.Entity;
 import utils.Vector2;
 

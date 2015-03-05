@@ -1,4 +1,4 @@
-package model;
+package behaviors;
 
 import utils.Orientation;
 

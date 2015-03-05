@@ -2,9 +2,9 @@ package processors;
 
 import java.util.ArrayList;
 
-import model.Behaviors;
+import behaviors.Behaviors;
 import model.Engine;
-import model.LivingComponent;
+import behaviors.LivingComponent;
 import model.Player;
 import model.Entity;
 

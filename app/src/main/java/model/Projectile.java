@@ -1,6 +1,10 @@
 package model;
 
-import utils.Vector2;
+import behaviors.Behaviors;
+import behaviors.DestinationComponent;
+import behaviors.LivingComponent;
+import behaviors.VelocityComponent;
+import behaviors.WorldComponent;
 import utils.VoidFunc;
 
 /**

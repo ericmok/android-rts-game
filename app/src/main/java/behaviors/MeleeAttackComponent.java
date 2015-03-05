@@ -1,7 +1,8 @@
-package model;
+package behaviors;
 
 import java.util.ArrayList;
 
+import model.Entity;
 import processors.Functional;
 import utils.VoidFunc;
 

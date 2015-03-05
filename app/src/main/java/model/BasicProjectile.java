@@ -1,5 +1,7 @@
 package model;
 
+import behaviors.Component;
+
 /**
  * Created by eric on 11/7/14.
  */

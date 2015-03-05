@@ -2,7 +2,7 @@ package processors;
 
 import java.util.ArrayList;
 
-import model.DestinationComponent;
+import behaviors.DestinationComponent;
 import structure.GameCamera;
 import structure.GameInput;
 

@@ -2,14 +2,13 @@ package processors;
 
 import java.util.ArrayList;
 
-import model.Behaviors;
-import model.MeleeAttackComponent;
+import behaviors.Behaviors;
+import behaviors.MeleeAttackComponent;
 import model.Engine;
 import model.Entity;
-import model.LivingComponent;
+import behaviors.LivingComponent;
 import model.Player;
-import model.VelocityComponent;
-import model.WorldComponent;
+import behaviors.WorldComponent;
 import utils.Vector2;
 
 /**

@@ -2,11 +2,10 @@ package processors;
 
 import java.util.ArrayList;
 
-import model.DestinationComponent;
+import behaviors.DestinationComponent;
 import model.Entity;
-import model.VelocityComponent;
-import model.WorldComponent;
-import model.SelectionComponent;
+import behaviors.VelocityComponent;
+import behaviors.WorldComponent;
 import utils.Vector2;
 
 /**
