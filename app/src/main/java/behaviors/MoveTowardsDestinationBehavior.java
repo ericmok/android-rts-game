@@ -8,7 +8,7 @@ import model.Entity;
  *
  * Components: [world, velocity, destination]
  */
-public class MoveTowardsDestinationBehavior extends Component {
+public class MoveTowardsDestinationBehavior extends Behavior {
 
     public WorldComponent worldComponent = null;
     public VelocityComponent velocityComponent = null;
@@ -19,6 +19,10 @@ public class MoveTowardsDestinationBehavior extends Component {
       WorldComponent.class, VelocityComponent.class, DestinationComponent.class
     };
 
+    public Class[] getComponents() {
+        return COMPONENTS;
+    }
+
     public static void mixin(Entity entity) {
 
         // TODO: Instead of putting this in labels, put this in a behaviors list
@@ -26,9 +30,9 @@ public class MoveTowardsDestinationBehavior extends Component {
 
         MoveTowardsDestinationBehavior behaviorToAdd =
                 new MoveTowardsDestinationBehavior();
-        entity.cData.put(MoveTowardsDestinationBehavior.class, behaviorToAdd);
+        //entity.cData.put(MoveTowardsDestinationBehavior.class, behaviorToAdd);
 
-        ensureRequirements(entity, behaviorToAdd);
+        behaviorToAdd.ensureRequirements(entity);
 
         behaviorToAdd.worldComponent =
                 (WorldComponent)entity.cData.get(WorldComponent.class);
@@ -46,30 +50,4 @@ public class MoveTowardsDestinationBehavior extends Component {
     //                         VelocityComponent vc,
     //                         DestinationComponent dc) {
     //}
-
-    /**
-     * For each component used by this behavior, check to see if component exists
-     * and add if not.
-     *
-     * @param entity
-     * @param behavior
-     */
-    public static void ensureRequirements(Entity entity, MoveTowardsDestinationBehavior behavior) {
-
-        for (int i = 0; i < COMPONENTS.length; i++) {
-
-            if (entity.cData.get(COMPONENTS[i]) == null) {
-                try {
-
-                    Object componentToAdd = COMPONENTS[i].newInstance();
-                    entity.cData.put(COMPONENTS[i], (Component)componentToAdd);
-
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }
