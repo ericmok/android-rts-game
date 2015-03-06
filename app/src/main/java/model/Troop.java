@@ -3,6 +3,7 @@ package model;
 import behaviors.AcquiresTargetInRangeBehavior;
 import behaviors.AttackTargetsInRangeBehavior;
 import behaviors.Behaviors;
+import behaviors.CastingProjectileCooldownBehavior;
 import behaviors.DiesBehavior;
 import behaviors.LivingComponent;
 import behaviors.MoveTowardsDestinationBehavior;
@@ -33,8 +34,9 @@ public class Troop extends Entity {
 
         DiesBehavior.mixin(this);
 
-        this.labels().add(Behaviors.BEHAVIOR_CASTS_PROJECTILE);
-        this.cData.put(ProjectileCasterComponent.class, new ProjectileCasterComponent());
+        //this.labels().add(Behaviors.BEHAVIOR_CASTS_PROJECTILE);
+        //this.cData.put(ProjectileCasterComponent.class, new ProjectileCasterComponent());
+        CastingProjectileCooldownBehavior.mixin(this);
 
         this.labels().add(Behaviors.BEHAVIOR_GETS_SELECTED);
         SelectionComponent selectionComponent = new SelectionComponent();
