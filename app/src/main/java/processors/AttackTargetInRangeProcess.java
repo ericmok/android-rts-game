@@ -23,7 +23,8 @@ public class AttackTargetInRangeProcess {
         for (int i = 0; i < engine.players.size(); i++) {
             Player player = engine.players.get(i);
 
-            ArrayList<Entity> troops = player.denorms.getListForLabel(Behaviors.BEHAVIOR_AQUIRES_TARGET_IN_RANGE);
+            //ArrayList<Entity> troops = player.denorms.getListForLabel(Behaviors.BEHAVIOR_AQUIRES_TARGET_IN_RANGE);
+            ArrayList<Entity> troops = player.denorms.getListForLabel(Behaviors.BEHAVIOR_ATTACKS_TARGET_IN_RANGE);
 
             for (int j = 0; j < troops.size(); j++) {
                 Entity troop = troops.get(j);

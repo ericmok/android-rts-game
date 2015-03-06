@@ -12,6 +12,8 @@ public class Behaviors {
 
     public static final int BEHAVIOR_AQUIRES_TARGET_IN_RANGE = 9;
 
+    public static final int BEHAVIOR_ATTACKS_TARGET_IN_RANGE = 90;
+
     public static final int BEHAVIOR_CASTS_ABILITIES = 10;
 
     public static final int BEHAVIOR_CASTS_PROJECTILE = 11;

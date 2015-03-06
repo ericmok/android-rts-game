@@ -1,17 +1,13 @@
 package model;
 
-import behaviors.AbilityComponent;
 import behaviors.AcquiresTargetInRangeBehavior;
+import behaviors.AttackTargetsInRangeBehavior;
 import behaviors.Behaviors;
-import behaviors.DestinationComponent;
 import behaviors.LivingComponent;
-import behaviors.MeleeAttackComponent;
 import behaviors.MoveTowardsDestinationBehavior;
 import behaviors.ProjectileCasterComponent;
 import behaviors.RadiusComponent;
 import behaviors.SelectionComponent;
-import behaviors.VelocityComponent;
-import behaviors.WorldComponent;
 
 /**
  * Created by eric on 11/9/14.
@@ -28,6 +24,7 @@ public class Troop extends Entity {
         //this.labels().add(Behaviors.BEHAVIOR_AQUIRES_TARGET_IN_RANGE);
 
         AcquiresTargetInRangeBehavior.mixin(this);
+        AttackTargetsInRangeBehavior.mixin(this);
 
         this.labels().add(Behaviors.BEHAVIOR_TAKES_DAMAGE_ON_COLLISION);
         this.labels().add(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
@@ -42,12 +39,14 @@ public class Troop extends Entity {
 
         MoveTowardsDestinationBehavior.mixin(this);
 
-        AbilityComponent abilityComponent = new AbilityComponent();
-        abilityComponent.abilities.add(Abilities.SPECIAL_ATTACK);
-        this.cData.put(AbilityComponent.class, abilityComponent);
+        //AbilityComponent abilityComponent = new AbilityComponent();
+        //abilityComponent.abilities.add(Abilities.SPECIAL_ATTACK);
+        //this.cData.put(AbilityComponent.class, abilityComponent);
 
-        LivingComponent livingComponent = new LivingComponent();
+        LivingComponent livingComponent = (LivingComponent)this.cData.get(LivingComponent.class);
         livingComponent.hitPoints = 5;
-        this.cData.put(LivingComponent.class, livingComponent);
+        //LivingComponent livingComponent = new LivingComponent();
+        //livingComponent.hitPoints = 5;
+        //this.cData.put(LivingComponent.class, livingComponent);
     }
 }
