@@ -3,6 +3,7 @@ package model;
 import behaviors.Behaviors;
 import behaviors.CastingProjectileCooldownBehavior;
 import behaviors.DestinationComponent;
+import behaviors.DiesBehavior;
 import behaviors.LivingComponent;
 import behaviors.MoveTowardsDestinationBehavior;
 import behaviors.VelocityComponent;
@@ -33,7 +34,8 @@ public class Projectile extends Entity {
         DestinationComponent destinationComponent = (DestinationComponent)this.cData.get(DestinationComponent.class);
         destinationComponent.onDestinationReached = Projectile.DIE_ON_DESTINATION_REACHED;
 
-        this.labels().add(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
+        //this.labels().add(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
+        DiesBehavior.mixin(this);
 
         reset();
     }

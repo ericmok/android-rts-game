@@ -3,6 +3,7 @@ package model;
 import behaviors.AcquiresTargetInRangeBehavior;
 import behaviors.AttackTargetsInRangeBehavior;
 import behaviors.Behaviors;
+import behaviors.DiesBehavior;
 import behaviors.LivingComponent;
 import behaviors.MoveTowardsDestinationBehavior;
 import behaviors.ProjectileCasterComponent;
@@ -27,8 +28,10 @@ public class Troop extends Entity {
         AttackTargetsInRangeBehavior.mixin(this);
 
         this.labels().add(Behaviors.BEHAVIOR_TAKES_DAMAGE_ON_COLLISION);
-        this.labels().add(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
+        //this.labels().add(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
         //this.cData.put(MeleeAttackComponent.class, new MeleeAttackComponent());
+
+        DiesBehavior.mixin(this);
 
         this.labels().add(Behaviors.BEHAVIOR_CASTS_PROJECTILE);
         this.cData.put(ProjectileCasterComponent.class, new ProjectileCasterComponent());
