@@ -66,8 +66,8 @@ public class TargetAcquisitionProcess {
                         WorldComponent wc1 = (WorldComponent)entity1.cData.get(WorldComponent.class);
                         WorldComponent wc2 = (WorldComponent)entity2.cData.get(WorldComponent.class);
 
-                        RadiusComponent rc1 = (RadiusComponent)entity1.cData.get(RadiusComponent.class);
-                        RadiusComponent rc2 = (RadiusComponent)entity2.cData.get(RadiusComponent.class);
+                        //RadiusComponent rc1 = (RadiusComponent)entity1.cData.get(RadiusComponent.class);
+                        //RadiusComponent rc2 = (RadiusComponent)entity2.cData.get(RadiusComponent.class);
 
                         MeleeAttackComponent cc2 = (MeleeAttackComponent)entity2.cData.get(MeleeAttackComponent.class);
 
