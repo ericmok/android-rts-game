@@ -1,6 +1,7 @@
 package model;
 
 import behaviors.AbilityComponent;
+import behaviors.AcquiresTargetInRangeBehavior;
 import behaviors.Behaviors;
 import behaviors.DestinationComponent;
 import behaviors.LivingComponent;
@@ -21,19 +22,16 @@ public class Troop extends Entity {
         this.labels().add(Behaviors.UNIT_TROOP);
         this.labels().add(Behaviors.BEHAVIOR_DRAWN_AS_TROOP);
 
-        WorldComponent worldComponent = new WorldComponent();
-        this.cData.put(WorldComponent.class, worldComponent);
-
-        VelocityComponent vc = new VelocityComponent();
-        this.cData.put(VelocityComponent.class, vc);
-
         RadiusComponent radiusComponent = new RadiusComponent();
         this.cData.put(RadiusComponent.class, radiusComponent);
 
-        this.labels().add(Behaviors.BEHAVIOR_AQUIRES_TARGET_IN_RANGE);
+        //this.labels().add(Behaviors.BEHAVIOR_AQUIRES_TARGET_IN_RANGE);
+
+        AcquiresTargetInRangeBehavior.mixin(this);
+
         this.labels().add(Behaviors.BEHAVIOR_TAKES_DAMAGE_ON_COLLISION);
         this.labels().add(Behaviors.BEHAVIOR_DIES_ON_NO_HP);
-        this.cData.put(MeleeAttackComponent.class, new MeleeAttackComponent());
+        //this.cData.put(MeleeAttackComponent.class, new MeleeAttackComponent());
 
         this.labels().add(Behaviors.BEHAVIOR_CASTS_PROJECTILE);
         this.cData.put(ProjectileCasterComponent.class, new ProjectileCasterComponent());
