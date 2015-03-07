@@ -1,20 +1,14 @@
 package structure;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.os.SystemClock;
 
-import behaviors.Behaviors;
-import model.Entity;
-
 import networking.Command;
-import processors.EngineSimulator;
 import processors.MapScrollFunction;
 import processors.ProjectileDrawerProcess;
 import processors.SelectionProcessor;
 import processors.TroopDrawerProcess;
-import utils.Vector2;
 
 public class GameLoop implements Runnable {
 	
@@ -133,8 +127,6 @@ public class GameLoop implements Runnable {
         MapScrollFunction.apply(currentGesture, game.gameInput, game.gameCamera);
 
         game.uiOverlay.processInput(game.gameCamera, currentGesture, game.gameInput);
-
-
 
 //        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
 //            if (selectionProcessor.userSelection.isEmpty()) {

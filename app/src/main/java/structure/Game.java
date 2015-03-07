@@ -7,10 +7,13 @@ import android.content.Context;
 
 import model.Engine;
 import networking.CommandHistory;
+import noteworthyengine.EngineDataPack;
 
 public class Game {
 
     public Engine engine = new Engine();
+
+    public EngineDataPack engineDataPack = new EngineDataPack();
 
 	private Game m = this;
 	
