@@ -1,19 +1,11 @@
 package noteworthyengine;
 
-import android.util.Log;
-
-import java.lang.reflect.*;
-
 import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
  */
 public class MovementNode extends Node {
-
-//    public final Field[] fields = {
-//        new Field("coords", Coords.class, null)
-//    };
 
     public Coords coords;
 
@@ -29,18 +21,6 @@ public class MovementNode extends Node {
 
     public MovementNode(Unit unit) {
         super(unit);
-
-        Node.addUnitFieldsForNode(unit, MovementNode.class, this);
-        //this.coords = (Coords) unit.field("coords");
-
-
-//        for (int i = 0; i < this.fields.length; i++) {
-//            this.fields[i].value = unit.field(fields[i].name);
-//        }
+        Node.instantiatePublicFieldsForUnit(unit, MovementNode.class, this);
     }
-
-//    @Override
-//    public Field[] getFields() {
-//        return fields;
-//    }
 }

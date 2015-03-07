@@ -16,7 +16,7 @@ public class Node {
         this.unit = unit;
     }
 
-    public static void addUnitFieldsForNode(Unit unit, Class klass, Node node) {
+    public static void instantiatePublicFieldsForUnit(Unit unit, Class klass, Node node) {
         java.lang.reflect.Field[] fields = klass.getFields();
         for (int i = 0; i < fields.length; i++) {
             try {
