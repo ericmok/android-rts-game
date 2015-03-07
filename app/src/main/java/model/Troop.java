@@ -5,6 +5,7 @@ import behaviors.AttackTargetsInRangeBehavior;
 import behaviors.Behaviors;
 import behaviors.CastingProjectileCooldownBehavior;
 import behaviors.DiesBehavior;
+import behaviors.GetsSelectedBehavior;
 import behaviors.LivingComponent;
 import behaviors.MoveTowardsDestinationBehavior;
 import behaviors.ProjectileCasterComponent;
@@ -23,18 +24,11 @@ public class Troop extends Entity {
 
         AcquiresTargetInRangeBehavior.mixin(this);
         AttackTargetsInRangeBehavior.mixin(this);
-
         TakesDamageOnCollisionBehavior.mixin(this);
-
         DiesBehavior.mixin(this);
-
         CastingProjectileCooldownBehavior.mixin(this);
-
         MoveTowardsDestinationBehavior.mixin(this);
-
-        this.labels().add(Behaviors.BEHAVIOR_GETS_SELECTED);
-        SelectionComponent selectionComponent = new SelectionComponent();
-        this.cData.put(SelectionComponent.class, selectionComponent);
+        GetsSelectedBehavior.mixin(this);
 
         LivingComponent livingComponent = (LivingComponent)this.cData.get(LivingComponent.class);
         livingComponent.hitPoints = 5;
