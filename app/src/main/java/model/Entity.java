@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import behaviors.Component;
+import systems.Node;
 
 /**
  * Created by eric on 10/30/14.
@@ -28,6 +29,17 @@ public class Entity implements Denormalizable<Integer> {
      * A map from Component classes to the component the entity has of that class
      */
     public Hashtable<Class<? extends Component>, Component> cData = new Hashtable<Class<? extends Component>, Component>(64);
+
+    //public Hashtable<String, Component> components = new Hashtable<String, Component>(64);
+    public Hashtable<String, Integer> flags = new Hashtable<String, Integer>(64);
+    public Hashtable<String, Node> nodes = new Hashtable<String, Node>(64);
+
+    public int flag(String flag) {
+        return flags.get(flag);
+    }
+    public Node node(String string) {
+        return nodes.get(string);
+    }
 
     public static enum Event {
         NONE, ADDED, REMOVED, CHANGED
