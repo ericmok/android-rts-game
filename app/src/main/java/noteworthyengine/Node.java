@@ -23,12 +23,18 @@ public class Node {
 
                 java.lang.reflect.Field field = fields[i];
 
-                if (field.get(node) == null) {
-                    Object instantiation = field.getType().newInstance();
-                    field.set(node, instantiation);
-                    unit.fields.put(field.getName(), instantiation);
-                } else {
-                    unit.fields.put(field.getName(), field.get(node));
+                if (unit.field(field.getName()) == null) {
+                    if (field.get(node) == null) {
+                        Object instantiation = field.getType().newInstance();
+                        field.set(node, instantiation);
+                        unit.fields.put(field.getName(), instantiation);
+                    } else {
+                        unit.fields.put(field.getName(), field.get(node));
+                    }
+                }
+                else {
+                    // If node already has the field in its dictionary, lets set the field
+                    field.set(node, unit.field(field.getName()));
                 }
 
             } catch (IllegalAccessException e) {

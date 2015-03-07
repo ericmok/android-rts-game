@@ -13,7 +13,8 @@ public class ReflectionTest extends ApplicationTestCase<Application> {
     public ReflectionTest() {
         super(Application.class);
 
-        Unit mech = Mech.createMech();
+        //Unit mech = Mech.createMech();
+        Unit mech = new Mech();
         assertNotNull(mech.field("coords"));
         assertNotNull(mech.field("velocity"));
         assertNotNull(mech.field("crowdSpeed"));
