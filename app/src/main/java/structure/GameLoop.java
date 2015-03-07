@@ -134,114 +134,116 @@ public class GameLoop implements Runnable {
 
         game.uiOverlay.processInput(game.gameCamera, currentGesture, game.gameInput);
 
-        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
-            if (selectionProcessor.userSelection.isEmpty()) {
-                //ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.BEHAVIOR_GETS_SELECTED);
-                ArrayList<Entity> selectableEntities = game.engine.currentPlayer.denorms.getListForLabel(Behaviors.BEHAVIOR_GETS_SELECTED);
-                selectionProcessor.process(selectableEntities, game.gameCamera,
-                        game.gameInput.touchPosition, SelectionProcessor.FN_SELECT);
-            }
-            else {
-                //UserChooseNewDestinationFunction.apply(selectionProcessor.userSelection, game.gameCamera, game.gameInput, SelectionProcessor.FN_DESELECT);
 
-                if (game.uiOverlay.currentButton != null) {
 
-                    // Construct fire command
-                    Vector2 temp = game.gamePool.vector2s.fetchMemory();
-                    game.gameCamera.getScreenToWorldCoords(temp, game.gameInput.touchPosition);
+//        if (currentGesture == GameInput.GESTURE_ON_SINGLE_TAP_UP) {
+//            if (selectionProcessor.userSelection.isEmpty()) {
+//                //ArrayList<Entity> selectableEntities = game.engine.entityDenormalizer.getListForLabel(Entity.BEHAVIOR_GETS_SELECTED);
+//                ArrayList<Entity> selectableEntities = game.engine.currentPlayer.denorms.getListForLabel(Behaviors.BEHAVIOR_GETS_SELECTED);
+//                selectionProcessor.process(selectableEntities, game.gameCamera,
+//                        game.gameInput.touchPosition, SelectionProcessor.FN_SELECT);
+//            }
+//            else {
+//                //UserChooseNewDestinationFunction.apply(selectionProcessor.userSelection, game.gameCamera, game.gameInput, SelectionProcessor.FN_DESELECT);
+//
+//                if (game.uiOverlay.currentButton != null) {
+//
+//                    // Construct fire command
+//                    Vector2 temp = game.gamePool.vector2s.fetchMemory();
+//                    game.gameCamera.getScreenToWorldCoords(temp, game.gameInput.touchPosition);
+//
+//                    newCommand = game.gamePool.commands.fetchMemory();
+//
+//                    newCommand.command = Command.FIRE;
+//                    newCommand.timeStamp = ct;
+//
+//                    newCommand.selection.clear();
+//
+//                    for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
+//                        newCommand.selection.add(selectionProcessor.userSelection.get(i));
+//                    }
+//                    newCommand.vec.copy(temp);
+//
+//                    game.gamePool.vector2s.recycleMemory(temp);
+//                }
+//                else {
+//                    // Construct move command
+//                    Vector2 temp = game.gamePool.vector2s.fetchMemory();
+//                    game.gameCamera.getScreenToWorldCoords(temp, game.gameInput.touchPosition);
+//
+//                    newCommand = game.gamePool.commands.fetchMemory();
+//
+//                    newCommand.command = Command.MOVE;
+//                    newCommand.timeStamp = ct;
+//
+//                    newCommand.selection.clear();
+//
+//                    // Copy the selection, (we might have to replay the command)
+//                    for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
+//                        newCommand.selection.add(selectionProcessor.userSelection.get(i));
+//                    }
+//                    newCommand.vec.copy(temp);
+//
+//                    game.gamePool.vector2s.recycleMemory(temp);
+//                }
+//
+//                for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
+//                    Entity entity = selectionProcessor.userSelection.get(i);
+//                    SelectionProcessor.FN_DESELECT.apply(entity);
+//                }
+//
+//                // This has to go somewhere
+//                selectionProcessor.userSelection.clear();
+//            }
+//        }
 
-                    newCommand = game.gamePool.commands.fetchMemory();
-
-                    newCommand.command = Command.FIRE;
-                    newCommand.timeStamp = ct;
-
-                    newCommand.selection.clear();
-
-                    for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
-                        newCommand.selection.add(selectionProcessor.userSelection.get(i));
-                    }
-                    newCommand.vec.copy(temp);
-
-                    game.gamePool.vector2s.recycleMemory(temp);
-                }
-                else {
-                    // Construct move command
-                    Vector2 temp = game.gamePool.vector2s.fetchMemory();
-                    game.gameCamera.getScreenToWorldCoords(temp, game.gameInput.touchPosition);
-
-                    newCommand = game.gamePool.commands.fetchMemory();
-
-                    newCommand.command = Command.MOVE;
-                    newCommand.timeStamp = ct;
-
-                    newCommand.selection.clear();
-
-                    // Copy the selection, (we might have to replay the command)
-                    for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
-                        newCommand.selection.add(selectionProcessor.userSelection.get(i));
-                    }
-                    newCommand.vec.copy(temp);
-
-                    game.gamePool.vector2s.recycleMemory(temp);
-                }
-
-                for (int i = 0; i < selectionProcessor.userSelection.size(); i++) {
-                    Entity entity = selectionProcessor.userSelection.get(i);
-                    SelectionProcessor.FN_DESELECT.apply(entity);
-                }
-
-                // This has to go somewhere
-                selectionProcessor.userSelection.clear();
-            }
-        }
-
-        if (newCommand != null) {
-
-            // There was a command, so we need to send a network request
-            // and affect local copy of state
-            game.commandHistory.commands.add(newCommand);
-        }
+//        if (newCommand != null) {
+//
+//            // There was a command, so we need to send a network request
+//            // and affect local copy of state
+//            game.commandHistory.commands.add(newCommand);
+//        }
 
         // If server updated the engine, then replay all commands in the history.
         // Then ack the commands that come before the servers time frame as these
         // commands are officially processed by the server
 
         // Since we have no network right now, the engine is never diff'd
-        if (1 == 0) {
-
-            // Engine got updated with new state, time to "rebase"
-            double replayTime = game.engine.gameTime;
-
-            for (int i = 0; i < game.commandHistory.commands.size(); i++) {
-                Command replayCommand = game.commandHistory.commands.get(i);
-
-                EngineSimulator.changeModelWithCommand(game.engine, replayCommand);
-
-                // Interpolate between the command's timeStamp and engine's current time
-                EngineSimulator.interpolate(game.engine, replayCommand.timeStamp,
-                        replayCommand.timeStamp - replayTime);
-
-                // Move time forward towards the command's time (possibly to current Time)
-                replayTime = replayCommand.timeStamp;
-            }
-        }
-        else {
-
-            // Engine has no server process, continue running naively
-            if (newCommand != null) EngineSimulator.changeModelWithCommand(game.engine, newCommand);
-
-            // If there was no command, we still want an interpolation after all
-            EngineSimulator.interpolate(game.engine, ct, dt);
-        }
+//        if (1 == 0) {
+//
+//            // Engine got updated with new state, time to "rebase"
+//            double replayTime = game.engine.gameTime;
+//
+//            for (int i = 0; i < game.commandHistory.commands.size(); i++) {
+//                Command replayCommand = game.commandHistory.commands.get(i);
+//
+//                EngineSimulator.changeModelWithCommand(game.engine, replayCommand);
+//
+//                // Interpolate between the command's timeStamp and engine's current time
+//                EngineSimulator.interpolate(game.engine, replayCommand.timeStamp,
+//                        replayCommand.timeStamp - replayTime);
+//
+//                // Move time forward towards the command's time (possibly to current Time)
+//                replayTime = replayCommand.timeStamp;
+//            }
+//        }
+//        else {
+//
+//            // Engine has no server process, continue running naively
+//            if (newCommand != null) EngineSimulator.changeModelWithCommand(game.engine, newCommand);
+//
+//            // If there was no command, we still want an interpolation after all
+//            EngineSimulator.interpolate(game.engine, ct, dt);
+//        }
 
         game.engine.gameTime = ct;
 
-        // When the network returns the state, commands will be considered ack'd or not
-        // Non-ack'd commands will have to be replayed on the networks version of the engine state
-        // Since there is no network, we'll consider commands ack'd immediately
-        while (!game.commandHistory.commands.isEmpty()) {
-            game.commandHistory.ack(ct);
-        }
+//        // When the network returns the state, commands will be considered ack'd or not
+//        // Non-ack'd commands will have to be replayed on the networks version of the engine state
+//        // Since there is no network, we'll consider commands ack'd immediately
+//        while (!game.commandHistory.commands.isEmpty()) {
+//            game.commandHistory.ack(ct);
+//        }
 
         // TODO: Set the engine state to the network state
 
