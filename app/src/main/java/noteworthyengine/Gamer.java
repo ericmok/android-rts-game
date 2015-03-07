@@ -79,7 +79,7 @@ public class Gamer {
 
             // TODO: Recycle
             //GameEntities.recycle(toRemove);
-            //UnitPool.recycle(toRemove);
+            UnitPool.recycle(toRemove);
         }
         unitsToRemove.clear();
     }

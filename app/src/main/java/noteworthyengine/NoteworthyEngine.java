@@ -7,7 +7,24 @@ package noteworthyengine;
  */
 public class NoteworthyEngine {
 
-    public NoteworthyEngine() {
+    public int frameNumber = 0;
 
+    public NoteworthyEngine() {
+    }
+
+    /**
+     * Takes game commands
+     */
+    public void exec(EngineDataPack engineDataPack) {
+
+    }
+
+    public void step(EngineDataPack engineDataPack, double ct, double dt) {
+
+        engineDataPack.eachGamerAddQueuedUnits();
+
+        engineDataPack.eachGanerRemoveQueuedUnits();
+
+        frameNumber += 1;
     }
 }

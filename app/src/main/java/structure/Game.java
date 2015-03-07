@@ -1,18 +1,26 @@
 package structure;
 
+import model.EngineLoader;
 import model.GameEntities;
 
 import android.app.Activity;
 import android.content.Context;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+
 import model.Engine;
 import networking.CommandHistory;
 import noteworthyengine.EngineDataPack;
+import noteworthyengine.EngineDataPackLoader;
+import noteworthyengine.NoteworthyEngine;
 
 public class Game {
 
     public Engine engine = new Engine();
 
+    public NoteworthyEngine noteworthyEngine = new NoteworthyEngine();
     public EngineDataPack engineDataPack = new EngineDataPack();
 
 	private Game m = this;
@@ -104,8 +112,28 @@ public class Game {
 
         engine = new Engine();
 
-        LevelLoader levelLoader = new LevelLoader(this.context);
-        levelLoader.load(engine, "level0.json");
+        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
+
+//        try {
+//            EngineLoader.load(engine, "self", levelFileLoader.jsonFromFile("level0.json"));
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+        try {
+            String json = levelFileLoader.jsonFromFile("level0.json");
+            engineDataPack.loadFromJson(json);
+        }
+        catch (IOException io) {
+           io.printStackTrace();
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         uiOverlay.buttons.add(GameEntities.attackButtonPool.fetchMemory());
         uiOverlay.buttons.add(GameEntities.defendButtonPool.fetchMemory());

@@ -71,7 +71,7 @@ public class GameLoop implements Runnable {
                 //this.performGameLogic(currentTick, tickDifference);
 
                 // Semi-fixed step
-                this.performGameLogic(currentTick, TARGET_MILLISEC_PER_FRAME);
+                this.performGameLogicV3(currentTick, TARGET_MILLISEC_PER_FRAME);
 
                 // Chew! Chew! Accumulator Yum!
                 accumulator -= TARGET_MILLISEC_PER_FRAME;
@@ -112,7 +112,17 @@ public class GameLoop implements Runnable {
 		
 		debugLog("GameLoop", "Is finished.");
 	}
-	
+
+    private void performGameLogicV3(long currentTick, long elapsedTime) {
+        double ct = currentTick * GameSettings.UNIT_TIME_MULTIPLIER;
+        double dt = elapsedTime * GameSettings.UNIT_TIME_MULTIPLIER;
+
+        int currentGesture = game.gameInput.takeCurrentGesture();
+
+        game.noteworthyEngine.exec(game.engineDataPack);
+        game.noteworthyEngine.step(game.engineDataPack, ct, dt);
+    }
+
 	private void performGameLogic(long currentTick, long elapsedTime) {
 
         double ct = currentTick * GameSettings.UNIT_TIME_MULTIPLIER;

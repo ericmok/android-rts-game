@@ -1,46 +1,56 @@
 package noteworthyengine;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import structure.LevelFileLoader;
 
 /**
  * Created by eric on 3/6/15.
  */
 public class EngineDataPackLoader {
 
-    public static boolean loadFromJson(EngineDataPack engineDataPack, String mainPlayerName, String json) throws JSONException {
+    public static boolean loadFromJson(EngineDataPack engineDataPack, String json)
+            throws JSONException {
 
-//        JSONObject jObj = new JSONObject(json);
-//
-//        this.gameTime = jObj.getDouble("time");
-//
-//        JSONArray playersArr = jObj.getJSONArray("players");
-//
-//        for (int jp = 0; jp < playersArr.length(); jp++) {
-//
-//            JSONObject jPlayerObj = playersArr.getJSONObject(jp);
-//
-//            Gamer player = new Gamer(jPlayerObj.getString("name"));
-//            player.team = jPlayerObj.getInt("team");
-//
-//            engine.addPlayer(player);
-//
-//            if (player.name.equals(mainPlayerName)) {
-//                engine.currentPlayer = player;
-//            } else {
-//                // Allied or enemy team
-//            }
-//
-//            JSONArray troopArr = jPlayerObj.getJSONArray("troop");
-//
-//            for (int i = 0; i < troopArr.length(); i++) {
-//                JSONObject jEntity = troopArr.getJSONObject(i);
-//
-//                Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
-//
-//                WorldComponent pc =
-//                        ((WorldComponent) troop.cData.get(WorldComponent.class));
+        JSONObject jObj = new JSONObject(json);
+
+        engineDataPack.gameTime = jObj.getDouble("time");
+
+        JSONArray playersArr = jObj.getJSONArray("players");
+
+        for (int jp = 0; jp < playersArr.length(); jp++) {
+
+            JSONObject jPlayerObj = playersArr.getJSONObject(jp);
+
+            Gamer player = new Gamer(jPlayerObj.getString("name"));
+            player.team = jPlayerObj.getInt("team");
+
+            engineDataPack.addGamer(player);
+
+            if (player.name.equals("self")) {
+                engineDataPack.currentGamer = player;
+            } else {
+                // Allied or enemy team
+            }
+
+            JSONArray troopArr = jPlayerObj.getJSONArray("troop");
+
+            for (int i = 0; i < troopArr.length(); i++) {
+                JSONObject jEntity = troopArr.getJSONObject(i);
+
+                //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
+                Unit troopy = UnitPool.troopyMemoryPool.fetchMemory();
+
+                Coords coords = (Coords)troopy.field("coords");
+                coords.pos.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
+                coords.rot.setDegrees(jEntity.getDouble("r"));
+
+                player.filters.addDenormalizable(troopy);
 //
 //                pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
 //                pc.rot.setDegrees(jEntity.getDouble("r"));
@@ -56,9 +66,9 @@ public class EngineDataPackLoader {
 //                }
 //
 //                player.denorms.addDenormalizable(troop);
-//            }
-//        }
-//
+            }
+        }
+
         return true;
     }
 }

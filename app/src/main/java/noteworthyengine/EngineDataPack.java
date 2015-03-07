@@ -1,5 +1,7 @@
 package noteworthyengine;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 /**
@@ -36,5 +38,9 @@ public class EngineDataPack {
             Gamer player = gamers.get(i);
             player.removeQueued();
         }
+    }
+
+    public void loadFromJson(String json) throws JSONException {
+        EngineDataPackLoader.loadFromJson(this, json);
     }
 }
