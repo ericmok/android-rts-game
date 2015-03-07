@@ -31,7 +31,7 @@ public class Gamer {
     public int team = 0;
 
     // Player-wise filters permit higher resolution filtering
-    public DenormalizedDataSet<Unit, Integer> filters = new DenormalizedDataSet<Unit, Integer>(32, 300);
+    public DenormalizedDataSet<Unit, Integer> filters = new DenormalizedDataSet<Unit, Integer>(32, 127);
 
 
     public Gamer(String name) {
