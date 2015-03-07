@@ -16,22 +16,22 @@ public class EngineDataPack {
     }
 
 
-    public void addPlayer(Gamer gamer) {
+    public void addGamer(Gamer gamer) {
         gamers.add(gamer);
     }
 
-    public void removePlayer(Gamer player) {
+    public void removeGamer(Gamer player) {
         gamers.remove(player);
     }
 
-    public void eachPlayerProcessAdded() {
+    public void eachGamerAddQueuedUnits() {
         for (int i = 0; i < gamers.size(); i++) {
             Gamer player = gamers.get(i);
             player.addQueued();
         }
     }
 
-    public void eachPlayerProcessRemoved() {
+    public void eachGanerRemoveQueuedUnits() {
         for (int i = 0; i < gamers.size(); i++) {
             Gamer player = gamers.get(i);
             player.removeQueued();
