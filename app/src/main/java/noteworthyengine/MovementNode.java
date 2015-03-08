@@ -7,6 +7,8 @@ import utils.Vector2;
  */
 public class MovementNode extends Node {
 
+    public String _name = "movementNode";
+
     public Coords coords;
 
     public Vector2 velocity;
@@ -21,6 +23,7 @@ public class MovementNode extends Node {
 
     public MovementNode(Unit unit) {
         super(unit);
+        unit.nodes.put("movementNode", this);
         Node.instantiatePublicFieldsForUnit(unit, MovementNode.class, this);
     }
 }

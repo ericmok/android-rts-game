@@ -19,5 +19,7 @@ public class ReflectionTest extends ApplicationTestCase<Application> {
         assertNotNull(mech.field("velocity"));
         assertNotNull(mech.field("crowdSpeed"));
         assertTrue((Double)mech.field("crowdSpeed") == 1);
+
+        assertNull(mech.field("_name"));
     }
 }

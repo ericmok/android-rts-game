@@ -3,9 +3,7 @@ package noteworthyengine;
 /**
  * Created by eric on 3/6/15.
  */
-public class Node {
-
-    public static final Field[] NO_FIELDS = {};
+public abstract class Node {
 
     public Unit unit;
 
@@ -16,6 +14,10 @@ public class Node {
         this.unit = unit;
     }
 
+    private static boolean isNotPublishedField(java.lang.reflect.Field field) {
+        return field.getName().charAt(0) == '_';
+    }
+
     public static void instantiatePublicFieldsForUnit(Unit unit, Class klass, Node node) {
         java.lang.reflect.Field[] fields = klass.getFields();
         for (int i = 0; i < fields.length; i++) {
@@ -23,12 +25,20 @@ public class Node {
 
                 java.lang.reflect.Field field = fields[i];
 
+                if (isNotPublishedField(field)) { continue; }
+
                 if (unit.field(field.getName()) == null) {
+                    // If node's dictionary doesn't have it, add it
+
                     if (field.get(node) == null) {
+                        // If public instance variable is not defined, create new instance
+
                         Object instantiation = field.getType().newInstance();
                         field.set(node, instantiation);
                         unit.fields.put(field.getName(), instantiation);
+
                     } else {
+                        // If public instance variable has value, copy it to dictionary
                         unit.fields.put(field.getName(), field.get(node));
                     }
                 }
