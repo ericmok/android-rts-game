@@ -62,4 +62,15 @@ public class DrawList2DItem {
 	
 	public DrawList2DItem() {
 	}
+
+    public void copy(DrawList2DItem other) {
+        this.position.copy(other.position);
+        this.width = other.width;
+        this.height = other.height;
+        this.angle = other.angle;
+        this.color = other.color;
+
+        this.animationName = other.animationName;
+        this.animationProgress = other.animationProgress;
+    }
 }

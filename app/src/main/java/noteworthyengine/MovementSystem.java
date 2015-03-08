@@ -8,19 +8,47 @@ import utils.Vector2;
  */
 public class MovementSystem extends System {
 
+    public QueueMutationList<MovementNode> movementNodes = new QueueMutationList<MovementNode>(127);
+
     public MovementSystem() {
     }
 
-    public void step(QueueMutationList<MovementNode> movementNodes, double ct, double dt) {
+    @Override
+    public void addNode(Node node) {
+        if (node.getClass() == MovementNode.class) {
+            movementNodes.queueToAdd((MovementNode)node);
+        }
+    }
 
+    @Override
+    public void removeNode(Node node) {
+        if (node.getClass() == MovementNode.class) {
+            movementNodes.queueToRemove((MovementNode)node);
+        }
+    }
+
+    @Override
+    public void flushQueues() {
         movementNodes.flushQueues();
+    }
+
+    public void step(double ct, double dt) {
 
         for (int i = 0; i < movementNodes.items.size(); i++) {
-            Vector2 position = movementNodes.items.get(i).coords.pos;
-            Vector2 velocity = movementNodes.items.get(i).velocity;
+
+            MovementNode movementNode = movementNodes.items.get(i);
+
+            Vector2 position = movementNode.coords.pos;
+            Vector2 velocity = movementNode.velocity;
+            Vector2 fieldForce = movementNode.fieldForce;
+
+            movementNode.acceleration.zero();
+            movementNode.acceleration.translate(fieldForce.x, fieldForce.y);
 
             velocity.x += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
             velocity.y += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
+
+            //velocity.translate(movementNode.acceleration.x, movementNode.acceleration.y);
 
             position.translate(velocity.x * dt, velocity.y * dt);
         }

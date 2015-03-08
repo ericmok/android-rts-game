@@ -12,8 +12,8 @@ public class Mech extends Unit {
         MovementNode movementNode = new MovementNode(this);
         RenderNode renderNode = new RenderNode(this);
 
-        renderNode.width.v = 0.7;
-        renderNode.height.v = 0.7;
+        renderNode.width.v = 0.7f;
+        renderNode.height.v = 0.7f;
     }
 
     public static Unit createMech() {

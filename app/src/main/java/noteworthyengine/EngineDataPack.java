@@ -19,9 +19,13 @@ public class EngineDataPack {
 
     public QueueMutationList<Unit> units = new QueueMutationList<Unit>(127);
 
-    // TODO: Systems go here
-    public QueueMutationList<MovementNode> movementNodes = new QueueMutationList<MovementNode>(127);
-    public QueueMutationList<RenderNode> renderNodes = new QueueMutationList<RenderNode>(127);
+    // TODO: Systems go here?
+    public ArrayList<System> systems = new ArrayList<System>(8);
+
+    // TODO: Move into system? Denormalize?
+    //public QueueMutationList<MovementNode> movementNodes = new QueueMutationList<MovementNode>(127);
+    //public QueueMutationList<RenderNode> renderNodes = new QueueMutationList<RenderNode>(127);
+
 
     /// Global filters on units
     //
@@ -96,24 +100,30 @@ public class EngineDataPack {
 //    }
 
     public void addNode(Node node) {
-        if (node.getClass() == MovementNode.class) {
-            //this.movementNodes.items.add((MovementNode) node);
-            this.movementNodes.queueToAdd((MovementNode) node);
-        }
-        if (node.getClass() == RenderNode.class) {
-            //this.movementNodes.items.add((MovementNode) node);
-            this.renderNodes.queueToAdd((RenderNode) node);
+//        if (node.getClass() == MovementNode.class) {
+//            //this.movementNodes.items.add((MovementNode) node);
+//            this.movementNodes.queueToAdd((MovementNode) node);
+//        }
+//        if (node.getClass() == RenderNode.class) {
+//            //this.movementNodes.items.add((MovementNode) node);
+//            this.renderNodes.queueToAdd((RenderNode) node);
+//        }
+        for (int i = 0; i < systems.size(); i++) {
+            systems.get(i).addNode(node);
         }
     }
 
     public void removeNode(Node node) {
-        if (node.getClass() == MovementNode.class) {
-            //this.movementNodes.items.remove((MovementNode) node);
-            this.movementNodes.queueToRemove((MovementNode) node);
-        }
-        if (node.getClass() == RenderNode.class) {
-            //this.movementNodes.items.add((MovementNode) node);
-            this.renderNodes.queueToRemove((RenderNode) node);
+//        if (node.getClass() == MovementNode.class) {
+//            //this.movementNodes.items.remove((MovementNode) node);
+//            this.movementNodes.queueToRemove((MovementNode) node);
+//        }
+//        if (node.getClass() == RenderNode.class) {
+//            //this.movementNodes.items.add((MovementNode) node);
+//            this.renderNodes.queueToRemove((RenderNode) node);
+//        }
+        for (int i = 0; i < systems.size(); i++) {
+            systems.get(i).removeNode(node);
         }
     }
 
@@ -141,8 +151,13 @@ public class EngineDataPack {
 
     public void flushQueues() {
         units.flushQueues();
-        movementNodes.flushQueues();
-        renderNodes.flushQueues();
+
+        //movementNodes.flushQueues();
+        //renderNodes.flushQueues();
+
+        for (int i = 0; i < systems.size(); i++) {
+            systems.get(i).flushQueues();
+        }
     }
 
     public void loadFromJson(String json) throws JSONException {

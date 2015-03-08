@@ -21,5 +21,6 @@ public class ReflectionTest extends ApplicationTestCase<Application> {
         assertTrue((Double)mech.field("crowdSpeed") == 1);
 
         assertNull(mech.field("_name"));
+        assertNull(mech.field("NAME"));
     }
 }

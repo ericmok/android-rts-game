@@ -5,4 +5,7 @@ package noteworthyengine;
  */
 public class IntegerPtr {
     public int v = 0;
+
+    public IntegerPtr() {
+    }
 }

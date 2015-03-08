@@ -50,9 +50,21 @@ public class EngineDataPackLoader {
                 coords.pos.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 coords.rot.setDegrees(jEntity.getDouble("r"));
 
-                //engineDataPack.addUnit(troopy);
-                //engineDataPack.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
+                FieldNode fieldNode = (FieldNode)troopy.node(FieldNode._NAME);
+                fieldNode.isFieldControl.v = 0;
+
                 engineDataPack.addUnit(troopy);
+                //engineDataPack.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
+                //engineDataPack.addUnit(troopy);
+
+                // Debug
+                FieldUnit fieldUnit = new FieldUnit();
+                engineDataPack.addUnit(fieldUnit);
+                fieldNode = (FieldNode) fieldUnit.node(FieldNode._NAME);
+                fieldNode.coords.pos.copy(coords.pos);
+                fieldUnit.fieldControl.position.set(coords.pos.x, coords.pos.y);
+                fieldUnit.fieldControl.direction.set(0, 1);
+
                 //engineDataPack.unitsByNodes.addDenormalizable(troopy);
                 //player.filters.addDenormalizable(troopy);
 //

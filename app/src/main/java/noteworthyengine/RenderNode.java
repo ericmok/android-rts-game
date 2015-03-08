@@ -11,10 +11,15 @@ public class RenderNode extends Node {
     public String _name = _NAME;
 
     public Coords coords;
-    public DoublePtr width = new DoublePtr() {{ v = 1; }};
-    public DoublePtr height = new DoublePtr() {{ v = 1; }};
+    public DoublePtr z;
+
+    public IntegerPtr color = new IntegerPtr() {{ v = Color.WHITE; }};
+
+    public FloatPtr width = new FloatPtr() {{ v = 1; }};
+    public FloatPtr height = new FloatPtr() {{ v = 1; }};
+
     public String animationName;
-    public DoublePtr animationProgress;
+    public IntegerPtr animationProgress;
     public IntegerPtr team;
 
     public RenderNode(Unit unit) {

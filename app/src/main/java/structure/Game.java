@@ -12,9 +12,13 @@ import java.io.IOException;
 
 import model.Engine;
 import networking.CommandHistory;
+import noteworthyengine.DrawCompat;
 import noteworthyengine.EngineDataPack;
 import noteworthyengine.EngineDataPackLoader;
+import noteworthyengine.FieldSystem;
+import noteworthyengine.MovementSystem;
 import noteworthyengine.NoteworthyEngine;
+import noteworthyengine.RenderSystem;
 
 public class Game {
 
@@ -81,6 +85,8 @@ public class Game {
 		
 		graphics = new Graphics(parentActivity);
 
+        loadEngine();
+
 		this.setGameState(State.LOADING);
 		loadLevel();
 		this.setGameState(State.LOADED);
@@ -107,7 +113,17 @@ public class Game {
 	//public ArrayList<Updateable> getUpdateList() {
 		//return updateList;
 	//}
-	
+
+    public void loadEngine() {
+        MovementSystem movementSystem = new MovementSystem();
+        RenderSystem renderSystem = new RenderSystem(engineDataPack, new DrawCompat(this));
+        FieldSystem fieldSystem = new FieldSystem();
+
+        engineDataPack.systems.add(movementSystem);
+        engineDataPack.systems.add(renderSystem);
+        engineDataPack.systems.add(fieldSystem);
+    }
+
 	public void loadLevel() {
 
         engine = new Engine();

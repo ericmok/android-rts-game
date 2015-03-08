@@ -11,9 +11,7 @@ public class NoteworthyEngine {
 
     public int frameNumber = 0;
 
-    ArrayList<System> systems = new ArrayList<System>(16);
-
-    MovementSystem movementSystem = new MovementSystem();
+    public MovementSystem movementSystem = new MovementSystem();
 
     public NoteworthyEngine() {
         //systems.add(new RenderSystem());
@@ -30,7 +28,14 @@ public class NoteworthyEngine {
 
         //engineDataPack.addQueuedUnits();
 
-        movementSystem.step(engineDataPack.movementNodes, ct, dt);
+        //movementSystem.step(engineDataPack.movementNodes, ct, dt);
+
+        for (int i = 0; i < engineDataPack.systems.size(); i++) {
+            System system = engineDataPack.systems.get(i);
+
+            system.flushQueues();
+            system.step(ct, dt);
+        }
 
         //engineDataPack.removeQueuedUnits();
 
