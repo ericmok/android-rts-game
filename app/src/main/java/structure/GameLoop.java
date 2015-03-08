@@ -1,10 +1,13 @@
 package structure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.SystemClock;
 
 import networking.Command;
+import noteworthyengine.RenderNode;
+import noteworthyengine.Unit;
 import processors.MapScrollFunction;
 import processors.ProjectileDrawerProcess;
 import processors.SelectionProcessor;
@@ -121,6 +124,35 @@ public class GameLoop implements Runnable {
 
         game.noteworthyEngine.exec(game.engineDataPack);
         game.noteworthyEngine.step(game.engineDataPack, ct, dt);
+
+        List<TemporaryDrawList2DItem> tempSprites = game.graphics.drawLists.temporarySprites;
+
+        RewriteOnlyArray<DrawList2DItem> spriteAllocater = game.graphics.drawLists.regularSprites.lockWritableBuffer();
+        spriteAllocater.resetWriteIndex();
+
+        // Draw buttons
+        // Draw troops
+
+        //ArrayList<Unit> unitsToRender = game.engineDataPack.unitsByNodes.getListForLabel(RenderNode.class);
+        ArrayList<Unit> unitsToRender = game.engineDataPack.units;
+        for (int i = 0; i < unitsToRender.size(); i++) {
+            RenderNode renderNode = (RenderNode)unitsToRender.get(i).node(RenderNode._NAME);
+            DrawList2DItem drawList2DItem = spriteAllocater.takeNextWritable();
+            drawList2DItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
+            drawList2DItem.animationProgress = 0;
+            drawList2DItem.position.x = renderNode.coords.pos.x;
+            drawList2DItem.position.y = renderNode.coords.pos.y;
+            drawList2DItem.position.z = 0;
+            drawList2DItem.width = (float)renderNode.width.v;
+            drawList2DItem.height = (float)renderNode.height.v;
+        }
+
+        // Flush graphics at the same time so settings are sync'd
+        game.graphics.drawLists.regularSprites.unlockWritableBuffer();
+        game.graphics.drawLists.regularSprites.finalizeUpdate();
+
+        game.graphics.setCameraPositionAndScale((float)game.gameCamera.x, (float)game.gameCamera.y, (float)game.gameCamera.scale);
+        game.graphics.flushCameraModifications();
     }
 
 	private void performGameLogic(long currentTick, long elapsedTime) {

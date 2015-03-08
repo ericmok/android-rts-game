@@ -50,7 +50,9 @@ public class EngineDataPackLoader {
                 coords.pos.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 coords.rot.setDegrees(jEntity.getDouble("r"));
 
-                player.filters.addDenormalizable(troopy);
+                engineDataPack.units.add(troopy);
+                //engineDataPack.unitsByNodes.addDenormalizable(troopy);
+                //player.filters.addDenormalizable(troopy);
 //
 //                pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
 //                pc.rot.setDegrees(jEntity.getDouble("r"));

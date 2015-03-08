@@ -6,12 +6,15 @@ package noteworthyengine;
 public abstract class Node {
 
     public Unit unit;
+    public String _name = "Node";
 
     public Node() {
     }
 
-    public Node(Unit unit) {
+    public Node(String name, Unit unit) {
         this.unit = unit;
+        this._name = name;
+        unit.addNode(this._name, this);
     }
 
     private static boolean isNotPublishedField(java.lang.reflect.Field field) {

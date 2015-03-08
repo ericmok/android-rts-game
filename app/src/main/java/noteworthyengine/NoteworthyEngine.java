@@ -1,5 +1,7 @@
 package noteworthyengine;
 
+import java.util.ArrayList;
+
 /**
  * Created by eric on 3/6/15.
  *
@@ -9,7 +11,10 @@ public class NoteworthyEngine {
 
     public int frameNumber = 0;
 
+    ArrayList<System> systems = new ArrayList<System>(16);
+
     public NoteworthyEngine() {
+        //systems.add(new RenderSystem());
     }
 
     /**
@@ -21,9 +26,9 @@ public class NoteworthyEngine {
 
     public void step(EngineDataPack engineDataPack, double ct, double dt) {
 
-        engineDataPack.eachGamerAddQueuedUnits();
+        engineDataPack.addQueuedUnits();
 
-        engineDataPack.eachGanerRemoveQueuedUnits();
+        engineDataPack.removeQueuedUnits();
 
         frameNumber += 1;
     }
