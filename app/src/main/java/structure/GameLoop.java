@@ -6,6 +6,7 @@ import java.util.List;
 import android.os.SystemClock;
 
 import networking.Command;
+import noteworthyengine.QueueMutationList;
 import noteworthyengine.RenderNode;
 import noteworthyengine.Unit;
 import processors.MapScrollFunction;
@@ -134,7 +135,7 @@ public class GameLoop implements Runnable {
         // Draw troops
 
         //ArrayList<Unit> unitsToRender = game.engineDataPack.unitsByNodes.getListForLabel(RenderNode.class);
-        ArrayList<Unit> unitsToRender = game.engineDataPack.units;
+        QueueMutationList<Unit> unitsToRender = game.engineDataPack.units;
         for (int i = 0; i < unitsToRender.size(); i++) {
             RenderNode renderNode = (RenderNode)unitsToRender.get(i).node(RenderNode._NAME);
             DrawList2DItem drawList2DItem = spriteAllocater.takeNextWritable();

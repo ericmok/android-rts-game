@@ -50,7 +50,9 @@ public class EngineDataPackLoader {
                 coords.pos.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 coords.rot.setDegrees(jEntity.getDouble("r"));
 
-                engineDataPack.units.add(troopy);
+                //engineDataPack.addUnit(troopy);
+                //engineDataPack.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
+                engineDataPack.addUnit(troopy);
                 //engineDataPack.unitsByNodes.addDenormalizable(troopy);
                 //player.filters.addDenormalizable(troopy);
 //
@@ -70,6 +72,8 @@ public class EngineDataPackLoader {
 //                player.denorms.addDenormalizable(troop);
             }
         }
+
+        engineDataPack.flushQueues();
 
         return true;
     }

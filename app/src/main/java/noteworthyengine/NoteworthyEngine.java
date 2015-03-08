@@ -13,6 +13,8 @@ public class NoteworthyEngine {
 
     ArrayList<System> systems = new ArrayList<System>(16);
 
+    MovementSystem movementSystem = new MovementSystem();
+
     public NoteworthyEngine() {
         //systems.add(new RenderSystem());
     }
@@ -26,9 +28,11 @@ public class NoteworthyEngine {
 
     public void step(EngineDataPack engineDataPack, double ct, double dt) {
 
-        engineDataPack.addQueuedUnits();
+        //engineDataPack.addQueuedUnits();
 
-        engineDataPack.removeQueuedUnits();
+        movementSystem.step(engineDataPack.movementNodes, ct, dt);
+
+        //engineDataPack.removeQueuedUnits();
 
         frameNumber += 1;
     }

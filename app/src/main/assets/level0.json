@@ -5,21 +5,25 @@
             name: self,
             team: 0,
             troop: [
-                { x: 0, y: -2, r: 90, dest: {x: 0, y:0} },
-                { x: -1.5, y: -2, r: 90, dest: {x: 0, y:0} },
-                { x: 1.5, y: -2, r: 90, dest: {x: 0, y:0} },
-                { x: -3, y: -2, r: 90, dest: {x: 0, y:0} },
-                { x: 3, y: -2, r: 90, dest: {x: 0, y:0} },
+                { x: 0, y: -2, r: 90, dest: {x: 0, y:0}, battalion: 0 },
+                { x: -1.5, y: -2, r: 90, dest: {x: 0, y:0}, battalion: 0 },
+                { x: 1.5, y: -2, r: 90, dest: {x: 0, y:0}, battalion: 0 },
+                { x: -3, y: -2, r: 90, dest: {x: 0, y:0}, battalion: 0 },
+                { x: 3, y: -2, r: 90, dest: {x: 0, y:0}, battalion: 0 },
 
-                { x: 0, y: -3.5, r: 90, dest: {x: 0, y:0} },
-                { x: -1.5, y: -3.5, r: 90, dest: {x: 0, y:0} },
-                { x: 1.5, y: -3.5, r: 90, dest: {x: 0, y:0} },
-                { x: -3, y: -3.5, r: 90, dest: {x: 0, y:0} },
-                { x: 3, y: -3.5, r: 90, dest: {x: 0, y:0} },
+                { x: 0, y: -3.5, r: 90, dest: {x: 0, y:0}, battalion: 1 },
+                { x: -1.5, y: -3.5, r: 90, dest: {x: 0, y:0}, battalion: 1 },
+                { x: 1.5, y: -3.5, r: 90, dest: {x: 0, y:0}, battalion: 1 },
+                { x: -3, y: -3.5, r: 90, dest: {x: 0, y:0}, battalion: 1 },
+                { x: 3, y: -3.5, r: 90, dest: {x: 0, y:0}, battalion: 1 },
 
-                { x: 0, y: -5, r: 90, dest: {x: 0, y:0} },
-                { x: -1.5, y: -5, r: 90, dest: {x: 0, y:0} },
-                { x: 1.5, y: -5, r: 90, dest: {x: 0, y:0} }
+                { x: 0, y: -5, r: 90, dest: {x: 0, y:0}, battalion: 2 },
+                { x: -1.5, y: -5, r: 90, dest: {x: 0, y:0}, battalion: 2 },
+                { x: 1.5, y: -5, r: 90, dest: {x: 0, y:0}, battalion: 2 }
+            ],
+            archer: [
+            ],
+            artillery: [
             ]
         },
         {

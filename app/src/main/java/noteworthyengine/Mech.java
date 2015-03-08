@@ -10,6 +10,10 @@ public class Mech extends Unit {
     public Mech() {
         this.name = NAME;
         MovementNode movementNode = new MovementNode(this);
+        RenderNode renderNode = new RenderNode(this);
+
+        renderNode.width.v = 0.7;
+        renderNode.height.v = 0.7;
     }
 
     public static Unit createMech() {
