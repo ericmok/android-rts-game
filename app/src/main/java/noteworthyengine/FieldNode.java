@@ -10,8 +10,8 @@ public class FieldNode extends Node {
     public static final String _NAME = "fieldNode";
     public String _name = _NAME;
 
-    public Coords coords;
-    public IntegerPtr isFieldControl = new IntegerPtr() {{ v = 0; }};
+    public FieldArrowNode _fieldArrowNode;
+    public FieldAgentNode _fieldAgentNode;
 
     public FieldNode(Unit unit) {
         super(_NAME, unit);
@@ -23,4 +23,40 @@ public class FieldNode extends Node {
         Node.instantiatePublicFieldsForUnit(unit, FieldNode.class, this);
     }
 
+
+    public static class FieldArrowNode extends Node {
+        public static final String _NAME = "fieldArrowNode";
+        public String _name = _NAME;
+
+        public Coords coords;
+
+        public FieldArrowNode(Unit unit) {
+            super(_NAME, unit);
+            Node.instantiatePublicFieldsForUnit(unit, FieldArrowNode.class, this);
+        }
+
+        public FieldArrowNode(String name, Unit unit) {
+            super(name, unit);
+            Node.instantiatePublicFieldsForUnit(unit, FieldArrowNode.class, this);
+        }
+    }
+
+
+    public static class FieldAgentNode extends Node {
+        public static final String _NAME = "fieldAgentNode";
+        public String _name = _NAME;
+
+        public Coords coords;
+        public Vector2 fieldForce;
+
+        public FieldAgentNode(Unit unit) {
+            super(_NAME, unit);
+            Node.instantiatePublicFieldsForUnit(unit, FieldAgentNode.class, this);
+        }
+
+        public FieldAgentNode(String name, Unit unit) {
+            super(name, unit);
+            Node.instantiatePublicFieldsForUnit(unit, FieldAgentNode.class, this);
+        }
+    }
 }

@@ -32,6 +32,9 @@ public class GameLoop implements Runnable {
 	private long tickDifference = 0;
 
     private SelectionProcessor selectionProcessor;
+
+    public static final double TIME_PER_FRAME = 1.0 / TARGET_MILLISEC_PER_FRAME;
+    public double accumulatedFrames = 0;
 	
 	private final void debugLog(String a, String b) {
 		//Log.i(a, b);
@@ -121,10 +124,12 @@ public class GameLoop implements Runnable {
         double ct = currentTick * GameSettings.UNIT_TIME_MULTIPLIER;
         double dt = elapsedTime * GameSettings.UNIT_TIME_MULTIPLIER;
 
+        accumulatedFrames += TIME_PER_FRAME;
+
         int currentGesture = game.gameInput.takeCurrentGesture();
 
         game.noteworthyEngine.exec(game.engineDataPack);
-        game.noteworthyEngine.step(game.engineDataPack, ct, dt);
+        game.noteworthyEngine.step(game.engineDataPack, accumulatedFrames, TIME_PER_FRAME);
 
 //        List<TemporaryDrawList2DItem> tempSprites = game.graphics.drawLists.temporarySprites;
 //

@@ -1,9 +1,16 @@
 package noteworthyengine;
 
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Hashtable;
+
 /**
  * Created by eric on 3/7/15.
  */
 public abstract class System {
+
+    public System() {
+    }
 
     public abstract void addNode(Node node);
     public abstract void removeNode(Node node);

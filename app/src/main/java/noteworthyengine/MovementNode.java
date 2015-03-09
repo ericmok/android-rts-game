@@ -20,6 +20,8 @@ public class MovementNode extends Node {
     public Vector2 separationForce;
     public Vector2 enemyAttractionForce;
 
+    public DoublePtr maxSpeed = new DoublePtr() {{ v = 1; }};
+
     public double crowdSpeed = 1;
 
     public MovementNode(Unit unit) {

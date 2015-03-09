@@ -28,6 +28,7 @@ public class Platoon extends Unit {
         renderNode.color.v = Color.WHITE;
 
         FieldNode fieldNode = new FieldNode(this);
-        fieldNode.isFieldControl.v = 0;
+        fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
+        //fieldNode._movementNode = movementNode;
     }
 }

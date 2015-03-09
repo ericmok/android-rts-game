@@ -30,8 +30,20 @@ public class Orientation extends Vector2 {
 		this.cacheDegrees = degree;
 		this.setDegrees(degree);
 	}
-	
-	/**
+
+    @Override
+    public Vector2 set(double d, double e) {
+        this.setDirection(d, e);
+        return this;
+    }
+
+    @Override
+    public Vector2 set(double[] vec) {
+        this.setDirection(vec[0], vec[1]);
+        return this;
+    }
+
+    /**
 	 * Sets the orientation and also sets normalized
 	 * @param x
 	 * @param y

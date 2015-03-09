@@ -45,12 +45,15 @@ public class MovementSystem extends System {
             movementNode.acceleration.zero();
             movementNode.acceleration.translate(fieldForce.x, fieldForce.y);
 
-            velocity.x += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
-            velocity.y += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
+            //velocity.x += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
+            //velocity.y += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
 
-            //velocity.translate(movementNode.acceleration.x, movementNode.acceleration.y);
+            velocity.translate(movementNode.acceleration.x, movementNode.acceleration.y);
+            velocity.withClampMagnitude(movementNode.maxSpeed.v);
 
             position.translate(velocity.x * dt, velocity.y * dt);
+
+            movementNode.coords.rot.setDirection(velocity);
         }
     }
 }
