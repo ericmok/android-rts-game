@@ -21,5 +21,7 @@ public class ArrowCommand extends Unit {
         RenderNode renderNode = new RenderNode(this);
         renderNode.animationName = DrawList2DItem.ANIMATION_TRIGGER_FIELDS_EXISTING;
         renderNode.color.v = Color.WHITE;
+        renderNode.width.v = 3;
+        renderNode.height.v = 3;
     }
 }
