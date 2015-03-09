@@ -54,7 +54,7 @@ public class UIOverlay {
         }
     }
 
-    public void draw(GameCamera gameCamera, RewriteOnlyArray<DrawList2DItem> sprites) {
+    public void draw(GameCamera gameCamera, RewriteOnlyArray<Sprite2dDef> sprites) {
         float offset = 0;
 
         for (int i = 0; i < buttons.size(); i++) {
@@ -80,7 +80,7 @@ public class UIOverlay {
             bc.touchPoint.x = buttonInWorldCoords.x;
             bc.touchPoint.y = buttonInWorldCoords.y + offset * i;
 
-            DrawList2DItem sprite = sprites.takeNextWritable();
+            Sprite2dDef sprite = sprites.takeNextWritable();
             sprite.animationName = bc.texture;
             sprite.position.x = buttonInWorldCoords.x;
             sprite.position.y = buttonInWorldCoords.y + offset * i;

@@ -51,6 +51,7 @@ public class MovementSystem extends System {
             velocity.translate(movementNode.acceleration.x, movementNode.acceleration.y);
             velocity.withClampMagnitude(movementNode.maxSpeed.v);
 
+            movementNode.gfxOldPosition.copy(position);
             position.translate(velocity.x * dt, velocity.y * dt);
 
             movementNode.coords.rot.setDirection(velocity);

@@ -2,12 +2,11 @@ package noteworthyengine;
 
 import java.util.List;
 
-import structure.DoubleBufferredArrayList;
 import structure.DoubleBufferredRewriteOnlyArray;
-import structure.DrawList2DItem;
+import structure.Sprite2dDef;
 import structure.Game;
 import structure.RewriteOnlyArray;
-import structure.TemporaryDrawList2DItem;
+import structure.TemporarySprite2dDef;
 import structure.TextDrawItem;
 import utils.MemoryPool;
 
@@ -17,10 +16,10 @@ import utils.MemoryPool;
  */
 public class DrawCompat {
 
-    private RewriteOnlyArray<DrawList2DItem> spriteAllocator;
-    private List<TemporaryDrawList2DItem> tempSprites;
+    private RewriteOnlyArray<Sprite2dDef> spriteAllocator;
+    private List<TemporarySprite2dDef> tempSprites;
     private DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItem;
-    private MemoryPool<TemporaryDrawList2DItem> tempSpritesMemoryPool;
+    private MemoryPool<TemporarySprite2dDef> tempSpritesMemoryPool;
 
     private Game game;
 
@@ -41,13 +40,13 @@ public class DrawCompat {
         game.graphics.drawLists.regularSprites.finalizeUpdate();
     }
 
-    public void drawSprite(DrawList2DItem drawList2DItem) {
-        DrawList2DItem toFill = spriteAllocator.takeNextWritable();
-        toFill.copy(drawList2DItem);
+    public void drawSprite(Sprite2dDef sprite2dDef) {
+        Sprite2dDef toFill = spriteAllocator.takeNextWritable();
+        toFill.copy(sprite2dDef);
     }
 
     // TODO:
-    public void drawTemporarySprite(TemporaryDrawList2DItem temporaryDrawList2DItem) {
+    public void drawTemporarySprite(TemporarySprite2dDef temporaryDrawList2DItem) {
 
     }
 }

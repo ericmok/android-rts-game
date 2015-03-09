@@ -2,6 +2,8 @@ package noteworthyengine;
 
 import android.graphics.Color;
 
+import utils.Vector2;
+
 /**
  * Created by eric on 3/7/15.
  */
@@ -11,7 +13,10 @@ public class RenderNode extends Node {
     public String _name = _NAME;
 
     public Coords coords;
+    public Vector2 gfxOldPosition;
     public DoublePtr z;
+
+    public IntegerPtr isGfxInterpolated = new IntegerPtr() {{ v = 0; }};
 
     public IntegerPtr color = new IntegerPtr() {{ v = Color.WHITE; }};
 

@@ -10,9 +10,9 @@ public class GamePool {
 
 	public MemoryPool<TriggerField> triggerFields;
 	
-	public MemoryPool<DrawList2DItem> drawItems;
+	public MemoryPool<Sprite2dDef> drawItems;
 	
-	public MemoryPool<TemporaryDrawList2DItem> temporaryDrawItems;
+	public MemoryPool<TemporarySprite2dDef> temporaryDrawItems;
 
     public MemoryPool<Vector2> vector2s;
 
@@ -28,9 +28,9 @@ public class GamePool {
 	
 	public void allocate() {
 
-		drawItems = new MemoryPool<DrawList2DItem>(DrawList2DItem.class, 1024);
+		drawItems = new MemoryPool<Sprite2dDef>(Sprite2dDef.class, 1024);
 
-		temporaryDrawItems = new MemoryPool<TemporaryDrawList2DItem>(TemporaryDrawList2DItem.class, 1024);
+		temporaryDrawItems = new MemoryPool<TemporarySprite2dDef>(TemporarySprite2dDef.class, 1024);
 
 		triggerFields = new MemoryPool<TriggerField>(TriggerField.class, 512);
 

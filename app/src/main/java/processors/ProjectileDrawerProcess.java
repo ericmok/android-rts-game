@@ -11,10 +11,10 @@ import model.Entity;
 import behaviors.LivingComponent;
 import model.Player;
 import behaviors.WorldComponent;
-import structure.DrawList2DItem;
+import structure.Sprite2dDef;
 import structure.GamePool;
 import structure.RewriteOnlyArray;
-import structure.TemporaryDrawList2DItem;
+import structure.TemporarySprite2dDef;
 import utils.Orientation;
 
 /**
@@ -22,8 +22,8 @@ import utils.Orientation;
  */
 public class ProjectileDrawerProcess {
 
-    public static final void process(RewriteOnlyArray<DrawList2DItem> spriteAllocater,
-                                     List<TemporaryDrawList2DItem> tempSprites,
+    public static final void process(RewriteOnlyArray<Sprite2dDef> spriteAllocater,
+                                     List<TemporarySprite2dDef> tempSprites,
                                      GamePool gamePool,
                                      Player player,
                                      double dt) {
@@ -36,10 +36,10 @@ public class ProjectileDrawerProcess {
             DestinationComponent dc = (DestinationComponent)projectile.cData.get(DestinationComponent.class);
             LivingComponent lc = (LivingComponent)projectile.cData.get(LivingComponent.class);
 
-            DrawList2DItem item = spriteAllocater.takeNextWritable();
+            Sprite2dDef item = spriteAllocater.takeNextWritable();
             item.position.x = worldComponent.pos.x;
             item.position.y = worldComponent.pos.y;
-            item.animationName = DrawList2DItem.ANIMATION_PROJECTILE_BASIC;
+            item.animationName = Sprite2dDef.ANIMATION_PROJECTILE_BASIC;
             item.width = 1;
             item.height = 1;
             item.animationProgress = 0;
@@ -49,8 +49,8 @@ public class ProjectileDrawerProcess {
 
 
             if (lc.hitPoints <= 0) {
-                TemporaryDrawList2DItem tempSprite = gamePool.temporaryDrawItems.fetchMemory();
-                tempSprite.animationName = DrawList2DItem.ANIMATION_PROJECTILE_EXPLOSION;
+                TemporarySprite2dDef tempSprite = gamePool.temporaryDrawItems.fetchMemory();
+                tempSprite.animationName = Sprite2dDef.ANIMATION_PROJECTILE_EXPLOSION;
                 tempSprite.progress.progress = 0;
                 tempSprite.progress.duration = 600;
                 tempSprite.animationProgress = 0;

@@ -15,6 +15,8 @@ import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.util.Log;
 
+import utils.Vector3;
+
 public class GameRenderer implements GLSurfaceView.Renderer  {
 
 	private GameRenderer m = this;
@@ -67,6 +69,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 		game.graphics.load();
 
+        previousTick = System.nanoTime() / 1000000;
 	}
 
     /**
@@ -154,16 +157,16 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	@SuppressLint("NewApi")
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		if (!surfaceIsReady)
-			return;
+//		if (!surfaceIsReady)
+//			return;
 
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-	
-		long startTick = SystemClock.uptimeMillis();
+		//long startTick = SystemClock.uptimeMillis();
+        long startTick = System.nanoTime() / 1000000;
 		tickDifference = startTick - previousTick;
 		previousTick = startTick; // Leapfrog previous tick
 		
 		synchronized(drawingMutex) {
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
             float[] cameraMatrix = game.graphics.getCameraMatrix();
 
@@ -172,29 +175,36 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
             Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
 
-			game.graphics.getSimpleSpriteBatch().beginDrawing();	
+			game.graphics.getSimpleSpriteBatch().beginDrawing();
 
-			RewriteOnlyArray<DrawList2DItem> sprites = game.graphics.drawLists.regularSprites.swapBuffer();
-	
+			RewriteOnlyArray<Sprite2dDef> sprites = game.graphics.drawLists.regularSprites.swapBuffer();
+
 			sprites.resetIterator();
-			
+
 			while (sprites.canIterateNext()) {
-				
-				DrawList2DItem sprite = sprites.getNextIteratorItem();
-				game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix, 
-															(float)sprite.position.x, (float)sprite.position.y, 
-															sprite.angle, 
+
+				Sprite2dDef sprite = sprites.getNextIteratorItem();
+                Vector3 temp = sprite.position;
+
+                if (sprite.isGfxInterpolated) {
+                    //sprite.calculateGfxInterpolation(Math.min(1, tickDifference / 12)); // tickDifference / 12ms
+                    sprite.calculateGfxInterpolation(0.8);
+                    temp = sprite.gfxInterpolation;
+                }
+				game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
+															(float)temp.x, (float)temp.y,
+															sprite.angle,
 															sprite.width, sprite.height,
 															game.graphics.getTextureLoader().animations.get(sprite.animationName).
 															maxFrameUnderCriteria(sprite.animationProgress).glTexture,
 															sprite.color);
-				
+
 			}
-			
+
 			// Need to buffer this
-			List<TemporaryDrawList2DItem> tempSprites = game.graphics.drawLists.temporarySprites;
+			List<TemporarySprite2dDef> tempSprites = game.graphics.drawLists.temporarySprites;
 			for (int i = 0; i < tempSprites.size(); i++) {
-				TemporaryDrawList2DItem tempSprite = tempSprites.get(i);
+				TemporarySprite2dDef tempSprite = tempSprites.get(i);
 				if (tempSprite.progress.progress > 99) {
 					tempSprites.remove(i);
 					game.gamePool.temporaryDrawItems.recycleMemory(tempSprite);
@@ -210,10 +220,10 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 															maxFrameUnderCriteria((int)tempSprite.progress.progress).glTexture,
 															tempSprite.color);
 			}
-			
+
 			RewriteOnlyArray<TextDrawItem> textDrawItems = game.graphics.drawLists.textDrawItems.swapBuffer();
 			textDrawItems.resetIterator();
-			
+
 			while (textDrawItems.canIterateNext()) {
 				TextDrawItem textDrawItem = textDrawItems.getNextIteratorItem();
 				float accumulator = 0;
@@ -225,13 +235,13 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 							(float)textDrawItem.angle,
 							textDrawItem.height * texture.widthRatio, textDrawItem.height,
 							texture.glTexture,
-							textDrawItem.color);	
+							textDrawItem.color);
 					accumulator += texture.widthRatio * 0.1f;
 				}
 			}
 
 			game.graphics.getSimpleSpriteBatch().endDrawing();
-						
+
 		}
 	}
 	

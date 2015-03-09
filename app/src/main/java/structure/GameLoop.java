@@ -1,14 +1,10 @@
 package structure;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.os.SystemClock;
 
 import networking.Command;
-import noteworthyengine.QueueMutationList;
-import noteworthyengine.RenderNode;
-import noteworthyengine.Unit;
 import processors.MapScrollFunction;
 import processors.ProjectileDrawerProcess;
 import processors.SelectionProcessor;
@@ -290,9 +286,9 @@ public class GameLoop implements Runnable {
 
         // Begin graphics mutations
         // (The mutations don't take affect immediately until explicit finalizations)
-            List<TemporaryDrawList2DItem> tempSprites = game.graphics.drawLists.temporarySprites;
+            List<TemporarySprite2dDef> tempSprites = game.graphics.drawLists.temporarySprites;
 
-            RewriteOnlyArray<DrawList2DItem> spriteAllocater = game.graphics.drawLists.regularSprites.lockWritableBuffer();
+            RewriteOnlyArray<Sprite2dDef> spriteAllocater = game.graphics.drawLists.regularSprites.lockWritableBuffer();
             spriteAllocater.resetWriteIndex();
 
             // Draw buttons when abilities are available

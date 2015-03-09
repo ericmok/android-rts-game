@@ -1,10 +1,6 @@
 package noteworthyengine;
 
-import java.util.ArrayList;
-
-import structure.DrawList2DItem;
-import structure.RewriteOnlyArray;
-import structure.TemporaryDrawList2DItem;
+import structure.Sprite2dDef;
 
 /**
  * Created by eric on 3/7/15.
@@ -12,7 +8,7 @@ import structure.TemporaryDrawList2DItem;
 public class RenderSystem extends System {
     public EngineDataPack engineDataPack;
     public DrawCompat drawCompat;
-    private DrawList2DItem drawList2DItemTemp = new DrawList2DItem();
+    private Sprite2dDef sprite2dDefTemp = new Sprite2dDef();
 
     public QueueMutationList<RenderNode> renderNodes = new QueueMutationList<RenderNode>(127);
 
@@ -59,19 +55,28 @@ public class RenderSystem extends System {
 //            drawList2DItem.width = (float)renderNode.width.v;
 //            drawList2DItem.height = (float)renderNode.height.v;
 
-            drawList2DItemTemp.animationName = renderNode.animationName;
-            drawList2DItemTemp.animationProgress = renderNode.animationProgress.v;
+            sprite2dDefTemp.animationName = renderNode.animationName;
+            sprite2dDefTemp.animationProgress = renderNode.animationProgress.v;
 
-            drawList2DItemTemp.position.x = renderNode.coords.pos.x;
-            drawList2DItemTemp.position.y = renderNode.coords.pos.y;
-            drawList2DItemTemp.position.z = renderNode.z.v;
-            drawList2DItemTemp.angle = (float)renderNode.coords.rot.getDegrees();
+            if (renderNode.isGfxInterpolated.v == 1) {
+                sprite2dDefTemp.oldPosition.x = renderNode.gfxOldPosition.x;
+                sprite2dDefTemp.oldPosition.y = renderNode.gfxOldPosition.y;
+                sprite2dDefTemp.oldPosition.z = renderNode.z.v;
+                sprite2dDefTemp.isGfxInterpolated = true;
+            } else {
+                sprite2dDefTemp.isGfxInterpolated = false;
+            }
 
-            drawList2DItemTemp.color = renderNode.color.v;
-            drawList2DItemTemp.width = renderNode.width.v;
-            drawList2DItemTemp.height = renderNode.height.v;
+            sprite2dDefTemp.position.x = renderNode.coords.pos.x;
+            sprite2dDefTemp.position.y = renderNode.coords.pos.y;
+            sprite2dDefTemp.position.z = renderNode.z.v;
+            sprite2dDefTemp.angle = (float)renderNode.coords.rot.getDegrees();
 
-            drawCompat.drawSprite(drawList2DItemTemp);
+            sprite2dDefTemp.color = renderNode.color.v;
+            sprite2dDefTemp.width = renderNode.width.v;
+            sprite2dDefTemp.height = renderNode.height.v;
+
+            drawCompat.drawSprite(sprite2dDefTemp);
         }
 
         drawCompat.endDraw();

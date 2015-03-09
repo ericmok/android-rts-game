@@ -12,12 +12,12 @@ import behaviors.MeleeAttackComponent;
 import model.Player;
 import behaviors.WorldComponent;
 import behaviors.SelectionComponent;
-import structure.DrawList2DItem;
+import structure.Sprite2dDef;
 import structure.GamePool;
 import structure.RewriteOnlyArray;
 
 import model.Entity;
-import structure.TemporaryDrawList2DItem;
+import structure.TemporarySprite2dDef;
 import utils.Orientation;
 
 /**
@@ -27,8 +27,8 @@ public class TroopDrawerProcess {
 
     public static int progress = 0;
 
-    public static final void process(RewriteOnlyArray<DrawList2DItem> spriteAllocater,
-                                     List<TemporaryDrawList2DItem> tempSprites,
+    public static final void process(RewriteOnlyArray<Sprite2dDef> spriteAllocater,
+                                     List<TemporarySprite2dDef> tempSprites,
                                      GamePool gamePool,
                                      Player player,
                                      double dt) {
@@ -44,10 +44,10 @@ public class TroopDrawerProcess {
             LivingComponent lc = (LivingComponent)entity.cData.get(LivingComponent.class);
 
             if (lc.hitPoints <= 0) {
-                TemporaryDrawList2DItem tempSprite = gamePool.temporaryDrawItems.fetchMemory();
+                TemporarySprite2dDef tempSprite = gamePool.temporaryDrawItems.fetchMemory();
                 tempSprite.color = Color.argb(240, 255, 255, 255);
                 tempSprite.angle = 90;
-                tempSprite.animationName = DrawList2DItem.ANIMATION_TROOPS_DYING;
+                tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
                 tempSprite.progress.progress = 0;
                 tempSprite.width = 1;
                 tempSprite.height = 1;
@@ -56,9 +56,9 @@ public class TroopDrawerProcess {
                 tempSprites.add(tempSprite);
             }
             else {
-                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+                Sprite2dDef drawItem = spriteAllocater.takeNextWritable();
 
-                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
+                drawItem.animationName = Sprite2dDef.ANIMATION_TROOPS_IDLING;
                 drawItem.animationProgress = 0;
                 drawItem.color = player.color();
                 drawItem.position.x = wc.pos.x;
@@ -71,8 +71,8 @@ public class TroopDrawerProcess {
             SelectionComponent sc = (SelectionComponent)entity.cData.get(SelectionComponent.class);
 
             if (sc.isSelected) {
-                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
-                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SELECTED;
+                Sprite2dDef drawItem = spriteAllocater.takeNextWritable();
+                drawItem.animationName = Sprite2dDef.ANIMATION_TROOPS_SELECTED;
                 drawItem.animationProgress = TroopDrawerProcess.progress;
                 drawItem.color = player.color();
                 drawItem.position.x = wc.pos.x;
@@ -85,8 +85,8 @@ public class TroopDrawerProcess {
             MeleeAttackComponent mac = (MeleeAttackComponent)entity.cData.get(MeleeAttackComponent.class);
 
             if (mac.event == MeleeAttackComponent.Event.COOLDOWN) {
-                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
-                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_COOLDOWN;
+                Sprite2dDef drawItem = spriteAllocater.takeNextWritable();
+                drawItem.animationName = Sprite2dDef.ANIMATION_TROOPS_COOLDOWN;
                 drawItem.animationProgress = 0;
                 drawItem.color = player.color();
                 drawItem.position.x = wc.pos.x - 0.97 * wc.rot.x;
@@ -109,8 +109,8 @@ public class TroopDrawerProcess {
 
                 // Show Attack Swing
 
-                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
-                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_SWING;
+                Sprite2dDef drawItem = spriteAllocater.takeNextWritable();
+                drawItem.animationName = Sprite2dDef.ANIMATION_TROOPS_SWING;
                 drawItem.animationProgress = (int)(100 * (mac.attackSwingProgress / mac.attackSwingTime));
                 drawItem.color = player.color();//Color.argb((int)(128 * Math.pow(2, (mac.attackSwingProgress / mac.attackSwingTime))), 255, 255, 255);
 
@@ -133,7 +133,7 @@ public class TroopDrawerProcess {
                 WorldComponent targetedWC = (WorldComponent)mac.targetsInRange.get(0).cData.get(WorldComponent.class);
 
                 drawItem = spriteAllocater.takeNextWritable();
-                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_TARGETED;
+                drawItem.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
                 drawItem.animationProgress = 0;
                 drawItem.color = player.color();
                 drawItem.position.x = targetedWC.pos.x;
@@ -147,7 +147,7 @@ public class TroopDrawerProcess {
                 double swingProgress = (mac.attackSwingProgress / mac.attackSwingTime);
 
                 drawItem = spriteAllocater.takeNextWritable();
-                drawItem.animationName = DrawList2DItem.ANIMATION_TROOPS_PROJECTILE;
+                drawItem.animationName = Sprite2dDef.ANIMATION_TROOPS_PROJECTILE;
                 drawItem.animationProgress = (int) (100 * swingProgress);
                 drawItem.color = Color.argb(240, 240, 210, 120);
                 //drawItem.position.x = targetedWC.pos.x;
@@ -165,9 +165,9 @@ public class TroopDrawerProcess {
             // For debugging!
             DestinationComponent dc = (DestinationComponent)entity.cData.get(DestinationComponent.class);
             if (dc.hasDestination) {
-                DrawList2DItem drawItem = spriteAllocater.takeNextWritable();
+                Sprite2dDef drawItem = spriteAllocater.takeNextWritable();
 
-                drawItem.animationName = DrawList2DItem.ANIMATION_RETICLE_TAP;
+                drawItem.animationName = Sprite2dDef.ANIMATION_RETICLE_TAP;
                 drawItem.animationProgress = 0;
                 drawItem.color = player.color();
                 drawItem.position.x = dc.dest.x;

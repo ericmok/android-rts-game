@@ -2,7 +2,7 @@ package model;
 
 import behaviors.Behaviors;
 import behaviors.ButtonComponent;
-import structure.DrawList2DItem;
+import structure.Sprite2dDef;
 
 /**
  * Created by eric on 11/3/14.
@@ -16,7 +16,7 @@ public class Buttons {
         public AttackButton() {
             ButtonComponent bc = new ButtonComponent(Buttons.S_ATTACK);
             bc.position = 0;
-            bc.texture = DrawList2DItem.ANIMATION_BUTTONS_ATTACK;
+            bc.texture = Sprite2dDef.ANIMATION_BUTTONS_ATTACK;
             bc.size.y = 0.6f;
 
             this.cData.put(ButtonComponent.class, bc);
@@ -31,7 +31,7 @@ public class Buttons {
         public DefendButton() {
             ButtonComponent bc = new ButtonComponent(Buttons.DEFEND);
             bc.position = 1;
-            bc.texture = DrawList2DItem.ANIMATION_BUTTONS_DEFEND;
+            bc.texture = Sprite2dDef.ANIMATION_BUTTONS_DEFEND;
             bc.size.y = 0.6f;
 
             this.cData.put(ButtonComponent.class, bc);

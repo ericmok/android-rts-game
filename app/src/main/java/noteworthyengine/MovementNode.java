@@ -11,6 +11,7 @@ public class MovementNode extends Node {
     public String _name = _NAME;
 
     public Coords coords;
+    public Vector2 gfxOldPosition;
 
     public Vector2 velocity;
     public Vector2 acceleration;
