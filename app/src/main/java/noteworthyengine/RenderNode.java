@@ -3,11 +3,19 @@ package noteworthyengine;
 import android.graphics.Color;
 
 import utils.Vector2;
+import utils.VoidFunc;
 
 /**
  * Created by eric on 3/7/15.
  */
 public class RenderNode extends Node {
+
+    public static final VoidFunc<RenderSystem> _DO_NOTHING = new VoidFunc<RenderSystem>() {
+        @Override
+        public void apply(RenderSystem element) {
+
+        }
+    };
 
     public static final String _NAME = "renderNode";
     public String _name = _NAME;
@@ -26,6 +34,8 @@ public class RenderNode extends Node {
     public String animationName;
     public IntegerPtr animationProgress;
     public IntegerPtr team;
+
+    public VoidFunc<RenderSystem> onDraw = _DO_NOTHING;
 
     public RenderNode(Unit unit) {
         super(_NAME, unit);

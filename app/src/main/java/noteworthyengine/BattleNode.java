@@ -2,7 +2,6 @@ package noteworthyengine;
 
 import java.util.ArrayList;
 
-import model.Entity;
 import utils.Vector2;
 import utils.VoidFunc;
 
@@ -11,73 +10,47 @@ import utils.VoidFunc;
  */
 public class BattleNode extends Node {
 
-    public String[] dependencies = {
-        "position",
-        "velocity"
+    public static final String _NAME = "battleNode";
+
+    public static final VoidFunc<BattleNode> _DONOTHING = new VoidFunc<BattleNode>() {
+        @Override
+        public void apply(BattleNode element) { }
     };
 
-    public String[] fields = {
-        "startingHp",
-        "hp",
-        "armor",
+    public static final Gamer _NO_GAMER = new Gamer("none");
 
-        "isAttackable",
+    public Gamer gamer = _NO_GAMER;
 
-        "attackRange",
-        "targetAcquisitionRange",
-
-        "attackDamage",
-        "attackSwingTime",
-        "attackCooldown",
-
-        "onAttack",
-        "onDie",
-        "onTargetAcquired",
-
-        "onHpHit",
-        "onArmorHit",
-
-        "events"
-    };
-
-    public Entity entity;
-
-    public Vector2 position;
+    public Coords coords;
     public Vector2 velocity;
 
-    public double startingHp;
-    public double hp;
-    public double armor;
+    public DoublePtr startingHp = new DoublePtr() {{ v = 1; }};
+    public DoublePtr hp = new DoublePtr() {{ v = 1; }};
+    public DoublePtr armor;
 
-    public boolean isAttackable;
+    public IntegerPtr isAttackable = new IntegerPtr() {{ v = 1; }};
 
-    public double attackRange;
-    public double targetAcquisitionRange;
+    public DoublePtr attackRange = new DoublePtr() {{ v = 1; }};
+    public DoublePtr targetAcquisitionRange = new DoublePtr() {{ v = 1; }};
 
-    public double attackDamage;
-    public double attackSwingTime;
-    public double attackCooldown;
+    public DoublePtr attackDamage = new DoublePtr() {{ v = 1; }};
+    public DoublePtr attackSwingTime = new DoublePtr() {{ v = 1; }};;
+    public DoublePtr attackCooldown = new DoublePtr() {{ v = 1; }};;
 
-    public VoidFunc<Void> onAttack;
-    public VoidFunc<Void> onDie;
-    public VoidFunc<Void> onTargetAcquired;
+    public VoidFunc<BattleNode> onAttack = _DONOTHING;
+    public VoidFunc<BattleNode> onDie = _DONOTHING;
+    public VoidFunc<BattleNode> onTargetAcquired = _DONOTHING;
 
-    public VoidFunc<Double> onHpHit;
-    public VoidFunc<Double> onArmorHit;
+    public VoidFunc<BattleNode> onHpHit = _DONOTHING;
+    public VoidFunc<BattleNode> onArmorHit = _DONOTHING;
 
     public ArrayList<String> events;
 
     public void revive() {}
     public void kill() {}
 
-
-    public BattleNode(Entity entity, Vector2 position, Vector2 velocity) {
-        this.entity = entity;
-
-        this.position = position;
-        this.velocity = velocity;
-
-        //this.entity.publish(fields);
-        this.entity.nodes.put("battleNode", this);
+    public BattleNode(Unit unit) {
+        super(_NAME, unit);
+        Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
     }
 }

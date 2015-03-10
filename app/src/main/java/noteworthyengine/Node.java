@@ -8,6 +8,9 @@ public abstract class Node {
     public Unit unit;
     public String _name = "Node";
 
+    /// If this is active, then systems will process it, otherwise not
+    public boolean isActive = true;
+
     public Node() {
     }
 
@@ -17,8 +20,14 @@ public abstract class Node {
         unit.addNode(this._name, this);
     }
 
-    private static boolean isNotPublishedField(java.lang.reflect.Field field) {
-        return field.getName().charAt(0) == '_';
+    private static boolean isPublishedField(java.lang.reflect.Field field) {
+        boolean hasUnderscore = field.getName().charAt(0) == '_';
+        boolean isStatic = java.lang.reflect.Modifier.isStatic(field.getModifiers());
+        boolean isAllCaps = field.getName().toUpperCase().equals(field.getName());
+
+        boolean isPublic = java.lang.reflect.Modifier.isPublic(field.getModifiers());
+
+        return !hasUnderscore && !isStatic && !isAllCaps && isPublic;
     }
 
     public static void instantiatePublicFieldsForUnit(Unit unit, Class klass, Node node) {
@@ -28,7 +37,7 @@ public abstract class Node {
 
                 java.lang.reflect.Field field = fields[i];
 
-                if (isNotPublishedField(field)) { continue; }
+                if (!isPublishedField(field)) { continue; }
 
                 if (unit.field(field.getName()) == null) {
                     // If node's dictionary doesn't have it, add it

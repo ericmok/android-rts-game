@@ -42,7 +42,13 @@ public class RenderSystem extends System {
         drawCompat.beginDraw();
 
         for (int i = 0; i < renderNodes.size(); i++) {
-            RenderNode renderNode = (RenderNode)renderNodes.get(i);
+            RenderNode renderNode = renderNodes.get(i);
+
+            if (!renderNode.isActive) {
+                continue;
+            }
+
+            renderNode.onDraw.apply(this);
 
 //            DrawList2DItem drawList2DItem = spriteAllocater.takeNextWritable();
 //            drawList2DItem.animationName = DrawList2DItem.ANIMATION_TROOPS_IDLING;
