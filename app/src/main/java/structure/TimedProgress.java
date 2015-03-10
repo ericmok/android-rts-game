@@ -84,4 +84,13 @@ public class TimedProgress {
 		}
 		return this.progress;
 	}
+
+    public void copy(TimedProgress other) {
+        this.name = other.name;
+        this.progress = other.progress;
+        this.duration = other.duration;
+        this.recurrent = other.recurrent;
+        this.directionMultiplier = other.directionMultiplier;
+        this.direction = other.direction;
+    }
 }

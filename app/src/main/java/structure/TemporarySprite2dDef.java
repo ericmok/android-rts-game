@@ -10,6 +10,6 @@ public class TemporarySprite2dDef extends Sprite2dDef {
 
     public void copy(TemporarySprite2dDef other) {
         super.copy(other);
-        //this.progress.copy(other.progress);
+        this.progress.copy(other.progress);
     }
 }

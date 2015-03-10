@@ -26,6 +26,9 @@ public class Gamer {
     public String name = "player_" + Math.floor(Math.random() * 10000);
     public int team = 0;
 
+    public Gamer() {
+    }
+
     public Gamer(String name) {
         this.name = name;
     }
@@ -40,5 +43,12 @@ public class Gamer {
 
     public static int colorForTeam(int team) {
         return TeamColors.get(team % TeamColors.size());
+    }
+
+    public Gamer copy(Gamer other) {
+        this.name = other.name;
+        this.team = other.team;
+
+        return this;
     }
 }

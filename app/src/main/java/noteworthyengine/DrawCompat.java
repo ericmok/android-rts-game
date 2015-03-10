@@ -46,7 +46,9 @@ public class DrawCompat {
     }
 
     // TODO:
-    public void drawTemporarySprite(TemporarySprite2dDef temporaryDrawList2DItem) {
-
+    public void drawTemporarySprite(TemporarySprite2dDef inTempSprite) {
+        TemporarySprite2dDef temporarySprite2dDef = tempSpritesMemoryPool.fetchMemory();
+        temporarySprite2dDef.copy(inTempSprite);
+        tempSprites.add(temporarySprite2dDef);
     }
 }

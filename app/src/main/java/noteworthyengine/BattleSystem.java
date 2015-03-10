@@ -68,11 +68,13 @@ public class BattleSystem extends System {
                         if (distance < battleNode.targetAcquisitionRange.v) {
                             battleNode.onTargetAcquired.apply(otherBattleNode);
 
-                            if (battleNode.attackCooldown.v == 0) {
+                            if (battleNode.attackState.v == 0) {
+
                                 battleNode.onAttack.apply(otherBattleNode);
 
                                 // For demo
-                                battleNode.hp.v = -1;
+                                battleNode.hp.v -= 1 / dt;
+                                otherBattleNode.hp.v -= 1 / dt;
                             }
                         }
                     }

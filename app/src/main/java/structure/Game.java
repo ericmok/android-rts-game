@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import model.Engine;
 import networking.CommandHistory;
+import noteworthyengine.BattleSystem;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.DrawCompat;
 import noteworthyengine.EngineDataPack;
@@ -119,11 +120,13 @@ public class Game {
         CommandSystem commandSystem = new CommandSystem(this);
         MovementSystem movementSystem = new MovementSystem();
         FieldSystem fieldSystem = new FieldSystem();
+        BattleSystem battleSystem = new BattleSystem();
         RenderSystem renderSystem = new RenderSystem(new DrawCompat(this));
 
         engineDataPack.systems.add(commandSystem);
         engineDataPack.systems.add(movementSystem);
         engineDataPack.systems.add(fieldSystem);
+        engineDataPack.systems.add(battleSystem);
         engineDataPack.systems.add(renderSystem);
     }
 

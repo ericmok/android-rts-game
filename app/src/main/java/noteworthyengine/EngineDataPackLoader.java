@@ -43,9 +43,8 @@ public class EngineDataPackLoader {
                 //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
                 Unit troopy = UnitPool.troopyMemoryPool.fetchMemory();
 
-                //troopy.fields.put("gamer", player);
-                BattleNode battleNode = (BattleNode)troopy.node(BattleNode._NAME);
-                battleNode.gamer = player;
+                Gamer gamer = (Gamer)troopy.fields.put("gamer", player);
+                gamer.copy(player);
 
                 Coords coords = (Coords)troopy.field("coords");
                 coords.pos.set(jEntity.getDouble("x"), jEntity.getDouble("y"));

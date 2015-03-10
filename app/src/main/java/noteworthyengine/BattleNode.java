@@ -19,7 +19,7 @@ public class BattleNode extends Node {
 
     public static final Gamer _NO_GAMER = new Gamer("none");
 
-    public Gamer gamer = _NO_GAMER;
+    public Gamer gamer;
 
     public Coords coords;
     public Vector2 velocity;
@@ -34,8 +34,11 @@ public class BattleNode extends Node {
     public DoublePtr targetAcquisitionRange = new DoublePtr() {{ v = 1; }};
 
     public DoublePtr attackDamage = new DoublePtr() {{ v = 1; }};
-    public DoublePtr attackSwingTime = new DoublePtr() {{ v = 1; }};;
-    public DoublePtr attackCooldown = new DoublePtr() {{ v = 1; }};;
+    public DoublePtr attackSwingTime = new DoublePtr() {{ v = 1; }};
+    public DoublePtr attackCooldown = new DoublePtr() {{ v = 1; }};
+
+    public IntegerPtr attackState = new IntegerPtr() {{ v = 0; }};
+    public IntegerPtr attackProgress = new IntegerPtr() {{ v = 0; }};
 
     public VoidFunc<BattleNode> onAttack = _DONOTHING;
     public VoidFunc<BattleNode> onDie = _DONOTHING;
