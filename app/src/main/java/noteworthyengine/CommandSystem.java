@@ -1,21 +1,20 @@
 package noteworthyengine;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
+import noteworthyframework.*;
 import structure.Game;
 import structure.GameInput;
-import structure.GameSettings;
 import structure.Sprite2dDef;
 import utils.Vector2;
 
 /**
  * Created by eric on 3/9/15.
  */
-public class CommandSystem extends System {
+public class CommandSystem extends noteworthyframework.System {
 
     private Game game;
     public ArrayList<CommandNode> commandNodes = new ArrayList<CommandNode>(63);
@@ -29,8 +28,8 @@ public class CommandSystem extends System {
     }
 
     @Override
-    public void initialize(EngineDataPack engineDataPack) {
-        engineDataPack.addUnit(feedback);
+    public void initialize() {
+        this.getBaseEngine().addUnit(feedback);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class CommandSystem extends System {
     }
 
     @Override
-    public void step(EngineDataPack engineDataPack, double ct, double dt) {
+    public void step(double ct, double dt) {
         int currentGesture = game.gameInput.takeCurrentGesture();
         int currentAction = game.gameInput.takeCurrentMouseEventAction();
 
@@ -77,7 +76,7 @@ public class CommandSystem extends System {
             coords.pos.copy(commandNode.coords.pos);
             coords.rot.copy(commandNode.coords.rot);
 
-            engineDataPack.addUnit(arrowCommand);
+            this.getBaseEngine().addUnit(arrowCommand);
 
             IntegerPtr color = (IntegerPtr)feedback.field("color");
             color.v = Color.argb(0, 255, 255, 255);

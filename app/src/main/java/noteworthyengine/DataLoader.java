@@ -4,19 +4,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import utils.Vector2;
+import noteworthyframework.Coords;
+import noteworthyframework.BaseEngine;
+import noteworthyframework.EngineDataLoader;
+import noteworthyframework.Gamer;
+import noteworthyframework.Unit;
+import noteworthyframework.UnitPool;
 
 /**
  * Created by eric on 3/6/15.
  */
-public class EngineDataPackLoader {
+public class DataLoader implements EngineDataLoader {
 
-    public static boolean loadFromJson(EngineDataPack engineDataPack, String json)
-            throws JSONException {
+    public boolean loadFromJson(BaseEngine baseEngine, String json) throws JSONException {
 
         JSONObject jObj = new JSONObject(json);
 
-        engineDataPack.gameTime = jObj.getDouble("time");
+        baseEngine.gameTime = jObj.getDouble("time");
 
         JSONArray playersArr = jObj.getJSONArray("players");
 
@@ -27,10 +31,10 @@ public class EngineDataPackLoader {
             Gamer player = new Gamer(jPlayerObj.getString("name"));
             player.team = jPlayerObj.getInt("team");
 
-            engineDataPack.addGamer(player);
+            baseEngine.addGamer(player);
 
             if (player.name.equals("self")) {
-                engineDataPack.currentGamer = player;
+                baseEngine.currentGamer = player;
             } else {
                 // Allied or enemy team
             }
@@ -54,14 +58,14 @@ public class EngineDataPackLoader {
                 //fieldNode.isFieldControl.v = 0;
                 //fieldNode._movementNode = (MovementNode)troopy.node(MovementNode._NAME);
 
-                engineDataPack.addUnit(troopy);
-                //engineDataPack.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
-                //engineDataPack.addUnit(troopy);
+                baseEngine.addUnit(troopy);
+                //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
+                //engineData.addUnit(troopy);
 
                 // Debug
                 //FieldUnit fieldUnit = new FieldUnit();
                 ArrowCommand arrowCommand = new ArrowCommand();
-                engineDataPack.addUnit(arrowCommand);
+                baseEngine.addUnit(arrowCommand);
 
                 Coords arrowCoords = (Coords)arrowCommand.field("coords");
                 arrowCoords.pos.copy(coords.pos);
@@ -77,7 +81,7 @@ public class EngineDataPackLoader {
 //                fieldUnit.arrowCommand.position.copy(coords.pos);
 //                fieldUnit.arrowCommand.direction.set(0, 1);
 
-                //engineDataPack.unitsByNodes.addDenormalizable(troopy);
+                //engineData.unitsByNodes.addDenormalizable(troopy);
                 //player.filters.addDenormalizable(troopy);
 //
 //                pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
@@ -97,7 +101,7 @@ public class EngineDataPackLoader {
             }
         }
 
-        engineDataPack.flushQueues();
+        baseEngine.flushQueues();
 
         return true;
     }

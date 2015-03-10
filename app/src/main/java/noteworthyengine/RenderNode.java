@@ -2,6 +2,12 @@ package noteworthyengine;
 
 import android.graphics.Color;
 
+import noteworthyframework.Coords;
+import noteworthyframework.DoublePtr;
+import noteworthyframework.FloatPtr;
+import noteworthyframework.IntegerPtr;
+import noteworthyframework.Node;
+import noteworthyframework.Unit;
 import utils.Vector2;
 import utils.VoidFunc;
 

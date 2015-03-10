@@ -2,6 +2,8 @@ package noteworthyengine;
 
 import android.graphics.Color;
 
+import noteworthyframework.Gamer;
+import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
@@ -51,7 +53,9 @@ public class Platoon extends Unit {
         public void apply(RenderSystem system) {
             renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.team);
 
-            if (battleNode.hp.v < 0) {
+            BattleNode battleNode1 = (BattleNode)renderNode.unit.node(BattleNode._NAME);
+
+            if (battleNode1.hp.v < 0) {
                 system.removeNode(renderNode);
                 system.drawCompat.drawTemporarySprite(new TemporarySprite2dDef() {{
                     this.progress.progress = 1;
@@ -62,6 +66,7 @@ public class Platoon extends Unit {
                     this.angle = 0;
                 }});
             }
+            //dyingRenderNode.isActive = true;
             // TODO: Should logic be delegated? Since we want full control over how to render
 //            if (battleNode.hp.v < 0) {
 //                renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;

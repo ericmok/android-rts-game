@@ -1,8 +1,8 @@
 package structure.reflection;
 
-import noteworthyengine.IntegerPtr;
-import noteworthyengine.Node;
-import noteworthyengine.Unit;
+import noteworthyframework.IntegerPtr;
+import noteworthyframework.Node;
+import noteworthyframework.Unit;
 
 /**
  * Created by eric on 3/10/15.

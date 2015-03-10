@@ -125,13 +125,14 @@ public class GameLoop implements Runnable {
         accumulatedFrames += TIME_PER_FRAME;
 
         //int currentGesture = game.gameInput.takeCurrentGesture();
+        //game.noteworthyEngine.baseEngine = game.baseEngine;
 
         if (firstRun) {
-            game.noteworthyEngine.initialize(game.engineDataPack);
+            game.noteworthyEngine.initialize();
             firstRun = false;
         }
-        game.noteworthyEngine.exec(game.engineDataPack);
-        game.noteworthyEngine.step(game.engineDataPack, accumulatedFrames, TIME_PER_FRAME);
+        //game.noteworthyEngine.exec(game.engineData);
+        game.noteworthyEngine.step(accumulatedFrames, TIME_PER_FRAME);
 
 //        List<TemporaryDrawList2DItem> tempSprites = game.graphics.drawLists.temporarySprites;
 //
@@ -141,8 +142,8 @@ public class GameLoop implements Runnable {
         // Draw buttons
         // Draw troops
 
-        //ArrayList<Unit> unitsToRender = game.engineDataPack.unitsByNodes.getListForLabel(RenderNode.class);
-//        QueueMutationList<Unit> unitsToRender = game.engineDataPack.units;
+        //ArrayList<Unit> unitsToRender = game.engineData.unitsByNodes.getListForLabel(RenderNode.class);
+//        QueueMutationList<Unit> unitsToRender = game.engineData.units;
 //        for (int i = 0; i < unitsToRender.size(); i++) {
 //            RenderNode renderNode = (RenderNode)unitsToRender.get(i).node(RenderNode._NAME);
 //            DrawList2DItem drawList2DItem = spriteAllocater.takeNextWritable();

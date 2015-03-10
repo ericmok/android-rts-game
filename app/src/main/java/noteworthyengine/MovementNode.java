@@ -1,5 +1,9 @@
 package noteworthyengine;
 
+import noteworthyframework.Coords;
+import noteworthyframework.DoublePtr;
+import noteworthyframework.Node;
+import noteworthyframework.Unit;
 import utils.Vector2;
 
 /**

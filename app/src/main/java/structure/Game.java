@@ -1,6 +1,5 @@
 package structure;
 
-import model.EngineLoader;
 import model.GameEntities;
 
 import android.app.Activity;
@@ -14,9 +13,8 @@ import model.Engine;
 import networking.CommandHistory;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.CommandSystem;
-import noteworthyengine.DrawCompat;
-import noteworthyengine.EngineDataPack;
-import noteworthyengine.EngineDataPackLoader;
+import noteworthyengine.DataLoader;
+import noteworthyframework.DrawCompat;
 import noteworthyengine.FieldSystem;
 import noteworthyengine.MovementSystem;
 import noteworthyengine.NoteworthyEngine;
@@ -26,8 +24,7 @@ public class Game {
 
     public Engine engine = new Engine();
 
-    public NoteworthyEngine noteworthyEngine = new NoteworthyEngine();
-    public EngineDataPack engineDataPack = new EngineDataPack();
+    public NoteworthyEngine noteworthyEngine;
 
 	private Game m = this;
 	
@@ -123,11 +120,12 @@ public class Game {
         BattleSystem battleSystem = new BattleSystem();
         RenderSystem renderSystem = new RenderSystem(new DrawCompat(this));
 
-        engineDataPack.systems.add(commandSystem);
-        engineDataPack.systems.add(movementSystem);
-        engineDataPack.systems.add(fieldSystem);
-        engineDataPack.systems.add(battleSystem);
-        engineDataPack.systems.add(renderSystem);
+        noteworthyEngine = new NoteworthyEngine();
+        noteworthyEngine.addSystem(commandSystem);
+        noteworthyEngine.addSystem(movementSystem);
+        noteworthyEngine.addSystem(fieldSystem);
+        noteworthyEngine.addSystem(battleSystem);
+        noteworthyEngine.addSystem(renderSystem);
     }
 
 	public void loadLevel() {
@@ -148,7 +146,9 @@ public class Game {
 
         try {
             String json = levelFileLoader.jsonFromFile("level0.json");
-            engineDataPack.loadFromJson(json);
+            DataLoader dataLoader = new DataLoader();
+            dataLoader.loadFromJson(noteworthyEngine, json);
+            //noteworthyEngine.loadFromJson(json);
         }
         catch (IOException io) {
            io.printStackTrace();

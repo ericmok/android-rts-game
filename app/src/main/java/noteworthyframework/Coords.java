@@ -1,4 +1,4 @@
-package noteworthyengine;
+package noteworthyframework;
 
 import utils.Orientation;
 import utils.Vector2;

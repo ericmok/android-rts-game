@@ -3,10 +3,12 @@ package noteworthyengine;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import noteworthyframework.*;
+
 /**
  * Created by eric on 3/6/15.
  */
-public class BattleSystem extends System {
+public class BattleSystem extends noteworthyframework.System {
 
     public QueueMutationList<BattleNode> battleNodes = new QueueMutationList<BattleNode>(127);
 
@@ -48,7 +50,7 @@ public class BattleSystem extends System {
     }
 
     @Override
-    public void step(EngineDataPack engineDataPack, double ct, double dt) {
+    public void step(double ct, double dt) {
         for (int i = 0; i < gamers.size(); i++) {
             Gamer gamer = gamers.get(i);
             QueueMutationList<BattleNode> gamerUnits = battleNodesByGamer.get(gamer);

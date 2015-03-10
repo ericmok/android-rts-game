@@ -1,10 +1,7 @@
-package noteworthyengine;
+package noteworthyframework;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
-
-import model.Denormalizable;
 
 /**
  * Created by eric on 3/6/15.

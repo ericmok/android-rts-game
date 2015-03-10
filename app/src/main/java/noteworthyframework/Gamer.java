@@ -1,10 +1,8 @@
-package noteworthyengine;
+package noteworthyframework;
 
 import android.graphics.Color;
 
 import java.util.ArrayList;
-
-import model.DenormalizedDataSet;
 
 /**
  * Created by eric on 3/6/15.

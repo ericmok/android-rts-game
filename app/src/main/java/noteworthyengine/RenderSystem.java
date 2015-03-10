@@ -1,11 +1,12 @@
 package noteworthyengine;
 
+import noteworthyframework.*;
 import structure.Sprite2dDef;
 
 /**
  * Created by eric on 3/7/15.
  */
-public class RenderSystem extends System {
+public class RenderSystem extends noteworthyframework.System {
     public DrawCompat drawCompat;
     private Sprite2dDef sprite2dDefTemp = new Sprite2dDef();
 
@@ -34,10 +35,10 @@ public class RenderSystem extends System {
         renderNodes.flushQueues();
     }
 
-    public void step(EngineDataPack engineDataPack, double ct, double dt) {
+    public void step(double ct, double dt) {
 
         // TODO:
-        // ArrayList<Unit> unitsToDraw = engineDataPack.unitsByNodes.getListForLabel(RenderNode.class);
+        // ArrayList<Unit> unitsToDraw = engineData.unitsByNodes.getListForLabel(RenderNode.class);
 
         drawCompat.beginDraw();
 

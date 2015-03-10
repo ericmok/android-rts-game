@@ -1,13 +1,12 @@
 package noteworthyengine;
 
-import android.util.Log;
-
+import noteworthyframework.*;
 import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
  */
-public class FieldSystem extends System {
+public class FieldSystem extends noteworthyframework.System {
 
     public QueueMutationList<FieldNode> troops = new QueueMutationList<FieldNode>(127);
     public QueueMutationList<FieldNode> fields = new QueueMutationList<FieldNode>(127);
@@ -83,7 +82,7 @@ public class FieldSystem extends System {
     }
 
     @Override
-    public void step(EngineDataPack engineDataPack, double ct, double dt) {
+    public void step(double ct, double dt) {
 
         for (int i = 0; i < troops.size(); i++) {
             // Loop through each troop to aggregate field forces

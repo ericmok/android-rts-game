@@ -4,7 +4,7 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 
 import noteworthyengine.Mech;
-import noteworthyengine.Unit;
+import noteworthyframework.Unit;
 
 /**
  * Created by eric on 3/7/15.

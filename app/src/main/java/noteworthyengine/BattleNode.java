@@ -2,6 +2,12 @@ package noteworthyengine;
 
 import java.util.ArrayList;
 
+import noteworthyframework.Coords;
+import noteworthyframework.DoublePtr;
+import noteworthyframework.Gamer;
+import noteworthyframework.IntegerPtr;
+import noteworthyframework.Node;
+import noteworthyframework.Unit;
 import utils.Vector2;
 import utils.VoidFunc;
 

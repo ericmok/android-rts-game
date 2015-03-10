@@ -1,12 +1,12 @@
 package noteworthyengine;
 
-import structure.GameSettings;
+import noteworthyframework.*;
 import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
  */
-public class MovementSystem extends System {
+public class MovementSystem extends noteworthyframework.System {
 
     public QueueMutationList<MovementNode> movementNodes = new QueueMutationList<MovementNode>(127);
 
@@ -33,7 +33,7 @@ public class MovementSystem extends System {
     }
 
     @Override
-    public void step(EngineDataPack engineDataPack, double ct, double dt) {
+    public void step(double ct, double dt) {
 
         for (int i = 0; i < movementNodes.items.size(); i++) {
 
