@@ -12,10 +12,12 @@ public abstract class System {
     public System() {
     }
 
+    public void initialize(EngineDataPack engineDataPack) {}
+
     public abstract void addNode(Node node);
     public abstract void removeNode(Node node);
 
-    public abstract void step(double ct, double dt);
+    public abstract void step(EngineDataPack engineDataPack, double ct, double dt);
 
     public abstract void flushQueues();
 

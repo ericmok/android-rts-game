@@ -10,11 +10,17 @@ import java.util.ArrayList;
 public class NoteworthyEngine {
 
     public int frameNumber = 0;
-
-    public MovementSystem movementSystem = new MovementSystem();
+    public EngineDataPack engineDataPack;
 
     public NoteworthyEngine() {
-        //systems.add(new RenderSystem());
+    }
+
+    public void initialize(EngineDataPack engineDataPack) {
+        for (int i = 0; i < engineDataPack.systems.size(); i++) {
+            System system = engineDataPack.systems.get(i);
+            system.initialize(engineDataPack);
+            system.flushQueues();
+        }
     }
 
     /**
@@ -26,6 +32,7 @@ public class NoteworthyEngine {
 
     public void step(EngineDataPack engineDataPack, double ct, double dt) {
 
+        this.engineDataPack = engineDataPack;
         //engineDataPack.addQueuedUnits();
 
         //movementSystem.step(engineDataPack.movementNodes, ct, dt);
@@ -34,10 +41,12 @@ public class NoteworthyEngine {
             System system = engineDataPack.systems.get(i);
 
             system.flushQueues();
-            system.step(ct, dt);
+            system.step(engineDataPack, ct, dt);
         }
 
         //engineDataPack.removeQueuedUnits();
+
+        engineDataPack.flushQueues();
 
         frameNumber += 1;
     }

@@ -66,6 +66,7 @@ public class GameGLSurfaceView extends GLSurfaceView {
         super.onTouchEvent(event);
 
 //		game.onTouchEvent(event);
+        game.gameInput.onTouchEvent(event);
 
         gestureDetector.onTouchEvent(event);
         scaleGestureDetector.onTouchEvent(event);

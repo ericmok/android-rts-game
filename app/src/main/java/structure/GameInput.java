@@ -1,5 +1,6 @@
 package structure;
 
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -32,11 +33,21 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
 
     // Direct Access
     public MotionEvent motionEvent = null;
+
+    public int currentMotionEventAction = -1;
+
     public boolean touchDown = false;
+
+    /// Primary touch position if gesture is parameterized by 1 MouseEvent
     public Vector2 touchPosition = new Vector2();
+
+    /// Secondary touch param for gestures is parameterized by 2 MouseEvent's
+    public Vector2 touchPosition2 = new Vector2();
+
     public Vector2 touchScrollDeltas = new Vector2();
 
-    /** The touch position recorded when a tap down last occurred */
+    /** Deprecated. Pending removal. Don't use as it does not work.
+     * The touch position recorded when a tap down last occurred */
     public Vector2 lastTouchDown = new Vector2();
 
     /** The touch position recorded when a touch up last occurred */
@@ -121,24 +132,44 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
         return ret;
     }
 
+    /**
+     * Returns the mouse event action and resets it to -1
+     * @return
+     */
+    public synchronized int takeCurrentMouseEventAction() {
+        int ret = this.currentMotionEventAction;
+        this.currentMotionEventAction = -1;
+        return ret;
+    }
+
+    /**
+     * TODO: Rearchitect this, might not be needed
+     */
     public void onTouchEvent(MotionEvent event) {
         //gameLoop.onTouchEvent(event);
         motionEvent = event;
-        getCoordsTranslatedAndNormalized(touchPosition, event.getX(), event.getY());
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        // TODO: This may be called duplicate
+       // getCoordsTranslatedAndNormalized(touchPosition, event.getX(), event.getY());
+
+        this.currentMotionEventAction = event.getAction();
+
+        if (currentMotionEventAction == MotionEvent.ACTION_DOWN) {
             touchDown = true;
-            lastTouchDown.copy(touchPosition);
+            //lastTouchDown.copy(touchPosition);
+            Log.v("GAMEINPUT", "down");
         }
 
-        if (event.getAction() == MotionEvent.ACTION_SCROLL) {
+        if (currentMotionEventAction == MotionEvent.ACTION_MOVE) {
             touchDown = true;
+            Log.v("GAMEINPUT", "move");
         }
 
         // Unclear if other actions will trigger flag to false
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+        if (currentMotionEventAction == MotionEvent.ACTION_UP) {
             touchDown = false;
-            lastTouchUp.copy(touchPosition);
+            //lastTouchUp.copy(touchPosition);
+            Log.v("GAMEINPUT", "up");
         }
     }
 
@@ -168,6 +199,7 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         //return gameLoop.gestureOnScroll(e1, e2, distanceX, distanceY);
         getCoordsTranslatedAndNormalized(touchPosition, e1.getX(), e1.getY());
+        getCoordsTranslatedAndNormalized(touchPosition2, e2.getX(), e2.getY());
 
         // Since we did not invert the Y with normalization
         getCoordsNormalizedToScreen(touchScrollDeltas, distanceX, distanceY);
@@ -186,6 +218,7 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         //return gameLoop.gestureOnFling(e1, e2, velocityX, velocityY);
         getCoordsTranslatedAndNormalized(touchPosition, e1.getX(), e1.getY());
+        getCoordsTranslatedAndNormalized(touchPosition2, e2.getX(), e2.getY());
         setCurrentGesture(GESTURE_ON_FLING);
         return true;
     }

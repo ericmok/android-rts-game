@@ -18,6 +18,8 @@ public class GameLoop implements Runnable {
 	
 	private boolean isFinished = false;
 	private boolean isPaused = false;
+
+    private boolean firstRun = true;
 	
 	public final static long TARGET_MILLISEC_PER_FRAME = 12;
 
@@ -122,8 +124,12 @@ public class GameLoop implements Runnable {
 
         accumulatedFrames += TIME_PER_FRAME;
 
-        int currentGesture = game.gameInput.takeCurrentGesture();
+        //int currentGesture = game.gameInput.takeCurrentGesture();
 
+        if (firstRun) {
+            game.noteworthyEngine.initialize(game.engineDataPack);
+            firstRun = false;
+        }
         game.noteworthyEngine.exec(game.engineDataPack);
         game.noteworthyEngine.step(game.engineDataPack, accumulatedFrames, TIME_PER_FRAME);
 

@@ -11,6 +11,9 @@ public class ArrowCommand extends Unit {
 
     public static final String NAME = "ArrowCommand";
 
+    public static final float WIDTH = 3f;
+    public static final float HEIGHT = 3f;
+
     public ArrowCommand() {
         this.name = NAME;
 
@@ -20,7 +23,7 @@ public class ArrowCommand extends Unit {
         RenderNode renderNode = new RenderNode(this);
         renderNode.animationName = Sprite2dDef.ANIMATION_TRIGGER_FIELDS_EXISTING;
         renderNode.color.v = Color.WHITE;
-        renderNode.width.v = 3;
-        renderNode.height.v = 3;
+        renderNode.width.v = WIDTH;
+        renderNode.height.v = HEIGHT;
     }
 }

@@ -6,14 +6,12 @@ import structure.Sprite2dDef;
  * Created by eric on 3/7/15.
  */
 public class RenderSystem extends System {
-    public EngineDataPack engineDataPack;
     public DrawCompat drawCompat;
     private Sprite2dDef sprite2dDefTemp = new Sprite2dDef();
 
     public QueueMutationList<RenderNode> renderNodes = new QueueMutationList<RenderNode>(127);
 
-    public RenderSystem(EngineDataPack engineDataPack, DrawCompat drawCompat) {
-        this.engineDataPack = engineDataPack;
+    public RenderSystem(DrawCompat drawCompat) {
         this.drawCompat = drawCompat;
     }
 
@@ -36,7 +34,7 @@ public class RenderSystem extends System {
         renderNodes.flushQueues();
     }
 
-    public void step(double ct, double dt) {
+    public void step(EngineDataPack engineDataPack, double ct, double dt) {
 
         // TODO:
         // ArrayList<Unit> unitsToDraw = engineDataPack.unitsByNodes.getListForLabel(RenderNode.class);
