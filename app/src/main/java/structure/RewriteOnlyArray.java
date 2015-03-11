@@ -150,36 +150,8 @@ public class RewriteOnlyArray<E> {
     public void sort(int startIndex, int endIndex, Comparator comparator) {
         Arrays.sort(data, Math.min(startIndex, 0), Math.max(endIndex, lastIndex + 1), comparator);
     }
+    
     public void sort(Comparator comparator) {
         Arrays.sort(data, 0, lastIndex + 1, comparator);
     }
-
-//    private void recursiveQuickSort(Comparator comparator, int leftIndex, int rightIndex) {
-//
-//        int leftBound = leftIndex;
-//        int rightBound = rightIndex;
-//        int midIndex = (leftIndex + rightIndex) / 2;
-//        E pivot = data[midIndex];
-//
-//        if (leftIndex == rightIndex) {
-//            return;
-//        }
-//
-//        while (leftIndex != rightIndex - 1) {
-//            int comp = comparator.compare(data[leftIndex], pivot);
-//            while (comp <= 0 && leftIndex + 1 != rightIndex) {
-//                leftIndex += 1;
-//            }
-//            while (comparator.compare(data[rightIndex], pivot) >= 0 && rightIndex - 1 != leftIndex) {
-//                rightIndex -= 1;
-//            }
-//
-//            if (leftIndex <= rightIndex) {
-//                swap(leftIndex, rightIndex);
-//            }
-//        }
-//
-//        recursiveQuickSort(comparator, leftBound, leftIndex);
-//        recursiveQuickSort(comparator, rightIndex, rightBound);
-//    }
 }
