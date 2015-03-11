@@ -1,6 +1,8 @@
 package structure;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 
 /**
@@ -123,4 +125,61 @@ public class RewriteOnlyArray<E> {
 			
 		};
 	}
+
+    /**
+     * Swaps elements by indices
+     * @param index
+     * @param otherIndex
+     */
+    public void swap(int index, int otherIndex) {
+        E temp = data[index];
+        data[index] = data[otherIndex];
+        data[otherIndex] = temp;
+    }
+
+    /// Use this only if the generic type is comparable
+    public void sort() {
+        Arrays.sort(data, 0, lastIndex + 1);
+    }
+
+    /// Use this only if the generic type is comparable
+    public void sort(int startIndex, int endIndex) {
+        Arrays.sort(data, Math.min(startIndex, 0), Math.max(endIndex, lastIndex + 1));
+    }
+
+    public void sort(int startIndex, int endIndex, Comparator comparator) {
+        Arrays.sort(data, Math.min(startIndex, 0), Math.max(endIndex, lastIndex + 1), comparator);
+    }
+    public void sort(Comparator comparator) {
+        Arrays.sort(data, 0, lastIndex + 1, comparator);
+    }
+
+//    private void recursiveQuickSort(Comparator comparator, int leftIndex, int rightIndex) {
+//
+//        int leftBound = leftIndex;
+//        int rightBound = rightIndex;
+//        int midIndex = (leftIndex + rightIndex) / 2;
+//        E pivot = data[midIndex];
+//
+//        if (leftIndex == rightIndex) {
+//            return;
+//        }
+//
+//        while (leftIndex != rightIndex - 1) {
+//            int comp = comparator.compare(data[leftIndex], pivot);
+//            while (comp <= 0 && leftIndex + 1 != rightIndex) {
+//                leftIndex += 1;
+//            }
+//            while (comparator.compare(data[rightIndex], pivot) >= 0 && rightIndex - 1 != leftIndex) {
+//                rightIndex -= 1;
+//            }
+//
+//            if (leftIndex <= rightIndex) {
+//                swap(leftIndex, rightIndex);
+//            }
+//        }
+//
+//        recursiveQuickSort(comparator, leftBound, leftIndex);
+//        recursiveQuickSort(comparator, rightIndex, rightBound);
+//    }
 }

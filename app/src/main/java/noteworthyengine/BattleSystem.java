@@ -1,6 +1,7 @@
 package noteworthyengine;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Hashtable;
 
 import noteworthyframework.*;
@@ -20,7 +21,7 @@ public class BattleSystem extends noteworthyframework.System {
     public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
 
     private RewriteOnlyArray<CollisionNode> collidedBattleNodes =
-            new RewriteOnlyArray<CollisionNode>(CollisionNode.class, 255);
+            new RewriteOnlyArray<CollisionNode>(CollisionNode.class, 63);
 
     public BattleSystem() {
     }
@@ -126,6 +127,8 @@ public class BattleSystem extends noteworthyframework.System {
 
             }
         }
+
+        collidedBattleNodes.sort();
     }
 
     @Override
@@ -139,9 +142,17 @@ public class BattleSystem extends noteworthyframework.System {
         }
     }
 
-    public static class CollisionNode {
+    public static class CollisionNode implements Comparable<CollisionNode> {
         public BattleNode battleNode;
         public BattleNode otherBattleNode;
         public double distance;
+
+        @Override
+        public int compareTo(CollisionNode collisionNode) {
+            if (this.distance < collisionNode.distance) return -1;
+            else if (this.distance > collisionNode.distance) return 1;
+            else
+                return 0;
+        }
     }
 }
