@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import noteworthyframework.*;
+import structure.RewriteOnlyArray;
+import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
@@ -12,10 +14,13 @@ public class BattleSystem extends noteworthyframework.System {
 
     public QueueMutationList<BattleNode> battleNodes = new QueueMutationList<BattleNode>(127);
 
-    public Hashtable<Gamer, QueueMutationList<BattleNode>> battleNodesByGamer =
-            new Hashtable<Gamer, QueueMutationList<BattleNode>>(8);
+    public Hashtable<String, QueueMutationList<BattleNode>> battleNodesByGamer =
+            new Hashtable<String, QueueMutationList<BattleNode>>(8);
 
     public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
+
+    private RewriteOnlyArray<CollisionNode> collidedBattleNodes =
+            new RewriteOnlyArray<CollisionNode>(CollisionNode.class, 255);
 
     public BattleSystem() {
     }
@@ -26,10 +31,10 @@ public class BattleSystem extends noteworthyframework.System {
             BattleNode battleNode = (BattleNode) node;
             battleNodes.queueToAdd(battleNode);
 
-            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer);
+            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer.name);
             if (gamerUnits == null) {
                 gamerUnits = new QueueMutationList<BattleNode>(127);
-                battleNodesByGamer.put(battleNode.gamer, gamerUnits);
+                battleNodesByGamer.put(battleNode.gamer.name, gamerUnits);
                 gamers.add(battleNode.gamer);
             }
             gamerUnits.queueToAdd(battleNode);
@@ -42,43 +47,80 @@ public class BattleSystem extends noteworthyframework.System {
             BattleNode battleNode = (BattleNode) node;
             battleNodes.queueToRemove((BattleNode)node);
 
-            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer);
+            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer.name);
             if (gamerUnits != null) {
                 gamerUnits.queueToRemove(battleNode);
             }
         }
     }
 
+    private void collide(double ct, double dt, BattleNode battleNode, BattleNode otherBattleNode) {
+
+        // Don't collide with self! (In case we want units of same team to collide one day)
+        if (battleNode == otherBattleNode) { return; }
+
+        double distance = battleNode.coords.pos.distanceTo(otherBattleNode.coords.pos);
+
+        if (distance < battleNode.targetAcquisitionRange.v) {
+            CollisionNode collisionNode = collidedBattleNodes.takeNextWritable();
+            collisionNode.battleNode = battleNode;
+            collisionNode.otherBattleNode = otherBattleNode;
+            collisionNode.distance = distance;
+
+            battleNode.onTargetAcquired.apply(this, battleNode, otherBattleNode);
+
+                battleNode.onAttack.apply(this, battleNode, otherBattleNode);
+                otherBattleNode.onHpHit.apply(this, battleNode, otherBattleNode);
+
+                // For demo
+                otherBattleNode.hp.v = otherBattleNode.hp.v - battleNode.attackDamage.v * dt;
+
+                if (otherBattleNode.hp.v <= 0) {
+                    otherBattleNode.onDie.apply(this, otherBattleNode);
+                    //otherBattleNode.isActive = false;
+                    //battleNodes.queueToRemove(otherBattleNode);
+                    this.getBaseEngine().removeUnit(otherBattleNode.unit);
+                }
+
+            // TODO:
+            //if (battleNode.attackState.v == 0) {
+            //}//battleNode.attackState.v += 1;
+            //else if (battleNode.attackState.v == 1) {
+            //}
+        }
+    }
+
     @Override
     public void step(double ct, double dt) {
+
+        collidedBattleNodes.resetWriteIndex();
+
         for (int i = 0; i < gamers.size(); i++) {
             Gamer gamer = gamers.get(i);
-            QueueMutationList<BattleNode> gamerUnits = battleNodesByGamer.get(gamer);
+            QueueMutationList<BattleNode> gamerUnits = battleNodesByGamer.get(gamer.name);
 
             for (int j = 0; j < gamerUnits.size(); j++) {
                 BattleNode battleNode = gamerUnits.get(j);
 
+                //if (!battleNode.isActive) { continue; }
+                if (battleNode.hp.v <= 0) { continue; }
+
                 for (int k = 0; k < gamers.size(); k++) {
+
+                    // Don't collide with own team
+                    if (i == k) { continue; }
+
                     Gamer otherGamer = gamers.get(k);
-                    QueueMutationList<BattleNode> otherGamerUnits = battleNodesByGamer.get(otherGamer);
+                    QueueMutationList<BattleNode> otherGamerUnits = battleNodesByGamer.get(otherGamer.name);
 
                     for (int m = 0; m < otherGamerUnits.size(); m++) {
                         BattleNode otherBattleNode = otherGamerUnits.get(m);
 
+                        //if (!otherBattleNode.isActive) { continue; }
+                        if (otherBattleNode.hp.v <= 0) { continue; }
+
                         // PHEW!!!
-                        double distance = battleNode.coords.pos.distanceTo(otherBattleNode.coords.pos);
-                        if (distance < battleNode.targetAcquisitionRange.v) {
-                            battleNode.onTargetAcquired.apply(otherBattleNode);
-
-                            if (battleNode.attackState.v == 0) {
-
-                                battleNode.onAttack.apply(otherBattleNode);
-
-                                // For demo
-                                battleNode.hp.v -= 1 / dt;
-                                otherBattleNode.hp.v -= 1 / dt;
-                            }
-                        }
+                        collide(ct, dt, battleNode, otherBattleNode);
                     }
                 }
 
@@ -89,5 +131,17 @@ public class BattleSystem extends noteworthyframework.System {
     @Override
     public void flushQueues() {
         battleNodes.flushQueues();
+
+        for (int i = 0; i < gamers.size(); i++) {
+            Gamer gamer = gamers.get(i);
+            QueueMutationList list = battleNodesByGamer.get(gamer.name);
+            list.flushQueues();
+        }
+    }
+
+    public static class CollisionNode {
+        public BattleNode battleNode;
+        public BattleNode otherBattleNode;
+        public double distance;
     }
 }

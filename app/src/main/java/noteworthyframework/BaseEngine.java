@@ -103,14 +103,16 @@ public class BaseEngine {
 
     public void step(double ct, double dt) {
 
+        this.flushQueues();
+
         for (int i = 0; i < this.systems.size(); i++) {
             System system = this.systems.get(i);
 
-            system.flushQueues();
+            //system.flushQueues();
             system.step(ct, dt);
         }
 
-        this.flushQueues();
+        //this.flushQueues();
 
         this.frameNumber += 1;
     }

@@ -49,4 +49,26 @@ public class Gamer {
 
         return this;
     }
+
+    @Override
+    // TODO: Test
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    // TODO: Test
+    public boolean equals(Object o) {
+        if (o instanceof  Gamer) {
+            return this.name == ((Gamer) o).name;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

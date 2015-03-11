@@ -10,6 +10,8 @@ import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;
 import utils.VoidFunc;
+import utils.VoidFunc2;
+import utils.VoidFunc3;
 
 /**
  * Created by eric on 3/6/15.
@@ -18,10 +20,16 @@ public class BattleNode extends Node {
 
     public static final String _NAME = "battleNode";
 
-    public static final VoidFunc<BattleNode> _DONOTHING = new VoidFunc<BattleNode>() {
-        @Override
-        public void apply(BattleNode element) { }
-    };
+    public static final VoidFunc2<BattleSystem, BattleNode> _DONOTHING2 =
+        new VoidFunc2<BattleSystem, BattleNode>() {
+            @Override
+            public void apply(BattleSystem system, BattleNode element) { }
+        };
+    public static final VoidFunc3<BattleSystem, BattleNode, BattleNode> _DONOTHING3 =
+            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+                @Override
+                public void apply(BattleSystem system, BattleNode element, BattleNode element2) { }
+            };
 
     public static final Gamer _NO_GAMER = new Gamer("none");
 
@@ -46,12 +54,12 @@ public class BattleNode extends Node {
     public IntegerPtr attackState = new IntegerPtr() {{ v = 0; }};
     public IntegerPtr attackProgress = new IntegerPtr() {{ v = 0; }};
 
-    public VoidFunc<BattleNode> onAttack = _DONOTHING;
-    public VoidFunc<BattleNode> onDie = _DONOTHING;
-    public VoidFunc<BattleNode> onTargetAcquired = _DONOTHING;
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttack = _DONOTHING3;
+    public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
 
-    public VoidFunc<BattleNode> onHpHit = _DONOTHING;
-    public VoidFunc<BattleNode> onArmorHit = _DONOTHING;
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onHpHit = _DONOTHING3;
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onArmorHit = _DONOTHING3;
 
     public ArrayList<String> events;
 
