@@ -70,7 +70,9 @@ public class DataLoader implements EngineDataLoader {
                 Coords arrowCoords = (Coords)arrowCommand.field("coords");
                 arrowCoords.pos.copy(coords.pos);
                 arrowCoords.pos.translate(Math.ceil(30 * Math.random() - 15), Math.ceil(30 * Math.random() - 15));
-                arrowCoords.rot.setDirection(2 * Math.random() - 1, 2 * Math.random() - 1);
+                //arrowCoords.rot.setDirection(2 * Math.random() - 1, 2 * Math.random() - 1);
+                arrowCoords.rot.setDirection(-arrowCoords.pos.x + ((Math.random()) - 0.5),
+                                                -arrowCoords.pos.y + ((Math.random()) - 0.5));
 
                 //Vector2 fieldDirection = (Vector2)arrowCommand.field("fieldDirection");
                 //fieldDirection.set((2 * Math.random()) - 1, (2 * Math.random()) - 1);

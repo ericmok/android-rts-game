@@ -21,7 +21,7 @@ public class BattleSystem extends noteworthyframework.System {
     public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
 
     private RewriteOnlyArray<CollisionNode> collidedBattleNodes =
-            new RewriteOnlyArray<CollisionNode>(CollisionNode.class, 63);
+            new RewriteOnlyArray<CollisionNode>(CollisionNode.class, 1024);
 
     public BattleSystem() {
     }
@@ -55,6 +55,32 @@ public class BattleSystem extends noteworthyframework.System {
         }
     }
 
+    private void battleAllCollisionPairs(double ct, double dt) {
+
+        for (int i = 0; i < collidedBattleNodes.size(); i++) {
+
+            CollisionNode collisionNode = collidedBattleNodes.get(i);
+            BattleNode battleNode = collisionNode.battleNode;
+            BattleNode otherBattleNode = collisionNode.otherBattleNode;
+            double distance = collisionNode.distance;
+
+            battleNode.onTargetAcquired.apply(this, battleNode, otherBattleNode);
+
+            battleNode.onAttack.apply(this, battleNode, otherBattleNode);
+            otherBattleNode.onHpHit.apply(this, battleNode, otherBattleNode);
+
+            // For demo
+            otherBattleNode.hp.v = otherBattleNode.hp.v - battleNode.attackDamage.v * dt;
+
+            if (otherBattleNode.hp.v <= 0) {
+                otherBattleNode.onDie.apply(this, otherBattleNode);
+                //otherBattleNode.isActive = false;
+                //battleNodes.queueToRemove(otherBattleNode);
+                this.getBaseEngine().removeUnit(otherBattleNode.unit);
+            }
+        }
+    }
+
     private void collide(double ct, double dt, BattleNode battleNode, BattleNode otherBattleNode) {
 
         // Don't collide with self! (In case we want units of same team to collide one day)
@@ -67,27 +93,6 @@ public class BattleSystem extends noteworthyframework.System {
             collisionNode.battleNode = battleNode;
             collisionNode.otherBattleNode = otherBattleNode;
             collisionNode.distance = distance;
-
-            battleNode.onTargetAcquired.apply(this, battleNode, otherBattleNode);
-
-                battleNode.onAttack.apply(this, battleNode, otherBattleNode);
-                otherBattleNode.onHpHit.apply(this, battleNode, otherBattleNode);
-
-                // For demo
-                otherBattleNode.hp.v = otherBattleNode.hp.v - battleNode.attackDamage.v * dt;
-
-                if (otherBattleNode.hp.v <= 0) {
-                    otherBattleNode.onDie.apply(this, otherBattleNode);
-                    //otherBattleNode.isActive = false;
-                    //battleNodes.queueToRemove(otherBattleNode);
-                    this.getBaseEngine().removeUnit(otherBattleNode.unit);
-                }
-
-            // TODO:
-            //if (battleNode.attackState.v == 0) {
-            //}//battleNode.attackState.v += 1;
-            //else if (battleNode.attackState.v == 1) {
-            //}
         }
     }
 
@@ -129,6 +134,7 @@ public class BattleSystem extends noteworthyframework.System {
         }
 
         collidedBattleNodes.sort();
+        battleAllCollisionPairs(ct, dt);
     }
 
     @Override

@@ -150,7 +150,7 @@ public class RewriteOnlyArray<E> {
     public void sort(int startIndex, int endIndex, Comparator comparator) {
         Arrays.sort(data, Math.min(startIndex, 0), Math.max(endIndex, lastIndex + 1), comparator);
     }
-    
+
     public void sort(Comparator comparator) {
         Arrays.sort(data, 0, lastIndex + 1, comparator);
     }
