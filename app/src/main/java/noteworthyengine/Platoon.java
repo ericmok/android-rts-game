@@ -22,6 +22,7 @@ public class Platoon extends Unit {
     BattleNode battleNode;
 
     RenderNode dyingRenderNode;
+    RenderNode selectedRenderNode;
 
     public Platoon() {
         this.name = NAME;
@@ -35,6 +36,7 @@ public class Platoon extends Unit {
         battleNode = new BattleNode(this);
         battleNode.hp.v = 100;
         battleNode.targetAcquisitionRange.v = 2;
+        battleNode.onTargetAcquired = onTargetAcquired;
 
         renderNode = new RenderNode(this);
         float size = Math.random() > 0.5f ? 1f : 0.7f;
@@ -50,14 +52,18 @@ public class Platoon extends Unit {
         dyingRenderNode.isActive = false;
         dyingRenderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
         dyingRenderNode.color.v = Color.WHITE;
+
+        selectedRenderNode = new RenderNode("selectedRenderNode", this);
+        selectedRenderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
+        selectedRenderNode.isActive = false;
     }
 
     public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =
         new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                renderNode.color.v = Color.YELLOW;
-                renderNode.animationName = Sprite2dDef.ANIMATION_RETICLE_TAP;
+                //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
+                selectedRenderNode.isActive = true;
             }
         };
 

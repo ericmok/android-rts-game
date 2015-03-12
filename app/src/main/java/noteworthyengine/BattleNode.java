@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import noteworthyframework.Coords;
 import noteworthyframework.DoublePtr;
+import noteworthyframework.FloatPtr;
 import noteworthyframework.Gamer;
 import noteworthyframework.IntegerPtr;
 import noteworthyframework.Node;
@@ -54,7 +55,11 @@ public class BattleNode extends Node {
     public IntegerPtr attackState = new IntegerPtr() {{ v = 0; }};
     public IntegerPtr attackProgress = new IntegerPtr() {{ v = 0; }};
 
+    public DoublePtr targetDistance = new DoublePtr() {{ v = 0; }};
+    public BattleNode[] target = new BattleNode[1];
+
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttack = _DONOTHING3;
     public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
 

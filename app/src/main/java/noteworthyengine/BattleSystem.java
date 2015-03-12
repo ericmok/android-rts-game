@@ -89,6 +89,7 @@ public class BattleSystem extends noteworthyframework.System {
         double distance = battleNode.coords.pos.distanceTo(otherBattleNode.coords.pos);
 
         if (distance < battleNode.targetAcquisitionRange.v) {
+
             CollisionNode collisionNode = collidedBattleNodes.takeNextWritable();
             collisionNode.battleNode = battleNode;
             collisionNode.otherBattleNode = otherBattleNode;
@@ -109,7 +110,7 @@ public class BattleSystem extends noteworthyframework.System {
                 BattleNode battleNode = gamerUnits.get(j);
 
                 //if (!battleNode.isActive) { continue; }
-                if (battleNode.hp.v <= 0) { continue; }
+                //if (battleNode.hp.v <= 0) { continue; }
 
                 for (int k = 0; k < gamers.size(); k++) {
 
@@ -123,7 +124,7 @@ public class BattleSystem extends noteworthyframework.System {
                         BattleNode otherBattleNode = otherGamerUnits.get(m);
 
                         //if (!otherBattleNode.isActive) { continue; }
-                        if (otherBattleNode.hp.v <= 0) { continue; }
+                        //if (otherBattleNode.hp.v <= 0) { continue; }
 
                         // PHEW!!!
                         collide(ct, dt, battleNode, otherBattleNode);
