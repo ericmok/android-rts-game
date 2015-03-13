@@ -20,8 +20,8 @@ public class BattleSystem extends noteworthyframework.System {
 
     public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
 
-    private RewriteOnlyArray<CollisionNode> collidedBattleNodes =
-            new RewriteOnlyArray<CollisionNode>(CollisionNode.class, 1024);
+    private RewriteOnlyArray<BattleNode.Ptr> activeBattleNodes =
+            new RewriteOnlyArray<BattleNode.Ptr>(BattleNode.Ptr.class, 1024);
 
     public BattleSystem() {
     }
@@ -56,21 +56,18 @@ public class BattleSystem extends noteworthyframework.System {
     }
 
     private void battleAllCollisionPairs(double ct, double dt) {
+        for (int i = 0; i < activeBattleNodes.size(); i++) {
 
-        for (int i = 0; i < collidedBattleNodes.size(); i++) {
+            BattleNode attackerNode = activeBattleNodes.get(i).v;
+            BattleNode otherBattleNode = attackerNode.target[0];
 
-            CollisionNode collisionNode = collidedBattleNodes.get(i);
-            BattleNode battleNode = collisionNode.battleNode;
-            BattleNode otherBattleNode = collisionNode.otherBattleNode;
-            double distance = collisionNode.distance;
+            attackerNode.onTargetAcquired.apply(this, attackerNode, otherBattleNode);
 
-            battleNode.onTargetAcquired.apply(this, battleNode, otherBattleNode);
-
-            battleNode.onAttack.apply(this, battleNode, otherBattleNode);
-            otherBattleNode.onHpHit.apply(this, battleNode, otherBattleNode);
+            attackerNode.onAttack.apply(this, attackerNode, otherBattleNode);
+            otherBattleNode.onHpHit.apply(this, attackerNode, otherBattleNode);
 
             // For demo
-            otherBattleNode.hp.v = otherBattleNode.hp.v - battleNode.attackDamage.v * dt;
+            otherBattleNode.hp.v = otherBattleNode.hp.v - attackerNode.attackDamage.v * dt;
 
             if (otherBattleNode.hp.v <= 0) {
                 otherBattleNode.onDie.apply(this, otherBattleNode);
@@ -78,6 +75,9 @@ public class BattleSystem extends noteworthyframework.System {
                 //battleNodes.queueToRemove(otherBattleNode);
                 this.getBaseEngine().removeUnit(otherBattleNode.unit);
             }
+
+            attackerNode.target[0] = null;
+            attackerNode.targetDistance.v = 0;
         }
     }
 
@@ -88,19 +88,41 @@ public class BattleSystem extends noteworthyframework.System {
 
         double distance = battleNode.coords.pos.distanceTo(otherBattleNode.coords.pos);
 
-        if (distance < battleNode.targetAcquisitionRange.v) {
+        if (distance <= battleNode.targetAcquisitionRange.v) {
 
-            CollisionNode collisionNode = collidedBattleNodes.takeNextWritable();
-            collisionNode.battleNode = battleNode;
-            collisionNode.otherBattleNode = otherBattleNode;
-            collisionNode.distance = distance;
+            battleNode._hasTarget = true;
+
+            if (battleNode.target[0] != null) {
+                if (distance == battleNode.targetDistance.v) {
+                    if (otherBattleNode.tieBreaker.v > battleNode.target[0].tieBreaker.v) {
+                        battleNode.targetDistance.v = distance;
+                        battleNode.target[0] = otherBattleNode;
+                    }
+                }
+                if (distance < battleNode.targetDistance.v) {
+                    battleNode.targetDistance.v = distance;
+                    battleNode.target[0] = otherBattleNode;
+                }
+            }
+            else {
+                BattleNode.Ptr battleNodePtr = activeBattleNodes.takeNextWritable();
+                battleNodePtr.v = battleNode;
+
+                battleNode.targetDistance.v = distance;
+                battleNode.target[0] = otherBattleNode;
+            }
+
+//            CollisionNode collisionNode = collidedBattleNodes.takeNextWritable();
+//            collisionNode.battleNode = battleNode;
+//            collisionNode.otherBattleNode = otherBattleNode;
+//            collisionNode.distance = distance;
         }
     }
 
     @Override
     public void step(double ct, double dt) {
 
-        collidedBattleNodes.resetWriteIndex();
+        activeBattleNodes.resetWriteIndex();
 
         for (int i = 0; i < gamers.size(); i++) {
             Gamer gamer = gamers.get(i);
@@ -134,7 +156,7 @@ public class BattleSystem extends noteworthyframework.System {
             }
         }
 
-        collidedBattleNodes.sort();
+        //collidedBattleNodes.sort();
         battleAllCollisionPairs(ct, dt);
     }
 
@@ -149,17 +171,19 @@ public class BattleSystem extends noteworthyframework.System {
         }
     }
 
-    public static class CollisionNode implements Comparable<CollisionNode> {
-        public BattleNode battleNode;
-        public BattleNode otherBattleNode;
-        public double distance;
 
-        @Override
-        public int compareTo(CollisionNode collisionNode) {
-            if (this.distance < collisionNode.distance) return -1;
-            else if (this.distance > collisionNode.distance) return 1;
-            else
-                return 0;
-        }
-    }
+//
+//    public static class CollisionNode implements Comparable<CollisionNode> {
+//        public BattleNode battleNode;
+//        public BattleNode otherBattleNode;
+//        public double distance;
+//
+//        @Override
+//        public int compareTo(CollisionNode collisionNode) {
+//            if (this.distance < collisionNode.distance) return -1;
+//            else if (this.distance > collisionNode.distance) return 1;
+//            else
+//                return 0;
+//        }
+//    }
 }

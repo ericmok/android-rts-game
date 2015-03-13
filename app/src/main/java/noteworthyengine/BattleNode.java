@@ -55,6 +55,8 @@ public class BattleNode extends Node {
     public IntegerPtr attackState = new IntegerPtr() {{ v = 0; }};
     public IntegerPtr attackProgress = new IntegerPtr() {{ v = 0; }};
 
+    public boolean _hasTarget = false;
+    public DoublePtr tieBreaker = new DoublePtr() {{ v = Math.random(); }};
     public DoublePtr targetDistance = new DoublePtr() {{ v = 0; }};
     public BattleNode[] target = new BattleNode[1];
 
@@ -74,5 +76,9 @@ public class BattleNode extends Node {
     public BattleNode(Unit unit) {
         super(_NAME, unit);
         Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
+    }
+
+    public static class Ptr {
+        public BattleNode v = null;
     }
 }

@@ -63,7 +63,7 @@ public class Platoon extends Unit {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
                 //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
-                selectedRenderNode.isActive = true;
+                //selectedRenderNode.isActive = true;
             }
         };
 
