@@ -1,5 +1,8 @@
 package noteworthyengine;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+
 import noteworthyframework.*;
 import utils.Vector2;
 
@@ -8,8 +11,14 @@ import utils.Vector2;
  */
 public class FieldSystem extends noteworthyframework.System {
 
-    public QueueMutationList<FieldNode> troops = new QueueMutationList<FieldNode>(127);
-    public QueueMutationList<FieldNode> fields = new QueueMutationList<FieldNode>(127);
+    public Hashtable<Gamer, QueueMutationList<FieldNode>> agentsByGamer =
+            new Hashtable<Gamer, QueueMutationList<FieldNode>>(4);
+            //new QueueMutationList<FieldNode>(127);
+    public Hashtable<Gamer, QueueMutationList<FieldNode>> arrowsByGamer =
+            new Hashtable<Gamer, QueueMutationList<FieldNode>>(4);
+            //new QueueMutationList<FieldNode>(127);
+
+    public ArrayList<Gamer> gamers = new ArrayList<Gamer>(4);
 
     private Vector2 temp = new Vector2();
 
@@ -17,6 +26,11 @@ public class FieldSystem extends noteworthyframework.System {
         MovementNode.class,
         FieldNode.class
     };
+
+//    public static final int MAX_GAMERS = 4;
+//
+//    public Hashtable<String, DenormalizedDataSet<FieldNode, String>> nodesByGamer;
+//
 
     // To much down casting
     //public Hashtable<Class, QueueMutationList> nodesLists = new Hashtable<Class, QueueMutationList>(ACCEPTED_NODES.length);
@@ -30,16 +44,38 @@ public class FieldSystem extends noteworthyframework.System {
             FieldNode fieldNode = (FieldNode) node;
 
             if (fieldNode._fieldAgentNode != null) {
-                troops.queueToAdd(fieldNode);
+
+                QueueMutationList<FieldNode> fieldAgentNodes = agentsByGamer.get(fieldNode.gamer.v);
+                if (fieldAgentNodes == null) {
+                    fieldAgentNodes = new QueueMutationList<FieldNode>(127);
+                    agentsByGamer.put(fieldNode.gamer.v, fieldAgentNodes);
+                    if (!gamers.contains(fieldNode.gamer.v)) {
+                        gamers.add(fieldNode.gamer.v);
+                    }
+                }
+                fieldAgentNodes.queueToAdd(fieldNode);
+
+                //troops.queueToAdd(fieldNode);
             }
             if (fieldNode._fieldArrowNode != null) {
-                fields.queueToAdd(fieldNode);
+
+                QueueMutationList<FieldNode> fieldArrowNodes = arrowsByGamer.get(fieldNode.gamer.v);
+                if (fieldArrowNodes == null) {
+                    fieldArrowNodes = new QueueMutationList<FieldNode>(127);
+                    arrowsByGamer.put(fieldNode.gamer.v, fieldArrowNodes);
+                    if (!gamers.contains(fieldNode.gamer.v)) {
+                        gamers.add(fieldNode.gamer.v);
+                    }
+                }
+                fieldArrowNodes.queueToAdd(fieldNode);
+
+                //arrowsByGamer.queueToAdd(fieldNode);
             }
 
 //            if (fieldNode.isFieldControl.v == 0) {
 //                troops.queueToAdd(fieldNode);
 //            } else {
-//                fields.queueToAdd(fieldNode);
+//                arrowsByGamer.queueToAdd(fieldNode);
 //            }
         }
 
@@ -61,65 +97,95 @@ public class FieldSystem extends noteworthyframework.System {
             FieldNode fieldNode = (FieldNode) node;
 
             if (fieldNode._fieldAgentNode != null) {
-                troops.queueToRemove(fieldNode);
+                QueueMutationList<FieldNode> list = agentsByGamer.get(fieldNode.gamer.v);
+                if (list != null) {
+                    list.queueToRemove(fieldNode);
+                }
+                //troops.queueToRemove(fieldNode);
             }
             if (fieldNode._fieldArrowNode != null) {
-                fields.queueToRemove(fieldNode);
+                QueueMutationList<FieldNode> list = arrowsByGamer.get(fieldNode.gamer.v);
+                if (list != null) {
+                    arrowsByGamer.get(fieldNode.gamer.v).queueToRemove(fieldNode);
+                }
+                //arrowsByGamer.queueToRemove(fieldNode);
             }
 
 //            if (fieldNode.isFieldControl.v == 0) {
 //                troops.queueToRemove(fieldNode);
 //            } else {
-//                fields.queueToRemove(fieldNode);
+//                arrowsByGamer.queueToRemove(fieldNode);
 //            }
         }
     }
 
     @Override
     public void flushQueues() {
-        troops.flushQueues();
-        fields.flushQueues();
+        //troops.flushQueues();
+        //arrowsByGamer.flushQueues();
+        for (int i = 0; i < gamers.size(); i++) {
+            QueueMutationList<FieldNode> list = agentsByGamer.get(gamers.get(i));
+            if (list != null) {
+                list.flushQueues();
+            }
+            list = arrowsByGamer.get(gamers.get(i));
+            if (list != null) {
+                list.flushQueues();
+            }
+        }
     }
 
     @Override
     public void step(double ct, double dt) {
 
-        for (int i = 0; i < troops.size(); i++) {
-            // Loop through each troop to aggregate field forces
+        for (int gamerIndex = 0; gamerIndex < gamers.size(); gamerIndex += 1) {
 
-            FieldNode troopFieldNode = troops.get(i);
+            Gamer gamer = gamers.get(gamerIndex);
 
-            //Coords troopCoords = (Coords)troopFieldNode.unit.field("coords");
-            //Vector2 fieldForce = (Vector2)troopFieldNode.unit.field("fieldForce");
+            for (int i = 0; i < agentsByGamer.get(gamer).size(); i++) {
+                // Loop through each troop to aggregate field forces
 
-            Coords troopCoords = troopFieldNode._fieldAgentNode.coords;
-            Vector2 fieldForce = troopFieldNode._fieldAgentNode.fieldForce;
+                // TODO: Check if list is null
+                if (agentsByGamer.get(gamer) == null) {
+                    continue;
+                }
+                FieldNode troopFieldNode = agentsByGamer.get(gamer).get(i);
 
-            fieldForce.zero();
+                //Coords troopCoords = (Coords)troopFieldNode.unit.field("coords");
+                //Vector2 fieldForce = (Vector2)troopFieldNode.unit.field("fieldForce");
 
-            for (int j = 0; j < fields.size(); j++) {
-                // Field controls add to the forces per troop
+                Coords troopCoords = troopFieldNode._fieldAgentNode.coords;
+                Vector2 fieldForce = troopFieldNode._fieldAgentNode.fieldForce;
 
-                FieldNode control = fields.get(j);
+                fieldForce.zero();
 
-                //FieldNode fieldNodeForControl = fields.get(j);
-                //FieldUnit fieldUnit = (FieldUnit)fieldNodeForControl.unit;
-                //FieldControl fieldControl = fieldUnit.fieldControl;
+                for (int j = 0; j < arrowsByGamer.get(gamer).size(); j++) {
+                    // Field controls add to the forces per troop
 
-                // Aggregate
-                // TODO:
-                //fieldForce.translate(Math.random(), Math.random());
-                //double distance = fieldControl.position.distanceTo(troopCoords.pos);
+                    if (arrowsByGamer.get(gamer) == null) {
+                        continue;
+                    }
+                    FieldNode control = arrowsByGamer.get(gamer).get(j);
 
-                double sqDistance = control._fieldArrowNode.coords.pos.squaredDistanceTo(troopCoords.pos) + 0.00001;
-                double speed = 0.1 / sqDistance;
+                    //FieldNode fieldNodeForControl = arrowsByGamer.get(j);
+                    //FieldUnit fieldUnit = (FieldUnit)fieldNodeForControl.unit;
+                    //FieldControl fieldControl = fieldUnit.fieldControl;
 
-                temp.copy(control._fieldArrowNode.coords.rot);
-                temp.setNormalized();
-                temp.scale(speed, speed);
+                    // Aggregate
+                    // TODO:
+                    //fieldForce.translate(Math.random(), Math.random());
+                    //double distance = fieldControl.position.distanceTo(troopCoords.pos);
 
-                //fieldForce.translate(Math.random(), Math.random());
-                fieldForce.translate(temp.x, temp.y);
+                    double sqDistance = control._fieldArrowNode.coords.pos.squaredDistanceTo(troopCoords.pos) + 0.00001;
+                    double speed = 0.1 / sqDistance;
+
+                    temp.copy(control._fieldArrowNode.coords.rot);
+                    temp.setNormalized();
+                    temp.scale(speed, speed);
+
+                    //fieldForce.translate(Math.random(), Math.random());
+                    fieldForce.translate(temp.x, temp.y);
+                }
             }
         }
     }

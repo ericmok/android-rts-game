@@ -70,7 +70,7 @@ public class Platoon extends Unit {
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem system) {
-            renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.team);
+            renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
             if (battleNode.hp.v <= 0) {
                 system.drawCompat.drawTemporarySprite(new TemporarySprite2dDef() {{

@@ -15,8 +15,8 @@ public class BattleSystem extends noteworthyframework.System {
 
     public QueueMutationList<BattleNode> battleNodes = new QueueMutationList<BattleNode>(127);
 
-    public Hashtable<String, QueueMutationList<BattleNode>> battleNodesByGamer =
-            new Hashtable<String, QueueMutationList<BattleNode>>(8);
+    public Hashtable<Gamer, QueueMutationList<BattleNode>> battleNodesByGamer =
+            new Hashtable<Gamer, QueueMutationList<BattleNode>>(8);
 
     public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
 
@@ -32,11 +32,11 @@ public class BattleSystem extends noteworthyframework.System {
             BattleNode battleNode = (BattleNode) node;
             battleNodes.queueToAdd(battleNode);
 
-            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer.name);
+            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer.v);
             if (gamerUnits == null) {
                 gamerUnits = new QueueMutationList<BattleNode>(127);
-                battleNodesByGamer.put(battleNode.gamer.name, gamerUnits);
-                gamers.add(battleNode.gamer);
+                battleNodesByGamer.put(battleNode.gamer.v, gamerUnits);
+                gamers.add(battleNode.gamer.v);
             }
             gamerUnits.queueToAdd(battleNode);
         }
@@ -48,7 +48,7 @@ public class BattleSystem extends noteworthyframework.System {
             BattleNode battleNode = (BattleNode) node;
             battleNodes.queueToRemove((BattleNode)node);
 
-            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer.name);
+            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer.v);
             if (gamerUnits != null) {
                 gamerUnits.queueToRemove(battleNode);
             }
@@ -126,7 +126,7 @@ public class BattleSystem extends noteworthyframework.System {
 
         for (int i = 0; i < gamers.size(); i++) {
             Gamer gamer = gamers.get(i);
-            QueueMutationList<BattleNode> gamerUnits = battleNodesByGamer.get(gamer.name);
+            QueueMutationList<BattleNode> gamerUnits = battleNodesByGamer.get(gamer);
 
             for (int j = 0; j < gamerUnits.size(); j++) {
                 BattleNode battleNode = gamerUnits.get(j);
@@ -140,7 +140,7 @@ public class BattleSystem extends noteworthyframework.System {
                     if (i == k) { continue; }
 
                     Gamer otherGamer = gamers.get(k);
-                    QueueMutationList<BattleNode> otherGamerUnits = battleNodesByGamer.get(otherGamer.name);
+                    QueueMutationList<BattleNode> otherGamerUnits = battleNodesByGamer.get(otherGamer);
 
                     for (int m = 0; m < otherGamerUnits.size(); m++) {
                         BattleNode otherBattleNode = otherGamerUnits.get(m);
@@ -166,7 +166,7 @@ public class BattleSystem extends noteworthyframework.System {
 
         for (int i = 0; i < gamers.size(); i++) {
             Gamer gamer = gamers.get(i);
-            QueueMutationList list = battleNodesByGamer.get(gamer.name);
+            QueueMutationList list = battleNodesByGamer.get(gamer);
             list.flushQueues();
         }
     }

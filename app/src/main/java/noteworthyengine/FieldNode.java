@@ -1,6 +1,7 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
+import noteworthyframework.Gamer;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;
@@ -12,6 +13,8 @@ public class FieldNode extends Node {
 
     public static final String _NAME = "fieldNode";
     public String _name = _NAME;
+
+    public GamerPtr gamer;
 
     public FieldArrowNode _fieldArrowNode;
     public FieldAgentNode _fieldAgentNode;

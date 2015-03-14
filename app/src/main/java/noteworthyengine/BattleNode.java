@@ -34,7 +34,7 @@ public class BattleNode extends Node {
 
     public static final Gamer _NO_GAMER = new Gamer("none");
 
-    public Gamer gamer;
+    public GamerPtr gamer;
 
     public Coords coords;
     public Vector2 velocity;

@@ -42,13 +42,16 @@ public class DataLoader implements EngineDataLoader {
             JSONArray troopArr = jPlayerObj.getJSONArray("troop");
 
             for (int i = 0; i < troopArr.length(); i++) {
+
                 JSONObject jEntity = troopArr.getJSONObject(i);
 
                 //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
                 Unit troopy = UnitPool.troopyMemoryPool.fetchMemory();
 
-                Gamer gamer = (Gamer)troopy.fields.put("gamer", player);
-                gamer.copy(player);
+                //GamerPtr gamer = (GamerPtr)troopy.fields.put("gamer", player);
+                //gamer.v = player;
+                GamerPtr gamerPtr = (GamerPtr)troopy.field("gamer");
+                gamerPtr.v = player;
 
                 Coords coords = (Coords)troopy.field("coords");
                 coords.pos.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
@@ -65,6 +68,8 @@ public class DataLoader implements EngineDataLoader {
                 // Debug
                 //FieldUnit fieldUnit = new FieldUnit();
                 ArrowCommand arrowCommand = new ArrowCommand();
+                GamerPtr tempGamer = (GamerPtr)arrowCommand.field("gamer");
+                tempGamer.v = player;
                 baseEngine.addUnit(arrowCommand);
 
                 Coords arrowCoords = (Coords)arrowCommand.field("coords");
@@ -73,6 +78,19 @@ public class DataLoader implements EngineDataLoader {
                 //arrowCoords.rot.setDirection(2 * Math.random() - 1, 2 * Math.random() - 1);
                 arrowCoords.rot.setDirection(-arrowCoords.pos.x + ((Math.random()) - 0.5),
                                                 -arrowCoords.pos.y + ((Math.random()) - 0.5));
+
+                arrowCommand = new ArrowCommand();
+                tempGamer = (GamerPtr)arrowCommand.field("gamer");
+                tempGamer.v = player;
+                baseEngine.addUnit(arrowCommand);
+
+                arrowCoords = (Coords)arrowCommand.field("coords");
+                arrowCoords.pos.copy(coords.pos);
+                arrowCoords.pos.translate(Math.ceil(30 * Math.random() - 15), Math.ceil(30 * Math.random() - 15));
+                //arrowCoords.rot.setDirection(2 * Math.random() - 1, 2 * Math.random() - 1);
+                arrowCoords.rot.setDirection(-arrowCoords.pos.x + ((Math.random()) - 0.5),
+                        -arrowCoords.pos.y + ((Math.random()) - 0.5));
+
 
                 //Vector2 fieldDirection = (Vector2)arrowCommand.field("fieldDirection");
                 //fieldDirection.set((2 * Math.random()) - 1, (2 * Math.random()) - 1);
