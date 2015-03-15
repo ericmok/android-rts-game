@@ -72,13 +72,12 @@ public class CommandSystem extends noteworthyframework.System {
         }
         if (currentAction == MotionEvent.ACTION_UP) {
             ArrowCommand arrowCommand = new ArrowCommand();
-            GamerPtr gamer = (GamerPtr)arrowCommand.field("gamer");
-            // TODO: Fix this!
-            gamer.v = this.getBaseEngine().currentGamer;
-            Coords coords = (Coords)arrowCommand.field("coords");
-            coords.pos.copy(commandNode.coords.pos);
-            coords.rot.copy(commandNode.coords.rot);
-
+            arrowCommand.set(this.getBaseEngine().currentGamer,
+                    commandNode.coords.pos.x,
+                    commandNode.coords.pos.y,
+                    commandNode.coords.rot.x,
+                    commandNode.coords.rot.y);
+            
             this.getBaseEngine().addUnit(arrowCommand);
 
             IntegerPtr color = (IntegerPtr)feedback.field("color");
