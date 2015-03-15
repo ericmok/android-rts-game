@@ -34,6 +34,13 @@ public class ArrowCommand extends Unit {
         renderNode.onDraw = onDraw;
     }
 
+    public void set(Gamer gamer, double x, double y, double rx, double ry) {
+        this.fieldNode.gamer.v = gamer;
+        this.fieldNode._fieldArrowNode.coords.pos.set(x, y);
+        this.fieldNode._fieldArrowNode.coords.rot.setDirection(rx, ry);
+        this.renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+    }
+
     public VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem element) {

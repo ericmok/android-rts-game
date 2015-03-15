@@ -10,6 +10,7 @@ import noteworthyframework.EngineDataLoader;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import noteworthyframework.UnitPool;
+import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
@@ -63,33 +64,19 @@ public class DataLoader implements EngineDataLoader {
 
                 baseEngine.addUnit(troopy);
                 //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
-                //engineData.addUnit(troopy);
 
-                // Debug
-                //FieldUnit fieldUnit = new FieldUnit();
+
                 ArrowCommand arrowCommand = new ArrowCommand();
-                GamerPtr tempGamer = (GamerPtr)arrowCommand.field("gamer");
-                tempGamer.v = player;
+                double randX = Math.ceil(30 * Math.random() - 15);
+                double randY = Math.ceil(30 * Math.random() - 15);
+
+                arrowCommand.set(player,
+                        randX,
+                        randY,
+                        -randX + 0.3 * ((Math.random()) - 0.5),
+                        -randY + 0.3 * ((Math.random()) - 0.5));
+
                 baseEngine.addUnit(arrowCommand);
-
-                Coords arrowCoords = (Coords)arrowCommand.field("coords");
-                arrowCoords.pos.copy(coords.pos);
-                arrowCoords.pos.translate(Math.ceil(30 * Math.random() - 15), Math.ceil(30 * Math.random() - 15));
-                //arrowCoords.rot.setDirection(2 * Math.random() - 1, 2 * Math.random() - 1);
-                arrowCoords.rot.setDirection(-arrowCoords.pos.x + ((Math.random()) - 0.5),
-                                                -arrowCoords.pos.y + ((Math.random()) - 0.5));
-
-                arrowCommand = new ArrowCommand();
-                tempGamer = (GamerPtr)arrowCommand.field("gamer");
-                tempGamer.v = player;
-                baseEngine.addUnit(arrowCommand);
-
-                arrowCoords = (Coords)arrowCommand.field("coords");
-                arrowCoords.pos.copy(coords.pos);
-                arrowCoords.pos.translate(Math.ceil(30 * Math.random() - 15), Math.ceil(30 * Math.random() - 15));
-                //arrowCoords.rot.setDirection(2 * Math.random() - 1, 2 * Math.random() - 1);
-                arrowCoords.rot.setDirection(-arrowCoords.pos.x + ((Math.random()) - 0.5),
-                        -arrowCoords.pos.y + ((Math.random()) - 0.5));
 
 
                 //Vector2 fieldDirection = (Vector2)arrowCommand.field("fieldDirection");
