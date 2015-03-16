@@ -8,9 +8,9 @@ import utils.Vector3;
 
 public class GamePool {
 
-	public MemoryPool<TriggerField> triggerFields;
+	//public MemoryPool<TriggerField> triggerFields;
 	
-	public MemoryPool<Sprite2dDef> drawItems;
+	//public MemoryPool<Sprite2dDef> drawItems;
 	
 	public MemoryPool<TemporarySprite2dDef> temporaryDrawItems;
 
@@ -18,9 +18,9 @@ public class GamePool {
 
 	public MemoryPool<Vector3> vector3s;
 	
-	public MemoryPool<TimedProgress> timedProgresses;
+	//public MemoryPool<TimedProgress> timedProgresses;
 
-    public MemoryPool<Command> commands;
+    //public MemoryPool<Command> commands;
 
 	public GamePool() {
 
@@ -28,19 +28,19 @@ public class GamePool {
 	
 	public void allocate() {
 
-		drawItems = new MemoryPool<Sprite2dDef>(Sprite2dDef.class, 1024);
+		//drawItems = new MemoryPool<Sprite2dDef>(Sprite2dDef.class, 1024);
 
 		temporaryDrawItems = new MemoryPool<TemporarySprite2dDef>(TemporarySprite2dDef.class, 1024);
 
-		triggerFields = new MemoryPool<TriggerField>(TriggerField.class, 512);
+		//triggerFields = new MemoryPool<TriggerField>(TriggerField.class, 512);
 
         vector2s = new MemoryPool<Vector2>(Vector2.class, 512);
 
         vector3s = new MemoryPool<Vector3>(Vector3.class, 512);
 
-		timedProgresses = new MemoryPool<TimedProgress>(TimedProgress.class, 512);
+		//timedProgresses = new MemoryPool<TimedProgress>(TimedProgress.class, 512);
 
-        commands = new MemoryPool<Command>(Command.class, CommandHistory.NUMBER_COMMANDS_IN_A_GAME);
+        //commands = new MemoryPool<Command>(Command.class, CommandHistory.NUMBER_COMMANDS_IN_A_GAME);
 	}
 	
 	/**
