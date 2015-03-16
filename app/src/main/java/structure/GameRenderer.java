@@ -190,6 +190,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
                     //sprite.calculateGfxInterpolation(Math.min(1, tickDifference / 12)); // tickDifference / 12ms
                     sprite.calculateGfxInterpolation(0.8);
                     temp = sprite.gfxInterpolation;
+                    sprite.oldPosition.copy(sprite.gfxInterpolation);
                 }
 				game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
 															(float)temp.x, (float)temp.y,
