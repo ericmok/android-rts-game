@@ -66,6 +66,14 @@ public class BattleSystem extends noteworthyframework.System {
             attackerNode.onAttack.apply(this, attackerNode, otherBattleNode);
             otherBattleNode.onHpHit.apply(this, attackerNode, otherBattleNode);
 
+            attackerNode.enemyAttractionForce.translate(
+                    otherBattleNode.coords.pos.x - attackerNode.coords.pos.x,
+                    otherBattleNode.coords.pos.y - attackerNode.coords.pos.y);
+            double distance = otherBattleNode.coords.pos.distanceTo(attackerNode.coords.pos);
+            double mag = 0.05 / (distance * 2);
+
+            attackerNode.enemyAttractionForce.scale(mag, mag);
+
             // For demo
             otherBattleNode.hp.v = otherBattleNode.hp.v - attackerNode.attackDamage.v * dt;
 
@@ -130,6 +138,8 @@ public class BattleSystem extends noteworthyframework.System {
 
             for (int j = 0; j < gamerUnits.size(); j++) {
                 BattleNode battleNode = gamerUnits.get(j);
+
+                battleNode.enemyAttractionForce.zero();
 
                 //if (!battleNode.isActive) { continue; }
                 //if (battleNode.hp.v <= 0) { continue; }

@@ -39,6 +39,8 @@ public class BattleNode extends Node {
     public Coords coords;
     public Vector2 velocity;
 
+    public Vector2 enemyAttractionForce;
+
     public DoublePtr startingHp = new DoublePtr() {{ v = 1; }};
     public DoublePtr hp = new DoublePtr() {{ v = 1; }};
     public DoublePtr armor;

@@ -14,6 +14,8 @@ import networking.CommandHistory;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.DataLoader;
+import noteworthyengine.SeparationNode;
+import noteworthyengine.SeparationSystem;
 import noteworthyengine.TimelineSystem;
 import noteworthyframework.DrawCompat;
 import noteworthyengine.FieldSystem;
@@ -117,16 +119,18 @@ public class Game {
     public void loadEngine() {
         CommandSystem commandSystem = new CommandSystem(this);
         TimelineSystem timelineSystem = new TimelineSystem();
-        MovementSystem movementSystem = new MovementSystem();
+        SeparationSystem separationSystem = new SeparationSystem();
         FieldSystem fieldSystem = new FieldSystem();
+        MovementSystem movementSystem = new MovementSystem();
         BattleSystem battleSystem = new BattleSystem();
         RenderSystem renderSystem = new RenderSystem(new DrawCompat(this));
 
         noteworthyEngine = new NoteworthyEngine();
         noteworthyEngine.addSystem(commandSystem);
         noteworthyEngine.addSystem(timelineSystem);
-        noteworthyEngine.addSystem(movementSystem);
         noteworthyEngine.addSystem(fieldSystem);
+        noteworthyEngine.addSystem(separationSystem);
+        noteworthyEngine.addSystem(movementSystem);
         noteworthyEngine.addSystem(battleSystem);
         noteworthyEngine.addSystem(renderSystem);
     }

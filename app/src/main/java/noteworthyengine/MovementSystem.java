@@ -45,16 +45,18 @@ public class MovementSystem extends noteworthyframework.System {
 
             movementNode.acceleration.zero();
             movementNode.acceleration.translate(fieldForce.x, fieldForce.y);
+            movementNode.acceleration.translate(movementNode.separationForce.x, movementNode.separationForce.y);
 
             //velocity.x += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
             //velocity.y += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
 
             velocity.translate(movementNode.acceleration.x, movementNode.acceleration.y);
+            velocity.translate(movementNode.enemyAttractionForce.x, movementNode.enemyAttractionForce.y);
             velocity.withClampMagnitude(movementNode.maxSpeed.v);
 
             movementNode.gfxOldPosition.copy(position);
-            position.translate(velocity.x * dt, velocity.y * dt);
 
+            position.translate(velocity.x * dt, velocity.y * dt);
             movementNode.coords.rot.setDirection(velocity);
         }
     }
