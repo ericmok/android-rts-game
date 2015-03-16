@@ -142,13 +142,12 @@ public class FieldSystem extends noteworthyframework.System {
 
             Gamer gamer = gamers.get(gamerIndex);
 
-            for (int i = 0; i < agentsByGamer.get(gamer).size(); i++) {
+            // TODO: Check if null?
+            QueueMutationList<FieldNode> agents = agentsByGamer.get(gamer);
+
+            for (int i = 0; i < agents.size(); i++) {
                 // Loop through each troop to aggregate field forces
 
-                // TODO: Check if list is null
-                if (agentsByGamer.get(gamer) == null) {
-                    continue;
-                }
                 FieldNode troopFieldNode = agentsByGamer.get(gamer).get(i);
 
                 //Coords troopCoords = (Coords)troopFieldNode.unit.field("coords");
@@ -159,12 +158,12 @@ public class FieldSystem extends noteworthyframework.System {
 
                 fieldForce.zero();
 
-                for (int j = 0; j < arrowsByGamer.get(gamer).size(); j++) {
+                // TODO: Check if null?
+                QueueMutationList<FieldNode> arrows = arrowsByGamer.get(gamer);
+
+                for (int j = 0; j < arrows.size(); j++) {
                     // Field controls add to the forces per troop
 
-                    if (arrowsByGamer.get(gamer) == null) {
-                        continue;
-                    }
                     FieldNode control = arrowsByGamer.get(gamer).get(j);
 
                     //FieldNode fieldNodeForControl = arrowsByGamer.get(j);
