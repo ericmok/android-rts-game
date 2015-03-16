@@ -164,15 +164,6 @@ public class FieldSystem extends noteworthyframework.System {
 
                     FieldNode control = arrows.get(j);
 
-                    //FieldNode fieldNodeForControl = arrowsByGamer.get(j);
-                    //FieldUnit fieldUnit = (FieldUnit)fieldNodeForControl.unit;
-                    //FieldControl fieldControl = fieldUnit.fieldControl;
-
-                    // Aggregate
-                    // TODO:
-                    //fieldForce.translate(Math.random(), Math.random());
-                    //double distance = fieldControl.position.distanceTo(troopCoords.pos);
-
                     double sqDistance = control._fieldArrowNode.coords.pos.squaredDistanceTo(troopCoords.pos) + 0.00001;
                     double speed = 0.1 / sqDistance;
 
