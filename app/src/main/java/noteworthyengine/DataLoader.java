@@ -66,18 +66,25 @@ public class DataLoader implements EngineDataLoader {
                 //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
 
 
-                ArrowCommand arrowCommand = new ArrowCommand();
-                double randX = Math.ceil(30 * Math.random() - 15);
-                double randY = Math.ceil(30 * Math.random() - 15);
+                //ArrowCommand arrowCommand = new ArrowCommand();
+                //double randX = Math.ceil(30 * Math.random() - 15);
+                //double randY = Math.ceil(30 * Math.random() - 15);
 
-                arrowCommand.set(player,
-                        randX,
-                        randY,
-                        -randX + 0.3 * ((Math.random()) - 0.5),
-                        -randY + 0.3 * ((Math.random()) - 0.5));
+                //arrowCommand.set(player,
+                //        randX,
+                //        randY,
+                //        -randX + 0.3 * ((Math.random()) - 0.5),
+                //        -randY + 0.3 * ((Math.random()) - 0.5));
 
-                baseEngine.addUnit(arrowCommand);
+                //baseEngine.addUnit(arrowCommand);
 
+                TimelineCommand timelineCommand = new TimelineCommand();
+                timelineCommand.timelineNode.gamerPtr.v = player;
+                timelineCommand.timelineNode.coords.pos.set(40 * Math.random() - 20, 40 * Math.random() - 20);
+                timelineCommand.timelineNode.coords.rot.set(-timelineCommand.timelineNode.coords.pos.x,
+                        -timelineCommand.timelineNode.coords.pos.y);
+                timelineCommand.timelineNode.frameTime.v = i * 4;
+                baseEngine.addUnit(timelineCommand);
 
                 //Vector2 fieldDirection = (Vector2)arrowCommand.field("fieldDirection");
                 //fieldDirection.set((2 * Math.random()) - 1, (2 * Math.random()) - 1);

@@ -17,6 +17,8 @@ public class ArrowCommand extends Unit {
     public static final float WIDTH = 3f;
     public static final float HEIGHT = 3f;
 
+    public static final String ANIMATION_FIELD_ARROW_EXISTING = "Animations/FieldArrows/Existing";
+
     FieldNode fieldNode;
     RenderNode renderNode;
 
@@ -27,7 +29,7 @@ public class ArrowCommand extends Unit {
         fieldNode._fieldArrowNode = new FieldNode.FieldArrowNode(this);
 
         renderNode = new RenderNode(this);
-        renderNode.animationName = Sprite2dDef.ANIMATION_TRIGGER_FIELDS_EXISTING;
+        renderNode.animationName = ANIMATION_FIELD_ARROW_EXISTING;
         renderNode.color.v = Color.WHITE;
         renderNode.width.v = WIDTH;
         renderNode.height.v = HEIGHT;

@@ -14,6 +14,7 @@ import networking.CommandHistory;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.DataLoader;
+import noteworthyengine.TimelineSystem;
 import noteworthyframework.DrawCompat;
 import noteworthyengine.FieldSystem;
 import noteworthyengine.MovementSystem;
@@ -115,6 +116,7 @@ public class Game {
 
     public void loadEngine() {
         CommandSystem commandSystem = new CommandSystem(this);
+        TimelineSystem timelineSystem = new TimelineSystem();
         MovementSystem movementSystem = new MovementSystem();
         FieldSystem fieldSystem = new FieldSystem();
         BattleSystem battleSystem = new BattleSystem();
@@ -122,6 +124,7 @@ public class Game {
 
         noteworthyEngine = new NoteworthyEngine();
         noteworthyEngine.addSystem(commandSystem);
+        noteworthyEngine.addSystem(timelineSystem);
         noteworthyEngine.addSystem(movementSystem);
         noteworthyEngine.addSystem(fieldSystem);
         noteworthyEngine.addSystem(battleSystem);

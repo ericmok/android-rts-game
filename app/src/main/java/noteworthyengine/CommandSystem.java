@@ -77,7 +77,7 @@ public class CommandSystem extends noteworthyframework.System {
                     commandNode.coords.pos.y,
                     commandNode.coords.rot.x,
                     commandNode.coords.rot.y);
-            
+
             this.getBaseEngine().addUnit(arrowCommand);
 
             IntegerPtr color = (IntegerPtr)feedback.field("color");
