@@ -189,7 +189,17 @@ public class Orientation extends Vector2 {
 		this.x = orientation.x;
 		this.y = orientation.y;
 	}
-	
+
+    public static void getPerpendicular(Vector2 output, Vector2 in) {
+        double pointX = 0;
+        if (in.x != 0) {
+            pointX = (-in.y / in.x);
+        }
+        output.x = pointX;
+        output.y = 1;
+        output.setNormalized();
+    }
+
 	public void getPerpendicular(Vector2 output) {
         double pointX = 0;
         if (x != 0) {
@@ -209,9 +219,9 @@ public class Orientation extends Vector2 {
 			output.setNormalized2d();
 			return;
 		}
-		
+
 		double pointX = (-y / x);
-		
+
 		output.x = pointX;
 		output.y = 1;
 		output.z = 0;

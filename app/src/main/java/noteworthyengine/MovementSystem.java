@@ -46,6 +46,7 @@ public class MovementSystem extends noteworthyframework.System {
             movementNode.acceleration.zero();
             movementNode.acceleration.translate(fieldForce.x, fieldForce.y);
             movementNode.acceleration.translate(movementNode.separationForce.x, movementNode.separationForce.y);
+            movementNode.acceleration.translate(movementNode.formationForce.x, movementNode.formationForce.y);
 
             //velocity.x += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
             //velocity.y += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;

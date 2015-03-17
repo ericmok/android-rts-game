@@ -2,7 +2,9 @@ package noteworthyengine;
 
 import java.util.ArrayList;
 
+import model.Denormalizable;
 import noteworthyframework.Coords;
+import noteworthyframework.Gamer;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;
@@ -13,6 +15,8 @@ import utils.Vector2;
 public class FormationNode extends Node {
 
     public static final String NAME = "formationNode";
+
+    public GamerPtr gamer;
 
     public Coords coords;
     public Vector2 formationForce;

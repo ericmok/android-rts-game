@@ -21,6 +21,7 @@ public class Platoon extends Unit {
     FieldNode fieldNode;
     BattleNode battleNode;
     SeparationNode separationNode;
+    FormationNode formationNode;
 
     RenderNode renderNode;
     RenderNode dyingRenderNode;
@@ -56,6 +57,7 @@ public class Platoon extends Unit {
         dyingRenderNode.color.v = Color.WHITE;
 
         separationNode = new SeparationNode(this);
+        formationNode = new FormationNode(this);
 
         selectedRenderNode = new RenderNode("selectedRenderNode", this);
         selectedRenderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
