@@ -1,5 +1,7 @@
 package noteworthyengine;
 
+import android.util.Log;
+
 import noteworthyframework.*;
 import utils.Vector2;
 
@@ -39,11 +41,14 @@ public class SeparationSystem extends noteworthyframework.System {
 
                 SeparationNode otherNode = nodes.get(j);
 
-                double distance = node.coords.pos.distanceTo(otherNode.coords.pos);
-                distance = distance * distance * distance;
+                double distance = (node.coords.pos.distanceTo(otherNode.coords.pos) + 1);
+
+                if (distance > 2) continue;
+
+                distance = distance * distance * distance * distance;
 
                 Vector2.subtract(temp, node.coords.pos, otherNode.coords.pos);
-                temp.scale(0.1 / distance, 0.1 / distance);
+                temp.scale(1 / distance, 1 / distance);
 
                 node.separationForce.translate(temp.x , temp.y);
             }

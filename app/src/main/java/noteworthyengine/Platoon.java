@@ -17,10 +17,12 @@ public class Platoon extends Unit {
     public static final String NAME = "Troopy";
 
     MovementNode movementNode;
-    RenderNode renderNode;
+
     FieldNode fieldNode;
     BattleNode battleNode;
+    SeparationNode separationNode;
 
+    RenderNode renderNode;
     RenderNode dyingRenderNode;
     RenderNode selectedRenderNode;
 
@@ -35,7 +37,7 @@ public class Platoon extends Unit {
 
         battleNode = new BattleNode(this);
         battleNode.hp.v = 100;
-        battleNode.targetAcquisitionRange.v = 2;
+        battleNode.targetAcquisitionRange.v = 3;
         battleNode.onTargetAcquired = onTargetAcquired;
 
         renderNode = new RenderNode(this);
@@ -52,6 +54,8 @@ public class Platoon extends Unit {
         dyingRenderNode.isActive = false;
         dyingRenderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
         dyingRenderNode.color.v = Color.WHITE;
+
+        separationNode = new SeparationNode(this);
 
         selectedRenderNode = new RenderNode("selectedRenderNode", this);
         selectedRenderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
