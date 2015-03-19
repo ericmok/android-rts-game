@@ -157,6 +157,7 @@ public class FieldSystem extends noteworthyframework.System {
                 Coords troopCoords = troopFieldNode._fieldAgentNode.coords;
                 Vector2 fieldForce = troopFieldNode._fieldAgentNode.fieldForce;
 
+                //fieldForce.scale(0.3, 0.3);
                 fieldForce.zero();
 
                 for (int j = 0; j < arrows.size(); j++) {
@@ -164,12 +165,19 @@ public class FieldSystem extends noteworthyframework.System {
 
                     FieldNode control = arrows.get(j);
 
-                    double sqDistance = control._fieldArrowNode.coords.pos.squaredDistanceTo(troopCoords.pos) + 0.00001;
-                    double speed = 0.1 / sqDistance;
+                    //double sqDistance = control._fieldArrowNode.coords.pos.squaredDistanceTo(troopCoords.pos) + 0.00001;
+                    //double speed = 1 / sqDistance;
+                    double distance = control._fieldArrowNode.coords.pos.distanceTo(troopCoords.pos) + 0.000001;
+                    double fieldArrowInfluenceRadius = control._fieldArrowNode.fieldArrowInfluenceRadius.v;
+
+                    double ramp = Math.min( (fieldArrowInfluenceRadius - distance + 0.00001) / fieldArrowInfluenceRadius, 1 );
+                    ramp = ramp * ramp * troopFieldNode._fieldAgentNode.maxSpeed.v;
+                    ramp = Math.min(ramp, troopFieldNode._fieldAgentNode.maxSpeed.v);
 
                     temp.copy(control._fieldArrowNode.coords.rot);
-                    temp.setNormalized();
-                    temp.scale(speed, speed);
+                    //temp.setNormalized();
+                    temp.scale(ramp, ramp);
+                    //temp.scale(speed, speed);
 
                     //fieldForce.translate(Math.random(), Math.random());
                     fieldForce.translate(temp.x, temp.y);

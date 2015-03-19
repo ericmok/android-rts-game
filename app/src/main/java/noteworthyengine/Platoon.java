@@ -31,6 +31,7 @@ public class Platoon extends Unit {
         this.name = NAME;
 
         movementNode = new MovementNode(this);
+        movementNode.maxSpeed.v = 0.8;
 
         fieldNode = new FieldNode(this);
         fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
@@ -38,7 +39,7 @@ public class Platoon extends Unit {
 
         battleNode = new BattleNode(this);
         battleNode.hp.v = 100;
-        battleNode.targetAcquisitionRange.v = 3;
+        battleNode.targetAcquisitionRange.v = 15;
         battleNode.onTargetAcquired = onTargetAcquired;
 
         renderNode = new RenderNode(this);

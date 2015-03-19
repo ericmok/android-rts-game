@@ -10,6 +10,9 @@ public class MovementSystem extends noteworthyframework.System {
 
     public QueueMutationList<MovementNode> movementNodes = new QueueMutationList<MovementNode>(127);
 
+    public Vector2 temp = new Vector2();
+    public Vector2 temp2 = new Vector2();
+
     public MovementSystem() {
     }
 
@@ -42,23 +45,38 @@ public class MovementSystem extends noteworthyframework.System {
             Vector2 position = movementNode.coords.pos;
             Vector2 velocity = movementNode.velocity;
             Vector2 fieldForce = movementNode.fieldForce;
+            Vector2 separationForce = movementNode.separationForce;
+            Vector2 formationForce = movementNode.formationForce;
 
-            movementNode.acceleration.zero();
-            movementNode.acceleration.translate(fieldForce.x, fieldForce.y);
-            movementNode.acceleration.translate(movementNode.separationForce.x, movementNode.separationForce.y);
-            movementNode.acceleration.translate(movementNode.formationForce.x, movementNode.formationForce.y);
+            Vector2 desiredVelocity = temp;
+            //desiredVelocity.zero();
+            desiredVelocity.copy(movementNode.velocity);
+            desiredVelocity.scale(0.4, 0.4);
+            desiredVelocity.translate(fieldForce.x, fieldForce.y);
+
+            desiredVelocity.translate(movementNode.enemyAttractionForce.x, movementNode.enemyAttractionForce.y);
+
+            temp2.copy(desiredVelocity);
+
+            //desiredVelocity.translate(formationForce.x, formationForce.y);
+            desiredVelocity.translate(separationForce.x, separationForce.y);
+
+            Vector2.subtract(movementNode.acceleration, desiredVelocity, movementNode.velocity);
 
             //velocity.x += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
             //velocity.y += (Math.random() > 0.5 ? 1 : -1) * GameSettings.UNIT_LENGTH_MULTIPLIER / 30;
 
             velocity.translate(movementNode.acceleration.x, movementNode.acceleration.y);
-            velocity.translate(movementNode.enemyAttractionForce.x, movementNode.enemyAttractionForce.y);
             velocity.withClampMagnitude(movementNode.maxSpeed.v);
 
             movementNode.gfxOldPosition.copy(position);
 
             position.translate(velocity.x * dt, velocity.y * dt);
-            movementNode.coords.rot.setDirection(velocity);
+
+            if (velocity.magnitude() != 0) {
+                //movementNode.coords.rot.setDirection(velocity);
+                movementNode.coords.rot.setDirection(temp2);
+            }
         }
     }
 }

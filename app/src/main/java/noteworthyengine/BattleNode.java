@@ -38,6 +38,7 @@ public class BattleNode extends Node {
 
     public Coords coords;
     public Vector2 velocity;
+    public DoublePtr maxSpeed;
 
     public Vector2 enemyAttractionForce;
 

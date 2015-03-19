@@ -20,6 +20,7 @@ public class ArrowCommand extends Unit {
     public static final String ANIMATION_FIELD_ARROW_EXISTING = "Animations/FieldArrows/Existing";
 
     FieldNode fieldNode;
+    DecayNode decayNode;
     RenderNode renderNode;
 
     public ArrowCommand() {
@@ -27,6 +28,9 @@ public class ArrowCommand extends Unit {
 
         fieldNode = new FieldNode(this);
         fieldNode._fieldArrowNode = new FieldNode.FieldArrowNode(this);
+
+        decayNode = new DecayNode(this);
+        decayNode.timeToLive.v = 10;
 
         renderNode = new RenderNode(this);
         renderNode.animationName = ANIMATION_FIELD_ARROW_EXISTING;

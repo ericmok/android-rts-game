@@ -1,6 +1,7 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
+import noteworthyframework.DoublePtr;
 import noteworthyframework.Gamer;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
@@ -35,6 +36,7 @@ public class FieldNode extends Node {
         public String _name = _NAME;
 
         public Coords coords;
+        public DoublePtr fieldArrowInfluenceRadius = new DoublePtr() {{ v = 20; }};
 
         public FieldArrowNode(Unit unit) {
             super(_NAME, unit);
@@ -54,6 +56,8 @@ public class FieldNode extends Node {
 
         public Coords coords;
         public Vector2 fieldForce;
+
+        public DoublePtr maxSpeed;
 
         public FieldAgentNode(Unit unit) {
             super(_NAME, unit);
