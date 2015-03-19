@@ -69,8 +69,10 @@ public class BattleSystem extends noteworthyframework.System {
             attackerNode.enemyAttractionForce.translate(
                     otherBattleNode.coords.pos.x - attackerNode.coords.pos.x,
                     otherBattleNode.coords.pos.y - attackerNode.coords.pos.y);
+
             double distance = otherBattleNode.coords.pos.distanceTo(attackerNode.coords.pos);
-            double mag = 0.05 / (distance * 2);
+            //double mag = 0.05 / (distance * 2);
+            double mag = 0.05 / ((distance + 0.000001) * (distance + 0.000001));
 
             attackerNode.enemyAttractionForce.scale(mag, mag);
 
