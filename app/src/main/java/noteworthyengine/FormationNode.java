@@ -21,11 +21,15 @@ public class FormationNode extends Node {
     public Coords coords;
     public Vector2 formationForce;
 
-    public FormationNode leader;
+    public Ptr leader;
     public ArrayList<Vector2> openPositions = new ArrayList<Vector2>(8);
 
     public FormationNode(Unit unit) {
         super(NAME, unit);
         Node.instantiatePublicFieldsForUnit(unit, FormationNode.class, this);
+    }
+
+    public static class Ptr {
+        public FormationNode v = null;
     }
 }

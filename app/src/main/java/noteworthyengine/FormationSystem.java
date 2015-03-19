@@ -40,14 +40,17 @@ public class FormationSystem extends noteworthyframework.System {
 
     @Override
     public void step(double ct, double dt) {
+
         for (int i = nodesByGamer.numberKeys() - 1; i >= 0; i--) {
             QueueMutationList<FormationNode> nodesForGamerOne = nodesByGamer.getListByKeyIndex(i);
 
-            for (int j = nodesForGamerOne.size() - 1; j >= 0; j--) {
+            int numberNodesForGamer = nodesForGamerOne.size();
+
+            for (int j = numberNodesForGamer - 1; j >= 0; j--) {
                 FormationNode formationNode = nodesForGamerOne.get(j);
                 formationNode.formationForce.zero();
 
-                for (int k = nodesForGamerOne.size() - 1; k >= 0; k--) {
+                for (int k = numberNodesForGamer - 1; k >= 0; k--) {
 
                     if (j == k) continue;
 
@@ -56,16 +59,17 @@ public class FormationSystem extends noteworthyframework.System {
                     Vector2.subtract(temp, formationNode.coords.pos, otherNode.coords.pos);
                     double mag = temp.magnitude();
 
-                    double formationRadius = 1;
+                    double formationRadius = 1.4;
 
-                    if (mag < formationRadius) {
+                   if (mag < formationRadius || mag > formationRadius * 3) {
                         continue;
                     }
 
-                    double distance = mag + formationRadius;
+                    double epsilon = 0.00001;
+                    double distance = mag;
 
                     // Smaller the distance, the lower the force (could try also sqDistance)
-                    double cosinusoidal = Math.cos(distance * Math.PI) / (distance);
+                    double cosinusoidal = Math.cos(formationRadius * distance * 2 * Math.PI) / distance;
                     //double cosinusoidal = Math.cos(formationRadius * 2 * Math.PI) / (distance);
 
                     // Scale by dot product with the perpendicular
@@ -79,8 +83,8 @@ public class FormationSystem extends noteworthyframework.System {
                     //cosinusoidal = cosinusoidal * dotProduct;
 
                     // TODO: Average the formation forces
-
-                    temp.scale(cosinusoidal, cosinusoidal);
+                    temp.setNormalized();
+                    temp.scale(0.5 * cosinusoidal / numberNodesForGamer, 0.5 * cosinusoidal / numberNodesForGamer);
 
                     formationNode.formationForce.translate(temp.x, temp.y);
                 }
