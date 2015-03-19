@@ -14,6 +14,7 @@ import networking.CommandHistory;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.DataLoader;
+import noteworthyengine.DecaySystem;
 import noteworthyengine.FormationSystem;
 import noteworthyengine.SeparationNode;
 import noteworthyengine.SeparationSystem;
@@ -126,6 +127,7 @@ public class Game {
         MovementSystem movementSystem = new MovementSystem();
         BattleSystem battleSystem = new BattleSystem();
         RenderSystem renderSystem = new RenderSystem(new DrawCompat(this));
+        DecaySystem decaySystem = new DecaySystem();
 
         noteworthyEngine = new NoteworthyEngine();
         noteworthyEngine.addSystem(commandSystem);
@@ -136,6 +138,7 @@ public class Game {
         noteworthyEngine.addSystem(movementSystem);
         noteworthyEngine.addSystem(battleSystem);
         noteworthyEngine.addSystem(renderSystem);
+        noteworthyEngine.addSystem(decaySystem);
     }
 
 	public void loadLevel() {
