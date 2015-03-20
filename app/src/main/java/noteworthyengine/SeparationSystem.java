@@ -45,7 +45,7 @@ public class SeparationSystem extends noteworthyframework.System {
 
                 if (distance > 2) continue;
 
-                distance = distance * distance * distance * distance;
+                distance = distance * distance * distance;
 
                 Vector2.subtract(temp, node.coords.pos, otherNode.coords.pos);
                 temp.scale(1 / distance, 1 / distance);
