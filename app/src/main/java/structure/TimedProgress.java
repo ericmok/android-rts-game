@@ -61,7 +61,7 @@ public class TimedProgress {
 	/**
 	 * Update the progress by a rate given by the duration for the progress to finish
 	 * If progress goes over 100, then loop over.
-	 * The update is continuous.
+	 * The process is continuous.
 	 * 
 	 * @param elapsedTime
 	 * @return
@@ -84,4 +84,13 @@ public class TimedProgress {
 		}
 		return this.progress;
 	}
+
+    public void copy(TimedProgress other) {
+        this.name = other.name;
+        this.progress = other.progress;
+        this.duration = other.duration;
+        this.recurrent = other.recurrent;
+        this.directionMultiplier = other.directionMultiplier;
+        this.direction = other.direction;
+    }
 }

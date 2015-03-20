@@ -35,6 +35,7 @@ public class DoubleBufferredArrayList<E> {
 	// TODO: Return null if locked by someone else
 	public ArrayList<E> lockWritableBuffer() {
 		writeLock = true;
+        isUpdated = false;
 		return activeList;	
 	}
 	

@@ -30,6 +30,7 @@ public class DoubleBufferredRewriteOnlyArray<E> {
 	// TODO: Return null if locked by someone else
 	public RewriteOnlyArray<E> lockWritableBuffer() {
 		writeLock = true;
+        isUpdated = false; // To prevent swaps while editing
 		return activeList;
 	}
 	

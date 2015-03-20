@@ -1,16 +1,29 @@
 package structure;
 
-import model.GameEntities;
-
 import android.app.Activity;
 import android.content.Context;
 
-import model.Engine;
-import networking.CommandHistory;
+import org.json.JSONException;
+
+import java.io.IOException;
+
+import noteworthyengine.BattleSystem;
+import noteworthyengine.CommandSystem;
+import noteworthyengine.DataLoader;
+import noteworthyengine.DecaySystem;
+import noteworthyengine.FormationSystem;
+import noteworthyengine.SeparationNode;
+import noteworthyengine.SeparationSystem;
+import noteworthyengine.TimelineSystem;
+import noteworthyframework.DrawCompat;
+import noteworthyengine.FieldSystem;
+import noteworthyengine.MovementSystem;
+import noteworthyengine.NoteworthyEngine;
+import noteworthyengine.RenderSystem;
 
 public class Game {
 
-    public Engine engine = new Engine();
+    public NoteworthyEngine noteworthyEngine;
 
 	private Game m = this;
 	
@@ -27,8 +40,6 @@ public class Game {
 
     public GameCamera gameCamera = new GameCamera();
     public UIOverlay uiOverlay = new UIOverlay();
-
-    public CommandHistory commandHistory = new CommandHistory(this);
 
 	/**
 	 * Stores pre-loaded heap memory allocations of game objects 
@@ -70,6 +81,8 @@ public class Game {
 		
 		graphics = new Graphics(parentActivity);
 
+        loadEngine();
+
 		this.setGameState(State.LOADING);
 		loadLevel();
 		this.setGameState(State.LOADED);
@@ -96,26 +109,69 @@ public class Game {
 	//public ArrayList<Updateable> getUpdateList() {
 		//return updateList;
 	//}
-	
+
+    public void loadEngine() {
+        CommandSystem commandSystem = new CommandSystem(this);
+        TimelineSystem timelineSystem = new TimelineSystem();
+        SeparationSystem separationSystem = new SeparationSystem();
+        FieldSystem fieldSystem = new FieldSystem();
+        FormationSystem formationSystem = new FormationSystem();
+        MovementSystem movementSystem = new MovementSystem();
+        BattleSystem battleSystem = new BattleSystem();
+        RenderSystem renderSystem = new RenderSystem(new DrawCompat(this));
+        DecaySystem decaySystem = new DecaySystem();
+
+        noteworthyEngine = new NoteworthyEngine();
+        noteworthyEngine.addSystem(commandSystem);
+        noteworthyEngine.addSystem(timelineSystem);
+        noteworthyEngine.addSystem(fieldSystem);
+        noteworthyEngine.addSystem(separationSystem);
+        noteworthyEngine.addSystem(formationSystem);
+        noteworthyEngine.addSystem(movementSystem);
+        noteworthyEngine.addSystem(battleSystem);
+        noteworthyEngine.addSystem(renderSystem);
+        noteworthyEngine.addSystem(decaySystem);
+    }
+
 	public void loadLevel() {
 
-        engine = new Engine();
+        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
 
-        LevelLoader levelLoader = new LevelLoader(this.context);
-        levelLoader.load(engine, "level0.json");
+//        try {
+//            EngineLoader.load(engine, "self", levelFileLoader.jsonFromFile("level0.json"));
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-        uiOverlay.buttons.add(GameEntities.buildAttackButton());
-        uiOverlay.buttons.add(GameEntities.buildDefendButton());
+        try {
+            String json = levelFileLoader.jsonFromFile("level0.json");
+            DataLoader dataLoader = new DataLoader();
+            dataLoader.loadFromJson(noteworthyEngine, json);
+            //noteworthyEngine.loadFromJson(json);
+        }
+        catch (IOException io) {
+           io.printStackTrace();
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+//        uiOverlay.buttons.add(GameEntities.attackButtonPool.fetchMemory());
+//        uiOverlay.buttons.add(GameEntities.defendButtonPool.fetchMemory());
 
 //		// TODO: Clean this up
 //		FormationSystem fs = new FormationSystem(this);
 //		fs.setupSquadPositions(stage.players.get(0).units, 1);
 //
 //		GenerateTroopsInSquadPositionsSystem gtsps = new GenerateTroopsInSquadPositionsSystem(this);
-//		gtsps.update(0, this.stage.players.get(0).units);
+//		gtsps.process(0, this.stage.players.get(0).units);
 //
 //		fs.setupSquadPositions(stage.players.get(1).units, 1);
-//		gtsps.update(1, this.stage.players.get(1).units);
+//		gtsps.process(1, this.stage.players.get(1).units);
 //
 //
 //		TriggerField test = this.gamePool.triggerFields.fetchMemory();

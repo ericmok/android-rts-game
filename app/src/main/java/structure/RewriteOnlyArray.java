@@ -1,6 +1,8 @@
 package structure;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 
 /**
@@ -123,4 +125,33 @@ public class RewriteOnlyArray<E> {
 			
 		};
 	}
+
+    /**
+     * Swaps elements by indices
+     * @param index
+     * @param otherIndex
+     */
+    public void swap(int index, int otherIndex) {
+        E temp = data[index];
+        data[index] = data[otherIndex];
+        data[otherIndex] = temp;
+    }
+
+    /// Use this only if the generic type is comparable
+    public void sort() {
+        Arrays.sort(data, 0, lastIndex + 1);
+    }
+
+    /// Use this only if the generic type is comparable
+    public void sort(int startIndex, int endIndex) {
+        Arrays.sort(data, Math.min(startIndex, 0), Math.max(endIndex, lastIndex + 1));
+    }
+
+    public void sort(int startIndex, int endIndex, Comparator comparator) {
+        Arrays.sort(data, Math.min(startIndex, 0), Math.max(endIndex, lastIndex + 1), comparator);
+    }
+
+    public void sort(Comparator comparator) {
+        Arrays.sort(data, 0, lastIndex + 1, comparator);
+    }
 }
