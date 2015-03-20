@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 import noteworthyframework.Coords;
 import noteworthyframework.DoublePtr;
-import noteworthyframework.FloatPtr;
 import noteworthyframework.Gamer;
 import noteworthyframework.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.TimerLoopMachine;
 import utils.Vector2;
-import utils.VoidFunc;
 import utils.VoidFunc2;
 import utils.VoidFunc3;
+import utils.VoidFunc4;
 
 /**
  * Created by eric on 3/6/15.
@@ -31,6 +31,18 @@ public class BattleNode extends Node {
                 @Override
                 public void apply(BattleSystem system, BattleNode element, BattleNode element2) { }
             };
+
+    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> ON_HP_HIT_DEFAULT =
+            new VoidFunc4<BattleSystem, BattleNode, BattleNode, Double>() {
+                @Override
+                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, Double damage) {
+                    battleNode.hp.v -= damage;
+                }
+            };
+
+    public static final int ATTACK_STATE_READY = -1;
+    public static final int ATTACK_STATE_SWINGING = 0;
+    public static final int ATTACK_STATE_WAITING_FOR_COOLODOWN = 1;
 
     public static final Gamer _NO_GAMER = new Gamer("none");
 
@@ -55,8 +67,8 @@ public class BattleNode extends Node {
     public DoublePtr attackSwingTime = new DoublePtr() {{ v = 1; }};
     public DoublePtr attackCooldown = new DoublePtr() {{ v = 1; }};
 
-    public IntegerPtr attackState = new IntegerPtr() {{ v = 0; }};
-    public IntegerPtr attackProgress = new IntegerPtr() {{ v = 0; }};
+    public IntegerPtr attackState = new IntegerPtr() {{ v = ATTACK_STATE_READY; }};
+    public DoublePtr attackProgress = new DoublePtr() {{ v = 0; }};
 
     public boolean _hasTarget = false;
     public DoublePtr tieBreaker = new DoublePtr() {{ v = Math.random(); }};
@@ -65,10 +77,13 @@ public class BattleNode extends Node {
 
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
-    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttack = _DONOTHING3;
+
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing = _DONOTHING3;
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = _DONOTHING3;
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady = _DONOTHING3;
     public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
 
-    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onHpHit = _DONOTHING3;
+    public VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> onHpHit = ON_HP_HIT_DEFAULT;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onArmorHit = _DONOTHING3;
 
     public ArrayList<String> events;

@@ -1,11 +1,11 @@
 package noteworthyengine;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Hashtable;
 
 import noteworthyframework.*;
 import structure.RewriteOnlyArray;
+import utils.TimerLoopMachine;
 import utils.Vector2;
 
 /**
@@ -22,6 +22,10 @@ public class BattleSystem extends noteworthyframework.System {
 
     private RewriteOnlyArray<BattleNode.Ptr> activeBattleNodes =
             new RewriteOnlyArray<BattleNode.Ptr>(BattleNode.Ptr.class, 1024);
+
+    private TimerLoopMachine timerLoopMachine = new TimerLoopMachine(4);
+
+    private Vector2 temp = new Vector2();
 
     public BattleSystem() {
     }
@@ -63,35 +67,83 @@ public class BattleSystem extends noteworthyframework.System {
 
             attackerNode.onTargetAcquired.apply(this, attackerNode, otherBattleNode);
 
-            attackerNode.onAttack.apply(this, attackerNode, otherBattleNode);
-            otherBattleNode.onHpHit.apply(this, attackerNode, otherBattleNode);
+            timerLoopMachine.clear();
+            timerLoopMachine.addTimer(attackerNode.attackSwingTime.v)
+                    .addTimer(attackerNode.attackCooldown.v)
+                    .addTimer(0);
+
+            if (attackerNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+                timerLoopMachine.setCurrentState(0);
+            }
+            else if (attackerNode.attackState.v == BattleNode.ATTACK_STATE_WAITING_FOR_COOLODOWN) {
+                timerLoopMachine.setCurrentState(1);
+            }
+            else if (attackerNode.attackState.v == BattleNode.ATTACK_STATE_READY) {
+                timerLoopMachine.setCurrentState(2);
+            }
+
+            timerLoopMachine.setCurrentProgress(attackerNode.attackProgress.v);
+            timerLoopMachine.step(dt);
+
+            if (timerLoopMachine.hasTransitioned()) {
+
+                // We want to attack but it may not be possible, do extra checks
+                if (timerLoopMachine.getCurrentState() == 0) {
+                    if (attackerNode.targetDistance.v > attackerNode.attackRange.v) {
+                        timerLoopMachine.setCurrentState(2); // Go back to ready
+                    } else {
+                        attackerNode.onAttackSwing.apply(this, attackerNode, otherBattleNode);
+                        attackerNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
+                    }
+                }
+                else if (timerLoopMachine.getCurrentState() == 1) {
+                    attackerNode.onAttackCast.apply(this, attackerNode, otherBattleNode);
+                    otherBattleNode.onHpHit.apply(this, otherBattleNode,
+                            attackerNode, attackerNode.attackDamage.v);
+                    attackerNode.attackState.v = BattleNode.ATTACK_STATE_WAITING_FOR_COOLODOWN;
+                }
+                else if (timerLoopMachine.getCurrentState() == 2) {
+                    attackerNode.onAttackReady.apply(this, attackerNode, otherBattleNode);
+                    attackerNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+                }
+            }
+
+            attackerNode.attackProgress.v = timerLoopMachine.getCurrentProgress();
+
+            // If the unit is dead, as a result of it being attacked by this node
+            // or by other nodes, remove the unit, clean up the attack state
+            if (otherBattleNode.hp.v <= 0) {
+                otherBattleNode.onDie.apply(this, otherBattleNode);
+                //otherBattleNode.isActive = false;
+                //battleNodes.queueToRemove(otherBattleNode);
+                this.getBaseEngine().removeUnit(otherBattleNode.unit);
+//
+//
+//                if (attackerNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+//                    attackerNode.attackState.v = BattleNode.ATTACK_STATE_WAITING_FOR_COOLODOWN;
+//                    attackerNode.attackProgress.v = 0;
+//                }
+//                else if (attackerNode.attackState.v == BattleNode.ATTACK_STATE_WAITING_FOR_COOLODOWN) {
+//                    attackerNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+//                    attackerNode.attackProgress.v = 0;
+//                }
+            }
+
+            // Lose the target
+            attackerNode.target[0] = null;
+            attackerNode.targetDistance.v = 0;
+
 
             attackerNode.enemyAttractionForce.translate(
                     otherBattleNode.coords.pos.x - attackerNode.coords.pos.x,
                     otherBattleNode.coords.pos.y - attackerNode.coords.pos.y);
 
             double distance = otherBattleNode.coords.pos.distanceTo(attackerNode.coords.pos);
-            //double mag = 0.05 / (distance * 2);
-            //double mag = 1 / ((distance + 0.000001) * (distance + 0.000001));
             double ramp = attackerNode.maxSpeed.v *
-                    (distance - attackerNode.attackRange.v) / (attackerNode.attackRange.v * 3);
+                    (distance - (attackerNode.attackRange.v * 0.9)) / (attackerNode.attackRange.v * 3);
             double mag = Math.min(attackerNode.maxSpeed.v, ramp);
-            // / ((distance + 0.000001) * (distance + 0.000001));
 
             attackerNode.enemyAttractionForce.scale(mag, mag);
-
-            // For demo
-            otherBattleNode.hp.v = otherBattleNode.hp.v - attackerNode.attackDamage.v * dt;
-
-            if (otherBattleNode.hp.v <= 0) {
-                otherBattleNode.onDie.apply(this, otherBattleNode);
-                //otherBattleNode.isActive = false;
-                //battleNodes.queueToRemove(otherBattleNode);
-                this.getBaseEngine().removeUnit(otherBattleNode.unit);
-            }
-
-            attackerNode.target[0] = null;
-            attackerNode.targetDistance.v = 0;
         }
     }
 
@@ -102,11 +154,20 @@ public class BattleSystem extends noteworthyframework.System {
 
         double distance = battleNode.coords.pos.distanceTo(otherBattleNode.coords.pos);
 
+        // Only battles with units in "front" of it
+        Vector2.subtract(temp, otherBattleNode.coords.pos, battleNode.coords.pos);
+        if (battleNode.coords.rot.dotProduct(temp) < -0.8) {
+            return;
+        }
+
+        // Only battles with units it can see
         if (distance <= battleNode.targetAcquisitionRange.v) {
 
             battleNode._hasTarget = true;
 
             if (battleNode.target[0] != null) {
+                // Update old target with new target if closer
+
                 if (distance == battleNode.targetDistance.v) {
                     if (otherBattleNode.tieBreaker.v > battleNode.target[0].tieBreaker.v) {
                         battleNode.targetDistance.v = distance;
@@ -119,11 +180,13 @@ public class BattleSystem extends noteworthyframework.System {
                 }
             }
             else {
-                BattleNode.Ptr battleNodePtr = activeBattleNodes.takeNextWritable();
-                battleNodePtr.v = battleNode;
+                // Battlenode didn't have a target, now it does, wake it up
 
                 battleNode.targetDistance.v = distance;
                 battleNode.target[0] = otherBattleNode;
+
+                BattleNode.Ptr battleNodePtr = activeBattleNodes.takeNextWritable();
+                battleNodePtr.v = battleNode;
             }
 
 //            CollisionNode collisionNode = collidedBattleNodes.takeNextWritable();

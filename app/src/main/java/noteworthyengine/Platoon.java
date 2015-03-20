@@ -38,7 +38,7 @@ public class Platoon extends Unit {
         //fieldNode._movementNode = movementNode;
 
         battleNode = new BattleNode(this);
-        battleNode.hp.v = 100;
+        battleNode.hp.v = 50;
         battleNode.targetAcquisitionRange.v = 15;
         battleNode.onTargetAcquired = onTargetAcquired;
 
@@ -80,18 +80,39 @@ public class Platoon extends Unit {
             renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
             if (battleNode.hp.v <= 0) {
-                system.drawCompat.drawTemporarySprite(new TemporarySprite2dDef() {{
-                    this.position.x = battleNode.coords.pos.x;
-                    this.position.y = battleNode.coords.pos.y;
-                    this.position.z = 1;
-                    this.progress.progress = 1;
-                    this.progress.duration = 1200;
-                    this.isGfxInterpolated = false;
-                    this.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
-                    this.animationProgress = 0;
-                    this.color = Color.WHITE;
-                    this.angle = 90;
-                }});
+                TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                tempSprite.position.x = battleNode.coords.pos.x;
+                tempSprite.position.y = battleNode.coords.pos.y;
+                tempSprite.position.z = 1;
+                tempSprite.width = 1f;
+                tempSprite.height = 1f;
+                tempSprite.progress.progress = 1;
+                tempSprite.progress.duration = 1200;
+                tempSprite.isGfxInterpolated = false;
+                tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
+                tempSprite.animationProgress = 0;
+                tempSprite.color = Color.WHITE;
+                tempSprite.angle = 90;
+
+                system.drawCompat.drawTemporarySprite(tempSprite);
+            }
+
+            if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+                TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                tempSprite.position.x = (battleNode.coords.pos.x + battleNode.coords.rot.x * battleNode.attackRange.v / 2);
+                tempSprite.position.y = (battleNode.coords.pos.y + battleNode.coords.rot.y * battleNode.attackRange.v / 2);
+                tempSprite.position.z = 1;
+                tempSprite.width = 0.3f;
+                tempSprite.height = 0.3f;
+                tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
+                tempSprite.progress.progress = 1;
+                tempSprite.progress.duration = 2;
+                tempSprite.isGfxInterpolated = false;
+                tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_PROJECTILE;
+                tempSprite.animationProgress = 0;
+                tempSprite.color = Color.WHITE;
+
+                system.drawCompat.drawTemporarySprite(tempSprite);
             }
             //dyingRenderNode.isActive = true;
         }

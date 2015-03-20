@@ -16,10 +16,10 @@ import utils.MemoryPool;
  */
 public class DrawCompat {
 
-    private RewriteOnlyArray<Sprite2dDef> spriteAllocator;
-    private List<TemporarySprite2dDef> tempSprites;
-    private DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItem;
-    private MemoryPool<TemporarySprite2dDef> tempSpritesMemoryPool;
+    public RewriteOnlyArray<Sprite2dDef> spriteAllocator;
+    public List<TemporarySprite2dDef> tempSprites;
+    public DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItem;
+    public MemoryPool<TemporarySprite2dDef> tempSpritesMemoryPool;
 
     private Game game;
 
