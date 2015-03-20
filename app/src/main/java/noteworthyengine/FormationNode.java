@@ -2,9 +2,7 @@ package noteworthyengine;
 
 import java.util.ArrayList;
 
-import model.Denormalizable;
 import noteworthyframework.Coords;
-import noteworthyframework.Gamer;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;

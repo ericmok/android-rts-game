@@ -151,6 +151,7 @@ public class Platoon extends Unit {
 
                 onAttackSwingAnim = false;
             }
+
             //dyingRenderNode.isActive = true;
         }
     };

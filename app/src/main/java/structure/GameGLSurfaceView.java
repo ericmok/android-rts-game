@@ -51,18 +51,6 @@ public class GameGLSurfaceView extends GLSurfaceView {
 //			});
 		//}
 
-		//float x = event.getX() - this.getWidth() / 2;
-
-		//float x = (event.getX() - this.getWidth() / 2);
-		//float y = event.getY() - this.getHeight() / 2;
-
-		// What is this?
-//		float y = this.getHeight() - event.getY() - this.getHeight() / 2;
-//		x = (x / this.getWidth() ) * 32;
-//		y = game.getGameRenderer().getAspectRatio() * 16 * y / (this.getHeight() / 2);
-
-		//Log.i("GameGLSurfaceView TouchEvent", "Touch at: " + x + "," + y);
-
         super.onTouchEvent(event);
 
 //		game.onTouchEvent(event);

@@ -333,7 +333,7 @@ public class BattleSystem extends noteworthyframework.System {
                     battleNode.attackProgress.v = 0;
 
                     // TODO: Simplify this callback
-                    //battleNode.onAttackReady.apply(this, battleNode, battleNode.target[0]);
+                    battleNode.onAttackReady.apply(this, battleNode, battleNode.target[0]);
                 }
                 else {
                     battleNode.attackProgress.v += dt;

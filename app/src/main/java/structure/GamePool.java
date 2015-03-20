@@ -1,7 +1,5 @@
 package structure;
 
-import networking.Command;
-import networking.CommandHistory;
 import utils.MemoryPool;
 import utils.Vector2;
 import utils.Vector3;

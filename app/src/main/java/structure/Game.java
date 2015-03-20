@@ -1,7 +1,5 @@
 package structure;
 
-import model.GameEntities;
-
 import android.app.Activity;
 import android.content.Context;
 
@@ -9,8 +7,6 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import model.Engine;
-import networking.CommandHistory;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.DataLoader;
@@ -26,8 +22,6 @@ import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.RenderSystem;
 
 public class Game {
-
-    public Engine engine = new Engine();
 
     public NoteworthyEngine noteworthyEngine;
 
@@ -46,8 +40,6 @@ public class Game {
 
     public GameCamera gameCamera = new GameCamera();
     public UIOverlay uiOverlay = new UIOverlay();
-
-    public CommandHistory commandHistory = new CommandHistory(this);
 
 	/**
 	 * Stores pre-loaded heap memory allocations of game objects 
@@ -143,8 +135,6 @@ public class Game {
 
 	public void loadLevel() {
 
-        engine = new Engine();
-
         LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
 
 //        try {
@@ -170,8 +160,8 @@ public class Game {
             e.printStackTrace();
         }
 
-        uiOverlay.buttons.add(GameEntities.attackButtonPool.fetchMemory());
-        uiOverlay.buttons.add(GameEntities.defendButtonPool.fetchMemory());
+//        uiOverlay.buttons.add(GameEntities.attackButtonPool.fetchMemory());
+//        uiOverlay.buttons.add(GameEntities.defendButtonPool.fetchMemory());
 
 //		// TODO: Clean this up
 //		FormationSystem fs = new FormationSystem(this);
