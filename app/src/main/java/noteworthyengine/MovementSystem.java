@@ -52,6 +52,15 @@ public class MovementSystem extends noteworthyframework.System {
             //desiredVelocity.zero();
             desiredVelocity.copy(movementNode.velocity);
             desiredVelocity.scale(0.4, 0.4);
+
+            // If the field force tries to push units into other units..
+            // We assume separation force is zero if not colliding
+            double pushForce = fieldForce.dotProduct(separationForce);
+
+            if (pushForce < 0) {
+                fieldForce.zero();
+            }
+
             desiredVelocity.translate(fieldForce.x, fieldForce.y);
 
             desiredVelocity.translate(movementNode.enemyAttractionForce.x, movementNode.enemyAttractionForce.y);
