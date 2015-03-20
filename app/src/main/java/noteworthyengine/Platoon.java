@@ -27,6 +27,9 @@ public class Platoon extends Unit {
     RenderNode dyingRenderNode;
     RenderNode selectedRenderNode;
 
+    public boolean onAttackSwingAnim = false;
+    public BattleNode[] target = new BattleNode[1];
+
     public Platoon() {
         this.name = NAME;
 
@@ -41,6 +44,9 @@ public class Platoon extends Unit {
         battleNode.hp.v = 50;
         battleNode.targetAcquisitionRange.v = 15;
         battleNode.onTargetAcquired = onTargetAcquired;
+        battleNode.onAttackReady = onAttackReady;
+        battleNode.onAttackSwing = onAttackSwing;
+        battleNode.onAttackCast = onAttackCast;
 
         renderNode = new RenderNode(this);
         float size = Math.random() > 0.5f ? 1f : 0.7f;
@@ -74,6 +80,31 @@ public class Platoon extends Unit {
             }
         };
 
+    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady =
+            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+                @Override
+                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+                    onAttackSwingAnim = false;
+                }
+            };
+
+    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing =
+            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+                @Override
+                public void apply(BattleSystem system, BattleNode node, BattleNode otherNode) {
+                    onAttackSwingAnim = true;
+                    target[0] = otherNode;
+                }
+            };
+
+    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast =
+            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+                @Override
+                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+                    onAttackSwingAnim = false;
+                }
+            };
+
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem system) {
@@ -98,16 +129,18 @@ public class Platoon extends Unit {
                 system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
             }
 
-            if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+            if (onAttackSwingAnim) {
                 TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
-                tempSprite.position.x = (battleNode.coords.pos.x + battleNode.coords.rot.x * battleNode.attackRange.v / 2);
-                tempSprite.position.y = (battleNode.coords.pos.y + battleNode.coords.rot.y * battleNode.attackRange.v / 2);
+                //tempSprite.position.x = (battleNode.coords.pos.x + battleNode.coords.rot.x * battleNode.attackRange.v / 2);
+                //tempSprite.position.y = (battleNode.coords.pos.y + battleNode.coords.rot.y * battleNode.attackRange.v / 2);
+                tempSprite.position.x = (battleNode.coords.pos.x + target[0].coords.pos.x) / 2;
+                tempSprite.position.y = (battleNode.coords.pos.y + target[0].coords.pos.y) / 2;
                 tempSprite.position.z = 1;
                 tempSprite.width = 0.3f;
                 tempSprite.height = 0.3f;
                 tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
                 tempSprite.progress.progress = 1;
-                tempSprite.progress.duration = 2;
+                tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 1000; // should be 1000 but...
                 tempSprite.isGfxInterpolated = false;
                 tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_PROJECTILE;
                 tempSprite.animationProgress = 0;
@@ -115,6 +148,8 @@ public class Platoon extends Unit {
 
                 system.drawCompat.drawTemporarySprite(tempSprite);
                 system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
+
+                onAttackSwingAnim = false;
             }
             //dyingRenderNode.isActive = true;
         }

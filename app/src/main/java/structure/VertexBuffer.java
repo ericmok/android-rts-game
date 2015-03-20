@@ -20,7 +20,7 @@ public class VertexBuffer {
 	/** 
 	 * Useful for updating the vbo
 	 */
-	private Buffer backingBuffer;
+	private FloatBuffer backingBuffer;
 	
 	/**
 	 * Constructor with number of dimensions for each vertex to be set
@@ -59,7 +59,7 @@ public class VertexBuffer {
 	}
 	
 	public FloatBuffer getFloatBuffer() {
-		return (FloatBuffer)backingBuffer;
+		return backingBuffer;
 	}
 	
 	public void bufferSubData(Buffer buffer) {
