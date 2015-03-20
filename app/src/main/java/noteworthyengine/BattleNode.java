@@ -40,9 +40,9 @@ public class BattleNode extends Node {
                 }
             };
 
-    public static final int ATTACK_STATE_READY = -1;
-    public static final int ATTACK_STATE_SWINGING = 0;
-    public static final int ATTACK_STATE_WAITING_FOR_COOLODOWN = 1;
+    public static final int ATTACK_STATE_READY = 0;
+    public static final int ATTACK_STATE_SWINGING = 1;
+    public static final int ATTACK_STATE_WAITING_FOR_COOLDOWN = 2;
 
     public static final Gamer _NO_GAMER = new Gamer("none");
 
