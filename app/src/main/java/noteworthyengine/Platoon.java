@@ -95,6 +95,7 @@ public class Platoon extends Unit {
                 tempSprite.angle = 90;
 
                 system.drawCompat.drawTemporarySprite(tempSprite);
+                system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
             }
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
@@ -113,6 +114,7 @@ public class Platoon extends Unit {
                 tempSprite.color = Color.WHITE;
 
                 system.drawCompat.drawTemporarySprite(tempSprite);
+                system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
             }
             //dyingRenderNode.isActive = true;
         }
