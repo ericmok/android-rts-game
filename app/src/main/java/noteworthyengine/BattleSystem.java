@@ -82,6 +82,7 @@ public class BattleSystem extends noteworthyframework.System {
             if (battleNode == possibleTarget) { continue; }
             if (battleNode.gamer.v.team == possibleTarget.gamer.v.team) { continue; }
             if (possibleTarget.hp.v <= 0) { continue; }
+            if (possibleTarget.isAttackable.v == 0) { continue; }
 
             double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
 

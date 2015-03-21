@@ -27,9 +27,10 @@ public class Explosion extends Unit {
         battleNode.targetAcquisitionRange.v = 5;
         battleNode.attackRange.v = 5;
         battleNode.attackDamage.v = 2;
-        battleNode.attackSwingTime.v = 2;
+        battleNode.attackSwingTime.v = 5;
         battleNode.attackCooldown.v = 1;
         battleNode.hp.v = 1000000;
+        battleNode.isAttackable.v = 0;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
         battleNode.gamer.v = gamer;
         battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
