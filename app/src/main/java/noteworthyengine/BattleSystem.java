@@ -21,14 +21,6 @@ public class BattleSystem extends noteworthyframework.System {
 
     public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
 
-    private RewriteOnlyArray<BattleNode.Ptr> activeBattleNodes =
-            new RewriteOnlyArray<BattleNode.Ptr>(BattleNode.Ptr.class, 1024);
-
-    private TimerLoopMachine timerLoopMachine = new TimerLoopMachine(4);
-
-    private BattleNode.Ptr tempBattleNodePtr = new BattleNode.Ptr();
-    private Vector2 temp = new Vector2();
-
     public BattleSystem() {
     }
 
