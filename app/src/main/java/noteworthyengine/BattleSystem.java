@@ -140,9 +140,10 @@ public class BattleSystem extends noteworthyframework.System {
             }
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_READY) {
-                //if (battleNode.target[0] != null) {
+
                 if (battleNodeHasValidTarget(battleNode)) {
                     // If in range, start the swing immediately
+
                     if (battleNode.coords.pos.distanceTo(battleNode.target[0].coords.pos) <= battleNode.attackRange.v ||
                             battleNode.attackSwingEvenWhenNotInRange.v == 1) {
                         battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
@@ -165,14 +166,15 @@ public class BattleSystem extends noteworthyframework.System {
 
                     if (!battleNodeHasValidTarget(battleNode)) {
                         // Lost the target before the swing finished (death or out of range)
-                        battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
-                        battleNode.attackProgress.v = 0;
+                        battleNode.onAttackCastFail.apply(this, battleNode);
                     }
                     else {
                         // We do have a target at cast time
 
                         battleNode.onAttackCast.apply(this, battleNode, battleNode.target[0]);
-                        battleNode.target[0].onHpHit.apply(this, battleNode.target[0], battleNode, battleNode.attackDamage.v);
+
+                        // Moved into attack cast
+                        //battleNode.target[0].inflictDamage.apply(this, battleNode.target[0], battleNode, battleNode.attackDamage.v);
 
                         // Check if battleNode killed something
                         // We don't nullify the target pointer since it gets fixed in the front of the loop

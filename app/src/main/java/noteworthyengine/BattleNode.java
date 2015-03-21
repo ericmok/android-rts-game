@@ -8,8 +8,6 @@ import noteworthyframework.Gamer;
 import noteworthyframework.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
-import structure.RewriteOnlyArray;
-import utils.TimerLoopMachine;
 import utils.Vector2;
 import utils.VoidFunc;
 import utils.VoidFunc2;
@@ -35,11 +33,28 @@ public class BattleNode extends Node {
                 public void apply(BattleSystem system, BattleNode element, BattleNode element2) { }
             };
 
-    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> ON_HP_HIT_DEFAULT =
+    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> INFLICT_DAMAGE_DEFAULT =
             new VoidFunc4<BattleSystem, BattleNode, BattleNode, Double>() {
                 @Override
                 public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, Double damage) {
                     battleNode.hp.v -= damage;
+                }
+            };
+
+    public static final VoidFunc3<BattleSystem, BattleNode, BattleNode> ON_ATTACK_CAST =
+            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+                @Override
+                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode otherBattleNode) {
+                    INFLICT_DAMAGE_DEFAULT.apply(battleSystem, otherBattleNode, battleNode, battleNode.attackDamage.v);
+                }
+            };
+
+    public static final VoidFunc2<BattleSystem, BattleNode> ON_ATTACK_CAST_FAIL_DEFAULT =
+            new VoidFunc2<BattleSystem, BattleNode>() {
+                @Override
+                public void apply(BattleSystem system, BattleNode node) {
+                    node.attackState.v = BattleNode.ATTACK_STATE_READY;
+                    node.attackProgress.v = 0;
                 }
             };
 
@@ -100,11 +115,12 @@ public class BattleNode extends Node {
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
 
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing = _DONOTHING3;
-    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = _DONOTHING3;
+    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = ON_ATTACK_CAST;
+    public VoidFunc2<BattleSystem, BattleNode> onAttackCastFail = ON_ATTACK_CAST_FAIL_DEFAULT;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady = _DONOTHING3;
     public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
 
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> onHpHit = ON_HP_HIT_DEFAULT;
+    public VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> inflictDamage = INFLICT_DAMAGE_DEFAULT;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onArmorHit = _DONOTHING3;
 
     public ArrayList<String> events;

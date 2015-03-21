@@ -102,6 +102,7 @@ public class Platoon extends Unit {
             new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
                 @Override
                 public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+                    BattleNode.INFLICT_DAMAGE_DEFAULT.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage.v);
                     onAttackSwingAnim = false;
                 }
             };
@@ -145,7 +146,7 @@ public class Platoon extends Unit {
                 tempSprite.isGfxInterpolated = false;
                 tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_PROJECTILE;
                 tempSprite.animationProgress = 0;
-                tempSprite.color = Color.WHITE;
+                tempSprite.color = Color.argb(120, 255, 255, 255);
 
                 system.drawCompat.drawTemporarySprite(tempSprite);
                 system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
