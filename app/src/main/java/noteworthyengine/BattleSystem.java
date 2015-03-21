@@ -86,7 +86,8 @@ public class BattleSystem extends noteworthyframework.System {
 
             double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
 
-            if (distance < battleNode.targetAcquisitionRange.v) {
+            // TODO: BUG
+            if (distance < battleNode.attackRange.v) {
 
                 // TODO: Check if it is in "front" (not in back)
 

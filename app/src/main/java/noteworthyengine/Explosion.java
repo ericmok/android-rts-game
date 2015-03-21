@@ -24,7 +24,7 @@ public class Explosion extends Unit {
         battleNode.stickyAttack.v = 0;
         battleNode.canAttackMultiple.v = 1;
         battleNode.canAttackSwingMiss.v = 1;
-        battleNode.targetAcquisitionRange.v = 5;
+        battleNode.targetAcquisitionRange.v = 105;
         battleNode.attackRange.v = 5;
         battleNode.attackDamage.v = 2;
         battleNode.attackSwingTime.v = 5;
