@@ -88,17 +88,13 @@ public class BattleNode extends Node {
     public BattleNode[] target = new BattleNode[1];
 
     /// For dealing damage to multiple targets
-    public RewriteOnlyArray<Target> possibleTargets = new RewriteOnlyArray<Target>(Target.class, MAX_POSSIBLE_TARGETS);
+    //public RewriteOnlyArray<Target> possibleTargets = new RewriteOnlyArray<Target>(Target.class, MAX_POSSIBLE_TARGETS);
+
+    //public IntegerPtr canAttackMultiple = new IntegerPtr() {{ v = 0; }};
 
     /// If the attack is sticky, the attack target is obtained at target acquisition time
     /// but not re-evaluated during attack swing
     public IntegerPtr stickyAttack = new IntegerPtr() {{ v = 1; }};
-
-    /// When set to 1: If the target disappears during the swing, go through with the attack
-    /// even when it has walked out of range during the swing
-    public IntegerPtr canAttackSwingMiss = new IntegerPtr() {{ v = 0; }};
-
-    public IntegerPtr canAttackMultiple = new IntegerPtr() {{ v = 0; }};
 
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;

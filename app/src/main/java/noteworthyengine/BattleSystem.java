@@ -1,13 +1,9 @@
 package noteworthyengine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 
 import noteworthyframework.*;
-import structure.RewriteOnlyArray;
-import utils.TimerLoopMachine;
-import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
@@ -20,6 +16,8 @@ public class BattleSystem extends noteworthyframework.System {
             new Hashtable<Gamer, QueueMutationList<BattleNode>>(8);
 
     public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
+
+    public BattleNode.Ptr tempBattleNodePtr = new BattleNode.Ptr();
 
     public BattleSystem() {
     }
@@ -71,9 +69,10 @@ public class BattleSystem extends noteworthyframework.System {
      * @param battleNode
      * @return
      */
-    public BattleNode.Target findClosestEnemyFor(BattleNode battleNode) {
+    public double findEnemyWithinRange(BattleNode.Ptr out, BattleNode battleNode, double range) {
 
-        battleNode.possibleTargets.resetWriteIndex();
+        out.v = null;
+        double bestDistance = 10000000;
 
         for (int i = battleNodes.size() - 1; i >= 0; i--) {
             BattleNode possibleTarget = battleNodes.get(i);
@@ -86,21 +85,18 @@ public class BattleSystem extends noteworthyframework.System {
 
             double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
 
-            // TODO: BUG
-            if (distance < battleNode.attackRange.v) {
+            if (distance < range) {
 
                 // TODO: Check if it is in "front" (not in back)
 
-                if (battleNode.possibleTargets.size() < BattleNode.MAX_POSSIBLE_TARGETS) {
-                    BattleNode.Target target = battleNode.possibleTargets.takeNextWritable();
-                    target.v = possibleTarget;
-                    target.distance = distance;
+                if (distance < bestDistance) {
+                    out.v = possibleTarget;
+                    bestDistance = distance;
                 }
             }
         }
 
-        battleNode.possibleTargets.sort();
-        return battleNode.possibleTargets.get(0);
+        return bestDistance;
     }
 
     public boolean battleNodeHasValidTarget(BattleNode battleNode) {
@@ -109,42 +105,37 @@ public class BattleSystem extends noteworthyframework.System {
         return battleNode.target[0] != null && battleNode.target[0].hp.v > 0;
     }
 
+    private void acquireNewTarget(BattleNode battleNode) {
+
+        // If we run out of attackable targets, the movement won't be calculated
+        // We zero it out here
+        battleNode.enemyAttractionForce.zero();
+
+        // If it has no target or has dead target, get new target
+        if (!battleNodeHasValidTarget(battleNode) ||
+                battleNode.attackState.v == BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN) {
+
+            // Find new target
+
+            // Reset
+            battleNode.target[0] = null;
+
+            // Find closest enemy...may be null
+            findEnemyWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v);
+            battleNode.target[0] = tempBattleNodePtr.v;
+        }
+    }
+
     public void step(double ct, double dt) {
         for (int i = battleNodes.size() - 1; i >= 0; i--) {
             BattleNode battleNode = battleNodes.get(i);
 
-            // If we run out of attackable targets, the movement won't be calculated
-            // We zero it out here
-            battleNode.enemyAttractionForce.zero();
-
-            // If it has no target or has dead target, get new target
-            //if (battleNode.target[0] == null || battleNode.target[0].hp.v <= 0 ||
-            if (!battleNodeHasValidTarget(battleNode) ||
-                    battleNode.attackState.v == BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN) {
-
-                // Find new target
-
-                // Reset
-                battleNode.target[0] = null;
-                //battleNode.targetDistance.v = 0;
-
-                // Find closest enemy...may be null
-                BattleNode.Target target = this.findClosestEnemyFor(battleNode);
-                battleNode.target[0] = target != null ? target.v : null;
-
-                //battleNode.targetDistance.v = target.distance;
-            }
+            acquireNewTarget(battleNode);
 
             // So we may or may not have a target (All the enemy may be dead)
-            // We step the battle phases anyways:
-            // If in cooldown, let it cool normally
-            // TODO: Consider making cooldown as a buff (decaying unit)
+            // We step the battle phases anyways
 
-            double distanceToSupposedlyAttackableTarget = 0;
-            //if (battleNode.target[0] != null) {
             if (battleNodeHasValidTarget(battleNode)) {
-                distanceToSupposedlyAttackableTarget = battleNode.coords.pos.distanceTo(battleNode.target[0].coords.pos);
-
                 moveNodeTowardsEnemy(battleNode, battleNode.target[0]);
             }
 
@@ -152,7 +143,7 @@ public class BattleSystem extends noteworthyframework.System {
                 //if (battleNode.target[0] != null) {
                 if (battleNodeHasValidTarget(battleNode)) {
                     // If in range, start the swing immediately
-                    if (distanceToSupposedlyAttackableTarget <= battleNode.attackRange.v ||
+                    if (battleNode.coords.pos.distanceTo(battleNode.target[0].coords.pos) <= battleNode.attackRange.v ||
                             battleNode.attackSwingEvenWhenNotInRange.v == 1) {
                         battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
                         battleNode.attackProgress.v = 0;
@@ -164,61 +155,42 @@ public class BattleSystem extends noteworthyframework.System {
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
 
-                // Keep getting new targets during the swing if no sticky attack
-                if (battleNode.stickyAttack.v == 0) {
-                    findClosestEnemyFor(battleNode);
-                }
+                if (battleNode.attackProgress.v >= battleNode.attackSwingTime.v) {
 
-                //if (battleNode.target[0] != null) {
-                if (battleNodeHasValidTarget(battleNode)) {
+                    // Keep getting new targets during the swing if no sticky attack
+                    if (battleNode.stickyAttack.v == 0) {
+                        findEnemyWithinRange(tempBattleNodePtr, battleNode, battleNode.attackRange.v);
+                        battleNode.target[0] = tempBattleNodePtr.v;
+                    }
 
-                    if (battleNode.attackProgress.v >= battleNode.attackSwingTime.v) {
-
-                        battleNode.onAttackCast.apply(this, battleNode, battleNode.target[0]);
-
-                        if (battleNode.canAttackMultiple.v == 1) {
-                            findClosestEnemyFor(battleNode);
-
-                            // It will have targets b/c of upper check
-                            for (int p = battleNode.possibleTargets.size() - 1; p >= 0; p--) {
-                                BattleNode.Target targetToCleave = battleNode.possibleTargets.get(p);
-                                targetToCleave.v.onHpHit.apply(this, targetToCleave.v, battleNode, battleNode.attackDamage.v);
-
-                                // Check if battleNode killed something
-                                // We don't nullify the target pointer since it gets fixed in the front of the loop
-                                if (targetToCleave.v.hp.v <= 0) {
-                                    this.getBaseEngine().removeUnit(targetToCleave.v.unit);
-
-                                    // The dead unit also has a target...
-                                    targetToCleave.v.target[0] = null;
-                                }
-                            }
-                        }
-                        else {
-                            battleNode.target[0].onHpHit.apply(this, battleNode.target[0], battleNode, battleNode.attackDamage.v);
-
-                            // Check if battleNode killed something
-                            // We don't nullify the target pointer since it gets fixed in the front of the loop
-                            if (battleNode.target[0].hp.v <= 0) {
-                                this.getBaseEngine().removeUnit(battleNode.target[0].unit);
-
-                                // The dead unit also has a target...
-                                battleNode.target[0] = null;
-                            }
-
-                        }
-
-                        battleNode.attackState.v = BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN;
+                    if (!battleNodeHasValidTarget(battleNode)) {
+                        // Lost the target before the swing finished (death or out of range)
+                        battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
                         battleNode.attackProgress.v = 0;
                     }
                     else {
-                        battleNode.attackProgress.v += dt;
+                        // We do have a target at cast time
+
+                        battleNode.onAttackCast.apply(this, battleNode, battleNode.target[0]);
+                        battleNode.target[0].onHpHit.apply(this, battleNode.target[0], battleNode, battleNode.attackDamage.v);
+
+                        // Check if battleNode killed something
+                        // We don't nullify the target pointer since it gets fixed in the front of the loop
+                        if (battleNode.target[0].hp.v <= 0) {
+                            this.getBaseEngine().removeUnit(battleNode.target[0].unit);
+
+                            // The dead unit also has a target...
+                            battleNode.target[0].target[0] = null;
+
+                            battleNode.target[0] = null;
+                        }
                     }
+
+                    battleNode.attackState.v = BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN;
+                    battleNode.attackProgress.v = 0;
                 }
                 else {
-                    // The target disappeared (death or out of range) before the swing finished!
-                    battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
-                    battleNode.attackProgress.v = 0;
+                    battleNode.attackProgress.v += dt;
                 }
             }
 
