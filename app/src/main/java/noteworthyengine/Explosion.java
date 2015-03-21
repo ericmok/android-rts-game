@@ -5,6 +5,7 @@ import android.graphics.Color;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
+import utils.VoidFunc;
 import utils.VoidFunc3;
 
 /**
@@ -26,7 +27,7 @@ public class Explosion extends Unit {
         battleNode.targetAcquisitionRange.v = 5;
         battleNode.attackRange.v = 5;
         battleNode.attackDamage.v = 2;
-        battleNode.attackSwingTime.v = 0;
+        battleNode.attackSwingTime.v = 2;
         battleNode.attackCooldown.v = 1;
         battleNode.hp.v = 1000000;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
@@ -44,5 +45,15 @@ public class Explosion extends Unit {
         renderNode.width.v = 10;
         renderNode.height.v = 10;
         renderNode.z.v = 2;
+        renderNode.onDraw = new VoidFunc<RenderSystem>() {
+            @Override
+            public void apply(RenderSystem element) {
+                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+                    float rad = (float)(battleNode.attackRange.v * (battleNode.attackProgress.v / battleNode.attackSwingTime.v));
+                    renderNode.width.v = rad;
+                    renderNode.height.v = rad;
+                }
+            }
+        };
     }
 }

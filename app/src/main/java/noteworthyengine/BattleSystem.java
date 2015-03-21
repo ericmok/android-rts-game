@@ -209,12 +209,6 @@ public class BattleSystem extends noteworthyframework.System {
                         battleNode.attackState.v = BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN;
                         battleNode.attackProgress.v = 0;
                     }
-                    else if (battleNode.canAttackSwingMiss.v == 1) {
-                        // No damage dealt
-
-                        battleNode.attackState.v = BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN;
-                        battleNode.attackProgress.v = 0;
-                    }
                     else {
                         battleNode.attackProgress.v += dt;
                     }
