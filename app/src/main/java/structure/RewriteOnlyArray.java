@@ -47,8 +47,16 @@ public class RewriteOnlyArray<E> {
 			}
 		}
 	}
-	
+
+    /**
+     * Gets the element at the index, but if the index is out of range, it will return null instead
+     * @param index
+     * @return
+     */
 	public E get(int index) {
+        if (index > lastIndex || index < 0) {
+            return  null;
+        }
 		return data[index];
 	}
 	

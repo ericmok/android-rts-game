@@ -97,6 +97,8 @@ public class DataLoader implements EngineDataLoader {
 
                 //baseEngine.addUnit(arrowCommand);
 
+                baseEngine.addUnit(new Explosion(player));
+
                 TimelineCommand timelineCommand = new TimelineCommand();
                 timelineCommand.timelineNode.gamerPtr.v = player;
                 timelineCommand.timelineNode.coords.pos.set(40 * Math.random() - 20, 40 * Math.random() - 20);
