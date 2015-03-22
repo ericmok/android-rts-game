@@ -97,7 +97,7 @@ public class DataLoader implements EngineDataLoader {
 
                 //baseEngine.addUnit(arrowCommand);
 
-                //baseEngine.addUnit(new Explosion(player));
+                baseEngine.addUnit(new Explosion(player));
 
                 TimelineCommand timelineCommand = new TimelineCommand();
                 timelineCommand.timelineNode.gamerPtr.v = player;

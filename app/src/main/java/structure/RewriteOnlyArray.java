@@ -22,9 +22,12 @@ public class RewriteOnlyArray<E> {
 	private int lastIndex;
 	
 	private int singleIteratorIndex;
+
+    private int capacity;
 	
 	public RewriteOnlyArray(Class<E> cls, int capacity) {
 		this.cls = cls;
+        this.capacity = capacity;
 		lastIndex = -1;
 		
 		singleIteratorIndex = -1;
@@ -86,6 +89,12 @@ public class RewriteOnlyArray<E> {
 	public int size() {
 		return lastIndex + 1;
 	}
+
+    /**
+     * Get capacity allocated for internal array
+     * @return
+     */
+    public int capacity() { return capacity; }
 	
 	/**
 	 * Checks if internal iterator counter is less than lastIndex 

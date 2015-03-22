@@ -4,8 +4,10 @@ import android.graphics.Color;
 
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
+import structure.RewriteOnlyArray;
 import structure.Sprite2dDef;
 import utils.VoidFunc;
+import utils.VoidFunc2;
 import utils.VoidFunc3;
 
 /**
@@ -15,8 +17,13 @@ public class Explosion extends Unit {
 
     public static final String NAME = "explosion";
 
+    public static final int MAX_BATTLE_NODES_AFFECTED = 20;
+
     public BattleNode battleNode = new BattleNode(this);
     public RenderNode renderNode = new RenderNode(this);
+
+    public RewriteOnlyArray<BattleNode.Target> battleTargets =
+            new RewriteOnlyArray<BattleNode.Target>(BattleNode.Target.class, MAX_BATTLE_NODES_AFFECTED);
 
     public Explosion(Gamer gamer) {
         this.name = NAME;
@@ -24,7 +31,7 @@ public class Explosion extends Unit {
         battleNode.stickyAttack.v = 0;
         battleNode.targetAcquisitionRange.v = 50;
         battleNode.attackRange.v = 5;
-        battleNode.attackDamage.v = 2;
+        battleNode.attackDamage.v = 4;
         battleNode.attackSwingTime.v = 5;
         battleNode.attackCooldown.v = 1;
         battleNode.hp.v = 1000000;
@@ -36,6 +43,17 @@ public class Explosion extends Unit {
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
                 //battleSystem.getBaseEngine().removeUnit(battleNode.unit);
                 // Else go to swing
+            }
+        };
+        battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+            @Override
+            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+                battleSystem.findEnemiesWithinRange(battleTargets, battleNode, battleNode.attackRange.v);
+
+                for (int j = battleTargets.size() - 1; j >= 0; j--) {
+                    BattleNode toInflict = battleTargets.get(j).v;
+                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage.v);
+                }
             }
         };
 
