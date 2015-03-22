@@ -35,11 +35,11 @@ public class NoteworthyEngine extends BaseEngine {
         gridSystem = new GridSystem();
         commandSystem = new CommandSystem(game);
         timelineSystem = new TimelineSystem();
-        separationSystem = new SeparationSystem();
+        separationSystem = new SeparationSystem(gridSystem);
         fieldSystem = new FieldSystem();
         //formationSystem = new FormationSystem();
         movementSystem = new MovementSystem();
-        battleSystem = new BattleSystem();
+        battleSystem = new BattleSystem(gridSystem);
         renderSystem = new RenderSystem(new DrawCompat(game));
         decaySystem = new DecaySystem();
 
