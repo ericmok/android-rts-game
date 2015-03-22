@@ -162,8 +162,7 @@ public class Platoon extends Unit {
                 tempSprite.progress.progress = 1;
                 tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900; // should be 1000 but...
                 tempSprite.isGfxInterpolated = false;
-                //tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_PROJECTILE;
-                tempSprite.animationName = "Animations/Smoke/Gunpowder";
+                tempSprite.animationName = Sprite2dDef.ANIMATION_SMOKE_GUNPOWDER;
                 tempSprite.animationProgress = 1;
                 tempSprite.color = Color.argb(50, 255, 255, 255);
 
