@@ -30,9 +30,9 @@ public class Mine extends Unit {
         this.name = NAME;
 
         battleNode.stickyAttack.v = 0;
-        battleNode.targetAcquisitionRange.v = 7;
-        battleNode.attackRange.v = 7;
-        battleNode.attackDamage.v = 20;
+        battleNode.targetAcquisitionRange.v = 5;
+        battleNode.attackRange.v = 5;
+        battleNode.attackDamage.v = 22;
         battleNode.attackSwingTime.v = 5;
         battleNode.attackCooldown.v = 1;
         battleNode.hp.v = 10;
@@ -73,8 +73,8 @@ public class Mine extends Unit {
                     renderNode.animationName = Sprite2dDef.ANIMATION_MINE_EXPLODING;
                     float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
                     float rad = (float)(battleNode.attackRange.v * ratio);
-                    renderNode.width.v = rad;
-                    renderNode.height.v = rad;
+                    renderNode.width.v = 2 * rad;
+                    renderNode.height.v = 2 * rad;
                     renderNode.animationProgress.v = (int) (ratio * 100);
                 } else {
                     renderNode.animationName = Sprite2dDef.ANIMATION_MINE_IDLING;
