@@ -115,7 +115,7 @@ public class Game {
         TimelineSystem timelineSystem = new TimelineSystem();
         SeparationSystem separationSystem = new SeparationSystem();
         FieldSystem fieldSystem = new FieldSystem();
-        FormationSystem formationSystem = new FormationSystem();
+        //FormationSystem formationSystem = new FormationSystem();
         MovementSystem movementSystem = new MovementSystem();
         BattleSystem battleSystem = new BattleSystem();
         RenderSystem renderSystem = new RenderSystem(new DrawCompat(this));
@@ -126,7 +126,7 @@ public class Game {
         noteworthyEngine.addSystem(timelineSystem);
         noteworthyEngine.addSystem(fieldSystem);
         noteworthyEngine.addSystem(separationSystem);
-        noteworthyEngine.addSystem(formationSystem);
+        //noteworthyEngine.addSystem(formationSystem);
         noteworthyEngine.addSystem(movementSystem);
         noteworthyEngine.addSystem(battleSystem);
         noteworthyEngine.addSystem(renderSystem);
