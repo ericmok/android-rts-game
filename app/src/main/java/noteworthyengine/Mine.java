@@ -67,21 +67,34 @@ public class Mine extends Unit {
         renderNode.z.v = 2;
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
-            public void apply(RenderSystem element) {
-
+            public void apply(RenderSystem system) {
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
-                    renderNode.animationName = Sprite2dDef.ANIMATION_MINE_EXPLODING;
                     float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
                     float rad = (float)(battleNode.attackRange.v * ratio);
-                    renderNode.width.v = 2 * rad;
-                    renderNode.height.v = 2 * rad;
-                    renderNode.animationProgress.v = (int) (ratio * 100);
-                } else {
-                    renderNode.animationName = Sprite2dDef.ANIMATION_MINE_IDLING;
-                    renderNode.animationProgress.v = 0;
-                    renderNode.width.v = 0.9f;
-                    renderNode.height.v = 0.9f;
+
+                    Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
+                    sprite2dDef.isGfxInterpolated = false;
+                    sprite2dDef.animationName = Sprite2dDef.ANIMATION_MINE_EXPLODING;
+                    sprite2dDef.animationProgress = (int) (ratio * 100);
+                    sprite2dDef.position.x = battleNode.coords.pos.x;
+                    sprite2dDef.position.y = battleNode.coords.pos.y;
+                    sprite2dDef.position.z = 3;
+                    sprite2dDef.angle = 0;
+                    sprite2dDef.width = 2 * rad;
+                    sprite2dDef.height = 2 * rad;
+                    sprite2dDef.color = renderNode.color.v;
+
+                    //renderNode.animationName = Sprite2dDef.ANIMATION_MINE_EXPLODING;
+                    //renderNode.width.v = 2 * rad;
+                    //renderNode.height.v = 2 * rad;
+                    //renderNode.animationProgress.v = (int) (ratio * 100);
                 }
+//                else {
+//                    renderNode.animationName = Sprite2dDef.ANIMATION_MINE_IDLING;
+//                    renderNode.animationProgress.v = 0;
+//                    renderNode.width.v = 0.9f;
+//                    renderNode.height.v = 0.9f;
+//                }
             }
         };
     }
