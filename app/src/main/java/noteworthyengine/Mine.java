@@ -19,6 +19,7 @@ public class Mine extends Unit {
 
     public static final int MAX_BATTLE_NODES_AFFECTED = 20;
 
+    public GridNode gridNode = new GridNode(this);
     public BattleNode battleNode = new BattleNode(this);
     public RenderNode renderNode = new RenderNode(this);
 

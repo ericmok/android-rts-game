@@ -16,6 +16,7 @@ import utils.VoidFunc3;
 public class Platoon extends Unit {
     public static final String NAME = "Troopy";
 
+    GridNode gridNode = new GridNode(this);
     MovementNode movementNode;
 
     FieldNode fieldNode;

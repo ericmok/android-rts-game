@@ -34,7 +34,7 @@ public class GridSystem extends noteworthyframework.System {
             grid.index(gridNode);
 
             gridNode.gridX.v = grid.getBucketX(gridNode.coords.pos.x);
-            gridNode.gridY.v = grid.getBucketX(gridNode.coords.pos.y);
+            gridNode.gridY.v = grid.getBucketY(gridNode.coords.pos.y);
         }
     }
 

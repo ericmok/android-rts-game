@@ -67,6 +67,9 @@ public class BattleNode extends Node {
     public GamerPtr gamer;
 
     public Coords coords;
+    public IntegerPtr gridX;
+    public IntegerPtr gridY;
+
     public Vector2 velocity;
     public DoublePtr maxSpeed;
 

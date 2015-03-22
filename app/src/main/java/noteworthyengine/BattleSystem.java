@@ -2,6 +2,7 @@ package noteworthyengine;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import noteworthyframework.*;
 import structure.RewriteOnlyArray;
@@ -75,8 +76,18 @@ public class BattleSystem extends noteworthyframework.System {
         out.v = null;
         double bestDistance = 10000000;
 
-        for (int i = battleNodes.size() - 1; i >= 0; i--) {
-            BattleNode possibleTarget = battleNodes.get(i);
+        Grid grid = ((NoteworthyEngine)this.getBaseEngine()).gridSystem.grid;
+        GridNode gridNode = (GridNode)battleNode.unit.node(GridNode.NAME);
+        List<GridNode> gridNodes = grid.getSurroundingNodes(gridNode, range);
+
+        for (int i = gridNodes.size() - 1; i >= 0; i--) {
+
+            BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
+
+            // Narrow phase
+            if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
+                continue;
+            }
 
             // Cannot attack self after all!
             //if (battleNode == possibleTarget) { continue; }
@@ -112,8 +123,17 @@ public class BattleSystem extends noteworthyframework.System {
 
         double bestDistance = 10000000;
 
-        for (int i = battleNodes.size() - 1; i >= 0; i--) {
-            BattleNode possibleTarget = battleNodes.get(i);
+        Grid grid = ((NoteworthyEngine)this.getBaseEngine()).gridSystem.grid;
+        GridNode gridNode = (GridNode)battleNode.unit.node(GridNode.NAME);
+        List<GridNode> gridNodes = grid.getSurroundingNodes(gridNode, range);
+
+        for (int i = gridNodes.size() - 1; i >= 0; i--) {
+            BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
+
+            // Narrow phase
+            if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
+                continue;
+            }
 
             // Cannot attack self after all!
             //if (battleNode == possibleTarget) { continue; }
