@@ -10,7 +10,6 @@ import noteworthyframework.EngineDataLoader;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import noteworthyframework.UnitPool;
-import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
@@ -97,7 +96,9 @@ public class DataLoader implements EngineDataLoader {
 
                 //baseEngine.addUnit(arrowCommand);
 
-                baseEngine.addUnit(new Explosion(player));
+                Mine mine = new Mine(player);
+                mine.battleNode.coords.pos.set(Math.random() * 20 - 10, Math.random() * 20 - 10);
+                baseEngine.addUnit(mine);
 
                 TimelineCommand timelineCommand = new TimelineCommand();
                 timelineCommand.timelineNode.gamerPtr.v = player;

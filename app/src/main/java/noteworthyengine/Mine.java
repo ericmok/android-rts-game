@@ -13,7 +13,7 @@ import utils.VoidFunc3;
 /**
  * Created by eric on 3/21/15.
  */
-public class Explosion extends Unit {
+public class Mine extends Unit {
 
     public static final String NAME = "explosion";
 
@@ -25,17 +25,17 @@ public class Explosion extends Unit {
     public RewriteOnlyArray<BattleNode.Target> battleTargets =
             new RewriteOnlyArray<BattleNode.Target>(BattleNode.Target.class, MAX_BATTLE_NODES_AFFECTED);
 
-    public Explosion(Gamer gamer) {
+    public Mine(Gamer gamer) {
         this.name = NAME;
 
         battleNode.stickyAttack.v = 0;
-        battleNode.targetAcquisitionRange.v = 50;
-        battleNode.attackRange.v = 5;
-        battleNode.attackDamage.v = 4;
+        battleNode.targetAcquisitionRange.v = 7;
+        battleNode.attackRange.v = 7;
+        battleNode.attackDamage.v = 20;
         battleNode.attackSwingTime.v = 5;
         battleNode.attackCooldown.v = 1;
-        battleNode.hp.v = 1000000;
-        battleNode.isAttackable.v = 0;
+        battleNode.hp.v = 10;
+        battleNode.isAttackable.v = 1;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
         battleNode.gamer.v = gamer;
         battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
@@ -57,19 +57,29 @@ public class Explosion extends Unit {
             }
         };
 
-        renderNode.animationName = Sprite2dDef.ANIMATION_RETICLE_TAP;
+        renderNode.animationName = Sprite2dDef.ANIMATION_MINE_IDLING;
         renderNode.isGfxInterpolated.v = 0;
-        renderNode.color.v = Color.argb(50, 255, 255, 255);
-        renderNode.width.v = 10;
-        renderNode.height.v = 10;
+        renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0x80ffffff;
+
+        renderNode.width.v = 0.9f;
+        renderNode.height.v = 0.9f;
         renderNode.z.v = 2;
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem element) {
+
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
-                    float rad = (float)(battleNode.attackRange.v * (battleNode.attackProgress.v / battleNode.attackSwingTime.v));
+                    renderNode.animationName = Sprite2dDef.ANIMATION_MINE_EXPLODING;
+                    float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
+                    float rad = (float)(battleNode.attackRange.v * ratio);
                     renderNode.width.v = rad;
                     renderNode.height.v = rad;
+                    renderNode.animationProgress.v = (int) (ratio * 100);
+                } else {
+                    renderNode.animationName = Sprite2dDef.ANIMATION_MINE_IDLING;
+                    renderNode.animationProgress.v = 0;
+                    renderNode.width.v = 0.9f;
+                    renderNode.height.v = 0.9f;
                 }
             }
         };
