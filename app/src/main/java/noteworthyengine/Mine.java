@@ -34,7 +34,7 @@ public class Mine extends Unit {
         battleNode.attackRange.v = 5;
         battleNode.attackDamage.v = 22;
         battleNode.attackSwingTime.v = 5;
-        battleNode.attackCooldown.v = 1;
+        battleNode.attackCooldown.v = 3;
         battleNode.hp.v = 10;
         battleNode.isAttackable.v = 1;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
