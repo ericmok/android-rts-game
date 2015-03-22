@@ -87,6 +87,9 @@ public class BattleSystem extends noteworthyframework.System {
 
             BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
 
+            // Not all gridNodes belong to units that have battleNodes...
+            if (possibleTarget == null) { continue; }
+
             // Narrow phase
             if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
                 continue;
