@@ -25,6 +25,9 @@ public class Sprite2dDef {
 
     public static final String ANIMATION_TROOPS_PROJECTILE = "Animations/Troops/Projectile";
 
+    public static final String ANIMATION_MINE_IDLING = "Animations/Mine/Idling";
+    public static final String ANIMATION_MINE_EXPLODING = "Animations/Mine/Exploding";
+
     public static final String ANIMATION_PROJECTILE_BASIC = "Animations/Projectiles/Basic";
     public static final String ANIMATION_PROJECTILE_EXPLOSION = "Animations/Projectiles/Explosion";
 

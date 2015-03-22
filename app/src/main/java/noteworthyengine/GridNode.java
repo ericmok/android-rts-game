@@ -7,20 +7,18 @@ import noteworthyframework.Unit;
 import utils.Vector2;
 
 /**
- * Created by eric on 3/16/15.
+ * Created by eric on 3/20/15.
  */
-public class SeparationNode extends Node {
-
-    public static final String NAME = "separationName";
+public class GridNode extends Node {
+    public static final String NAME = "gridNode";
 
     public Coords coords;
-    public Vector2 separationForce;
-
     public IntegerPtr gridX;
     public IntegerPtr gridY;
 
-    public SeparationNode(Unit unit) {
+
+    public GridNode(Unit unit) {
         super(NAME, unit);
-        Node.instantiatePublicFieldsForUnit(unit, SeparationNode.class, this);
+        Node.instantiatePublicFieldsForUnit(unit, GridNode.class, this);
     }
 }
