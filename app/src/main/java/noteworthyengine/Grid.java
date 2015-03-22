@@ -58,6 +58,27 @@ public class Grid {
         return points[getBucketX(gridNode.coords.pos.x)][getBucketY(gridNode.coords.pos.y)];
     }
 
+    public List<GridNode> getSurroundingNodes(int gridX, int gridY, double range) {
+        ret.clear();
+        int lx = gridX - (int)Math.ceil(range / cellSize);
+        int ly = gridY - (int)Math.ceil(range / cellSize);
+        int lxMax = gridX + (int)Math.ceil(range / cellSize);
+        int lyMax = gridY + (int)Math.ceil(range / cellSize);
+
+        for (int i = lx; i <= lxMax; i++) {
+            for (int j = ly; j <= lyMax; j++) {
+                ret.addAll(points[i][j]);
+            }
+        }
+//        for (int i = Math.max(lx, 0); i < Math.min(lx + 1, width); i++) {
+//            for (int j = Math.max(ly, 0); j < Math.min(ly + 1, height); j++) {
+//                ret.addAll(points[i][j]);
+//            }
+//        }
+
+        return ret;
+    }
+
     public List<GridNode> getSurroundingNodes(GridNode gridNode, double range) {
         ret.clear();
         int lx = this.getBucketX(gridNode.coords.pos.x - range);

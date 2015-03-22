@@ -77,8 +77,8 @@ public class BattleSystem extends noteworthyframework.System {
         double bestDistance = 10000000;
 
         Grid grid = ((NoteworthyEngine)this.getBaseEngine()).gridSystem.grid;
-        GridNode gridNode = (GridNode)battleNode.unit.node(GridNode.NAME);
-        List<GridNode> gridNodes = grid.getSurroundingNodes(gridNode, range);
+        //GridNode gridNode = (GridNode)battleNode.unit.node(GridNode.NAME);
+        List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v, range);
 
         for (int i = gridNodes.size() - 1; i >= 0; i--) {
 
@@ -124,8 +124,9 @@ public class BattleSystem extends noteworthyframework.System {
         double bestDistance = 10000000;
 
         Grid grid = ((NoteworthyEngine)this.getBaseEngine()).gridSystem.grid;
-        GridNode gridNode = (GridNode)battleNode.unit.node(GridNode.NAME);
-        List<GridNode> gridNodes = grid.getSurroundingNodes(gridNode, range);
+        //GridNode gridNode = (GridNode)battleNode.unit.node(GridNode.NAME);
+        //List<GridNode> gridNodes = grid.getSurroundingNodes(gridNode, range);
+        List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v , range);
 
         for (int i = gridNodes.size() - 1; i >= 0; i--) {
             BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);

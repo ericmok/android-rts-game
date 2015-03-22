@@ -58,11 +58,39 @@ public class GridTest extends ApplicationTestCase<Application> {
         gridUnit.gridNode.coords.pos.y = 4;
         grid.index(gridUnit.gridNode);
         assertTrue(grid.getBucketForCell(51, 51).size() == 1);
+        assertTrue(grid.getSurroundingNodes(50, 50, 0).size() == 0);
+        assertTrue(grid.getSurroundingNodes(50, 52, 0).size() == 0);
+        assertTrue(grid.getSurroundingNodes(52, 50, 0).size() == 0);
+        assertTrue(grid.getSurroundingNodes(52, 52, 0).size() == 0);
+        assertTrue(grid.getSurroundingNodes(50, 50, 1).size() == 1);
+        assertTrue(grid.getSurroundingNodes(50, 52, 1).size() == 1);
+        assertTrue(grid.getSurroundingNodes(52, 50, 1).size() == 1);
+        assertTrue(grid.getSurroundingNodes(52, 52, 1).size() == 1);
+        assertTrue(grid.getSurroundingNodes(49, 49, 1).size() == 0);
+        assertTrue(grid.getSurroundingNodes(49, 53, 1).size() == 0);
+        assertTrue(grid.getSurroundingNodes(53, 49, 1).size() == 0);
+        assertTrue(grid.getSurroundingNodes(53, 53, 1).size() == 0);
+        assertTrue(grid.getSurroundingNodes(49, 49, 4).size() == 0);
+        assertTrue(grid.getSurroundingNodes(49, 53, 4).size() == 0);
+        assertTrue(grid.getSurroundingNodes(53, 49, 4).size() == 0);
+        assertTrue(grid.getSurroundingNodes(53, 53, 4).size() == 0);
+        assertTrue(grid.getSurroundingNodes(49, 49, 8).size() == 1);
+        assertTrue(grid.getSurroundingNodes(49, 53, 8).size() == 1);
+        assertTrue(grid.getSurroundingNodes(53, 49, 8).size() == 1);
+        assertTrue(grid.getSurroundingNodes(53, 53, 8).size() == 1);
 
         grid.clear();
         gridUnit.gridNode.coords.pos.x = -5;
         gridUnit.gridNode.coords.pos.y = -5;
         grid.index(gridUnit.gridNode);
         assertTrue(grid.getBucketForCell(48, 48).size() == 1);
+
+        grid.clear();
+        gridUnit.gridNode.coords.pos.x = -5;
+        gridUnit.gridNode.coords.pos.y = -5;
+        grid.index(gridUnit.gridNode);
+        assertTrue(grid.getBucketForCell(48, 48).size() == 1);
+        assertTrue(grid.getSurroundingNodes(48, 48, 5).size() == 1);
+        assertTrue(grid.getSurroundingNodes(48, 48, 0).size() == 1);
     }
 }
