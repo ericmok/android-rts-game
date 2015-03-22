@@ -67,7 +67,11 @@ public class Grid {
 
         for (int i = lx; i <= lxMax; i++) {
             for (int j = ly; j <= lyMax; j++) {
-                ret.addAll(points[i][j]);
+
+                List<GridNode> nodesToRed = points[i][j];
+                for (int k = nodesToRed.size() - 1; k >= 0; k--) {
+                    ret.add(points[i][j].get(k));
+                }
             }
         }
 //        for (int i = Math.max(lx, 0); i < Math.min(lx + 1, width); i++) {
@@ -88,7 +92,11 @@ public class Grid {
 
         for (int i = lx; i <= lxMax; i++) {
             for (int j = ly; j <= lyMax; j++) {
-                ret.addAll(points[i][j]);
+
+                List<GridNode> nodesToRed = points[i][j];
+                for (int k = nodesToRed.size() - 1; k >= 0; k--) {
+                    ret.add(points[i][j].get(k));
+                }
             }
         }
 //        for (int i = Math.max(lx, 0); i < Math.min(lx + 1, width); i++) {
