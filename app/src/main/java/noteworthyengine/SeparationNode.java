@@ -1,6 +1,7 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
+import noteworthyframework.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;
@@ -14,6 +15,9 @@ public class SeparationNode extends Node {
 
     public Coords coords;
     public Vector2 separationForce;
+
+    public IntegerPtr gridX;
+    public IntegerPtr gridY;
 
     public SeparationNode(Unit unit) {
         super(NAME, unit);

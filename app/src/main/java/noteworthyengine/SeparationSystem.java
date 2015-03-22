@@ -2,6 +2,8 @@ package noteworthyengine;
 
 import android.util.Log;
 
+import java.util.List;
+
 import noteworthyframework.*;
 import utils.Vector2;
 
@@ -12,7 +14,14 @@ public class SeparationSystem extends noteworthyframework.System {
 
     public QueueMutationList<SeparationNode> nodes = new QueueMutationList<SeparationNode>(127);
 
+    // External system dependency
+    private GridSystem gridSystem;
+
     private Vector2 temp = new Vector2();
+
+    public SeparationSystem(GridSystem gridSystem) {
+        this.gridSystem = gridSystem;
+    }
 
     @Override
     public void addNode(Node node) {
@@ -30,16 +39,25 @@ public class SeparationSystem extends noteworthyframework.System {
 
     @Override
     public void step(double ct, double dt) {
+
+        NoteworthyEngine noteworthyEngine = (NoteworthyEngine)this.getBaseEngine();
+        Grid grid = noteworthyEngine.gridSystem.grid;
+
         for (int i = 0; i < nodes.size(); i++) {
             SeparationNode node = nodes.get(i);
             node.separationForce.zero();
 
-            for (int j = 0; j < nodes.size(); j++) {
+            List<GridNode> nearbyNodes = grid.getSurroundingNodes(node.gridX.v, node.gridY.v, 2);
+
+            for (int j = 0; j < nearbyNodes.size(); j++) {
 
                 // Don't separate with self
-                if (i == j) continue;
+                //if (i == j) continue;
 
-                SeparationNode otherNode = nodes.get(j);
+                SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j).unit.node(SeparationNode.NAME);
+
+                // Not all gridNodes belong to units that have separationNodes
+                if (otherNode == null || node == otherNode) { continue; }
 
                 double distance = (node.coords.pos.distanceTo(otherNode.coords.pos) + 1);
 
