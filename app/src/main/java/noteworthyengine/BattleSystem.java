@@ -77,7 +77,6 @@ public class BattleSystem extends noteworthyframework.System {
         double bestDistance = 10000000;
 
         Grid grid = ((NoteworthyEngine)this.getBaseEngine()).gridSystem.grid;
-        //GridNode gridNode = (GridNode)battleNode.unit.node(GridNode.NAME);
         List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v, range);
 
         for (int i = gridNodes.size() - 1; i >= 0; i--) {
@@ -89,11 +88,6 @@ public class BattleSystem extends noteworthyframework.System {
                 continue;
             }
 
-            // Cannot attack self after all!
-            //if (battleNode == possibleTarget) { continue; }
-            //if (battleNode.gamer.v.team == possibleTarget.gamer.v.team) { continue; }
-            //if (possibleTarget.hp.v <= 0) { continue; }
-            //if (possibleTarget.isAttackable.v == 0) { continue; }
             if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) { continue; }
 
             double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
@@ -124,8 +118,6 @@ public class BattleSystem extends noteworthyframework.System {
         double bestDistance = 10000000;
 
         Grid grid = ((NoteworthyEngine)this.getBaseEngine()).gridSystem.grid;
-        //GridNode gridNode = (GridNode)battleNode.unit.node(GridNode.NAME);
-        //List<GridNode> gridNodes = grid.getSurroundingNodes(gridNode, range);
         List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v , range);
 
         for (int i = gridNodes.size() - 1; i >= 0; i--) {
@@ -136,11 +128,6 @@ public class BattleSystem extends noteworthyframework.System {
                 continue;
             }
 
-            // Cannot attack self after all!
-            //if (battleNode == possibleTarget) { continue; }
-            //if (battleNode.gamer.v.team == possibleTarget.gamer.v.team) { continue; }
-            //if (possibleTarget.hp.v <= 0) { continue; }
-            //if (possibleTarget.isAttackable.v == 0) { continue; }
             if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) { continue; }
 
             double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
