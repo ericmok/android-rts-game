@@ -21,7 +21,11 @@ public class BattleSystem extends noteworthyframework.System {
 
     public BattleNode.Ptr tempBattleNodePtr = new BattleNode.Ptr();
 
-    public BattleSystem() {
+    // External system dependency
+    private GridSystem gridSystem;
+
+    public BattleSystem(GridSystem gridSystem) {
+        this.gridSystem = gridSystem;
     }
 
     @Override
@@ -76,7 +80,7 @@ public class BattleSystem extends noteworthyframework.System {
         out.v = null;
         double bestDistance = 10000000;
 
-        Grid grid = ((NoteworthyEngine)this.getBaseEngine()).gridSystem.grid;
+        Grid grid = gridSystem.grid;
         List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v, range);
 
         for (int i = gridNodes.size() - 1; i >= 0; i--) {
@@ -117,11 +121,14 @@ public class BattleSystem extends noteworthyframework.System {
 
         double bestDistance = 10000000;
 
-        Grid grid = ((NoteworthyEngine)this.getBaseEngine()).gridSystem.grid;
+        Grid grid = gridSystem.grid;
         List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v , range);
 
         for (int i = gridNodes.size() - 1; i >= 0; i--) {
             BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
+
+            // Not all gridNodes belong to units that have battleNodes...
+            if (possibleTarget == null) { continue; }
 
             // Narrow phase
             if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
