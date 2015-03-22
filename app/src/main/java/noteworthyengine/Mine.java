@@ -30,11 +30,11 @@ public class Mine extends Unit {
         this.name = NAME;
 
         battleNode.stickyAttack.v = 0;
-        battleNode.targetAcquisitionRange.v = 5;
-        battleNode.attackRange.v = 5;
-        battleNode.attackDamage.v = 22;
-        battleNode.attackSwingTime.v = 5;
-        battleNode.attackCooldown.v = 3;
+        battleNode.targetAcquisitionRange.v = 4.5;
+        battleNode.attackRange.v = 4.5;
+        battleNode.attackDamage.v = 23;
+        battleNode.attackSwingTime.v = 4.5;
+        battleNode.attackCooldown.v = 5;
         battleNode.hp.v = 10;
         battleNode.isAttackable.v = 1;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
