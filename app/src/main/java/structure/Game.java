@@ -153,6 +153,8 @@ public class Game {
         r.gc();
         if ( !gameThread.isAlive() ) {
         	gameThread = new Thread(gameLoop);
+
+            // Don't need to call it twice...
         	//gameLoop.resume(); // Make sure isFinished flag is set to false
         }
         if (gameThread.getState() == Thread.State.NEW ) {
@@ -164,8 +166,8 @@ public class Game {
 	public void resume() {
 		gameGLSurfaceView.onResume();
 
-		//gameLoop.resume();
-		//gameState = State.RUNNING;
+        gameLoop.resume();
+		gameState = State.RUNNING;
 	}
 	
 	public void pause() {
@@ -189,8 +191,8 @@ public class Game {
 	
 	public void onSurfaceReady() {
         // Only when we have a good surface do we resume the game loop
-        gameLoop.resume();
-        this.gameState = State.RUNNING;
+        //gameLoop.resume();
+        //this.gameState = State.RUNNING;
 
         // Bubble upwards
 		((GameActivity)context).onSurfaceReady();
