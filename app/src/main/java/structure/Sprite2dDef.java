@@ -13,6 +13,9 @@ import utils.Vector3;
  */
 public class Sprite2dDef {
 
+    public static final String ANIMATION_SPLASH_SPLASH = "Animations/Splash/Splash";
+    public static final String ANIMATION_SPLASH_LOADER = "Animations/Splash/Loader";
+
     public static final String ANIMATION_SMOKE_GUNPOWDER = "Animations/Smoke/Gunpowder";
 	public static final String ANIMATION_TROOPS_IDLING = "Animations/Troops/Idling";
 	public static final String ANIMATION_TROOPS_MOVING = "Animations/Troops/Moving";
