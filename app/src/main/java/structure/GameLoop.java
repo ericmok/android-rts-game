@@ -1,8 +1,8 @@
 package structure;
 
-import java.util.List;
-
 import android.os.SystemClock;
+
+import noteworthyengine.GameSettings;
 
 public class GameLoop implements Runnable {
 	
@@ -11,7 +11,7 @@ public class GameLoop implements Runnable {
 	private Object pauseLock;	
 	
 	private boolean isFinished = false;
-	private boolean isPaused = false;
+	private boolean isPaused = true; // Loop is started in paused state
 
     private boolean firstRun = true;
 	
@@ -46,8 +46,23 @@ public class GameLoop implements Runnable {
         previousTick = SystemClock.uptimeMillis();
 		
 		while(!isFinished) {
-			
-			long currentTick = SystemClock.uptimeMillis();
+
+            synchronized(pauseLock) {
+                debugLog("GameLoop", "Entering while paused");
+
+                while (isPaused) {
+                    debugLog("GameLoop", "Waiting on pause");
+                    try {
+                        pauseLock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                debugLog("GameLoop", "End while in pause sync");
+            }
+
+
+            long currentTick = SystemClock.uptimeMillis();
 			tickDifference = currentTick - previousTick;
 			previousTick = currentTick; // Update previous tick
 
@@ -89,30 +104,13 @@ public class GameLoop implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			synchronized(pauseLock) {
-				debugLog("GameLoop", "Entering while paused");
-				
-				while (isPaused) {
-					debugLog("GameLoop", "Waiting on pause");
-					try {
-						pauseLock.wait();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				debugLog("GameLoop", "End while in pause sync");
-			}
-			
+
 		} // End Game Loop
 		
 		debugLog("GameLoop", "Is finished.");
 	}
 
     private void performGameLogicV3(long currentTick, long elapsedTime) {
-        double ct = currentTick * GameSettings.UNIT_TIME_MULTIPLIER;
-        double dt = elapsedTime * GameSettings.UNIT_TIME_MULTIPLIER;
-
         accumulatedFrames += TIME_PER_FRAME;
 
         if (firstRun) {
@@ -120,12 +118,6 @@ public class GameLoop implements Runnable {
             firstRun = false;
         }
         game.noteworthyEngine.step(accumulatedFrames, TIME_PER_FRAME);
-
-        // Draw buttons
-        // Draw troops
-
-        game.graphics.setCameraPositionAndScale((float)game.gameCamera.x, (float)game.gameCamera.y, (float)game.gameCamera.scale);
-        game.graphics.flushCameraModifications();
     }
 	
 	/**

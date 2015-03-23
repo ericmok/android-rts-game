@@ -93,6 +93,11 @@ public class BaseEngine {
         systems.add(system);
     }
 
+    public void removeSystem(System system) {
+        systems.remove(system);
+        system.setBaseEngine(null);
+    }
+
     public void initialize() {
         for (int i = 0; i < this.systems.size(); i++) {
             System system = this.systems.get(i);

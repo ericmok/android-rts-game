@@ -2,11 +2,13 @@ package structure;
 
 import android.app.Activity;
 import android.content.Context;
+import android.opengl.Matrix;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 
+import noteworthyengine.BackgroundUnit;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.DataLoader;
@@ -40,6 +42,8 @@ public class Game {
 
     public GameCamera gameCamera = new GameCamera();
     public UIOverlay uiOverlay = new UIOverlay();
+
+    BackgroundUnit backgroundUnit = new BackgroundUnit();
 
 	/**
 	 * Stores pre-loaded heap memory allocations of game objects 
@@ -116,17 +120,11 @@ public class Game {
 
 	public void loadLevel() {
 
-        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
+//        noteworthyEngine.cameraScale = 4;
+//        noteworthyEngine.addUnit(backgroundUnit);
+//        noteworthyEngine.flushQueues();
 
-//        try {
-//            EngineLoader.load(engine, "self", levelFileLoader.jsonFromFile("level0.json"));
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
 
         try {
             String json = levelFileLoader.jsonFromFile("level0.json");
@@ -143,53 +141,6 @@ public class Game {
 
 //        uiOverlay.buttons.add(GameEntities.attackButtonPool.fetchMemory());
 //        uiOverlay.buttons.add(GameEntities.defendButtonPool.fetchMemory());
-
-//		// TODO: Clean this up
-//		FormationSystem fs = new FormationSystem(this);
-//		fs.setupSquadPositions(stage.players.get(0).units, 1);
-//
-//		GenerateTroopsInSquadPositionsSystem gtsps = new GenerateTroopsInSquadPositionsSystem(this);
-//		gtsps.process(0, this.stage.players.get(0).units);
-//
-//		fs.setupSquadPositions(stage.players.get(1).units, 1);
-//		gtsps.process(1, this.stage.players.get(1).units);
-//
-//
-//		TriggerField test = this.gamePool.triggerFields.fetchMemory();
-//		test.source.x = -0.2;
-//		test.source.y = 1.1f;
-//		test.dest.x = -1;
-//		test.dest.y = -0.8f;
-//		stage.players.get(1).fields.add(test);
-//
-//		test = this.gamePool.triggerFields.fetchMemory();
-//		test.source.x = 0.2;
-//		test.source.y = 1.1f;
-//		test.dest.x = 1;
-//		test.dest.y = -0.8f;
-//		stage.players.get(1).fields.add(test);
-//
-//
-//		test = this.gamePool.triggerFields.fetchMemory();
-//		test.source.x = 0;
-//		test.source.y = 0.9f;
-//		test.dest.x = -1;
-//		test.dest.y = -0.8f;
-//		stage.players.get(1).fields.add(test);
-//
-//		test = this.gamePool.triggerFields.fetchMemory();
-//		test.source.x = 1;
-//		test.source.y = -0.7f;
-//		test.dest.x = 0;
-//		test.dest.y = 0f;
-//		stage.players.get(1).fields.add(test);
-//
-//		test = this.gamePool.triggerFields.fetchMemory();
-//		test.source.x = -1;
-//		test.source.y = 0.7f;
-//		test.dest.x = 0;
-//		test.dest.y = 0f;
-//		stage.players.get(1).fields.add(test);
 	}
 	
 	public GameRenderer getGameRenderer() {
@@ -202,7 +153,7 @@ public class Game {
         r.gc();
         if ( !gameThread.isAlive() ) {
         	gameThread = new Thread(gameLoop);
-        	gameLoop.resume(); // Make sure isFinished flag is set to false
+        	//gameLoop.resume(); // Make sure isFinished flag is set to false
         }
         if (gameThread.getState() == Thread.State.NEW ) {
         	gameThread.start(); 
@@ -212,9 +163,9 @@ public class Game {
 	
 	public void resume() {
 		gameGLSurfaceView.onResume();
-		
-		gameLoop.resume();
-		gameState = State.RUNNING;
+
+		//gameLoop.resume();
+		//gameState = State.RUNNING;
 	}
 	
 	public void pause() {
@@ -237,6 +188,11 @@ public class Game {
 	}
 	
 	public void onSurfaceReady() {
+        // Only when we have a good surface do we resume the game loop
+        gameLoop.resume();
+        this.gameState = State.RUNNING;
+
+        // Bubble upwards
 		((GameActivity)context).onSurfaceReady();
 	}
 

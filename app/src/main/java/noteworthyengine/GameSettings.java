@@ -1,4 +1,4 @@
-package structure;
+package noteworthyengine;
 
 /**
  * Created by eric on 10/31/14.
