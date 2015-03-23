@@ -22,13 +22,13 @@ public class LoaderUIEngine extends BaseEngine {
 
         renderSystem = new RenderSystem(new DrawCompat(game));
         this.addSystem(renderSystem);
+
+        game.graphics.setCameraPositionAndScale(0, 0, 1);
+        game.graphics.flushCameraModifications();
     }
 
     @Override
     public void step(double dt) {
         super.step(dt);
-
-        game.graphics.setCameraPositionAndScale(0, 0, 4);
-        game.graphics.flushCameraModifications();
     }
 }

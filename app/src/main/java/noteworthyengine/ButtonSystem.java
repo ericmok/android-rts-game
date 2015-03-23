@@ -38,20 +38,18 @@ public class ButtonSystem extends noteworthyframework.System {
 
     @Override
     public void step(double ct, double dt) {
-        if (game.gameInput.isTouchDown()) {
-            game.activeEngine = game.noteworthyEngine;
-        }
+
         for (int i = nodes.size() - 1; i >= 0; i--) {
             ButtonNode buttonNode = nodes.get(i);
 
             if (game.gameInput.isTouchDown()) {
                 if (game.gameInput.touchPosition.distanceTo(buttonNode.coords.pos) <
-                        2 * Math.min(buttonNode.width.v, buttonNode.height.v)) {
+                        Math.min(buttonNode.width.v, buttonNode.height.v)) {
                     buttonNode.onTap.apply(this);
-                }
 
-                buttonNode.coords.pos.copy(game.gameInput.touchPosition);
-                //buttonNode.coords.pos.scale(0.5, 0.5);
+                    buttonNode.coords.pos.copy(game.gameInput.touchPosition);
+                    //buttonNode.coords.pos.scale(0.5, 0.5);
+                }
             }
         }
     }

@@ -27,6 +27,7 @@ import noteworthyengine.MovementSystem;
 import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.RenderSystem;
 import noteworthyframework.Unit;
+import utils.VoidFunc;
 
 public class Game {
 
@@ -131,13 +132,21 @@ public class Game {
 
 	public void loadLevel() {
         activeEngine = loaderUIEngine;
+        backgroundUnit.renderNode.width.v = 4;
+        backgroundUnit.renderNode.height.v = 4;
         loaderUIEngine.addUnit(backgroundUnit);
-//        ButtonUnit buttonUnit = new ButtonUnit();
-//        buttonUnit.renderNode.animationName = Sprite2dDef.ANIMATION_BUTTONS_ATTACK;
-//        buttonUnit.renderNode.coords.pos.set(0.1,0.1);
-//        buttonUnit.renderNode.width.v = 0.1f;// (float)(1 / gameCamera.scale);
-//        buttonUnit.renderNode.height.v = 0.1f; //(float)(1 / gameCamera.scale);
-//        loaderUIEngine.addUnit(buttonUnit);
+        ButtonUnit buttonUnit = new ButtonUnit();
+        buttonUnit.renderNode.animationName = Sprite2dDef.ANIMATION_BUTTONS_PLAY;
+        buttonUnit.renderNode.coords.pos.set(-0.85, 0);
+        buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
+        buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
+        buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
+            @Override
+            public void apply(ButtonSystem element) {
+                activeEngine = noteworthyEngine;
+            }
+        };
+        loaderUIEngine.addUnit(buttonUnit);
         loaderUIEngine.flushQueues();
 
         LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
