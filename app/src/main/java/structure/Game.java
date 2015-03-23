@@ -10,21 +10,28 @@ import java.io.IOException;
 
 import noteworthyengine.BackgroundUnit;
 import noteworthyengine.BattleSystem;
+import noteworthyengine.ButtonSystem;
+import noteworthyengine.ButtonUnit;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.DataLoader;
 import noteworthyengine.DecaySystem;
 import noteworthyengine.FormationSystem;
+import noteworthyengine.LoaderUIEngine;
 import noteworthyengine.SeparationNode;
 import noteworthyengine.SeparationSystem;
 import noteworthyengine.TimelineSystem;
+import noteworthyframework.BaseEngine;
 import noteworthyframework.DrawCompat;
 import noteworthyengine.FieldSystem;
 import noteworthyengine.MovementSystem;
 import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.RenderSystem;
+import noteworthyframework.Unit;
 
 public class Game {
 
+    public BaseEngine activeEngine;
+    public LoaderUIEngine loaderUIEngine;
     public NoteworthyEngine noteworthyEngine;
 
 	private Game m = this;
@@ -115,14 +122,23 @@ public class Game {
 	//}
 
     public void loadEngine() {
+        loaderUIEngine = new LoaderUIEngine(this);
         noteworthyEngine = new NoteworthyEngine(this);
+
+        loaderUIEngine.initialize();
+        noteworthyEngine.initialize();
     }
 
 	public void loadLevel() {
-
-//        noteworthyEngine.cameraScale = 4;
-//        noteworthyEngine.addUnit(backgroundUnit);
-//        noteworthyEngine.flushQueues();
+        activeEngine = loaderUIEngine;
+        loaderUIEngine.addUnit(backgroundUnit);
+//        ButtonUnit buttonUnit = new ButtonUnit();
+//        buttonUnit.renderNode.animationName = Sprite2dDef.ANIMATION_BUTTONS_ATTACK;
+//        buttonUnit.renderNode.coords.pos.set(0.1,0.1);
+//        buttonUnit.renderNode.width.v = 0.1f;// (float)(1 / gameCamera.scale);
+//        buttonUnit.renderNode.height.v = 0.1f; //(float)(1 / gameCamera.scale);
+//        loaderUIEngine.addUnit(buttonUnit);
+        loaderUIEngine.flushQueues();
 
         LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
 
@@ -154,8 +170,8 @@ public class Game {
         if ( !gameThread.isAlive() ) {
         	gameThread = new Thread(gameLoop);
 
-            // Don't need to call it twice...
-        	//gameLoop.resume(); // Make sure isFinished flag is set to false
+            // If commented out, sometimes doesn't resume properly...
+        	gameLoop.resume(); // Make sure isFinished flag is set to false
         }
         if (gameThread.getState() == Thread.State.NEW ) {
         	gameThread.start(); 

@@ -113,11 +113,14 @@ public class GameLoop implements Runnable {
     private void performGameLogicV3(long currentTick, long elapsedTime) {
         accumulatedFrames += TIME_PER_FRAME;
 
-        if (firstRun) {
-            game.noteworthyEngine.initialize();
-            firstRun = false;
-        }
-        game.noteworthyEngine.step(accumulatedFrames, TIME_PER_FRAME);
+//        if (firstRun) {
+//            //game.noteworthyEngine.initialize();
+//            game.activeEngine.initialize();
+//            firstRun = false;
+//        }
+
+        //game.noteworthyEngine.step(accumulatedFrames, TIME_PER_FRAME);
+        game.activeEngine.step(TIME_PER_FRAME);
     }
 	
 	/**

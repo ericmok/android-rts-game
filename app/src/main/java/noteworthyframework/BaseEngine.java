@@ -106,7 +106,7 @@ public class BaseEngine {
         }
     }
 
-    public void step(double ct, double dt) {
+    public void step(double dt) {
 
         this.flushQueues();
 
@@ -114,11 +114,12 @@ public class BaseEngine {
             System system = this.systems.get(i);
 
             //system.flushQueues();
-            system.step(ct, dt);
+            system.step(this.gameTime, dt);
         }
 
         //this.flushQueues();
 
+        this.gameTime += dt;
         this.frameNumber += 1;
     }
 

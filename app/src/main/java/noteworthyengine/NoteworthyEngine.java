@@ -63,8 +63,8 @@ public class NoteworthyEngine extends BaseEngine {
         super.initialize();
     }
 
-    public void step(double ct, double dt) {
-        super.step(ct, dt);
+    public void step(double dt) {
+        super.step(dt);
 
         game.graphics.setCameraPositionAndScale((float)gameCameraPosition.x, (float)gameCameraPosition.y, (float)cameraScale);
         game.graphics.flushCameraModifications();
