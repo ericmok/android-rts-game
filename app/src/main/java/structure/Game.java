@@ -2,6 +2,7 @@ package structure;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.opengl.Matrix;
 
 import org.json.JSONException;
@@ -135,11 +136,13 @@ public class Game {
         backgroundUnit.renderNode.width.v = 4;
         backgroundUnit.renderNode.height.v = 4;
         loaderUIEngine.addUnit(backgroundUnit);
+
         ButtonUnit buttonUnit = new ButtonUnit();
         buttonUnit.renderNode.animationName = Sprite2dDef.ANIMATION_BUTTONS_PLAY;
         buttonUnit.renderNode.coords.pos.set(-0.85, 0);
         buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
         buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
+        buttonUnit.renderNode.color.v = Color.WHITE;
         buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
             @Override
             public void apply(ButtonSystem element) {

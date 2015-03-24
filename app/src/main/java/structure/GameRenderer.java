@@ -179,7 +179,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 			game.graphics.getSimpleSpriteBatch().beginDrawing();
 
 			RewriteOnlyArray<Sprite2dDef> sprites = game.graphics.drawLists.regularSprites.swapBuffer();
-            sprites.sort();
+            //sprites.sort(); Transparency and z problems if sorted by texture ...
 
             String cacheAnimationName = null;
             TextureLoader.TextureAnimation cacheAnimation = null;

@@ -1,5 +1,6 @@
 package structure;
 
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
@@ -26,11 +27,13 @@ public class SimpleSpriteBatch {
 	/**
 	 * The shader to draw the batch
 	 */
-	public SimpleShader simpleShader;
+	//public SimpleShader simpleShader;
+    public SimpleQuadShader simpleQuadShader;
 	
-	public SimpleSpriteBatch(SimpleShader simpleShader) {
+	public SimpleSpriteBatch(SimpleQuadShader simpleShader) {
 		reusableQuad = new Quad();
-		this.simpleShader = simpleShader;
+		this.simpleQuadShader = simpleShader;
+
 		tempMatrix = new float[16];
 		tempMatrix2 = new float[16];
 		tempMatrix3 = new float[16];
@@ -69,7 +72,58 @@ public class SimpleSpriteBatch {
 				
 		return tempMatrix;
 	}
-	
+
+    /**
+     * Sprites are better sorted, rather than relying on z index
+     * @param viewProjectionMatrix
+     * @param x
+     * @param y
+     * @param z
+     * @param angle
+     * @param width
+     * @param height
+     * @param glTexture
+     * @param color
+     */
+    public void draw2dz(float[] viewProjectionMatrix, float x, float y, float z, float angle, float width, float height, int glTexture, int color) {
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
+
+        //this.setScaleQuadTempMatrix(x, y, 1, width, height);
+
+        float[] scalingMatrix = tempMatrix;
+        Matrix.setIdentityM(scalingMatrix, 0);
+        Matrix.scaleM(scalingMatrix, 0, width, height, 1);
+
+        float[] rotationMatrix = tempMatrix2;
+        Matrix.setIdentityM(rotationMatrix, 0);
+
+        // TODO: zero degree rotation problem
+        Matrix.rotateM(rotationMatrix, 0, angle, 0, 0, 1);
+
+        float[] translationMatrix = tempMatrix3;
+        Matrix.setIdentityM(translationMatrix, 0);
+        Matrix.translateM(translationMatrix, 0, x, y, z);
+
+        float[] finalMatrix = tempMatrix4;
+        Matrix.setIdentityM(finalMatrix, 0);
+
+        Matrix.multiplyMM(finalMatrix, 0, rotationMatrix, 0, scalingMatrix, 0);
+        Matrix.multiplyMM(finalMatrix, 0, translationMatrix, 0, finalMatrix, 0);
+
+        Matrix.multiplyMM(finalMatrix, 0, viewProjectionMatrix, 0, finalMatrix, 0);
+
+        // TODO: Performance Profiling (Should move this to shader?)
+        //reusableQuad.setColor(color);
+        //reusableQuad.reBufferColorData();
+
+        simpleQuadShader.draw(finalMatrix,
+                reusableQuad.vertexBuffer,
+                color,
+                glTexture,
+                reusableQuad.textureBuffer,
+                GLES20.GL_TRIANGLE_STRIP, 4);
+    }
+
 	/**
 	 * Does appropriate scaling and rotation and translation for rendering the glTexture on a quad
 	 * 
@@ -85,73 +139,31 @@ public class SimpleSpriteBatch {
 	 * @param glTexture GL handle
 	 */
 	public void draw2d(float[] viewProjectionMatrix, float x, float y, float angle, float width, float height, int glTexture, int color) {
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
-		
-		//this.setScaleQuadTempMatrix(x, y, 1, width, height);
-		
-		float[] scalingMatrix = tempMatrix;
-		Matrix.setIdentityM(scalingMatrix, 0);
-		Matrix.scaleM(scalingMatrix, 0, width, height, 1);
-		
-		float[] rotationMatrix = tempMatrix2;
-		Matrix.setIdentityM(rotationMatrix, 0);
-		
-		// TODO: zero degree rotation problem
-		Matrix.rotateM(rotationMatrix, 0, angle, 0, 0, 1);
-		
-		float[] translationMatrix = tempMatrix3;
-		Matrix.setIdentityM(translationMatrix, 0);
-		Matrix.translateM(translationMatrix, 0, x, y, 0);
-		
-		float[] finalMatrix = tempMatrix4;
-		Matrix.setIdentityM(finalMatrix, 0);
-		
-		Matrix.multiplyMM(finalMatrix, 0, rotationMatrix, 0, scalingMatrix, 0);
-		Matrix.multiplyMM(finalMatrix, 0, translationMatrix, 0, finalMatrix, 0);
-		
-		Matrix.multiplyMM(finalMatrix, 0, viewProjectionMatrix, 0, finalMatrix, 0);
-		
-		// TODO: Performance Profiling
-		reusableQuad.setColor(color);
-		reusableQuad.reBufferColorData();
-		
-		simpleShader.draw(finalMatrix, 
-							reusableQuad.vertexBuffer, 
-							reusableQuad.colorBuffer, 
-							glTexture, 
-							reusableQuad.textureBuffer, 
-							GLES20.GL_TRIANGLE_STRIP, 4);
+        this.draw2dz(viewProjectionMatrix, x, y, 0, angle, width, height, glTexture, color);
 	}
 	
 	
-	/**
-	 * <strong>To be deprecated.</strong><br/>
-	 * Renders a centered unit quad.<br/>
-	 * A matrix is input to affect the rendering of the quad.<br/>
-	 * 
-	 * @param mvpMatrix Should account for view projection and other model transformations
-	 * @param x [deprecated]
-	 * @param y [deprecated]
-	 * @param z [deprecated]
-	 * @param width Width [deprecated]
-	 * @param height Height [deprecated]
-	 * @param glTexture Texture handle
-	 */
-	public void draw(float[] mvpMatrix, int glTexture) {
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
-		//reusableQuad.setupVertices(x, y, z, width, height);
-		//reusableQuad.bufferData();
-		
-		//this.setScaleQuadTempMatrix(x, y, z, width, height);
-		
-		//Matrix.multiplyMM(tempMatrix, 0,  mvpMatrix, 0, tempMatrix, 0);
-		
-		simpleShader.draw(mvpMatrix, 
-						reusableQuad.vertexBuffer, 
-						reusableQuad.colorBuffer, 
-						glTexture, reusableQuad.textureBuffer, 
-						GLES20.GL_TRIANGLE_STRIP, 4);
-	}
+//	/**
+//	 * <strong>To be deprecated.</strong><br/>
+//	 * Renders a centered unit quad.<br/>
+//	 * A matrix is input to affect the rendering of the quad.<br/>
+//	 *
+//	 * @param mvpMatrix Should account for view projection and other model transformations
+//	 * @param x [deprecated]
+//	 * @param y [deprecated]
+//	 * @param z [deprecated]
+//	 * @param width Width [deprecated]
+//	 * @param height Height [deprecated]
+//	 * @param glTexture Texture handle
+//	 */
+//	public void draw(float[] mvpMatrix, int glTexture) {
+//		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
+//		simpleShader.draw(mvpMatrix,
+//						reusableQuad.vertexBuffer,
+//						reusableQuad.colorBuffer,
+//						glTexture, reusableQuad.textureBuffer,
+//						GLES20.GL_TRIANGLE_STRIP, 4);
+//	}
 	
 	public void endDrawing() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
