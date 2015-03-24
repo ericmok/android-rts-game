@@ -64,7 +64,7 @@ public class DataLoader implements EngineDataLoader {
                 baseEngine.addUnit(troopy);
                 //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
 
-                for (int k = 0; k < 5; k++) {
+                for (int k = 0; k < 4; k++) {
                     //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
                     troopy = UnitPool.troopyMemoryPool.fetchMemory();
 
@@ -84,6 +84,11 @@ public class DataLoader implements EngineDataLoader {
                     baseEngine.addUnit(troopy);
                     //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
                 }
+                Archer archer = new Archer(player);
+                gamerPtr = (GamerPtr)archer.field("gamer");
+                gamerPtr.v = player;
+                archer.movementNode.coords.pos.set(jEntity.getDouble("x") + Math.random(), jEntity.getDouble("y") + Math.random());
+                baseEngine.addUnit(archer);
                 //ArrowCommand arrowCommand = new ArrowCommand();
                 //double randX = Math.ceil(30 * Math.random() - 15);
                 //double randY = Math.ceil(30 * Math.random() - 15);
