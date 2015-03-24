@@ -11,7 +11,7 @@ import utils.Vector3;
  * If the physics takes too long, the graphics thread should handle it. But if draw items require splitting into multiple sprites then what?<br/>
  * A problem: The TextureLoader belongs in the graphics, but we don't have access to it in game logic. So we hardcode some animation strings.
  */
-public class Sprite2dDef {
+public class Sprite2dDef implements Comparable<Sprite2dDef> {
 
     public static final String ANIMATION_SPLASH_SPLASH = "Animations/Splash/Splash";
     public static final String ANIMATION_SPLASH_LOADER = "Animations/Splash/Loader";
@@ -108,5 +108,10 @@ public class Sprite2dDef {
         this.gfxInterpolation.copy(other.gfxInterpolation);
         this.isGfxInterpolated = other.isGfxInterpolated;
         this.oldPosition.copy(other.oldPosition);
+    }
+
+    @Override
+    public int compareTo(Sprite2dDef o) {
+        return this.animationName.compareTo(o.animationName);
     }
 }

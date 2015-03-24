@@ -1,6 +1,7 @@
 package structure;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -25,7 +26,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 	private Context context;
 	private Game game;
-	
+
 	private Stack<float[]> matrixStack;
 
     private float[] tempMatrix;
@@ -33,7 +34,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	private float[] projectionMatrix;
 
 	public Object drawingMutex = new Object();
-	
+
 	private boolean surfaceIsReady = false;
 
 	private long previousTick = 0;
@@ -48,7 +49,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
     private float near = 1;
     private float far = 1000;
     private float scale = 1.0f;
-	
+
 	public GameRenderer(Context parentActivity, Game game) {
 		this.context = parentActivity;
 		this.game = game;
@@ -57,11 +58,11 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		//cameraMatrix = new float[16];
 		projectionMatrix = new float[16];
 	}
-	
+
 	public Graphics getGraphics() {
 		return game.graphics;
 	}
-	
+
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
@@ -152,7 +153,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		surfaceIsReady = true;
 		game.onSurfaceReady();
 	}
-	
+
 
 	@SuppressLint("NewApi")
 	@Override
@@ -164,7 +165,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
         long startTick = System.nanoTime() / 1000000;
 		tickDifference = startTick - previousTick;
 		previousTick = startTick; // Leapfrog previous tick
-		
+
 		synchronized(drawingMutex) {
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -178,12 +179,22 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 			game.graphics.getSimpleSpriteBatch().beginDrawing();
 
 			RewriteOnlyArray<Sprite2dDef> sprites = game.graphics.drawLists.regularSprites.swapBuffer();
+            sprites.sort();
+
+            String cacheAnimationName = null;
+            TextureLoader.TextureAnimation cacheAnimation = null;
 
 			sprites.resetIterator();
 
 			while (sprites.canIterateNext()) {
 
 				Sprite2dDef sprite = sprites.getNextIteratorItem();
+
+                if (sprite.animationName != cacheAnimationName) {
+                    cacheAnimationName = sprite.animationName;
+                    cacheAnimation = game.graphics.getTextureLoader().animations.get(sprite.animationName);
+                }
+
                 Vector3 temp = sprite.position;
 
                 if (sprite.isGfxInterpolated) {
@@ -196,7 +207,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 															(float)temp.x, (float)temp.y,
 															sprite.angle,
 															sprite.width, sprite.height,
-															game.graphics.getTextureLoader().animations.get(sprite.animationName).
+															cacheAnimation.
 															maxFrameUnderCriteria(sprite.animationProgress).glTexture,
 															sprite.color);
 
@@ -204,20 +215,31 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 			// Need to buffer this
 			List<TemporarySprite2dDef> tempSprites = game.graphics.drawLists.temporarySprites;
-			for (int i = 0; i < tempSprites.size(); i++) {
+
+            // For this synchronized list containing many sprites of similar texture, avoid
+            // sorting by texture
+
+            for (int i = 0; i < tempSprites.size(); i++) {
 				TemporarySprite2dDef tempSprite = tempSprites.get(i);
-				if (tempSprite.progress.progress > 99) {
+
+                if (tempSprite.progress.progress > 99) {
 					tempSprites.remove(i);
 					game.gamePool.temporaryDrawItems.recycleMemory(tempSprite);
 					i = i - 1;
 					continue;
 				}
+
+                if (tempSprite.animationName != cacheAnimationName) {
+                    cacheAnimationName = tempSprite.animationName;
+                    cacheAnimation = game.graphics.getTextureLoader().animations.get(cacheAnimationName);
+                }
+
 				tempSprite.progress.update(tickDifference);
 				game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
 															(float)tempSprite.position.x, (float)tempSprite.position.y,
 															tempSprite.angle,
 															tempSprite.width, tempSprite.height,
-															game.graphics.getTextureLoader().animations.get(tempSprite.animationName).
+															cacheAnimation.
 															maxFrameUnderCriteria((int)tempSprite.progress.progress).glTexture,
 															tempSprite.color);
 			}
