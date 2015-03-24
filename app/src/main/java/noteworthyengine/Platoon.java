@@ -44,7 +44,8 @@ public class Platoon extends Unit {
 
         battleNode = new BattleNode(this);
         battleNode.hp.v = 50;
-        battleNode.attackRange.v = 3.5;
+        battleNode.attackRange.v = 5;
+        battleNode.attackDamage.v = 1;
         battleNode.targetAcquisitionRange.v = 6.5;
         battleNode.onTargetAcquired = onTargetAcquired;
         battleNode.onAttackReady = onAttackReady;
@@ -156,8 +157,8 @@ public class Platoon extends Unit {
                 tempSprite.position.x = (battleNode.coords.pos.x + target[0].coords.pos.x) / 2;
                 tempSprite.position.y = (battleNode.coords.pos.y + target[0].coords.pos.y) / 2;
                 tempSprite.position.z = 1;
-                tempSprite.width = 1.0f;
-                tempSprite.height = 1.0f;
+                tempSprite.width = 0.6f;
+                tempSprite.height = 0.6f;
                 tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
                 tempSprite.progress.progress = 1;
                 tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900; // should be 1000 but...

@@ -11,31 +11,26 @@ import utils.VoidFunc;
 /**
  * Created by eric on 3/23/15.
  */
-public class Archer extends Platoon {
+public class Cannon extends Platoon {
 
-    public static final String NAME = "Archer";
+    public Cannon(Gamer gamer) {
+        this.name = this.getClass().getSimpleName();
 
-    public Archer(Gamer gamer) {
-        super();
-        this.name = NAME;
+        this.movementNode.maxSpeed.v = 0.2;
 
-        this.renderNode.width.v = 1.3f;
-        this.renderNode.height.v = 1.3f;
+        this.battleNode.gamer.v = gamer;
+        this.battleNode.hp.v = 10;
+        this.battleNode.attackSwingTime.v = 10;
+        this.battleNode.attackDamage.v = 50;
+        this.battleNode.attackRange.v = 7.5;
+        this.battleNode.targetAcquisitionRange.v = 8.5;
 
-        this.battleNode.hp.v = 90;
-        this.battleNode.maxSpeed.v = 1.3;
-        //this.battleNode.attackRange.v = 5.5;
-        this.battleNode.attackDamage.v = 2;
-        this.battleNode.attackRange.v = 2;
-        this.battleNode.targetAcquisitionRange.v = 7;
-        this.battleNode.attackSwingTime.v = 2;
-        this.battleNode.attackCooldown.v = 2;
-
-        this.renderNode.animationName = "Animations/Archers/Idling";
+        this.renderNode.animationName = "Animations/Cannons/Idling";
+        this.renderNode.width.v = 1.4f;
+        this.renderNode.height.v = 1.4f;
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
-                //renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team) & 0xFF9999FF;
                 renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
                 if (battleNode.hp.v <= 0) {
@@ -67,14 +62,13 @@ public class Archer extends Platoon {
                         sprite2dDef.position.x = ratio * (battleNode.target[0].coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x;
                         sprite2dDef.position.y = ratio * (battleNode.target[0].coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y;
                         sprite2dDef.position.z = 1;
-                        //sprite2dDef.animationName = Sprite2dDef.ANIMATION_PROJECTILE_BASIC;
-                        sprite2dDef.animationName = "Animations/Troops/Sword";
+                        sprite2dDef.animationName = Sprite2dDef.ANIMATION_PROJECTILE_BASIC;
                         sprite2dDef.animationProgress = 1;
                         sprite2dDef.color = renderNode.color.v;
                         sprite2dDef.angle = (float) Orientation.getDegreesBaseX(battleNode.target[0].coords.pos.x - battleNode.coords.pos.x,
                                 battleNode.target[0].coords.pos.y - battleNode.coords.pos.y);
-                        sprite2dDef.width = 0.55f;
-                        sprite2dDef.height = 0.55f;
+                        sprite2dDef.width = 0.9f;
+                        sprite2dDef.height = 0.9f;
                     }
                 }
             }

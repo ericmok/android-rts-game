@@ -64,7 +64,7 @@ public class DataLoader implements EngineDataLoader {
                 baseEngine.addUnit(troopy);
                 //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
 
-                for (int k = 0; k < 4; k++) {
+                for (int k = 0; k < 1; k++) {
                     //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
                     troopy = UnitPool.troopyMemoryPool.fetchMemory();
 
@@ -84,11 +84,14 @@ public class DataLoader implements EngineDataLoader {
                     baseEngine.addUnit(troopy);
                     //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
                 }
-                Archer archer = new Archer(player);
-                gamerPtr = (GamerPtr)archer.field("gamer");
-                gamerPtr.v = player;
-                archer.movementNode.coords.pos.set(jEntity.getDouble("x") + Math.random(), jEntity.getDouble("y") + Math.random());
-                baseEngine.addUnit(archer);
+
+                if (Math.random() > 0.2) {
+                    Archer archer = new Archer(player);
+                    gamerPtr = (GamerPtr) archer.field("gamer");
+                    gamerPtr.v = player;
+                    archer.movementNode.coords.pos.set(jEntity.getDouble("x") + Math.random(), jEntity.getDouble("y") + Math.random());
+                    baseEngine.addUnit(archer);
+                }
                 //ArrowCommand arrowCommand = new ArrowCommand();
                 //double randX = Math.ceil(30 * Math.random() - 15);
                 //double randY = Math.ceil(30 * Math.random() - 15);
@@ -101,9 +104,18 @@ public class DataLoader implements EngineDataLoader {
 
                 //baseEngine.addUnit(arrowCommand);
 
-                Mine mine = new Mine(player);
-                mine.battleNode.coords.pos.set(Math.random() * 20 - 10, Math.random() * 20 - 10);
-                baseEngine.addUnit(mine);
+                if (Math.random() > 0.8) {
+                    Mine mine = new Mine(player);
+                    //mine.battleNode.coords.pos.set(Math.random() * 20 - 10, Math.random() * 20 - 10);
+                    mine.battleNode.coords.pos.set(jEntity.getDouble("x") + 4 * Math.random() - 2,
+                            jEntity.getDouble("y") + 4 * Math.random() - 2);
+                    baseEngine.addUnit(mine);
+                }
+                if (Math.random() > 0.8) {
+                    Cannon cannon = new Cannon(player);
+                    cannon .movementNode.coords.pos.set(jEntity.getDouble("x") + Math.random(), jEntity.getDouble("y") + Math.random());
+                    baseEngine.addUnit(cannon);
+                }
 
                 TimelineCommand timelineCommand = new TimelineCommand();
                 timelineCommand.timelineNode.gamerPtr.v = player;
