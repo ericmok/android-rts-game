@@ -90,29 +90,27 @@ public class SimpleSpriteBatch {
 
         //this.setScaleQuadTempMatrix(x, y, 1, width, height);
 
-        float[] scalingMatrix = tempMatrix;
-        Matrix.setIdentityM(scalingMatrix, 0);
-        Matrix.scaleM(scalingMatrix, 0, width, height, 1);
+//        float[] scalingMatrix = tempMatrix;
+//        Matrix.setIdentityM(scalingMatrix, 0);
+//        Matrix.scaleM(scalingMatrix, 0, width, height, 1);
+//
+//        float[] rotationMatrix = tempMatrix2;
+//        Matrix.setIdentityM(rotationMatrix, 0);
+//
+//        // TODO: zero degree rotation problem
+//        Matrix.rotateM(rotationMatrix, 0, angle, 0, 0, 1);
+//
+//        float[] translationMatrix = tempMatrix3;
+//        Matrix.setIdentityM(translationMatrix, 0);
+//        Matrix.translateM(translationMatrix, 0, x, y, z);
+//
+//        float[] finalMatrix = tempMatrix4;
+//        Matrix.setIdentityM(finalMatrix, 0);
+//
+//        Matrix.multiplyMM(finalMatrix, 0, rotationMatrix, 0, scalingMatrix, 0);
+//        Matrix.multiplyMM(finalMatrix, 0, translationMatrix, 0, finalMatrix, 0);
 
-        float[] rotationMatrix = tempMatrix2;
-        Matrix.setIdentityM(rotationMatrix, 0);
-
-        // TODO: zero degree rotation problem
-        Matrix.rotateM(rotationMatrix, 0, angle, 0, 0, 1);
-
-        float[] translationMatrix = tempMatrix3;
-        Matrix.setIdentityM(translationMatrix, 0);
-        Matrix.translateM(translationMatrix, 0, x, y, z);
-
-        float[] finalMatrix = tempMatrix4;
-        Matrix.setIdentityM(finalMatrix, 0);
-
-        Matrix.multiplyMM(finalMatrix, 0, rotationMatrix, 0, scalingMatrix, 0);
-        Matrix.multiplyMM(finalMatrix, 0, translationMatrix, 0, finalMatrix, 0);
-
-        //Matrix.multiplyMM(finalMatrix, 0, viewProjectionMatrix, 0, finalMatrix, 0);
-
-        simpleQuadShader.draw(projectionMatrix, finalMatrix,
+        simpleQuadShader.draw(projectionMatrix, width, height, angle, x, y,
                 reusableQuad.vertexBuffer,
                 color,
                 glTexture,

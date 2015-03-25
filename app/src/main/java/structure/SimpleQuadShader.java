@@ -35,6 +35,11 @@ public class SimpleQuadShader {
     public static final String SHADER_UNIFORM_FLAT_COLOR = "u_FlatColor";
     public static final String SHADER_UNIFORM_PROJECTION_MATRIX = "u_ProjectionMatrix";
     public static final String SHADER_UNIFORM_MODEL_MATRIX = "u_ModelMatrix";
+    public static final String SHADER_UNIFORM_SCALING_X = "u_ScalingX";
+    public static final String SHADER_UNIFORM_SCALING_Y = "u_ScalingY";
+    public static final String SHADER_UNIFORM_ANGLE = "u_Angle";
+    public static final String SHADER_UNIFORM_TRANSLATION_X = "u_TranslationX";
+    public static final String SHADER_UNIFORM_TRANSLATION_Y = "u_TranslationY";
 
     public static final String SHADER_ATTRIBUTE_POSITION = "a_Position";
     //public static final String SHADER_ATTRIBUTE_COLOR = "a_Color";
@@ -45,6 +50,11 @@ public class SimpleQuadShader {
     private int shaderUniformFlatColorLocation = 0;
     private int shaderUniformProjectionMatrix = 0;
     private int shaderUniformModelMatrix = 0;
+    private int shaderUniformScalingX = 0;
+    private int shaderUniformScalingY = 0;
+    private int shaderUniformAngle = 0;
+    private int shaderUniformTranslationX = 0;
+    private int shaderUniformTranslationY = 0;
 
     private int shaderAttributePositionLocation = 0;
     private int shaderAttributeColorLocation = 0;
@@ -199,6 +209,12 @@ public class SimpleQuadShader {
         shaderUniformProjectionMatrix = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_PROJECTION_MATRIX);
         shaderUniformModelMatrix = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MODEL_MATRIX);
 
+        shaderUniformScalingX = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_SCALING_X);
+        shaderUniformScalingY = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_SCALING_Y);
+        shaderUniformAngle = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_ANGLE);
+        shaderUniformTranslationX = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_TRANSLATION_X);
+        shaderUniformTranslationY = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_TRANSLATION_Y);
+
         shaderAttributePositionLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_POSITION);
         //shaderAttributeColorLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_COLOR);
         shaderAttributeTextureLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_TEXTURE);
@@ -207,6 +223,9 @@ public class SimpleQuadShader {
         locations.put(SHADER_UNIFORM_TEXTURE, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_TEXTURE) );
         locations.put(SHADER_UNIFORM_PROJECTION_MATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_PROJECTION_MATRIX) );
         locations.put(SHADER_UNIFORM_MODEL_MATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MODEL_MATRIX) );
+        //locations.put(SHADER_UNIFORM_SCALING, shaderUniformScaling);
+        //locations.put(SHADER_UNIFORM_ANGLE, shaderUniformAngle);
+        //locations.put(SHADER_UNIFORM_TRANSLATION, shaderUniformTranslation);
 
         locations.put(SHADER_ATTRIBUTE_POSITION, GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_POSITION) );
         locations.put(SHADER_UNIFORM_FLAT_COLOR, GLES20.glGetAttribLocation(programHandle, SHADER_UNIFORM_FLAT_COLOR) );
@@ -230,12 +249,19 @@ public class SimpleQuadShader {
      * @param mode
      * @param count
      */
-    public void draw(float[] projectionMatrix, float[] modelMatrix, VertexBuffer positionBuffer, int color, int textureHandle, VertexBuffer textureBuffer, int mode, int count) {
+    public void draw(float[] projectionMatrix, float scalingX, float scalingY, float angle, float translationX, float translationY, VertexBuffer positionBuffer, int color, int textureHandle, VertexBuffer textureBuffer, int mode, int count) {
         // Pass in mvpMatrix
         //GLES20.glUniformMatrix4fv(locations.get(SHADER_UNIFORM_MVPMATRIX), 1, false, mvpMatrix, 0);
         //GLES20.glUniformMatrix4fv(shaderUniformMvpMatrixLocation, 1, false, mvpMatrix, 0);
         GLES20.glUniformMatrix4fv(shaderUniformProjectionMatrix, 1, false, projectionMatrix, 0);
-        GLES20.glUniformMatrix4fv(shaderUniformModelMatrix, 1, false, modelMatrix, 0);
+        //GLES20.glUniformMatrix4fv(shaderUniformModelMatrix, 1, false, modelMatrix, 0);
+
+        GLES20.glUniform1f(shaderUniformScalingX, scalingX);
+        GLES20.glUniform1f(shaderUniformScalingY, scalingY);
+        GLES20.glUniform1f(shaderUniformAngle, angle);
+        GLES20.glUniform1f(shaderUniformTranslationX, translationX);
+        GLES20.glUniform1f(shaderUniformTranslationY, translationY);
+
         GLES20.glUniform4f(shaderUniformFlatColorLocation,
                 Color.red(color),
                 Color.green(color),
