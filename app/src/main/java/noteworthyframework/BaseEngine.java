@@ -93,6 +93,11 @@ public class BaseEngine {
         systems.add(system);
     }
 
+    public void removeSystem(System system) {
+        systems.remove(system);
+        system.setBaseEngine(null);
+    }
+
     public void initialize() {
         for (int i = 0; i < this.systems.size(); i++) {
             System system = this.systems.get(i);
@@ -101,7 +106,7 @@ public class BaseEngine {
         }
     }
 
-    public void step(double ct, double dt) {
+    public void step(double dt) {
 
         this.flushQueues();
 
@@ -109,11 +114,12 @@ public class BaseEngine {
             System system = this.systems.get(i);
 
             //system.flushQueues();
-            system.step(ct, dt);
+            system.step(this.gameTime, dt);
         }
 
         //this.flushQueues();
 
+        this.gameTime += dt;
         this.frameNumber += 1;
     }
 

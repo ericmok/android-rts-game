@@ -322,7 +322,7 @@ public class SimpleShader {
         GLES20.glDrawArrays(mode, 0, count);			
    
 	}
-	
+
 	public boolean isInitialized() {
 		return isInitialized;
 	}

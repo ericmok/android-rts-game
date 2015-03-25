@@ -44,7 +44,8 @@ public class Platoon extends Unit {
 
         battleNode = new BattleNode(this);
         battleNode.hp.v = 50;
-        battleNode.attackRange.v = 4;
+        battleNode.attackRange.v = 5;
+        battleNode.attackDamage.v = 1;
         battleNode.targetAcquisitionRange.v = 6.5;
         battleNode.onTargetAcquired = onTargetAcquired;
         battleNode.onAttackReady = onAttackReady;
@@ -156,14 +157,13 @@ public class Platoon extends Unit {
                 tempSprite.position.x = (battleNode.coords.pos.x + target[0].coords.pos.x) / 2;
                 tempSprite.position.y = (battleNode.coords.pos.y + target[0].coords.pos.y) / 2;
                 tempSprite.position.z = 1;
-                tempSprite.width = 1.1f;
-                tempSprite.height = 1.1f;
+                tempSprite.width = 0.6f;
+                tempSprite.height = 0.6f;
                 tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
                 tempSprite.progress.progress = 1;
                 tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900; // should be 1000 but...
                 tempSprite.isGfxInterpolated = false;
-                //tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_PROJECTILE;
-                tempSprite.animationName = "Animations/Smoke/Gunpowder";
+                tempSprite.animationName = Sprite2dDef.ANIMATION_SMOKE_GUNPOWDER;
                 tempSprite.animationProgress = 1;
                 tempSprite.color = Color.argb(50, 255, 255, 255);
 

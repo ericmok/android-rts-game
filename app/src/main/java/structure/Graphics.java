@@ -10,7 +10,8 @@ import android.util.Log;
  */
 public class Graphics {
 	private Context context;
-	private SimpleShader simpleShader;
+	//private SimpleShader simpleShader;
+    private SimpleQuadShader simpleQuadShader;
 	private SimpleSpriteBatch simpleSpriteBatch;
 	private TextureLoader textureLoader;
 	private boolean isLoaded = false;
@@ -48,8 +49,10 @@ public class Graphics {
 	 */
 	public Graphics(Context context) {
 		this.context = context;
-		simpleShader = new SimpleShader(context.getResources());
-		simpleSpriteBatch = new SimpleSpriteBatch(simpleShader);
+		//simpleShader = new SimpleShader(context.getResources());
+        simpleQuadShader = new SimpleQuadShader(context.getResources());
+
+		simpleSpriteBatch = new SimpleSpriteBatch(simpleQuadShader);
 		textureLoader = new TextureLoader(context);
 
         cameraMatrix = new float[16];
@@ -68,7 +71,7 @@ public class Graphics {
 	 */
 	public void load() {
 		try {
-			simpleShader.initializeResources();
+			simpleQuadShader.initializeResources();
 			simpleSpriteBatch.load();
 
 			textureLoader.loadAllAssetsInFolder("Animations", true);
@@ -96,7 +99,7 @@ public class Graphics {
 	}
 	
 	public Context getContext() { return context; }
-	public SimpleShader getSimpleShader() { return simpleShader; }
+	//public SimpleShader getSimpleShader() { return simpleShader; }
 	public TextureLoader getTextureLoader() { return textureLoader; }
 	public boolean isLoaded() { return isLoaded; }
 	
@@ -122,11 +125,11 @@ public class Graphics {
 		}
  
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.glTexture);
-		simpleShader.draw(mvpMatrix, 
-						sprite.quad.vertexBuffer, 
-						sprite.quad.colorBuffer, 
-						sprite.glTexture, sprite.quad.textureBuffer, 
-						GLES20.GL_TRIANGLE_STRIP, 4);
+//		simpleShader.draw(mvpMatrix,
+//						sprite.quad.vertexBuffer,
+//						sprite.quad.colorBuffer,
+//						sprite.glTexture, sprite.quad.textureBuffer,
+//						GLES20.GL_TRIANGLE_STRIP, 4);
 		
 	}
 	

@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import noteworthyframework.*;
 import structure.Game;
+import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
@@ -26,6 +27,9 @@ public class NoteworthyEngine extends BaseEngine {
     public BattleSystem battleSystem;
     public RenderSystem renderSystem;
     public DecaySystem decaySystem;
+
+    public Vector2 gameCameraPosition = new Vector2();
+    public double cameraScale = GameSettings.UNIT_LENGTH_MULTIPLIER;
 
     public NoteworthyEngine(Game game) {
         super();
@@ -59,7 +63,10 @@ public class NoteworthyEngine extends BaseEngine {
         super.initialize();
     }
 
-    public void step(double ct, double dt) {
-        super.step(ct, dt);
+    public void step(double dt) {
+        super.step(dt);
+
+        game.graphics.setCameraPositionAndScale((float)gameCameraPosition.x, (float)gameCameraPosition.y, (float)cameraScale);
+        game.graphics.flushCameraModifications();
     }
 }

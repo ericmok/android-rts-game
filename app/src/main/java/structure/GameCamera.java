@@ -1,5 +1,6 @@
 package structure;
 
+import noteworthyengine.GameSettings;
 import utils.Vector2;
 
 /**

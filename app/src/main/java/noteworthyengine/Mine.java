@@ -20,6 +20,8 @@ public class Mine extends Unit {
     public static final int MAX_BATTLE_NODES_AFFECTED = 20;
 
     public GridNode gridNode = new GridNode(this);
+    public MovementNode movementNode = new MovementNode(this);
+    public SeparationNode separationNode = new SeparationNode(this);
     public BattleNode battleNode = new BattleNode(this);
     public RenderNode renderNode = new RenderNode(this);
 
@@ -29,13 +31,15 @@ public class Mine extends Unit {
     public Mine(Gamer gamer) {
         this.name = NAME;
 
+        movementNode.maxSpeed.v = 1.3;
+
         battleNode.stickyAttack.v = 0;
-        battleNode.targetAcquisitionRange.v = 4.5;
-        battleNode.attackRange.v = 4.5;
-        battleNode.attackDamage.v = 23;
+        battleNode.targetAcquisitionRange.v = 8;
+        battleNode.attackRange.v = 2.5;
+        battleNode.attackDamage.v = 50;
         battleNode.attackSwingTime.v = 4.5;
-        battleNode.attackCooldown.v = 5;
-        battleNode.hp.v = 10;
+        battleNode.attackCooldown.v = 3;
+        battleNode.hp.v = 40;
         battleNode.isAttackable.v = 1;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
         battleNode.gamer.v = gamer;
