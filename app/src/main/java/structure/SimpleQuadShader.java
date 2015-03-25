@@ -30,7 +30,7 @@ public class SimpleQuadShader {
 
     private int programHandle = -1;
 
-    public static final String SHADER_UNIFORM_MVPMATRIX = "u_MVPMatrix";
+    //public static final String SHADER_UNIFORM_MVPMATRIX = "u_MVPMatrix";
     public static final String SHADER_UNIFORM_TEXTURE = "u_Texture";
     public static final String SHADER_UNIFORM_FLAT_COLOR = "u_FlatColor";
     public static final String SHADER_UNIFORM_PROJECTION_MATRIX = "u_ProjectionMatrix";
@@ -40,7 +40,7 @@ public class SimpleQuadShader {
     //public static final String SHADER_ATTRIBUTE_COLOR = "a_Color";
     public static final String SHADER_ATTRIBUTE_TEXTURE = "a_TexCoord";
 
-    private int shaderUniformMvpMatrixLocation = 0;
+    //private int shaderUniformMvpMatrixLocation = 0;
     private int shaderUniformTextureLocation = 0;
     private int shaderUniformFlatColorLocation = 0;
     private int shaderUniformProjectionMatrix = 0;
@@ -193,7 +193,7 @@ public class SimpleQuadShader {
         GLES20.glUseProgram(programHandle);
 
         // Set program handles. These will later be used to pass in values to the program.
-        shaderUniformMvpMatrixLocation = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MVPMATRIX);
+        //shaderUniformMvpMatrixLocation = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MVPMATRIX);
         shaderUniformTextureLocation = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_TEXTURE);
         shaderUniformFlatColorLocation = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_FLAT_COLOR);
         shaderUniformProjectionMatrix = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_PROJECTION_MATRIX);
@@ -203,7 +203,7 @@ public class SimpleQuadShader {
         //shaderAttributeColorLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_COLOR);
         shaderAttributeTextureLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_TEXTURE);
 
-        locations.put(SHADER_UNIFORM_MVPMATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MVPMATRIX) );
+        //locations.put(SHADER_UNIFORM_MVPMATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MVPMATRIX) );
         locations.put(SHADER_UNIFORM_TEXTURE, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_TEXTURE) );
         locations.put(SHADER_UNIFORM_PROJECTION_MATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_PROJECTION_MATRIX) );
         locations.put(SHADER_UNIFORM_MODEL_MATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MODEL_MATRIX) );
@@ -286,6 +286,7 @@ public class SimpleQuadShader {
 
 
     /**
+     * Do not use. It is here for reference.
      * Calls draw arrays after setting up shader variables
      * @param mvpMatrix
      * @param positionBuffer Remember to set position() to draw from correct indices
@@ -296,10 +297,12 @@ public class SimpleQuadShader {
      * @param count The number of indices to render
      * <b>Preconditions:</b> Must have called initializedResources first
      */
-    public void draw(float[] mvpMatrix, FloatBuffer positionBuffer, FloatBuffer colorBuffer, int textureHandle, FloatBuffer textureBuffer, int mode, int count) {
+    public void draw(float[] projectionMatrix, float[] modelMatrix, FloatBuffer positionBuffer, FloatBuffer colorBuffer, int textureHandle, FloatBuffer textureBuffer, int mode, int count) {
         // Pass in mvpMatrix
         //GLES20.glUniformMatrix4fv(locations.get(SHADER_UNIFORM_MVPMATRIX), 1, false, mvpMatrix, 0);
-        GLES20.glUniformMatrix4fv(shaderUniformMvpMatrixLocation, 1, false, mvpMatrix, 0);
+        //GLES20.glUniformMatrix4fv(shaderUniformMvpMatrixLocation, 1, false, mvpMatrix, 0);
+        GLES20.glUniformMatrix4fv(shaderUniformProjectionMatrix, 1, false, projectionMatrix, 0);
+        GLES20.glUniformMatrix4fv(shaderUniformModelMatrix, 1, false, modelMatrix, 0);
 
         // Pass in the position information
         positionBuffer.position(0);

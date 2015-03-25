@@ -1,6 +1,5 @@
 uniform mat4 u_ProjectionMatrix;
 uniform mat4 u_ModelMatrix;
-uniform mat4 u_MVPMatrix;
 uniform vec4 u_FlatColor;
 
 attribute vec4 a_Position;
