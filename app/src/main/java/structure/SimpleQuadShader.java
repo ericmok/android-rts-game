@@ -252,16 +252,6 @@ public class SimpleQuadShader {
         //GLES20.glEnableVertexAttribArray(locations.get(SHADER_ATTRIBUTE_POSITION));
         GLES20.glEnableVertexAttribArray(shaderAttributePositionLocation);
 
-        // Pass in the color information
-        //colorBuffer.bindBuffer();
-        //GLES20.glVertexAttribPointer(locations.get(SHADER_ATTRIBUTE_COLOR),
-        //GLES20.glVertexAttribPointer(shaderAttributeColorLocation,
-        //        NUMBER_COLOR_ELEMENTS,
-        //        GLES20.GL_FLOAT, false,
-        //        0, 0);
-        //GLES20.glEnableVertexAttribArray(locations.get(SHADER_ATTRIBUTE_COLOR));
-        //GLES20.glEnableVertexAttribArray(shaderAttributeColorLocation);
-
         // Textures
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle);
