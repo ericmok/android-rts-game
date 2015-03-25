@@ -72,7 +72,7 @@ public class TextureLoader {
 			
 			TextureFrame maxFrame = textureFrames.get(0);
 
-			for (int frameIndex = 0; frameIndex < textureFrames.size(); frameIndex++) {
+			for (int frameIndex = 1; frameIndex < textureFrames.size(); frameIndex++) {
 
 				TextureFrame currentFrame = textureFrames.get(frameIndex);
 
