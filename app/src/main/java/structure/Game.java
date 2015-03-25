@@ -13,6 +13,7 @@ import noteworthyengine.BackgroundUnit;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.ButtonSystem;
 import noteworthyengine.ButtonUnit;
+import noteworthyengine.CameraUnit;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.DataLoader;
 import noteworthyengine.DecaySystem;
@@ -133,6 +134,15 @@ public class Game {
 
 	public void loadLevel() {
         activeEngine = loaderUIEngine;
+
+        CameraUnit loaderUICamera = new CameraUnit(gameRenderer.mainCamera, 4f);
+        CameraUnit activeGameCamera = new CameraUnit(gameRenderer.mainCamera, 0.07f);
+
+        loaderUIEngine.addUnit(loaderUICamera);
+        loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
+        noteworthyEngine.addUnit(activeGameCamera);
+        noteworthyEngine.mainCamera = activeGameCamera.cameraNode.camera;
+
         backgroundUnit.renderNode.width.v = 4;
         backgroundUnit.renderNode.height.v = 4;
         loaderUIEngine.addUnit(backgroundUnit);

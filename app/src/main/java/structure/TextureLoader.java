@@ -71,16 +71,16 @@ public class TextureLoader {
 			//int winningFrameGLHandle = textureFrames.get(0).glTexture;
 			
 			TextureFrame maxFrame = textureFrames.get(0);
-			
+
 			for (int frameIndex = 0; frameIndex < textureFrames.size(); frameIndex++) {
-				
-				TextureFrame currentFrame = textureFrames.get(frameIndex); 
-				
+
+				TextureFrame currentFrame = textureFrames.get(frameIndex);
+
 				if ((currentFrame.frameNumber > maxFrame.frameNumber) && (currentFrame.frameNumber <= limit)) {
 					maxFrame = currentFrame;
 				}
 			}
-			
+
 			return maxFrame;
 		}
 	}

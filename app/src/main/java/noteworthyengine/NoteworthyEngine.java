@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import noteworthyframework.*;
 import structure.Game;
+import structure.GameCamera;
 import utils.Vector2;
 
 /**
@@ -16,6 +17,8 @@ public class NoteworthyEngine extends BaseEngine {
     public int frameNumber = 0;
 
     public Game game;
+
+    public CameraSystem cameraSystem;
 
     public GridSystem gridSystem;
     public CommandSystem commandSystem;
@@ -31,11 +34,14 @@ public class NoteworthyEngine extends BaseEngine {
     public Vector2 gameCameraPosition = new Vector2();
     public double cameraScale = GameSettings.UNIT_LENGTH_MULTIPLIER;
 
+    public GameCamera mainCamera;
+
     public NoteworthyEngine(Game game) {
         super();
 
         this.game = game;
 
+        cameraSystem = new CameraSystem(game);
         gridSystem = new GridSystem();
         commandSystem = new CommandSystem(game);
         timelineSystem = new TimelineSystem();
@@ -47,6 +53,7 @@ public class NoteworthyEngine extends BaseEngine {
         renderSystem = new RenderSystem(new DrawCompat(game));
         decaySystem = new DecaySystem();
 
+        this.addSystem(cameraSystem);
         this.addSystem(gridSystem);
         this.addSystem(commandSystem);
         this.addSystem(timelineSystem);
@@ -66,7 +73,7 @@ public class NoteworthyEngine extends BaseEngine {
     public void step(double dt) {
         super.step(dt);
 
-        game.graphics.setCameraPositionAndScale((float)gameCameraPosition.x, (float)gameCameraPosition.y, (float)cameraScale);
-        game.graphics.flushCameraModifications();
+        //game.graphics.setCameraPositionAndScale((float) gameCameraPosition.x, (float) gameCameraPosition.y, (float) cameraScale);
+        //game.graphics.flushCameraModifications();
     }
 }

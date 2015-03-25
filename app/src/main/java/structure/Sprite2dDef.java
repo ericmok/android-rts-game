@@ -69,11 +69,13 @@ public class Sprite2dDef implements Comparable<Sprite2dDef> {
 
 	public float width = 1.0f;
 	public float height = 1.0f;
-	
+
 	public float angle = 0.0f;
 
 	public int color = Color.WHITE;
-	
+
+    public int cameraIndex = 0;
+
 	/**
 	 * Use string constants for GC friendliness. Denotes the animation to be played
 	 * in terms of the location of the assets for the animation
