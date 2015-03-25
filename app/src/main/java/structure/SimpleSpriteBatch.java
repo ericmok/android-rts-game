@@ -85,7 +85,7 @@ public class SimpleSpriteBatch {
      * @param glTexture
      * @param color
      */
-    public void draw2dz(float[] viewProjectionMatrix, float x, float y, float z, float angle, float width, float height, int glTexture, int color) {
+    public void draw2d(float[] projectionMatrix, float x, float y, float z, float angle, float width, float height, int glTexture, int color) {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
 
         //this.setScaleQuadTempMatrix(x, y, 1, width, height);
@@ -110,13 +110,9 @@ public class SimpleSpriteBatch {
         Matrix.multiplyMM(finalMatrix, 0, rotationMatrix, 0, scalingMatrix, 0);
         Matrix.multiplyMM(finalMatrix, 0, translationMatrix, 0, finalMatrix, 0);
 
-        Matrix.multiplyMM(finalMatrix, 0, viewProjectionMatrix, 0, finalMatrix, 0);
+        //Matrix.multiplyMM(finalMatrix, 0, viewProjectionMatrix, 0, finalMatrix, 0);
 
-        // TODO: Performance Profiling (Should move this to shader?)
-        //reusableQuad.setColor(color);
-        //reusableQuad.reBufferColorData();
-
-        simpleQuadShader.draw(finalMatrix,
+        simpleQuadShader.draw(projectionMatrix, finalMatrix,
                 reusableQuad.vertexBuffer,
                 color,
                 glTexture,
@@ -124,23 +120,23 @@ public class SimpleSpriteBatch {
                 GLES20.GL_TRIANGLE_STRIP, 4);
     }
 
-	/**
-	 * Does appropriate scaling and rotation and translation for rendering the glTexture on a quad
-	 * 
-	 * TODO: Use model matrix in shader
-	 * 
-	 * @param viewProjectionMatrix
-	 * @param x Position x of sprite
-	 * @param y Position y of sprite 
-	 * @param z Layering
-	 * @param angle In degrees
-	 * @param width Quad width
-	 * @param height Quad height
-	 * @param glTexture GL handle
-	 */
-	public void draw2d(float[] viewProjectionMatrix, float x, float y, float angle, float width, float height, int glTexture, int color) {
-        this.draw2dz(viewProjectionMatrix, x, y, 0, angle, width, height, glTexture, color);
-	}
+//	/**
+//	 * Does appropriate scaling and rotation and translation for rendering the glTexture on a quad
+//	 *
+//	 * TODO: Use model matrix in shader
+//	 *
+//	 * @param viewProjectionMatrix
+//	 * @param x Position x of sprite
+//	 * @param y Position y of sprite
+//	 * @param z Layering
+//	 * @param angle In degrees
+//	 * @param width Quad width
+//	 * @param height Quad height
+//	 * @param glTexture GL handle
+//	 */
+//	public void draw2d(float[] viewProjectionMatrix, float x, float y, float angle, float width, float height, int glTexture, int color) {
+//        this.draw2dz(viewProjectionMatrix, x, y, 0, angle, width, height, glTexture, color);
+//	}
 	
 	
 //	/**

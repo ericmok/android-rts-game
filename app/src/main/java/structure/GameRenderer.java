@@ -205,6 +205,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
                 }
 				game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
 															(float)temp.x, (float)temp.y,
+                                                            0,
 															sprite.angle,
 															sprite.width, sprite.height,
 															cacheAnimation.
@@ -237,6 +238,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 				tempSprite.progress.update(tickDifference);
 				game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
 															(float)tempSprite.position.x, (float)tempSprite.position.y,
+                                                            0,
 															tempSprite.angle,
 															tempSprite.width, tempSprite.height,
 															cacheAnimation.
@@ -255,6 +257,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 					TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
 					game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
 							(float) (accumulator + textDrawItem.position.x), (float)textDrawItem.position.y,
+                            0,
 							(float)textDrawItem.angle,
 							textDrawItem.height * texture.widthRatio, textDrawItem.height,
 							texture.glTexture,
