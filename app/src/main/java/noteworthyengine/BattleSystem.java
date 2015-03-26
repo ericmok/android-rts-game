@@ -63,10 +63,21 @@ public class BattleSystem extends noteworthyframework.System {
                 otherBattleNode.coords.pos.y - battleNode.coords.pos.y);
 
         double distance = otherBattleNode.coords.pos.distanceTo(battleNode.coords.pos);
+
+        double numerator = (distance - (battleNode.attackRange.v * 0.8));
+
+        // The unit walks towards the enemy with more force than it walks away from it
+        // to maintain ~constant range
+        if (numerator < 0) {
+            numerator *= 0.8;
+        }
+
         double ramp = battleNode.maxSpeed.v *
-                (distance - (battleNode.attackRange.v * 0.8)) / (battleNode.attackRange.v * 3);
+                numerator / (battleNode.attackRange.v);
+
         double mag = Math.min(battleNode.maxSpeed.v, ramp);
 
+        battleNode.enemyAttractionForce.setNormalized();
         battleNode.enemyAttractionForce.scale(mag, mag);
     }
 
