@@ -85,7 +85,8 @@ public class BattleSystem extends noteworthyframework.System {
 
         for (int i = gridNodes.size() - 1; i >= 0; i--) {
 
-            BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
+            //BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
+            BattleNode possibleTarget = (BattleNode)gridNodes.get(i)._battleNode;
 
             // Not all gridNodes belong to units that have battleNodes...
             if (possibleTarget == null) { continue; }

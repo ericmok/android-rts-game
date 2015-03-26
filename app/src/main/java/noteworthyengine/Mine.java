@@ -19,7 +19,7 @@ public class Mine extends Unit {
 
     public static final int MAX_BATTLE_NODES_AFFECTED = 20;
 
-    public GridNode gridNode = new GridNode(this);
+    public GridNode gridNode;
     public MovementNode movementNode = new MovementNode(this);
     public SeparationNode separationNode = new SeparationNode(this);
     public BattleNode battleNode = new BattleNode(this);
@@ -30,6 +30,8 @@ public class Mine extends Unit {
 
     public Mine(Gamer gamer) {
         this.name = NAME;
+
+        gridNode = new GridNode(this, separationNode, battleNode);
 
         movementNode.maxSpeed.v = 1.3;
 

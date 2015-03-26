@@ -17,7 +17,7 @@ import utils.VoidFunc3;
 public class Platoon extends Unit {
     public static final String NAME = "Troopy";
 
-    GridNode gridNode = new GridNode(this);
+    GridNode gridNode;
     MovementNode movementNode;
 
     FieldNode fieldNode;
@@ -69,6 +69,8 @@ public class Platoon extends Unit {
 
         separationNode = new SeparationNode(this);
         formationNode = new FormationNode(this);
+
+        gridNode = new GridNode(this, separationNode, battleNode);
 
         selectedRenderNode = new RenderNode("selectedRenderNode", this);
         selectedRenderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;

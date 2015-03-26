@@ -64,7 +64,7 @@ public class DataLoader implements EngineDataLoader {
                 baseEngine.addUnit(troopy);
                 //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
 
-                for (int k = 0; k < 1; k++) {
+                for (int k = 0; k < 3; k++) {
                     //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
                     troopy = UnitPool.troopyMemoryPool.fetchMemory();
 
