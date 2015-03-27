@@ -114,6 +114,10 @@ public class BattleNode extends Node {
     /// but not re-evaluated during attack swing
     public IntegerPtr stickyAttack = new IntegerPtr() {{ v = 1; }};
 
+    /// The fudge factor for node to walk within attack range to deal with
+    /// various race conditions (attack swing time, round-off error)
+    public DoublePtr fractionToWalkIntoAttackRange = new DoublePtr() {{ v = 0.8; }};
+
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
 

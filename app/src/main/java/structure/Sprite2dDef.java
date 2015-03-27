@@ -48,6 +48,7 @@ public class Sprite2dDef implements Comparable<Sprite2dDef> {
     public void set(String animationName, int animationProgress,
                     float x, float y, float z,
                     float width, float height,
+                    float angle,
                     int color,
                     int cameraIndex) {
         this.animationName = animationName;
@@ -58,6 +59,7 @@ public class Sprite2dDef implements Comparable<Sprite2dDef> {
         this.position.z = z;
         this.width = width;
         this.height = height;
+        this.angle = angle;
         this.color = color;
         this.cameraIndex = cameraIndex;
     }

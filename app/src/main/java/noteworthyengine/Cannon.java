@@ -8,6 +8,7 @@ import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.Orientation;
 import utils.VoidFunc;
+import utils.VoidFunc3;
 
 /**
  * Created by eric on 3/23/15.
@@ -22,9 +23,18 @@ public class Cannon extends Platoon {
         this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 10;
         this.battleNode.attackSwingTime.v = 10;
+        this.battleNode.attackCooldown.v = 10;
         this.battleNode.attackDamage.v = 50;
         this.battleNode.attackRange.v = 7.5;
         this.battleNode.targetAcquisitionRange.v = 8.5;
+        this.battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+            @Override
+            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+                Missle missle = new Missle(battleNode.gamer.v);
+                missle.movementNode.coords.pos.copy(movementNode.coords.pos);
+                battleSystem.getBaseEngine().addUnit(missle);
+            }
+        };
 
         this.renderNode.animationName = "Animations/Cannons/Idling";
         this.renderNode.width.v = 1.4f;
@@ -59,17 +69,23 @@ public class Cannon extends Platoon {
                         double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
 
                         Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                        sprite2dDef.isGfxInterpolated = false;
-                        sprite2dDef.position.x = ratio * (battleNode.target[0].coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x;
-                        sprite2dDef.position.y = ratio * (battleNode.target[0].coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y;
-                        sprite2dDef.position.z = 1;
-                        sprite2dDef.animationName = Animations.ANIMATION_PROJECTILE_BASIC;
-                        sprite2dDef.animationProgress = 1;
-                        sprite2dDef.color = renderNode.color.v;
-                        sprite2dDef.angle = (float) Orientation.getDegreesBaseX(battleNode.target[0].coords.pos.x - battleNode.coords.pos.x,
-                                battleNode.target[0].coords.pos.y - battleNode.coords.pos.y);
-                        sprite2dDef.width = 0.9f;
-                        sprite2dDef.height = 0.9f;
+                        sprite2dDef.set(Animations.ANIMATION_TROOPS_SWING, (int)ratio * 100,
+                                (float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y - renderNode.height.v, 0,
+                                1f, 1f,
+                                90,
+                                Gamer.colorForTeam(battleNode.gamer.v.team), 0
+                                );
+//                        sprite2dDef.isGfxInterpolated = false;
+//                        sprite2dDef.position.x = ratio * (battleNode.target[0].coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x;
+//                        sprite2dDef.position.y = ratio * (battleNode.target[0].coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y;
+//                        sprite2dDef.position.z = 1;
+//                        sprite2dDef.animationName = Animations.ANIMATION_PROJECTILE_BASIC;
+//                        sprite2dDef.animationProgress = 1;
+//                        sprite2dDef.color = renderNode.color.v;
+//                        sprite2dDef.angle = (float) Orientation.getDegreesBaseX(battleNode.target[0].coords.pos.x - battleNode.coords.pos.x,
+//                                battleNode.target[0].coords.pos.y - battleNode.coords.pos.y);
+//                        sprite2dDef.width = 0.9f;
+//                        sprite2dDef.height = 0.9f;
                     }
                 }
             }
