@@ -21,7 +21,7 @@ public class Missle extends Mine {
 
         this.battleNode.attackDamage.v = 50;
         this.battleNode.attackSwingTime.v = 3;
-        this.battleNode.attackRange.v = 2;
+        this.battleNode.attackRange.v = 1.5;
         this.battleNode.targetAcquisitionRange.v = 20;
         this.battleNode.hp.v = 100;
         this.battleNode.fractionToWalkIntoAttackRange.v = 0.1;
@@ -54,8 +54,8 @@ public class Missle extends Mine {
         };
 
         this.renderNode.animationName = Animations.ANIMATION_PROJECTILE_BASIC;
-        this.renderNode.width.v = 1;
-        this.renderNode.height.v = 1;
+        this.renderNode.width.v = 1.1f;
+        this.renderNode.height.v = 1.1f;
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
@@ -63,9 +63,9 @@ public class Missle extends Mine {
                 Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                 sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
                         (float)renderNode.coords.pos.x, (float)renderNode.coords.pos.y, 0,
-                        1.1f, 1.1f,
+                        1.3f, 1.3f,
                         90f,
-                        Color.WHITE,
+                        Color.argb(60, 255, 255, 255),
                         0);
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
