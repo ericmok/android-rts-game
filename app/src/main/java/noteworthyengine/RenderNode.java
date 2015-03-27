@@ -16,6 +16,9 @@ import utils.VoidFunc;
  */
 public class RenderNode extends Node {
 
+    public static final int MAIN_CAMERA = 0;
+    public static final int AUX_CAMERA = 1;
+
     public static final VoidFunc<RenderSystem> _DO_NOTHING = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem element) {
@@ -40,6 +43,8 @@ public class RenderNode extends Node {
     public String animationName;
     public IntegerPtr animationProgress;
     public IntegerPtr team;
+
+    public IntegerPtr cameraType = new IntegerPtr() {{ v = MAIN_CAMERA; }};
 
     public VoidFunc<RenderSystem> onDraw = _DO_NOTHING;
 

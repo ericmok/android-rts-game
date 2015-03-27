@@ -53,9 +53,11 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 //    private float scale = 1.0f;
 
     public GameCamera mainCamera = new GameCamera();
+    public GameCamera auxCamera = new GameCamera();
 
     private ArrayList<GameCamera> cameras = new ArrayList<GameCamera>(2) {{
         this.add(mainCamera);
+        this.add(auxCamera);
     }};
 
 	public GameRenderer(Context parentActivity, Game game) {

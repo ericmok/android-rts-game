@@ -2,6 +2,7 @@ package noteworthyengine;
 
 import android.graphics.Color;
 
+import art.Animations;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
@@ -64,7 +65,7 @@ public class Mine extends Unit {
             }
         };
 
-        renderNode.animationName = Sprite2dDef.ANIMATION_MINE_IDLING;
+        renderNode.animationName = Animations.ANIMATION_MINE_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0x80ffffff;
 
@@ -80,7 +81,7 @@ public class Mine extends Unit {
 
                     Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                     sprite2dDef.isGfxInterpolated = false;
-                    sprite2dDef.animationName = Sprite2dDef.ANIMATION_MINE_EXPLODING;
+                    sprite2dDef.animationName = Animations.ANIMATION_MINE_EXPLODING;
                     sprite2dDef.animationProgress = (int) (ratio * 100);
                     sprite2dDef.position.x = battleNode.coords.pos.x;
                     sprite2dDef.position.y = battleNode.coords.pos.y;

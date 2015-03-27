@@ -2,6 +2,7 @@ package noteworthyengine;
 
 import android.graphics.Color;
 
+import art.Animations;
 import noteworthyframework.Gamer;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
@@ -48,7 +49,7 @@ public class Archer extends Platoon {
                     tempSprite.progress.progress = 1;
                     tempSprite.progress.duration = 1200;
                     tempSprite.isGfxInterpolated = false;
-                    tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
+                    tempSprite.animationName = Animations.ANIMATION_TROOPS_DYING;
                     tempSprite.animationProgress = 0;
                     tempSprite.color = Color.WHITE;
                     tempSprite.angle = 90;

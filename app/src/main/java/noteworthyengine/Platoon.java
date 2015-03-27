@@ -2,6 +2,7 @@ package noteworthyengine;
 
 import android.graphics.Color;
 
+import art.Animations;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
@@ -54,7 +55,7 @@ public class Platoon extends Unit {
 
         renderNode = new RenderNode(this);
         float size = Math.random() > 0.5f ? 1f : 0.7f;
-        renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_IDLING;
+        renderNode.animationName = Animations.ANIMATION_TROOPS_IDLING;
         renderNode.animationProgress.v = 0;
         renderNode.width.v = size;
         renderNode.height.v = size;
@@ -64,7 +65,7 @@ public class Platoon extends Unit {
 
         dyingRenderNode = new RenderNode("dyingRenderNode", this);
         dyingRenderNode.isActive = false;
-        dyingRenderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
+        dyingRenderNode.animationName = Animations.ANIMATION_TROOPS_DYING;
         dyingRenderNode.color.v = Color.WHITE;
 
         separationNode = new SeparationNode(this);
@@ -73,7 +74,7 @@ public class Platoon extends Unit {
         gridNode = new GridNode(this, separationNode, battleNode);
 
         selectedRenderNode = new RenderNode("selectedRenderNode", this);
-        selectedRenderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
+        selectedRenderNode.animationName = Animations.ANIMATION_TROOPS_TARGETED;
         selectedRenderNode.isActive = false;
     }
 
@@ -127,7 +128,7 @@ public class Platoon extends Unit {
                 tempSprite.progress.progress = 1;
                 tempSprite.progress.duration = 1200;
                 tempSprite.isGfxInterpolated = false;
-                tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
+                tempSprite.animationName = Animations.ANIMATION_TROOPS_DYING;
                 tempSprite.animationProgress = 0;
                 tempSprite.color = Color.WHITE;
                 tempSprite.angle = 90;
@@ -147,7 +148,7 @@ public class Platoon extends Unit {
                 tempSprite.height = 0.39f;
                 tempSprite.angle = (float) Orientation.getDegreesBaseX(rx, ry);
                 tempSprite.isGfxInterpolated = false;
-                tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_PROJECTILE;
+                tempSprite.animationName = Animations.ANIMATION_TROOPS_PROJECTILE;
                 tempSprite.animationProgress = 0;
                 tempSprite.color = Color.argb(120, 255, 255, 255);
             }
@@ -165,7 +166,7 @@ public class Platoon extends Unit {
                 tempSprite.progress.progress = 1;
                 tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900; // should be 1000 but...
                 tempSprite.isGfxInterpolated = false;
-                tempSprite.animationName = Sprite2dDef.ANIMATION_SMOKE_GUNPOWDER;
+                tempSprite.animationName = Animations.ANIMATION_SMOKE_GUNPOWDER;
                 tempSprite.animationProgress = 1;
                 tempSprite.color = Color.argb(50, 255, 255, 255);
 

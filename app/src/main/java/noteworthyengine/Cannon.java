@@ -2,6 +2,7 @@ package noteworthyengine;
 
 import android.graphics.Color;
 
+import art.Animations;
 import noteworthyframework.Gamer;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
@@ -43,7 +44,7 @@ public class Cannon extends Platoon {
                     tempSprite.progress.progress = 1;
                     tempSprite.progress.duration = 1200;
                     tempSprite.isGfxInterpolated = false;
-                    tempSprite.animationName = Sprite2dDef.ANIMATION_TROOPS_DYING;
+                    tempSprite.animationName = Animations.ANIMATION_TROOPS_DYING;
                     tempSprite.animationProgress = 0;
                     tempSprite.color = Color.WHITE;
                     tempSprite.angle = 90;
@@ -62,7 +63,7 @@ public class Cannon extends Platoon {
                         sprite2dDef.position.x = ratio * (battleNode.target[0].coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x;
                         sprite2dDef.position.y = ratio * (battleNode.target[0].coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y;
                         sprite2dDef.position.z = 1;
-                        sprite2dDef.animationName = Sprite2dDef.ANIMATION_PROJECTILE_BASIC;
+                        sprite2dDef.animationName = Animations.ANIMATION_PROJECTILE_BASIC;
                         sprite2dDef.animationProgress = 1;
                         sprite2dDef.color = renderNode.color.v;
                         sprite2dDef.angle = (float) Orientation.getDegreesBaseX(battleNode.target[0].coords.pos.x - battleNode.coords.pos.x,

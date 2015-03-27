@@ -81,6 +81,8 @@ public class RenderSystem extends noteworthyframework.System {
             sprite2dDefTemp.width = renderNode.width.v;
             sprite2dDefTemp.height = renderNode.height.v;
 
+            sprite2dDefTemp.cameraIndex = renderNode.cameraType.v;
+
             drawCompat.drawSprite(sprite2dDefTemp);
         }
 

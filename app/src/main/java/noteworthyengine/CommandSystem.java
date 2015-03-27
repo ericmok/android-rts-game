@@ -5,11 +5,11 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
+import art.Animations;
 import noteworthyframework.*;
 import structure.Game;
 import structure.GameCamera;
 import structure.GameInput;
-import structure.Sprite2dDef;
 import utils.Vector2;
 
 /**
@@ -125,7 +125,7 @@ public class CommandSystem extends noteworthyframework.System {
             renderNode.width.v = RADIUS;
             renderNode.height.v = RADIUS;
             renderNode.color.v = Color.argb(0, 0, 0, 0);
-            renderNode.animationName = Sprite2dDef.ANIMATION_TRIGGER_FIELDS_EXISTING;
+            renderNode.animationName = Animations.ANIMATION_TRIGGER_FIELDS_EXISTING;
         }
     }
 }
