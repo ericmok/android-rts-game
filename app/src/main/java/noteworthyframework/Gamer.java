@@ -14,11 +14,11 @@ public class Gamer {
         this.add(Color.argb(240, 198, 71, 132));
 
         // From flatcolors
-        this.add(Color.argb(240, 46, 204, 113)); // Emerald
-        this.add(Color.argb(240, 44, 62, 80)); // Midnight blue
+        this.add(Color.argb(240, 189, 195, 199)); // Silver
         this.add(Color.argb(240, 230, 126, 34)); // Carrot
         this.add(Color.argb(240, 155, 89, 182)); // Amethyst
         this.add(Color.argb(240, 241, 196, 15)); // Sunflower
+        this.add(Color.argb(240, 46, 204, 113)); // Emerald
     }};
 
     public String name = "player_" + Math.floor(Math.random() * 10000);
