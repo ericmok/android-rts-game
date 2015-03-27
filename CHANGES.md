@@ -1,6 +1,8 @@
 ## Notes
 
 ### Version 0.2.3
+- Add massive performance improvements by adverting the use of HashMap.get
+- Rudimentary camera system added
 - Removed old engine code!
 - For this demo:
   - Changed/added some art assets
