@@ -108,7 +108,7 @@ public class Platoon extends Unit {
             new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
                 @Override
                 public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                    BattleNode.INFLICT_DAMAGE_DEFAULT.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage.v);
+                    BattleNode.INFLICT_DAMAGE_DEFAULT.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
                     onAttackSwingAnim = false;
                 }
             };

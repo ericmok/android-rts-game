@@ -33,11 +33,11 @@ public class BattleNode extends Node {
                 public void apply(BattleSystem system, BattleNode element, BattleNode element2) { }
             };
 
-    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> INFLICT_DAMAGE_DEFAULT =
-            new VoidFunc4<BattleSystem, BattleNode, BattleNode, Double>() {
+    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> INFLICT_DAMAGE_DEFAULT =
+            new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
                 @Override
-                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, Double damage) {
-                    battleNode.hp.v -= damage;
+                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, DoublePtr damage) {
+                    battleNode.hp.v -= damage.v;
                 }
             };
 
@@ -45,7 +45,7 @@ public class BattleNode extends Node {
             new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
                 @Override
                 public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode otherBattleNode) {
-                    INFLICT_DAMAGE_DEFAULT.apply(battleSystem, otherBattleNode, battleNode, battleNode.attackDamage.v);
+                    INFLICT_DAMAGE_DEFAULT.apply(battleSystem, otherBattleNode, battleNode, battleNode.attackDamage);
                 }
             };
 
@@ -123,7 +123,7 @@ public class BattleNode extends Node {
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady = _DONOTHING3;
     public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
 
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> inflictDamage = INFLICT_DAMAGE_DEFAULT;
+    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> inflictDamage = INFLICT_DAMAGE_DEFAULT;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onArmorHit = _DONOTHING3;
 
     public ArrayList<String> events;
