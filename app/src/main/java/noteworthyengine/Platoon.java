@@ -54,7 +54,7 @@ public class Platoon extends Unit {
         battleNode.onAttackCast = onAttackCast;
 
         renderNode = new RenderNode(this);
-        float size = Math.random() > 0.5f ? 1f : 0.7f;
+        float size = 0.95f;
         renderNode.animationName = Animations.ANIMATION_TROOPS_IDLING;
         renderNode.animationProgress.v = 0;
         renderNode.width.v = size;
