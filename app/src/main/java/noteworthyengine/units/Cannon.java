@@ -48,18 +48,20 @@ public class Cannon extends Platoon {
 
                 if (battleNode.hp.v <= 0) {
                     TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                    tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                     tempSprite.position.x = battleNode.coords.pos.x;
                     tempSprite.position.y = battleNode.coords.pos.y;
-                    tempSprite.position.z = 1;
-                    tempSprite.width = 1f;
-                    tempSprite.height = 1f;
-                    tempSprite.progress.progress = 1;
-                    tempSprite.progress.duration = 1200;
-                    tempSprite.isGfxInterpolated = false;
-                    tempSprite.animationName = Animations.ANIMATION_TROOPS_DYING;
-                    tempSprite.animationProgress = 0;
-                    tempSprite.color = Color.WHITE;
-                    tempSprite.angle = 90;
+
+//                    tempSprite.position.z = 1;
+//                    tempSprite.width = 1f;
+//                    tempSprite.height = 1f;
+//                    tempSprite.progress.progress = 1;
+//                    tempSprite.progress.duration = 1200;
+//                    tempSprite.isGfxInterpolated = false;
+//                    tempSprite.animationName = Animations.ANIMATION_TROOPS_DYING;
+//                    tempSprite.animationProgress = 0;
+//                    tempSprite.color = Color.WHITE;
+//                    tempSprite.angle = 90;
 
                     system.drawCompat.drawTemporarySprite(tempSprite);
                     system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);

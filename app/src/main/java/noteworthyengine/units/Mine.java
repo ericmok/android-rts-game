@@ -14,6 +14,7 @@ import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
 import structure.Sprite2dDef;
+import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
 import utils.VoidFunc2;
 import utils.VoidFunc3;
@@ -82,6 +83,16 @@ public class Mine extends Unit {
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
+                if (battleNode.hp.v <= 0) {
+                    TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+
+                    tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
+                    tempSprite.setPosition((float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y, 1);
+
+                    system.drawCompat.drawTemporarySprite(tempSprite);
+                    system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
+                }
+
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
                     float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
                     float rad = (float)(battleNode.attackRange.v * ratio);

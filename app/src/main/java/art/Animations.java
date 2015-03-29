@@ -1,5 +1,9 @@
 package art;
 
+import android.graphics.Color;
+
+import structure.TemporarySprite2dDef;
+
 /**
  * Created by eric on 3/27/15.
  */
@@ -9,9 +13,13 @@ public class Animations {
     public static final String ANIMATION_SPLASH_LOADER = "Animations/Splash/Loader";
 
     public static final String ANIMATION_SMOKE_GUNPOWDER = "Animations/Smoke/Gunpowder";
+    public static final SmokeGunpowderAnimation ANIMATION_SMOKE_GUNPOWDER_DEF = new SmokeGunpowderAnimation();
+
     public static final String ANIMATION_TROOPS_IDLING = "Animations/Troops/Idling";
     public static final String ANIMATION_TROOPS_MOVING = "Animations/Troops/Moving";
     public static final String ANIMATION_TROOPS_DYING = "Animations/Troops/Dying";
+    public static final TroopsDyingAnimation ANIMATION_TROOPS_DYING_DEF = new TroopsDyingAnimation(0, 0);
+
     public static final String ANIMATION_TROOPS_SELECTED = "Animations/Troops/Selected";
 
     public static final String ANIMATION_TROOPS_TARGETED = "Animations/Troops/Targeted";

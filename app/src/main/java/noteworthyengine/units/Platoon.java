@@ -132,18 +132,9 @@ public class Platoon extends Unit {
 
             if (battleNode.hp.v <= 0) {
                 TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                 tempSprite.position.x = battleNode.coords.pos.x;
                 tempSprite.position.y = battleNode.coords.pos.y;
-                tempSprite.position.z = 1;
-                tempSprite.width = 1f;
-                tempSprite.height = 1f;
-                tempSprite.progress.progress = 1;
-                tempSprite.progress.duration = 1200;
-                tempSprite.isGfxInterpolated = false;
-                tempSprite.animationName = Animations.ANIMATION_TROOPS_DYING;
-                tempSprite.animationProgress = 0;
-                tempSprite.color = Color.WHITE;
-                tempSprite.angle = 90;
 
                 system.drawCompat.drawTemporarySprite(tempSprite);
                 system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
@@ -169,18 +160,21 @@ public class Platoon extends Unit {
                 TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
                 //tempSprite.position.x = (battleNode.coords.pos.x + battleNode.coords.rot.x * battleNode.attackRange.v / 2);
                 //tempSprite.position.y = (battleNode.coords.pos.y + battleNode.coords.rot.y * battleNode.attackRange.v / 2);
+                tempSprite.copy(Animations.ANIMATION_SMOKE_GUNPOWDER_DEF);
                 tempSprite.position.x = (battleNode.coords.pos.x + target[0].coords.pos.x) / 2;
                 tempSprite.position.y = (battleNode.coords.pos.y + target[0].coords.pos.y) / 2;
-                tempSprite.position.z = 1;
-                tempSprite.width = 0.6f;
-                tempSprite.height = 0.6f;
+                tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900;
                 tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
-                tempSprite.progress.progress = 1;
-                tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900; // should be 1000 but...
-                tempSprite.isGfxInterpolated = false;
-                tempSprite.animationName = Animations.ANIMATION_SMOKE_GUNPOWDER;
-                tempSprite.animationProgress = 1;
-                tempSprite.color = Color.argb(50, 255, 255, 255);
+
+//                tempSprite.position.z = 1;
+//                tempSprite.width = 0.6f;
+//                tempSprite.height = 0.6f;
+//                tempSprite.progress.progress = 1;
+//                tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900; // should be 1000 but...
+//                tempSprite.isGfxInterpolated = false;
+//                tempSprite.animationName = Animations.ANIMATION_SMOKE_GUNPOWDER;
+//                tempSprite.animationProgress = 1;
+//                tempSprite.color = Color.argb(50, 255, 255, 255);
 
                 system.drawCompat.drawTemporarySprite(tempSprite);
                 system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);

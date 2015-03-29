@@ -71,6 +71,38 @@ public class Sprite2dDef implements Comparable<Sprite2dDef> {
         this.oldPosition.z = oldZ;
     }
 
+    public Sprite2dDef setPosition(double x, double y, double z) {
+        this.position.set(x, y, z);
+        return this;
+    }
+
+    public Sprite2dDef setAnimation(String animationName, int animationProgress) {
+        this.animationName = animationName;
+        this.animationProgress = animationProgress;
+        return  this;
+    }
+
+    public Sprite2dDef setDimensions(float width, float height) {
+        this.width = width;
+        this.height = height;
+        return this;
+    }
+
+    public Sprite2dDef setAngle(float angle) {
+        this.angle = angle;
+        return this;
+    }
+
+    public Sprite2dDef setColor(int color) {
+        this.color = color;
+        return this;
+    }
+
+    public Sprite2dDef setCamera(int index) {
+        this.cameraIndex = index;
+        return this;
+    }
+
     public void reset() {
         oldPosition.zero();
         position.zero();

@@ -43,18 +43,9 @@ public class Archer extends Platoon {
 
                 if (battleNode.hp.v <= 0) {
                     TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
-                    tempSprite.position.x = battleNode.coords.pos.x;
-                    tempSprite.position.y = battleNode.coords.pos.y;
-                    tempSprite.position.z = 1;
-                    tempSprite.width = 1f;
-                    tempSprite.height = 1f;
-                    tempSprite.progress.progress = 1;
-                    tempSprite.progress.duration = 1200;
-                    tempSprite.isGfxInterpolated = false;
-                    tempSprite.animationName = Animations.ANIMATION_TROOPS_DYING;
-                    tempSprite.animationProgress = 0;
-                    tempSprite.color = Color.WHITE;
-                    tempSprite.angle = 90;
+
+                    tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
+                    tempSprite.setPosition((float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y, 1);
 
                     system.drawCompat.drawTemporarySprite(tempSprite);
                     system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
@@ -66,18 +57,15 @@ public class Archer extends Platoon {
                         double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
 
                         Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                        sprite2dDef.isGfxInterpolated = false;
-                        sprite2dDef.position.x = ratio * (battleNode.target[0].coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x;
-                        sprite2dDef.position.y = ratio * (battleNode.target[0].coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y;
-                        sprite2dDef.position.z = 1;
-                        //sprite2dDef.animationName = Sprite2dDef.ANIMATION_PROJECTILE_BASIC;
-                        sprite2dDef.animationName = "Animations/Troops/Sword";
-                        sprite2dDef.animationProgress = 1;
-                        sprite2dDef.color = renderNode.color.v;
-                        sprite2dDef.angle = (float) Orientation.getDegreesBaseX(battleNode.target[0].coords.pos.x - battleNode.coords.pos.x,
-                                battleNode.target[0].coords.pos.y - battleNode.coords.pos.y);
-                        sprite2dDef.width = 0.55f;
-                        sprite2dDef.height = 0.55f;
+                        sprite2dDef.set("Animations/Troops/Sword", 0,
+                                (float)(ratio * (battleNode.target[0].coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x),
+                                (float)(ratio * (battleNode.target[0].coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y),
+                                1f,
+                                0.55f, 0.55f,
+                                (float) Orientation.getDegreesBaseX(battleNode.target[0].coords.pos.x - battleNode.coords.pos.x,
+                                        battleNode.target[0].coords.pos.y - battleNode.coords.pos.y),
+                                renderNode.color.v,
+                                0);
                     }
                 }
             }
