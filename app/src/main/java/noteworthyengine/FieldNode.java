@@ -1,8 +1,8 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
-import noteworthyframework.DoublePtr;
-import noteworthyframework.Gamer;
+import utils.DoublePtr;
+import noteworthyframework.GamerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;

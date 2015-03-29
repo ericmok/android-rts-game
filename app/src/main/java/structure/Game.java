@@ -3,7 +3,6 @@ package structure;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.opengl.Matrix;
 
 import org.json.JSONException;
 
@@ -11,25 +10,13 @@ import java.io.IOException;
 
 import art.Animations;
 import noteworthyengine.BackgroundUnit;
-import noteworthyengine.BattleSystem;
 import noteworthyengine.ButtonSystem;
-import noteworthyengine.ButtonUnit;
-import noteworthyengine.CameraUnit;
-import noteworthyengine.CommandSystem;
+import noteworthyengine.units.ButtonUnit;
+import noteworthyengine.units.CameraUnit;
 import noteworthyengine.DataLoader;
-import noteworthyengine.DecaySystem;
-import noteworthyengine.FormationSystem;
 import noteworthyengine.LoaderUIEngine;
-import noteworthyengine.SeparationNode;
-import noteworthyengine.SeparationSystem;
-import noteworthyengine.TimelineSystem;
 import noteworthyframework.BaseEngine;
-import noteworthyframework.DrawCompat;
-import noteworthyengine.FieldSystem;
-import noteworthyengine.MovementSystem;
 import noteworthyengine.NoteworthyEngine;
-import noteworthyengine.RenderSystem;
-import noteworthyframework.Unit;
 import utils.VoidFunc;
 
 public class Game {

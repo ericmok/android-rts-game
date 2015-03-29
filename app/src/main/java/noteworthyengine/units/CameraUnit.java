@@ -1,5 +1,6 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
+import noteworthyengine.CameraNode;
 import noteworthyframework.Unit;
 import structure.GameCamera;
 

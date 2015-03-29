@@ -3,7 +3,7 @@ package structure.reflection;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
-import noteworthyengine.Mech;
+import noteworthyengine.units.Mech;
 import noteworthyframework.Unit;
 
 /**

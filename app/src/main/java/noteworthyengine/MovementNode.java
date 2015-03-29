@@ -1,7 +1,7 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
-import noteworthyframework.DoublePtr;
+import utils.DoublePtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.JsonSerializable;

@@ -1,8 +1,10 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
 import android.graphics.Color;
 
 import art.Animations;
+import noteworthyengine.BattleNode;
+import noteworthyengine.RenderSystem;
 import noteworthyframework.Gamer;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;

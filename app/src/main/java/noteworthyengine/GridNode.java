@@ -1,10 +1,9 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
-import noteworthyframework.IntegerPtr;
+import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
-import utils.Vector2;
 
 /**
  * Created by eric on 3/20/15.

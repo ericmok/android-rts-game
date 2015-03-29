@@ -6,10 +6,13 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 import art.Animations;
+import noteworthyengine.units.ArrowCommand;
 import noteworthyframework.*;
 import structure.Game;
 import structure.GameCamera;
 import structure.GameInput;
+import utils.FloatPtr;
+import utils.IntegerPtr;
 import utils.Vector2;
 
 /**

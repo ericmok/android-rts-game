@@ -1,5 +1,6 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
+import noteworthyengine.TimelineNode;
 import noteworthyframework.Unit;
 
 /**

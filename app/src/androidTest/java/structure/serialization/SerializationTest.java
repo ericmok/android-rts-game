@@ -2,19 +2,11 @@ package structure.serialization;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import noteworthyengine.Mech;
-import noteworthyengine.Platoon;
-import noteworthyframework.Gamer;
+import noteworthyengine.units.Mech;
 
 /**
  * Created by eric on 3/27/15.

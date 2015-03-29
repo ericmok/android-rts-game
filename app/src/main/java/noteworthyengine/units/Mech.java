@@ -1,5 +1,7 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
+import noteworthyengine.MovementNode;
+import noteworthyengine.RenderNode;
 import noteworthyframework.Unit;
 
 /**

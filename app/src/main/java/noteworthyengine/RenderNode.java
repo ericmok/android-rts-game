@@ -3,9 +3,9 @@ package noteworthyengine;
 import android.graphics.Color;
 
 import noteworthyframework.Coords;
-import noteworthyframework.DoublePtr;
-import noteworthyframework.FloatPtr;
-import noteworthyframework.IntegerPtr;
+import utils.DoublePtr;
+import utils.FloatPtr;
+import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.StringPtr;

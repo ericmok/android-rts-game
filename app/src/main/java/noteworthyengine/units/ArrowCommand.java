@@ -1,7 +1,11 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
 import android.graphics.Color;
 
+import noteworthyengine.DecayNode;
+import noteworthyengine.FieldNode;
+import noteworthyengine.RenderNode;
+import noteworthyengine.RenderSystem;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;

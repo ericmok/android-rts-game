@@ -1,7 +1,6 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
-import noteworthyframework.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import structure.GameCamera;

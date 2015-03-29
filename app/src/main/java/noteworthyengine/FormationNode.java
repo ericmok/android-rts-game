@@ -3,6 +3,7 @@ package noteworthyengine;
 import java.util.ArrayList;
 
 import noteworthyframework.Coords;
+import noteworthyframework.GamerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;

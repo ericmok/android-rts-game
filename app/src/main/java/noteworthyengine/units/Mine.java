@@ -1,8 +1,15 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
 import android.graphics.Color;
 
 import art.Animations;
+import noteworthyengine.BattleNode;
+import noteworthyengine.BattleSystem;
+import noteworthyengine.GridNode;
+import noteworthyengine.MovementNode;
+import noteworthyengine.RenderNode;
+import noteworthyengine.RenderSystem;
+import noteworthyengine.SeparationNode;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;

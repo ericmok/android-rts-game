@@ -1,8 +1,17 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
 import android.graphics.Color;
 
 import art.Animations;
+import noteworthyengine.BattleNode;
+import noteworthyengine.BattleSystem;
+import noteworthyengine.FieldNode;
+import noteworthyengine.FormationNode;
+import noteworthyengine.GridNode;
+import noteworthyengine.MovementNode;
+import noteworthyengine.RenderNode;
+import noteworthyengine.RenderSystem;
+import noteworthyengine.SeparationNode;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
@@ -18,17 +27,17 @@ import utils.VoidFunc3;
 public class Platoon extends Unit {
     public static final String NAME = "Troopy";
 
-    GridNode gridNode;
-    MovementNode movementNode;
+    public GridNode gridNode;
+    public MovementNode movementNode;
 
-    FieldNode fieldNode;
-    BattleNode battleNode;
-    SeparationNode separationNode;
-    FormationNode formationNode;
+    public FieldNode fieldNode;
+    public BattleNode battleNode;
+    public SeparationNode separationNode;
+    public FormationNode formationNode;
 
-    RenderNode renderNode;
-    RenderNode dyingRenderNode;
-    RenderNode selectedRenderNode;
+    public RenderNode renderNode;
+    public RenderNode dyingRenderNode;
+    public RenderNode selectedRenderNode;
 
     public boolean onAttackSwingAnim = false;
     public BattleNode[] target = new BattleNode[1];

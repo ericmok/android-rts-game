@@ -1,12 +1,10 @@
 package noteworthyengine;
 
-import android.graphics.Color;
 import android.util.Log;
 
 import noteworthyframework.*;
 import structure.Game;
-import structure.GameInput;
-import structure.Sprite2dDef;
+import utils.FloatPtr;
 import utils.StringPtr;
 import utils.VoidFunc;
 

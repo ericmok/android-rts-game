@@ -1,7 +1,7 @@
 package noteworthyframework;
 
-import noteworthyengine.Mech;
-import noteworthyengine.Platoon;
+import noteworthyengine.units.Mech;
+import noteworthyengine.units.Platoon;
 import utils.MemoryPool;
 
 /**

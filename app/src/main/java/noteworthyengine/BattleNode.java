@@ -3,13 +3,13 @@ package noteworthyengine;
 import java.util.ArrayList;
 
 import noteworthyframework.Coords;
-import noteworthyframework.DoublePtr;
+import utils.DoublePtr;
 import noteworthyframework.Gamer;
-import noteworthyframework.IntegerPtr;
+import noteworthyframework.GamerPtr;
+import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;
-import utils.VoidFunc;
 import utils.VoidFunc2;
 import utils.VoidFunc3;
 import utils.VoidFunc4;

@@ -1,4 +1,4 @@
-package noteworthyframework;
+package utils;
 
 import utils.JsonSerializable;
 
