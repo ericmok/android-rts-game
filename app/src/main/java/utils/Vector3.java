@@ -18,6 +18,12 @@ public class Vector3 implements JsonSerializable {
 		
 		array = new float[4];
 	}
+
+    public void set(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 	
 	public void set(float[] vector) {
 		this.x = vector[0];
