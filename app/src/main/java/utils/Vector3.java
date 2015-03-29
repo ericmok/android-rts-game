@@ -1,6 +1,6 @@
 package utils;
 
-public class Vector3 {
+public class Vector3 implements JsonSerializable {
 	public double x = 0;
 	public double y = 0;
 	public double z = 0;
@@ -181,5 +181,8 @@ public class Vector3 {
 	public String toString() {
 		return "(" + x + "," + y + "," + z + ")";
 	}
-	
+
+    public String json() {
+        return "[" + x + "," + y + "," + z + "]";
+    }
 }

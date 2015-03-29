@@ -33,7 +33,7 @@ public class ArrowCommand extends Unit {
         decayNode.timeToLive.v = 10;
 
         renderNode = new RenderNode(this);
-        renderNode.animationName = ANIMATION_FIELD_ARROW_EXISTING;
+        renderNode.animationName.v = ANIMATION_FIELD_ARROW_EXISTING;
         renderNode.color.v = Color.WHITE;
         renderNode.width.v = WIDTH;
         renderNode.height.v = HEIGHT;

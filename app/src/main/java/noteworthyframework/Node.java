@@ -31,7 +31,8 @@ public abstract class Node {
     }
 
     public static void instantiatePublicFieldsForUnit(Unit unit, Class klass, Node node) {
-        java.lang.reflect.Field[] fields = klass.getFields();
+        java.lang.reflect.Field[] fields = klass.getDeclaredFields();
+
         for (int i = 0; i < fields.length; i++) {
             try {
 
@@ -56,7 +57,8 @@ public abstract class Node {
                 }
                 else {
                     // If node already has the field in its dictionary, lets set the field
-                    field.set(node, unit.field(field.getName()));
+                    Object valueInsideDictionary = unit.field(field.getName());
+                    field.set(node, valueInsideDictionary);
                 }
 
             } catch (IllegalAccessException e) {

@@ -55,27 +55,30 @@ public class Platoon extends Unit {
 
         renderNode = new RenderNode(this);
         float size = 0.95f;
-        renderNode.animationName = Animations.ANIMATION_TROOPS_IDLING;
-        renderNode.animationProgress.v = 0;
-        renderNode.width.v = size;
-        renderNode.height.v = size;
-        renderNode.color.v = Color.WHITE;
-        renderNode.isGfxInterpolated.v = 1;
+        renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
+        renderNode.setInterpolated(0, 0);
+//        renderNode.animationName.v = Animations.ANIMATION_TROOPS_IDLING;
+//        renderNode.animationProgress.v = 0;
+//        renderNode.width.v = size;
+//        renderNode.height.v = size;
+//        renderNode.color.v = Color.WHITE;
+//        renderNode.isGfxInterpolated.v = 1;
         renderNode.onDraw = this.onDraw;
 
-        dyingRenderNode = new RenderNode("dyingRenderNode", this);
-        dyingRenderNode.isActive = false;
-        dyingRenderNode.animationName = Animations.ANIMATION_TROOPS_DYING;
-        dyingRenderNode.color.v = Color.WHITE;
+        // Only one renderNode per unit...
+//        dyingRenderNode = new RenderNode("dyingRenderNode", this);
+//        dyingRenderNode.isActive = false;
+//        dyingRenderNode.animationName.v = Animations.ANIMATION_TROOPS_DYING;
+//        dyingRenderNode.color.v = Color.WHITE;
 
         separationNode = new SeparationNode(this);
         formationNode = new FormationNode(this);
 
         gridNode = new GridNode(this, separationNode, battleNode);
 
-        selectedRenderNode = new RenderNode("selectedRenderNode", this);
-        selectedRenderNode.animationName = Animations.ANIMATION_TROOPS_TARGETED;
-        selectedRenderNode.isActive = false;
+//        selectedRenderNode = new RenderNode("selectedRenderNode", this);
+//        selectedRenderNode.animationName.v = Animations.ANIMATION_TROOPS_TARGETED;
+//        selectedRenderNode.isActive = false;
     }
 
     public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =

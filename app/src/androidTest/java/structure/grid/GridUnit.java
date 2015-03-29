@@ -8,7 +8,7 @@ import noteworthyframework.Unit;
  */
 public class GridUnit extends Unit {
 
-    public GridNode gridNode = new GridNode(this);
+    public GridNode gridNode = new GridNode(this, null, null);
 
     public GridUnit() {
 

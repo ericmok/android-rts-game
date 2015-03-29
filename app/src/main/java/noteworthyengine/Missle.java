@@ -54,7 +54,7 @@ public class Missle extends Mine {
             }
         };
 
-        this.renderNode.animationName = Animations.ANIMATION_PROJECTILE_BASIC;
+        this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
         this.renderNode.width.v = 1.1f;
         this.renderNode.height.v = 1.1f;
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {

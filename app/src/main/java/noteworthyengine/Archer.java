@@ -32,7 +32,7 @@ public class Archer extends Platoon {
         this.battleNode.attackSwingTime.v = 2;
         this.battleNode.attackCooldown.v = 2;
 
-        this.renderNode.animationName = "Animations/Archers/Idling";
+        this.renderNode.animationName.v = "Animations/Archers/Idling";
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {

@@ -4,12 +4,13 @@ import noteworthyframework.Coords;
 import noteworthyframework.DoublePtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.JsonSerializable;
 import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
  */
-public class MovementNode extends Node {
+public class MovementNode extends Node implements JsonSerializable {
 
     public static final String _NAME = "movementNode";
     public String _name = _NAME;
@@ -27,7 +28,7 @@ public class MovementNode extends Node {
 
     public DoublePtr maxSpeed = new DoublePtr() {{ v = 1; }};
 
-    public double crowdSpeed = 1;
+    //public double crowdSpeed = 1;
 
     public MovementNode(Unit unit) {
         super(_NAME, unit);
@@ -37,5 +38,10 @@ public class MovementNode extends Node {
     public MovementNode(String name, Unit unit) {
         super(name, unit);
         Node.instantiatePublicFieldsForUnit(unit, MovementNode.class, this);
+    }
+
+    public String json() {
+
+        return "";
     }
 }

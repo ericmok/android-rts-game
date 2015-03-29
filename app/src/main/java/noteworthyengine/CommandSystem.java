@@ -125,7 +125,7 @@ public class CommandSystem extends noteworthyframework.System {
             renderNode.width.v = RADIUS;
             renderNode.height.v = RADIUS;
             renderNode.color.v = Color.argb(0, 0, 0, 0);
-            renderNode.animationName = Animations.ANIMATION_TRIGGER_FIELDS_EXISTING;
+            renderNode.animationName.v = Animations.ANIMATION_TRIGGER_FIELDS_EXISTING;
         }
     }
 }

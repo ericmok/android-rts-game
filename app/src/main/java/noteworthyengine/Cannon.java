@@ -36,7 +36,7 @@ public class Cannon extends Platoon {
             }
         };
 
-        this.renderNode.animationName = "Animations/Cannons/Idling";
+        this.renderNode.animationName.v = "Animations/Cannons/Idling";
         this.renderNode.width.v = 1.4f;
         this.renderNode.height.v = 1.4f;
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {

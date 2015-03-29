@@ -15,7 +15,7 @@ public class BackgroundUnit extends Unit {
     public BackgroundUnit() {
         this.name = this.getClass().getSimpleName();
 
-        renderNode.animationName = Animations.ANIMATION_SPLASH_LOADER;
+        renderNode.animationName.v = Animations.ANIMATION_SPLASH_LOADER;
         renderNode.animationProgress.v = 1;
         renderNode.width.v = 1;
         renderNode.height.v = 1;

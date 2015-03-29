@@ -65,7 +65,7 @@ public class Mine extends Unit {
             }
         };
 
-        renderNode.animationName = Animations.ANIMATION_MINE_IDLING;
+        renderNode.animationName.v = Animations.ANIMATION_MINE_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0x80ffffff;
 

@@ -151,7 +151,7 @@ public class Game {
         loaderUIEngine.addUnit(backgroundUnit);
 
         ButtonUnit buttonUnit = new ButtonUnit();
-        buttonUnit.renderNode.animationName = Animations.ANIMATION_BUTTONS_PLAY;
+        buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
         buttonUnit.renderNode.coords.pos.set(-0.85, 0);
         buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
         buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
