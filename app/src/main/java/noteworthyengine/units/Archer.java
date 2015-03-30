@@ -25,6 +25,7 @@ public class Archer extends Platoon {
         this.renderNode.width.v = 1.3f;
         this.renderNode.height.v = 1.3f;
 
+        this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 90;
         this.battleNode.maxSpeed.v = 1.3;
         //this.battleNode.attackRange.v = 5.5;
