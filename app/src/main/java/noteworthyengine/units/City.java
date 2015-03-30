@@ -3,11 +3,15 @@ package noteworthyengine.units;
 import android.graphics.Color;
 
 import noteworthyengine.BattleNode;
+import noteworthyengine.BattleSystem;
 import noteworthyengine.GridNode;
 import noteworthyengine.RenderNode;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
+import utils.DoublePtr;
+import utils.VoidFunc2;
+import utils.VoidFunc4;
 
 /**
  * Created by eric on 3/29/15.
@@ -22,7 +26,7 @@ public class City extends Unit {
     public BattleNode battleNode = new BattleNode(this);
     public RenderNode renderNode = new RenderNode(this);
 
-    public City(Gamer gamer) {
+    public City(final Gamer gamer) {
         this.name = NAME;
 
         gridNode = new GridNode(this, null, battleNode);
@@ -30,6 +34,18 @@ public class City extends Unit {
         battleNode.gamer.v = gamer;
         battleNode.hp.v = 100;
         battleNode.attackDamage.v = 1;
+        battleNode.inflictDamage = new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
+            @Override
+            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
+                battleNode.hp.v -= damage.v;
+
+                if (battleNode.hp.v <= 0) {
+                    City city = new City(attacker.gamer.v);
+                    city.battleNode.coords.pos.copy(battleNode.coords.pos);
+                    battleSystem.getBaseEngine().addUnit(city);
+                }
+            }
+        };
 
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
     }
