@@ -71,6 +71,7 @@ public class RenderNode extends Node {
         this.width.v = width;
         this.height.v = height;
         this.coords.rot.setDegrees(angle);
+        this.color.v = color;
         this.animationName.v = animationName;
         this.animationProgress.v = animationProgress;
         this.cameraType.v = cameraType;
