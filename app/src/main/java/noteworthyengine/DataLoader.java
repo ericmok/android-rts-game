@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import noteworthyengine.units.Archer;
 import noteworthyengine.units.Cannon;
+import noteworthyengine.units.City;
 import noteworthyengine.units.Mine;
 import noteworthyengine.units.TimelineCommand;
 import noteworthyframework.Coords;
@@ -43,6 +44,10 @@ public class DataLoader implements EngineDataLoader {
             } else {
                 // Allied or enemy team
             }
+
+            City city = new City(player);
+            city.battleNode.coords.pos.set(Math.random() * 30 - 15, Math.random() * 30 - 15);
+            baseEngine.addUnit(city);
 
             JSONArray troopArr = jPlayerObj.getJSONArray("troop");
 

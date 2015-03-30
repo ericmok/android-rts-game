@@ -117,6 +117,11 @@ public class BaseEngine {
             system.step(this.gameTime, dt);
         }
 
+        int numberUnits = units.size();
+        for (int i = 0; i < numberUnits; i++) {
+            units.get(i).step(this, dt);
+        }
+
         //this.flushQueues();
 
         this.gameTime += dt;

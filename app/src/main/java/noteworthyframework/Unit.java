@@ -74,4 +74,7 @@ public class Unit implements JsonSerializable {
 
         return sb.toString();
     }
+
+    public void step(BaseEngine engine, double dt) {
+    }
 }
