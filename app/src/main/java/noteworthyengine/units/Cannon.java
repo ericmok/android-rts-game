@@ -69,7 +69,7 @@ public class Cannon extends Platoon {
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
 
-                    if (battleNode.target[0] != null) {
+                    if (battleNode.target.v != null) {
                         double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
 
                         Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();

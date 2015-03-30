@@ -186,7 +186,7 @@ public class BattleSystem extends noteworthyframework.System {
     public boolean battleNodeHasAliveTarget(BattleNode battleNode) {
 
         // Check if target is null first, then hp
-        return battleNode.target[0] != null && battleNode.target[0].hp.v > 0;
+        return battleNode.target.v != null && battleNode.target.v.hp.v > 0;
     }
 
     private void acquireNewTarget(BattleNode battleNode) {
@@ -203,7 +203,7 @@ public class BattleSystem extends noteworthyframework.System {
 
             // Find closest enemy...may be null
             findEnemyWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v);
-            battleNode.target[0] = tempBattleNodePtr.v;
+            battleNode.target.v = tempBattleNodePtr.v;
         }
     }
 
@@ -211,7 +211,7 @@ public class BattleSystem extends noteworthyframework.System {
     public boolean cleanUpBattleNode(BattleNode battleNode) {
         if (battleNode.hp.v <= 0) {
             this.getBaseEngine().removeUnit(battleNode.unit);
-            battleNode.target[0] = null;
+            battleNode.target.v = null;
             return  true;
         }
         return false;
@@ -231,7 +231,7 @@ public class BattleSystem extends noteworthyframework.System {
             // We step the battle phases anyways
 
             if (battleNodeHasAliveTarget(battleNode)) {
-                moveNodeTowardsEnemy(battleNode, battleNode.target[0]);
+                moveNodeTowardsEnemy(battleNode, battleNode.target.v);
             }
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_READY) {
@@ -239,12 +239,12 @@ public class BattleSystem extends noteworthyframework.System {
                 if (battleNodeHasAliveTarget(battleNode)) {
                     // If in range, start the swing immediately
 
-                    if (battleNode.coords.pos.distanceTo(battleNode.target[0].coords.pos) <= battleNode.attackRange.v ||
+                    if (battleNode.coords.pos.distanceTo(battleNode.target.v.coords.pos) <= battleNode.attackRange.v ||
                             battleNode.attackSwingEvenWhenNotInRange.v == 1) {
                         battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
                         battleNode.attackProgress.v = 0;
 
-                        battleNode.onAttackSwing.apply(this, battleNode, battleNode.target[0]);
+                        battleNode.onAttackSwing.apply(this, battleNode, battleNode.target.v);
                     }
                 }
             }
@@ -267,7 +267,7 @@ public class BattleSystem extends noteworthyframework.System {
                     else {
                         // We do have a target at cast time
 
-                        battleNode.onAttackCast.apply(this, battleNode, battleNode.target[0]);
+                        battleNode.onAttackCast.apply(this, battleNode, battleNode.target.v);
 
                         // Moved into attack cast
                         //battleNode.target[0].inflictDamage.apply(this, battleNode.target[0], battleNode, battleNode.attackDamage.v);
@@ -299,7 +299,7 @@ public class BattleSystem extends noteworthyframework.System {
                     battleNode.attackProgress.v = 0;
 
                     // TODO: Simplify this callback
-                    battleNode.onAttackReady.apply(this, battleNode, battleNode.target[0]);
+                    battleNode.onAttackReady.apply(this, battleNode, battleNode.target.v);
                 }
                 else {
                     battleNode.attackProgress.v += dt;

@@ -53,17 +53,17 @@ public class Archer extends Platoon {
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
 
-                    if (battleNode.target[0] != null) {
+                    if (battleNode.target.v != null) {
                         double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
 
                         Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                         sprite2dDef.set("Animations/Troops/Sword", 0,
-                                (float)(ratio * (battleNode.target[0].coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x),
-                                (float)(ratio * (battleNode.target[0].coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y),
+                                (float)(ratio * (battleNode.target.v.coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x),
+                                (float)(ratio * (battleNode.target.v.coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y),
                                 1f,
                                 0.55f, 0.55f,
-                                (float) Orientation.getDegreesBaseX(battleNode.target[0].coords.pos.x - battleNode.coords.pos.x,
-                                        battleNode.target[0].coords.pos.y - battleNode.coords.pos.y),
+                                (float) Orientation.getDegreesBaseX(battleNode.target.v.coords.pos.x - battleNode.coords.pos.x,
+                                        battleNode.target.v.coords.pos.y - battleNode.coords.pos.y),
                                 renderNode.color.v,
                                 0);
                     }

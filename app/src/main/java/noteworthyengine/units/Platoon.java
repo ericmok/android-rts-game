@@ -36,8 +36,8 @@ public class Platoon extends Unit {
     public FormationNode formationNode;
 
     public RenderNode renderNode;
-    public RenderNode dyingRenderNode;
-    public RenderNode selectedRenderNode;
+    //public RenderNode dyingRenderNode;
+    //public RenderNode selectedRenderNode;
 
     public boolean onAttackSwingAnim = false;
     public BattleNode[] target = new BattleNode[1];

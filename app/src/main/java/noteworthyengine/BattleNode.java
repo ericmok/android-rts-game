@@ -9,6 +9,7 @@ import noteworthyframework.GamerPtr;
 import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.JsonSerializable;
 import utils.Vector2;
 import utils.VoidFunc2;
 import utils.VoidFunc3;
@@ -103,7 +104,7 @@ public class BattleNode extends Node {
 
     /// Target lock-on, also acts as a cache. The battleNode will pursue and attack this target
     /// which is obtained at target acquisition time.
-    public BattleNode[] target = new BattleNode[1];
+    public Ptr target = new Ptr();
 
     /// For dealing damage to multiple targets
     //public RewriteOnlyArray<Target> possibleTargets = new RewriteOnlyArray<Target>(Target.class, MAX_POSSIBLE_TARGETS);
@@ -140,8 +141,13 @@ public class BattleNode extends Node {
         Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
     }
 
-    public static class Ptr {
+    public static class Ptr implements JsonSerializable {
         public BattleNode v = null;
+
+        @Override
+        public String json() {
+            return "\"To be implemented!\"";
+        }
     }
 
     public static class Target implements Comparable<Target>{
