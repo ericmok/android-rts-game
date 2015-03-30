@@ -210,6 +210,7 @@ public class BattleSystem extends noteworthyframework.System {
 
     public boolean cleanUpBattleNode(BattleNode battleNode) {
         if (battleNode.hp.v <= 0) {
+            battleNode.onDie.apply(this, battleNode);
             this.getBaseEngine().removeUnit(battleNode.unit);
             battleNode.target.v = null;
             return  true;
