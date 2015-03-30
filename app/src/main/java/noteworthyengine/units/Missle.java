@@ -23,12 +23,12 @@ public class Missle extends Mine {
         this.movementNode.maxSpeed.v = 1;
 
         this.battleNode.isAttackable.v = 0;
-        this.battleNode.attackDamage.v = 25;
+        this.battleNode.attackDamage.v = 50;
         this.battleNode.attackSwingTime.v = 3;
-        this.battleNode.attackRange.v = 1.5;
+        this.battleNode.attackRange.v = 2.5;
         this.battleNode.targetAcquisitionRange.v = 20;
         this.battleNode.hp.v = 100;
-        this.battleNode.fractionToWalkIntoAttackRange.v = 0.1;
+        this.battleNode.fractionToWalkIntoAttackRange.v = 0.02;
         this.battleNode.stickyAttack.v = 0;
         this.battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override

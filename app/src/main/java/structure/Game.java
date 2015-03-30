@@ -124,7 +124,7 @@ public class Game {
         activeEngine = loaderUIEngine;
 
         CameraUnit loaderUICamera = new CameraUnit(gameRenderer.mainCamera, 4f);
-        CameraUnit activeGameCamera = new CameraUnit(gameRenderer.mainCamera, 0.07f);
+        CameraUnit activeGameCamera = new CameraUnit(gameRenderer.mainCamera, 0.06f);
         CameraUnit auxGameCamera = new CameraUnit(gameRenderer.auxCamera, 4);
 
         loaderUIEngine.addUnit(loaderUICamera);

@@ -63,7 +63,15 @@ public class DataLoader implements EngineDataLoader {
 
                 for (int k = 0; k < 3; k++) {
                     //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
-                    troopy = UnitPool.troopyMemoryPool.fetchMemory();
+                    if (player.name.equals("evilempire")) {
+                        troopy = new Archer(player);
+                    }
+                    if (player.name.equals("enemy")) {
+                        troopy = new Mine(player);
+                    }
+                    else {
+                        troopy = UnitPool.troopyMemoryPool.fetchMemory();
+                    }
 
                     //GamerPtr gamer = (GamerPtr)troopy.fields.put("gamer", player);
                     //gamer.v = player;
