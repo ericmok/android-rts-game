@@ -36,8 +36,6 @@ public class Platoon extends Unit {
     public FormationNode formationNode;
 
     public RenderNode renderNode;
-    //public RenderNode dyingRenderNode;
-    //public RenderNode selectedRenderNode;
 
     public boolean onAttackSwingAnim = false;
     public BattleNode[] target = new BattleNode[1];
@@ -50,7 +48,6 @@ public class Platoon extends Unit {
 
         fieldNode = new FieldNode(this);
         fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
-        //fieldNode._movementNode = movementNode;
 
         battleNode = new BattleNode(this);
         battleNode.hp.v = 50;
@@ -66,28 +63,12 @@ public class Platoon extends Unit {
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
         renderNode.setInterpolated(0, 0);
-//        renderNode.animationName.v = Animations.ANIMATION_TROOPS_IDLING;
-//        renderNode.animationProgress.v = 0;
-//        renderNode.width.v = size;
-//        renderNode.height.v = size;
-//        renderNode.color.v = Color.WHITE;
-//        renderNode.isGfxInterpolated.v = 1;
         renderNode.onDraw = this.onDraw;
-
-        // Only one renderNode per unit...
-//        dyingRenderNode = new RenderNode("dyingRenderNode", this);
-//        dyingRenderNode.isActive = false;
-//        dyingRenderNode.animationName.v = Animations.ANIMATION_TROOPS_DYING;
-//        dyingRenderNode.color.v = Color.WHITE;
 
         separationNode = new SeparationNode(this);
         formationNode = new FormationNode(this);
 
         gridNode = new GridNode(this, separationNode, battleNode);
-
-//        selectedRenderNode = new RenderNode("selectedRenderNode", this);
-//        selectedRenderNode.animationName.v = Animations.ANIMATION_TROOPS_TARGETED;
-//        selectedRenderNode.isActive = false;
     }
 
     public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =
@@ -159,31 +140,18 @@ public class Platoon extends Unit {
 
             if (onAttackSwingAnim) {
                 TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
-                //tempSprite.position.x = (battleNode.coords.pos.x + battleNode.coords.rot.x * battleNode.attackRange.v / 2);
-                //tempSprite.position.y = (battleNode.coords.pos.y + battleNode.coords.rot.y * battleNode.attackRange.v / 2);
                 tempSprite.copy(Animations.ANIMATION_SMOKE_GUNPOWDER_DEF);
                 tempSprite.position.x = (battleNode.coords.pos.x + target[0].coords.pos.x) / 2;
                 tempSprite.position.y = (battleNode.coords.pos.y + target[0].coords.pos.y) / 2;
                 tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900;
                 tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
 
-//                tempSprite.position.z = 1;
-//                tempSprite.width = 0.6f;
-//                tempSprite.height = 0.6f;
-//                tempSprite.progress.progress = 1;
-//                tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900; // should be 1000 but...
-//                tempSprite.isGfxInterpolated = false;
-//                tempSprite.animationName = Animations.ANIMATION_SMOKE_GUNPOWDER;
-//                tempSprite.animationProgress = 1;
-//                tempSprite.color = Color.argb(50, 255, 255, 255);
 
                 system.drawCompat.drawTemporarySprite(tempSprite);
                 system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
 
                 onAttackSwingAnim = false;
             }
-
-            //dyingRenderNode.isActive = true;
         }
     };
 }
