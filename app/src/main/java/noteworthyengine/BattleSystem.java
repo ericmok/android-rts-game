@@ -192,14 +192,14 @@ public class BattleSystem extends noteworthyframework.System {
     private void acquireNewTarget(BattleNode battleNode) {
         // If it has no target or has dead target, get new target
         // Also, we can acquire new target during cooldown, but that may take cycles...
-        if (!battleNodeHasAliveTarget(battleNode) ||
-                battleNode.attackState.v == BattleNode.ATTACK_STATE_READY ||
-                battleNode.stickyAttack.v == 0) {
+//        if (!battleNodeHasAliveTarget(battleNode) ||
+//                battleNode.attackState.v == BattleNode.ATTACK_STATE_READY ||
+//                battleNode.stickyAttack.v == 0) {
 
             // Find closest enemy...may be null
             findEnemyWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v);
             battleNode.target.v = tempBattleNodePtr.v;
-        }
+       // }
     }
 
 
@@ -221,8 +221,6 @@ public class BattleSystem extends noteworthyframework.System {
                 continue;
             }
 
-            acquireNewTarget(battleNode);
-
             // So we may or may not have a target (All the enemy may be dead)
             // We step the battle phases anyways
 
@@ -234,6 +232,8 @@ public class BattleSystem extends noteworthyframework.System {
             }
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_READY) {
+
+                acquireNewTarget(battleNode);
 
                 if (battleNodeHasAliveTarget(battleNode)) {
                     // If in range, start the swing immediately
@@ -252,12 +252,12 @@ public class BattleSystem extends noteworthyframework.System {
 
                 if (battleNode.attackProgress.v >= battleNode.attackSwingTime.v) {
 
-                    // Moved to top
-//                    // Keep getting new targets during the swing if no sticky attack
-//                    if (battleNode.stickyAttack.v == 0) {
-//                        findEnemyWithinRange(tempBattleNodePtr, battleNode, battleNode.attackRange.v);
-//                        battleNode.target[0] = tempBattleNodePtr.v;
-//                    }
+                    // At attack cast time, ditch the old target for any new targets that
+                    // walked into the swing
+                    if (battleNode.stickyAttack.v == 0) {
+                        findEnemyWithinRange(tempBattleNodePtr, battleNode, battleNode.attackRange.v);
+                        battleNode.target.v = tempBattleNodePtr.v;
+                    }
 
                     if (!battleNodeHasAliveTarget(battleNode)) {
                         // Lost the target before the swing finished (death or out of range)
@@ -293,6 +293,9 @@ public class BattleSystem extends noteworthyframework.System {
 
             // Invariant to whether or not there is a target
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN) {
+
+                acquireNewTarget(battleNode); // Unless we want unit to be idle when in cooldown
+
                 if (battleNode.attackProgress.v >= battleNode.attackCooldown.v) {
                     battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
                     battleNode.attackProgress.v = 0;
