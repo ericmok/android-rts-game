@@ -190,11 +190,6 @@ public class BattleSystem extends noteworthyframework.System {
     }
 
     private void acquireNewTarget(BattleNode battleNode) {
-
-        // If we run out of attackable targets, the movement won't be calculated
-        // We zero it out here
-        battleNode.enemyAttractionForce.zero();
-
         // If it has no target or has dead target, get new target
         // Also, we can acquire new target during cooldown, but that may take cycles...
         if (!battleNodeHasAliveTarget(battleNode) ||
@@ -230,6 +225,9 @@ public class BattleSystem extends noteworthyframework.System {
 
             // So we may or may not have a target (All the enemy may be dead)
             // We step the battle phases anyways
+
+            // Zero by default, to be calculated only if there is an enemy
+            battleNode.enemyAttractionForce.zero();
 
             if (battleNodeHasAliveTarget(battleNode)) {
                 moveNodeTowardsEnemy(battleNode, battleNode.target.v);
