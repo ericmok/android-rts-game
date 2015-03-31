@@ -157,19 +157,19 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
         if (currentMotionEventAction == MotionEvent.ACTION_DOWN) {
             touchDown = true;
             //lastTouchDown.copy(touchPosition);
-            Log.v("GAMEINPUT", "down");
+            //Log.v("GAMEINPUT", "down");
         }
 
         if (currentMotionEventAction == MotionEvent.ACTION_MOVE) {
             touchDown = true;
-            Log.v("GAMEINPUT", "move");
+            //Log.v("GAMEINPUT", "move");
         }
 
         // Unclear if other actions will trigger flag to false
         if (currentMotionEventAction == MotionEvent.ACTION_UP) {
             touchDown = false;
             //lastTouchUp.copy(touchPosition);
-            Log.v("GAMEINPUT", "up");
+            //Log.v("GAMEINPUT", "up");
         }
     }
 
