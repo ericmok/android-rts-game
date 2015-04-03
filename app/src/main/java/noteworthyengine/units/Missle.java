@@ -8,6 +8,7 @@ import noteworthyengine.BattleSystem;
 import noteworthyengine.RenderSystem;
 import noteworthyframework.Gamer;
 import structure.Sprite2dDef;
+import utils.BooleanFunc2;
 import utils.VoidFunc;
 import utils.VoidFunc2;
 import utils.VoidFunc3;
@@ -37,10 +38,18 @@ public class Missle extends Mine {
                 battleNode.attackProgress.v = 0;
             }
         };
+
+        final BooleanFunc2<BattleNode, BattleNode> allTargetsEvenSelf = new BooleanFunc2<BattleNode, BattleNode>() {
+            @Override
+            public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
+                return BattleSystem.battleNodeShouldAttackOther(battleNode, battleNode2);
+            }
+        };
+
         this.battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                battleSystem.findEnemiesWithinRange(battleTargets, battleNode, battleNode.attackRange.v);
+                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, allTargetsEvenSelf);
 
                 for (int j = battleTargets.size() - 1; j >= 0; j--) {
                     BattleNode toInflict = battleTargets.get(j).v;
@@ -87,6 +96,7 @@ public class Missle extends Mine {
                     sprite2dDef.width = 2 * rad;
                     sprite2dDef.height = 2 * rad;
                     sprite2dDef.color = renderNode.color.v;
+                    //sprite2dDef.color = Color.argb(128, 255, 255, 255);
                 }
             }
         };

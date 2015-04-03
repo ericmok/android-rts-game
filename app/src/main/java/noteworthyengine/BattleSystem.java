@@ -6,6 +6,8 @@ import java.util.List;
 
 import noteworthyframework.*;
 import structure.RewriteOnlyArray;
+import utils.BooleanFunc2;
+import utils.VoidFunc2;
 
 /**
  * Created by eric on 3/6/15.
@@ -22,7 +24,7 @@ public class BattleSystem extends noteworthyframework.System {
     public BattleNode.Ptr tempBattleNodePtr = new BattleNode.Ptr();
 
     // External system dependency
-    private GridSystem gridSystem;
+    public GridSystem gridSystem;
 
     public BattleSystem(GridSystem gridSystem) {
         this.gridSystem = gridSystem;
@@ -86,7 +88,7 @@ public class BattleSystem extends noteworthyframework.System {
      * @param battleNode
      * @return
      */
-    public double findEnemyWithinRange(BattleNode.Ptr out, BattleNode battleNode, double range) {
+    public double findAttackablesWithinRange(BattleNode.Ptr out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
 
         out.v = null;
         double bestDistance = 10000000;
@@ -108,6 +110,7 @@ public class BattleSystem extends noteworthyframework.System {
             }
 
             if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) { continue; }
+            if (!criteria.apply(battleNode, possibleTarget)) { continue; }
 
             double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
 
@@ -130,7 +133,7 @@ public class BattleSystem extends noteworthyframework.System {
      * @param battleNode
      * @return
      */
-    public double findEnemiesWithinRange(RewriteOnlyArray<BattleNode.Target> out, BattleNode battleNode, double range) {
+    public double findAttackablesWithinRange(RewriteOnlyArray<BattleNode.Target> out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
 
         out.resetWriteIndex();
 
@@ -151,6 +154,7 @@ public class BattleSystem extends noteworthyframework.System {
             }
 
             if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) { continue; }
+            if (!criteria.apply(battleNode, possibleTarget)) { continue; }
 
             double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
 
@@ -178,7 +182,7 @@ public class BattleSystem extends noteworthyframework.System {
      */
     public static boolean battleNodeShouldAttackOther(BattleNode battleNode, BattleNode otherBattleNode) {
         return (battleNode != otherBattleNode) &&
-                (battleNode.gamer.v != otherBattleNode.gamer.v) &&
+                //(battleNode.gamer.v != otherBattleNode.gamer.v) &&
                 (otherBattleNode.hp.v > 0) &&
                 (otherBattleNode.isAttackable.v == 1);
     }
@@ -197,8 +201,9 @@ public class BattleSystem extends noteworthyframework.System {
 //                battleNode.stickyAttack.v == 0) {
 
             // Find closest enemy...may be null
-            findEnemyWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v);
-            battleNode.target.v = tempBattleNodePtr.v;
+            //findAttackablesWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v, DEFAULT_TARGET_CRITERIA);
+            //battleNode.target.v = tempBattleNodePtr.v;
+        battleNode.onAcquireTarget.apply(this, battleNode);
        // }
     }
 
@@ -255,8 +260,9 @@ public class BattleSystem extends noteworthyframework.System {
                     // At attack cast time, ditch the old target for any new targets that
                     // walked into the swing
                     if (battleNode.stickyAttack.v == 0) {
-                        findEnemyWithinRange(tempBattleNodePtr, battleNode, battleNode.attackRange.v);
-                        battleNode.target.v = tempBattleNodePtr.v;
+                        //findAttackablesWithinRange(tempBattleNodePtr, battleNode, battleNode.attackRange.v, DEFAULT_TARGET_CRITERIA);
+                        //battleNode.target.v = tempBattleNodePtr.v;
+                        findAttackablesWithinRange(battleNode.target, battleNode, battleNode.attackRange.v, DEFAULT_TARGET_CRITERIA);
                     }
 
                     if (!battleNodeHasAliveTarget(battleNode)) {
@@ -294,7 +300,7 @@ public class BattleSystem extends noteworthyframework.System {
             // Invariant to whether or not there is a target
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN) {
 
-                acquireNewTarget(battleNode); // Unless we want unit to be idle when in cooldown
+                //acquireNewTarget(battleNode); // Unless we want unit to be idle when in cooldown
 
                 if (battleNode.attackProgress.v >= battleNode.attackCooldown.v) {
                     battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
@@ -321,4 +327,48 @@ public class BattleSystem extends noteworthyframework.System {
         }
     }
 
+
+    public static final BooleanFunc2<BattleNode, BattleNode> DEFAULT_TARGET_CRITERIA =
+        new BooleanFunc2<BattleNode, BattleNode>() {
+        @Override
+        public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
+            return battleNode.gamer.v != battleNode2.gamer.v && battleNodeShouldAttackOther(battleNode, battleNode2);
+        }
+    };
+
+    public static final VoidFunc2<BattleSystem, BattleNode> DEFAULT_ON_ACQUIRE_TARGET =
+        new VoidFunc2<BattleSystem, BattleNode>() {
+
+        @Override
+        public void apply(BattleSystem system, BattleNode node) {
+            system.findAttackablesWithinRange(node.target, node, node.targetAcquisitionRange.v, DEFAULT_TARGET_CRITERIA);
+
+            // Test if node has a target, if it doesn't find a new target
+
+//            if (node.target.v == null) {
+//                system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
+//            }
+//            else {
+//                if (node.target.v.hp.v < 0) {
+//                    system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
+//                }
+//            }
+            //system.findAttackablesWithinRange(sharedTargetsPool, node, node.attackRange.v);
+
+
+//            if (sharedTargetsPool.size() > 0) {
+//                sharedTargetsPool.sort();
+//
+//                int i = 0;
+//                node.target.v = null;
+//                while (node.target.v == null && i < sharedTargetsPool.size()) {
+//                    if (sharedTargetsPool.get(i).v.gamer.v.team != node.gamer.v.team) {
+//                        node.target.v = sharedTargetsPool.get(i).v;
+//                    }
+//
+//                    i += 1;
+//                }
+//            }
+        }
+    };
 }

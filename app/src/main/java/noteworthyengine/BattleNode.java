@@ -3,6 +3,9 @@ package noteworthyengine;
 import java.util.ArrayList;
 
 import noteworthyframework.Coords;
+import structure.RewriteOnlyArray;
+import utils.BooleanFunc2;
+import utils.BooleanFunc3;
 import utils.DoublePtr;
 import noteworthyframework.Gamer;
 import noteworthyframework.GamerPtr;
@@ -11,6 +14,7 @@ import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.JsonSerializable;
 import utils.Vector2;
+import utils.VoidFunc;
 import utils.VoidFunc2;
 import utils.VoidFunc3;
 import utils.VoidFunc4;
@@ -22,6 +26,8 @@ public class BattleNode extends Node {
 
     public static final String _NAME = "battleNode";
     public static final int MAX_POSSIBLE_TARGETS = 30;
+
+    public static final RewriteOnlyArray<Target> sharedTargetsPool = new RewriteOnlyArray<Target>(Target.class, 127);
 
     public static final VoidFunc2<BattleSystem, BattleNode> _DONOTHING2 =
         new VoidFunc2<BattleSystem, BattleNode>() {
@@ -121,6 +127,10 @@ public class BattleNode extends Node {
 
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
+
+    public BooleanFunc2<BattleNode, BattleNode> targetCriteria = BattleSystem.DEFAULT_TARGET_CRITERIA;
+
+    public VoidFunc2<BattleSystem, BattleNode> onAcquireTarget = BattleSystem.DEFAULT_ON_ACQUIRE_TARGET;
 
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = ON_ATTACK_CAST;

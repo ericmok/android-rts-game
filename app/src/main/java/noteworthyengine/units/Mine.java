@@ -1,7 +1,5 @@
 package noteworthyengine.units;
 
-import android.graphics.Color;
-
 import art.Animations;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
@@ -16,7 +14,6 @@ import structure.RewriteOnlyArray;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
-import utils.VoidFunc2;
 import utils.VoidFunc3;
 
 /**
@@ -65,7 +62,7 @@ public class Mine extends Unit {
         battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                battleSystem.findEnemiesWithinRange(battleTargets, battleNode, battleNode.attackRange.v);
+                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
 
                 for (int j = battleTargets.size() - 1; j >= 0; j--) {
                     BattleNode toInflict = battleTargets.get(j).v;
