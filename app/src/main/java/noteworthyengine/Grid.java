@@ -174,6 +174,37 @@ public class Grid {
         return (int)Math.ceil(range / cellSize);
     }
 
+    public List<GridNode> findClosestShell(int gridX, int gridY) {
+        ret.clear();
+
+        int queryX = gridX;
+        int queryY = gridY;
+
+        // Get a shell around the query point, increase range
+        int range = 0;
+        List<GridNode> test = getShell(queryX, queryY, range);
+
+        if (test.size() != 0) {
+            return test;
+        }
+
+        range += 1;
+
+        // Sloppy bounds check...
+        while (range < Math.min(width - 1, height - 1) && test.size() == 0) {
+
+            test = getShell(queryX, queryY, range);
+
+            if (test.size() != 0) {
+                return test;
+            }
+
+            range += 1;
+        }
+
+        return null;
+    }
+
     public void clear() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {

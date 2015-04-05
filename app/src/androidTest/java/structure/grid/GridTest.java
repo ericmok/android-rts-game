@@ -144,5 +144,17 @@ public class GridTest extends ApplicationTestCase<Application> {
 
         shell = grid.getShell(51, 51, 1);
         assertEquals(2, shell.size());
+
+        List<GridNode> closestShell = grid.findClosestShell(50, 50);
+        assertEquals(1, closestShell.size());
+
+        closestShell = grid.findClosestShell(51, 51);
+        assertEquals(2, closestShell.size());
+
+        closestShell = grid.findClosestShell(50, 49);
+        assertEquals(2, closestShell.size());
+
+        closestShell = grid.findClosestShell(49, 49);
+        assertEquals(1, closestShell.size());
     }
 }
