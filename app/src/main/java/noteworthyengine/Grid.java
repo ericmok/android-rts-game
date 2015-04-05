@@ -35,11 +35,13 @@ public class Grid {
     }
 
     public int getBucketX(double x) {
-        return Math.max(Math.min((int) Math.floor(x / cellSize) + (width / 2), width), 0);
+        int cell = (int) Math.round(x / cellSize);
+        int bias = (width / 2);
+        return Math.max(Math.min(cell + bias, width - 1), 0);
     }
 
     public int getBucketY(double y) {
-        return Math.max(Math.min((int) Math.floor(y / cellSize) + (height / 2), height), 0);
+        return Math.max(Math.min((int) Math.round(y / cellSize) + (height / 2), height - 1), 0);
     }
 
     public void index(GridNode node) {
@@ -60,10 +62,13 @@ public class Grid {
 
     public List<GridNode> getSurroundingNodes(int gridX, int gridY, double range) {
         ret.clear();
-        int lx = gridX - (int)Math.ceil(range / cellSize);
-        int ly = gridY - (int)Math.ceil(range / cellSize);
-        int lxMax = gridX + (int)Math.ceil(range / cellSize);
-        int lyMax = gridY + (int)Math.ceil(range / cellSize);
+
+        int discreteRange = (int)Math.ceil(range / cellSize);
+
+        int lx = Math.max(gridX - discreteRange, 0);
+        int ly = Math.max(gridY - discreteRange, 0);
+        int lxMax = Math.min(gridX + discreteRange, width - 1);
+        int lyMax = Math.min(gridY + discreteRange, height - 1);
 
         for (int i = lx; i <= lxMax; i++) {
             for (int j = ly; j <= lyMax; j++) {
