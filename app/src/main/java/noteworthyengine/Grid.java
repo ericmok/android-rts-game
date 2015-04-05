@@ -128,6 +128,10 @@ public class Grid {
     public List<GridNode> getShell(int gridX, int gridY, int cellRange) {
         ret.clear();
 
+        // Untested bounds check
+        gridX = Math.max(Math.min(gridX, width - 1), 0);
+        gridY = Math.max(Math.min(gridY, height - 1), 0);
+
         // Boundary condition, at 0 range, there is no shell
         if (cellRange == 0) {
             List<GridNode> nodesToRet = points[gridX][gridY];
