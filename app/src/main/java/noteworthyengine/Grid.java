@@ -103,6 +103,65 @@ public class Grid {
         return ret;
     }
 
+    /**
+     * Returns a list of units of the outer cells of the rectangular spatial query.
+     * An iterative search of increasing cellRanges from 0 to cellRange allows
+     * for a performant strategy.
+     *
+     * <pre>
+     * 0 0 0 0 0
+     * 0 0 0 1 0
+     * 0 0 2 0 0
+     * 0 1 0 0 0
+     * 1 0 0 0 0
+     * </pre>
+     *
+     * shell(x: 0, y: 0, cellRange: 0) => 2
+     * shell(x: 0, y: 0, cellRange: 1) => 2
+     * shell(x: 0, y: 0, cellRange: 2) => 1
+     *
+     * @param gridX
+     * @param gridY
+     * @param cellRange
+     * @return
+     */
+    public List<GridNode> getShell(int gridX, int gridY, int cellRange) {
+        ret.clear();
+
+        // Boundary condition, at 0 range, there is no shell
+        if (cellRange == 0) {
+            List<GridNode> nodesToRet = points[gridX][gridY];
+            for (int k = nodesToRet.size() - 1; k >= 0; k--) {
+                ret.add(nodesToRet.get(k));
+            }
+
+            return ret;
+        }
+
+        int lowX = gridX - cellRange;
+        int lowY = gridY - cellRange;
+        int highX = gridX + cellRange;
+        int highY = gridY + cellRange;
+
+        for (int i = lowX; i <= highX; i++) {
+            for (int j = lowY; j <= highY; j++) {
+
+                if (i > lowX && i < highX && j > lowY && j < highY) {
+                    continue;
+                }
+                else {
+                    List<GridNode> nodesToRet = points[i][j];
+                    for (int k = nodesToRet.size() - 1; k >= 0; k--) {
+                        ret.add(points[i][j].get(k));
+                    }
+                }
+
+            }
+        }
+
+        return ret;
+    }
+
     public void clear() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {

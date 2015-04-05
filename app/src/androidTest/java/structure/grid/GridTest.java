@@ -98,15 +98,51 @@ public class GridTest extends ApplicationTestCase<Application> {
         assertTrue(grid.getSurroundingNodes(53, 53, 8).size() == 1);
 
         grid.clear();
+        // Cell (-1, -1)
         gridUnit.gridNode.coords.pos.x = -5;
         gridUnit.gridNode.coords.pos.y = -5;
         grid.index(gridUnit.gridNode);
         assertTrue(grid.getBucketForCell(49, 49).size() == 1);
 
-        grid.clear();
+        // Cell (-2, -2)
         gridUnit.gridNode.coords.pos.x = -7;
         gridUnit.gridNode.coords.pos.y = -7;
         grid.index(gridUnit.gridNode);
         assertTrue(grid.getBucketForCell(48, 48).size() == 1);
+
+        // Cell (2, 2)
+        gridUnit.gridNode.coords.pos.x = 7;
+        gridUnit.gridNode.coords.pos.y = 7;
+        grid.index(gridUnit.gridNode);
+        assertTrue(grid.getBucketForCell(52, 52).size() == 1);
+
+        // Cell (0, 0)
+        gridUnit.gridNode.coords.pos.x = -1.5;
+        gridUnit.gridNode.coords.pos.y = -1.5;
+        grid.index(gridUnit.gridNode);
+        assertTrue(grid.getBucketForCell(50, 50).size() == 1);
+
+        /*
+          * 0 0 0 0 1
+          * 0 0 0 0 0
+          * 0 0 1 0 0
+          * 0 1 0 0 0
+          * 1 0 0 0 0
+         */
+
+        List<GridNode> shell = grid.getShell(50, 50, 0);
+        assertEquals(1, shell.size());
+
+        shell = grid.getShell(50, 50, 1);
+        assertEquals(1, shell.size());
+
+        shell = grid.getShell(50, 50, 2);
+        assertEquals(2, shell.size());
+
+        shell = grid.getShell(51, 51, 0);
+        assertEquals(0, shell.size());
+
+        shell = grid.getShell(51, 51, 1);
+        assertEquals(2, shell.size());
     }
 }
