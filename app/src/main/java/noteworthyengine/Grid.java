@@ -79,11 +79,6 @@ public class Grid {
                 }
             }
         }
-//        for (int i = Math.max(lx, 0); i < Math.min(lx + 1, width); i++) {
-//            for (int j = Math.max(ly, 0); j < Math.min(ly + 1, height); j++) {
-//                ret.addAll(points[i][j]);
-//            }
-//        }
 
         return ret;
     }
@@ -104,11 +99,6 @@ public class Grid {
                 }
             }
         }
-//        for (int i = Math.max(lx, 0); i < Math.min(lx + 1, width); i++) {
-//            for (int j = Math.max(ly, 0); j < Math.min(ly + 1, height); j++) {
-//                ret.addAll(points[i][j]);
-//            }
-//        }
 
         return ret;
     }
