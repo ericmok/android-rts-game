@@ -202,7 +202,7 @@ public class Grid {
             range += 1;
         }
 
-        return null;
+        return ret;
     }
 
     public void clear() {
