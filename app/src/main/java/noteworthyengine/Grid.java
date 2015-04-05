@@ -170,6 +170,10 @@ public class Grid {
         return ret;
     }
 
+    public int numberCellsForRange(double range) {
+        return (int)Math.ceil(range / cellSize);
+    }
+
     public void clear() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
