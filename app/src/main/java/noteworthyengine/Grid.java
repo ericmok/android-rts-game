@@ -103,6 +103,10 @@ public class Grid {
         return ret;
     }
 
+    public List<GridNode> getShell(GridNode gridNode, int cellRange) {
+        return getShell(gridNode.gridX.v, gridNode.gridY.v, cellRange);
+    }
+
     /**
      * Returns a list of units of the outer cells of the rectangular spatial query.
      * An iterative search of increasing cellRanges from 0 to cellRange allows
