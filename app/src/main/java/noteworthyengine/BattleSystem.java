@@ -94,35 +94,54 @@ public class BattleSystem extends noteworthyframework.System {
         double bestDistance = 10000000;
 
         Grid grid = gridSystem.grid;
-        List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v, range);
 
-        for (int i = gridNodes.size() - 1; i >= 0; i--) {
+        int query = 0;
 
-            //BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
-            BattleNode possibleTarget = (BattleNode)gridNodes.get(i)._battleNode;
+        while (query <= grid.numberCellsForRange(range)) {
 
-            // Not all gridNodes belong to units that have battleNodes...
-            if (possibleTarget == null) { continue; }
+            List<GridNode> gridNodes = grid.getShell(battleNode.gridX.v, battleNode.gridY.v, query);
 
-            // Narrow phase
-            if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
-                continue;
-            }
+            for (int i = gridNodes.size() - 1; i >= 0; i--) {
 
-            if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) { continue; }
-            if (!criteria.apply(battleNode, possibleTarget)) { continue; }
+                //BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
+                BattleNode possibleTarget = (BattleNode) gridNodes.get(i)._battleNode;
 
-            double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
+                // Not all gridNodes belong to units that have battleNodes...
+                if (possibleTarget == null) {
+                    continue;
+                }
 
-            if (distance < range) {
+                // Narrow phase
+                if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
+                    continue;
+                }
 
-                // TODO: Check if it is in "front" (not in back)
+                if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) {
+                    continue;
+                }
+                if (!criteria.apply(battleNode, possibleTarget)) {
+                    continue;
+                }
 
-                if (distance < bestDistance) {
-                    out.v = possibleTarget;
-                    bestDistance = distance;
+                double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
+
+                if (distance < range) {
+
+                    // TODO: Check if it is in "front" (not in back)
+
+                    if (distance < bestDistance) {
+                        out.v = possibleTarget;
+                        bestDistance = distance;
+                    }
                 }
             }
+
+            // We found a target that meets all criteria, so skip further search
+            if (out.v != null) {
+                return bestDistance;
+            }
+
+            query += 1;
         }
 
         return bestDistance;
@@ -140,35 +159,50 @@ public class BattleSystem extends noteworthyframework.System {
         double bestDistance = 10000000;
 
         Grid grid = gridSystem.grid;
-        List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v , range);
+        //List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v , range);
 
-        for (int i = gridNodes.size() - 1; i >= 0; i--) {
-            BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
+        int query = 0;
 
-            // Not all gridNodes belong to units that have battleNodes...
-            if (possibleTarget == null) { continue; }
+        while (query <= grid.numberCellsForRange(range)) {
 
-            // Narrow phase
-            if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
-                continue;
-            }
+            List<GridNode> gridNodes = grid.getShell(battleNode.gridX.v, battleNode.gridY.v, query);
 
-            if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) { continue; }
-            if (!criteria.apply(battleNode, possibleTarget)) { continue; }
+            for (int i = gridNodes.size() - 1; i >= 0; i--) {
+                BattleNode possibleTarget = (BattleNode) gridNodes.get(i).unit.node(BattleNode._NAME);
 
-            double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
+                // Not all gridNodes belong to units that have battleNodes...
+                if (possibleTarget == null) {
+                    continue;
+                }
 
-            if (distance < range) {
+                // Narrow phase
+                if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
+                    continue;
+                }
 
-                // TODO: Check if it is in "front" (not in back)
+                if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) {
+                    continue;
+                }
+                if (!criteria.apply(battleNode, possibleTarget)) {
+                    continue;
+                }
 
-                // Ugly overflow check
-                if (out.size() < out.capacity() - 1) {
-                    BattleNode.Target nodeToAdd = out.takeNextWritable();
-                    nodeToAdd.v = possibleTarget;
-                    nodeToAdd.distance = distance;
+                double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
+
+                if (distance < range) {
+
+                    // TODO: Check if it is in "front" (not in back)
+
+                    // Ugly overflow check
+                    if (out.size() < out.capacity() - 1) {
+                        BattleNode.Target nodeToAdd = out.takeNextWritable();
+                        nodeToAdd.v = possibleTarget;
+                        nodeToAdd.distance = distance;
+                    }
                 }
             }
+
+            query += 1;
         }
 
         return bestDistance;

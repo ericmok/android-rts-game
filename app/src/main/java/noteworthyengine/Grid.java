@@ -3,6 +3,8 @@ package noteworthyengine;
 import java.util.ArrayList;
 import java.util.List;
 
+import utils.BooleanFunc;
+import utils.BooleanFunc2;
 import utils.Vector2;
 
 /**
@@ -154,6 +156,11 @@ public class Grid {
         for (int i = lowX; i <= highX; i++) {
             for (int j = lowY; j <= highY; j++) {
 
+                // Bounds of shell
+                if (i < 0 || i > width - 1 || j < 0 || j > height - 1) {
+                    continue;
+                }
+
                 if (i > lowX && i < highX && j > lowY && j < highY) {
                     continue;
                 }
@@ -170,10 +177,44 @@ public class Grid {
         return ret;
     }
 
+
+    // TODO: test
+    public List<GridNode> iterativeShellSearch(int gridX, int gridY, int cellRange, BooleanFunc<GridNode> filter) {
+        ret.clear();
+
+        int queryRange = 0;
+
+        while(queryRange <= cellRange) {
+
+            List<GridNode> query = getShell(gridX, gridY, queryRange);
+            for (int i = query.size() - 1; i >= 0; i--) {
+
+                GridNode nodeToTest = query.get(i);
+
+                if (filter.apply(nodeToTest)) {
+                    ret.add(nodeToTest);
+                }
+            }
+
+            queryRange += 1;
+        }
+
+        return ret;
+    }
+
+
     public int numberCellsForRange(double range) {
         return (int)Math.ceil(range / cellSize);
     }
 
+
+    /**
+     * Returns the closest shell that is occupied by any gridNode
+     * Kind of useless..
+     * @param gridX
+     * @param gridY
+     * @return
+     */
     public List<GridNode> findClosestShell(int gridX, int gridY) {
         ret.clear();
 
@@ -191,7 +232,7 @@ public class Grid {
         range += 1;
 
         // Sloppy bounds check...
-        while (range < Math.min(width - 1, height - 1) && test.size() == 0) {
+        while (range <= Math.max(width - 1, height - 1) && test.size() == 0) {
 
             test = getShell(queryX, queryY, range);
 

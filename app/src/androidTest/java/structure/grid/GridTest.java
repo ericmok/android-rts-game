@@ -3,6 +3,7 @@ package structure.grid;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import noteworthyengine.Grid;
@@ -156,5 +157,22 @@ public class GridTest extends ApplicationTestCase<Application> {
 
         closestShell = grid.findClosestShell(49, 49);
         assertEquals(1, closestShell.size());
+
+        grid = new Grid(4, 4, 1);
+        gridUnit.gridNode.coords.pos.set(0, 0);
+        grid.index(gridUnit.gridNode);
+        assertEquals(1, grid.getShell(2, 2, 0).size());
+
+        gridUnit.gridNode.coords.pos.set(10, 10);
+        grid.index(gridUnit.gridNode);
+        assertEquals(1, grid.getShell(2, 2, 0).size());
+
+        int queryRange = 0;
+        List<GridNode> outOfBoundsTest = new ArrayList<GridNode>();
+        while (queryRange < 10) {
+            outOfBoundsTest.addAll(grid.getShell(2, 2, queryRange));
+            queryRange += 1;
+        }
+        assertEquals(2, outOfBoundsTest.size());
     }
 }
