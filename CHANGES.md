@@ -1,5 +1,10 @@
 ## Notes
 
+### Version 0.2.4
+- More optimal grid stuff
+- Faster battleSystem
+- Add city
+
 ### Version 0.2.3
 - Add massive performance improvements by adverting the use of HashMap.get
 - Rudimentary camera system added
