@@ -31,7 +31,7 @@ public class Archer extends Platoon {
         //this.battleNode.attackRange.v = 5.5;
         this.battleNode.attackDamage.v = 2;
         this.battleNode.attackRange.v = 2;
-        this.battleNode.targetAcquisitionRange.v = 7;
+        this.battleNode.targetAcquisitionRange.v = 17;
         this.battleNode.attackSwingTime.v = 2;
         this.battleNode.attackCooldown.v = 2;
 

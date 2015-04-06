@@ -24,11 +24,11 @@ public class Cannon extends Platoon {
 
         this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 5;
-        this.battleNode.attackSwingTime.v = 10;
+        this.battleNode.attackSwingTime.v = 8;
         this.battleNode.attackCooldown.v = 10;
         this.battleNode.attackDamage.v = 0;
-        this.battleNode.attackRange.v = 7.5;
-        this.battleNode.targetAcquisitionRange.v = 8.5;
+        this.battleNode.attackRange.v = 7.8;
+        this.battleNode.targetAcquisitionRange.v = 18.5;
         this.battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {

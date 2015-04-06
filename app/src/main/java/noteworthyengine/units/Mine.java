@@ -39,16 +39,16 @@ public class Mine extends Unit {
 
         gridNode = new GridNode(this, separationNode, battleNode);
 
-        movementNode.maxSpeed.v = 1.3;
+        movementNode.maxSpeed.v = 0;
 
         battleNode.stickyAttack.v = 0;
         battleNode.fractionToWalkIntoAttackRange.v = 0.3;
         battleNode.targetAcquisitionRange.v = 8;
         battleNode.attackRange.v = 2.5;
-        battleNode.attackDamage.v = 50;
+        battleNode.attackDamage.v = 90;
         battleNode.attackSwingTime.v = 4.5;
         battleNode.attackCooldown.v = 3;
-        battleNode.hp.v = 9;
+        battleNode.hp.v = 50;
         battleNode.isAttackable.v = 1;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
         battleNode.gamer.v = gamer;

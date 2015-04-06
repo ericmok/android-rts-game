@@ -72,7 +72,8 @@ public class DataLoader implements EngineDataLoader {
                         troopy = new Archer(player);
                     }
                     if (player.name.equals("enemy")) {
-                        troopy = new Mine(player);
+                        //troopy = new Mine(player);
+                        troopy = UnitPool.troopyMemoryPool.fetchMemory();
                     }
                     else {
                         troopy = UnitPool.troopyMemoryPool.fetchMemory();

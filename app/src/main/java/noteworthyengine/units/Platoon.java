@@ -53,7 +53,7 @@ public class Platoon extends Unit {
         battleNode.hp.v = 50;
         battleNode.attackRange.v = 5;
         battleNode.attackDamage.v = 1;
-        battleNode.targetAcquisitionRange.v = 6.5;
+        battleNode.targetAcquisitionRange.v = 16.5;
         battleNode.onTargetAcquired = onTargetAcquired;
         battleNode.onAttackReady = onAttackReady;
         battleNode.onAttackSwing = onAttackSwing;

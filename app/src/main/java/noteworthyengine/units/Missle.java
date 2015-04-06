@@ -21,7 +21,7 @@ public class Missle extends Mine {
     public Missle(Gamer gamer) {
         super(gamer);
 
-        this.movementNode.maxSpeed.v = 1;
+        this.movementNode.maxSpeed.v = 0.7;
 
         this.battleNode.isAttackable.v = 0;
         this.battleNode.attackDamage.v = 50;
@@ -67,8 +67,8 @@ public class Missle extends Mine {
         };
 
         this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
-        this.renderNode.width.v = 1.1f;
-        this.renderNode.height.v = 1.1f;
+        this.renderNode.width.v = 1.2f;
+        this.renderNode.height.v = 1.2f;
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
@@ -76,9 +76,9 @@ public class Missle extends Mine {
                 Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                 sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
                         (float)renderNode.coords.pos.x, (float)renderNode.coords.pos.y, 0,
-                        1.3f, 1.3f,
+                        1.4f, 1.4f,
                         90f,
-                        Color.argb(60, 255, 255, 255),
+                        Color.argb(70, 255, 255, 255),
                         0);
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {

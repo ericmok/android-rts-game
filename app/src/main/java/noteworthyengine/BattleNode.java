@@ -123,7 +123,7 @@ public class BattleNode extends Node {
 
     /// The fudge factor for node to walk within attack range to deal with
     /// various race conditions (attack swing time, round-off error)
-    public DoublePtr fractionToWalkIntoAttackRange = new DoublePtr() {{ v = 0.8; }};
+    public DoublePtr fractionToWalkIntoAttackRange = new DoublePtr() {{ v = 0.9; }};
 
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
