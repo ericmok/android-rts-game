@@ -67,7 +67,7 @@ public class MovementSystem extends noteworthyframework.System {
 
             temp2.copy(desiredVelocity);
 
-            //desiredVelocity.translate(formationForce.x, formationForce.y);
+            desiredVelocity.translate(formationForce.x, formationForce.y);
             desiredVelocity.translate(separationForce.x, separationForce.y);
 
             Vector2.subtract(movementNode.acceleration, desiredVelocity, movementNode.velocity);

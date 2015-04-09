@@ -25,7 +25,7 @@ public class NoteworthyEngine extends BaseEngine {
     public TimelineSystem timelineSystem;
     public SeparationSystem separationSystem;
     public FieldSystem fieldSystem;
-    //public FormationSystem formationSystem;
+    public FormationSystem formationSystem;
     public MovementSystem movementSystem;
     public BattleSystem battleSystem;
     public RenderSystem renderSystem;
@@ -47,7 +47,7 @@ public class NoteworthyEngine extends BaseEngine {
         timelineSystem = new TimelineSystem();
         separationSystem = new SeparationSystem(gridSystem);
         fieldSystem = new FieldSystem();
-        //formationSystem = new FormationSystem();
+        formationSystem = new FormationSystem(gridSystem);
         movementSystem = new MovementSystem();
         battleSystem = new BattleSystem(gridSystem);
         renderSystem = new RenderSystem(new DrawCompat(game));
@@ -59,7 +59,7 @@ public class NoteworthyEngine extends BaseEngine {
         this.addSystem(timelineSystem);
         this.addSystem(fieldSystem);
         this.addSystem(separationSystem);
-        //this.addSystem(formationSystem);
+        this.addSystem(formationSystem);
         this.addSystem(movementSystem);
         this.addSystem(battleSystem);
         this.addSystem(renderSystem);

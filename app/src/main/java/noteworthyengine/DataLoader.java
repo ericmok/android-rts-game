@@ -8,6 +8,7 @@ import noteworthyengine.units.Mech;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.City;
 import noteworthyengine.units.Mine;
+import noteworthyengine.units.PlatoonLeader;
 import noteworthyengine.units.TimelineCommand;
 import noteworthyframework.Coords;
 import noteworthyframework.BaseEngine;
@@ -66,7 +67,15 @@ public class DataLoader implements EngineDataLoader {
 
                 baseEngine.addUnit(troopy);
 
-                for (int k = 0; k < 3; k++) {
+                if (i < 2) {
+                    PlatoonLeader platoonLeader = new PlatoonLeader();
+                    platoonLeader.formationLeader.gamer.v = player;
+                    platoonLeader.formationLeader.coords.pos.copy(coords.pos);
+                    baseEngine.addUnit(platoonLeader);
+                }
+
+
+                for (int k = 0; k < 0; k++) {
                     //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
                     if (player.name.equals("evilempire")) {
                         troopy = new Mech(player);
