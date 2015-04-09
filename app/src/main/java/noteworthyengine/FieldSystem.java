@@ -160,6 +160,8 @@ public class FieldSystem extends noteworthyframework.System {
                 //fieldForce.scale(0.3, 0.3);
                 fieldForce.zero();
 
+                if (arrows == null) { continue; }
+
                 for (int j = 0; j < arrows.size(); j++) {
                     // Field controls add to the forces per troop
 
