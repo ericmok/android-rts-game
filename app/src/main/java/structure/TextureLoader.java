@@ -71,16 +71,16 @@ public class TextureLoader {
 			//int winningFrameGLHandle = textureFrames.get(0).glTexture;
 			
 			TextureFrame maxFrame = textureFrames.get(0);
-			
-			for (int frameIndex = 0; frameIndex < textureFrames.size(); frameIndex++) {
-				
-				TextureFrame currentFrame = textureFrames.get(frameIndex); 
-				
+
+			for (int frameIndex = 1; frameIndex < textureFrames.size(); frameIndex++) {
+
+				TextureFrame currentFrame = textureFrames.get(frameIndex);
+
 				if ((currentFrame.frameNumber > maxFrame.frameNumber) && (currentFrame.frameNumber <= limit)) {
 					maxFrame = currentFrame;
 				}
 			}
-			
+
 			return maxFrame;
 		}
 	}
@@ -231,7 +231,7 @@ public class TextureLoader {
 			// animations > type > (loop through states) > 1,2,3
 			for (int i = 0; i < animationStates.length; i++) {
 
-				Log.i("rotationConfig1", "rotationConfig1: " + rotated);
+				//Log.i("rotationConfig1", "rotationConfig1: " + rotated);
 				
 				TextureAnimation animation = new TextureAnimation();
 				animation.name = animationStates[i];
@@ -240,7 +240,7 @@ public class TextureLoader {
 				animations.put(texturePackName + "/" + animationStates[i], animation);
 				
 				Log.i("LOADTEXTUREFROMASSETS", "animations key: " + texturePackName + "/" + animationStates[i]);
-				Log.i("LOADTEXTUREFROMASSETS", "textureAnimationName: " + animation.name);
+				//Log.i("LOADTEXTUREFROMASSETS", "textureAnimationName: " + animation.name);
 				
 				// animations > type > states > (1,2,3)
 				String[] bitmapFrameNames = m.context.getAssets().list(texturePackName + "/" + animationStates[i]);				
@@ -251,14 +251,14 @@ public class TextureLoader {
 					String bitmapFileLocation = texturePackName + "/" + animationStates[i] + "/" + bitmapFrameNames[f];					
 					
 					Bitmap bitmap = BitmapFactory.decodeStream(m.context.getAssets().open(bitmapFileLocation));
-					Log.i("generate from rotationConfig", "generate from rotationConfig: " + rotated);
+					//Log.i("generate from rotationConfig", "generate from rotationConfig: " + rotated);
 					int glHandle = this.generateGLTextureFromBitmap(bitmap, rotated);
 					
 					int frameNumber = Integer.parseInt( bitmapFrameNames[f].substring(0, bitmapFrameNames[f].lastIndexOf('.')) ); 
 					animation.addFrame(frameNumber, glHandle);
-									
-					Log.i("LOADTEXTUREFROMASSETS", "frameNumber: " + frameNumber);
-					Log.i("LOADTEXTUREFROMASSETS", "animation.textureFrames length: " + animation.name + ", " + animation.textureFrames.size());
+
+					//Log.i("LOADTEXTUREFROMASSETS", "frameNumber: " + frameNumber);
+					//Log.i("LOADTEXTUREFROMASSETS", "animation.textureFrames length: " + animation.name + ", " + animation.textureFrames.size());
 				}
 				
 				Collections.sort(animation.textureFrames, new Comparator<TextureFrame>() {

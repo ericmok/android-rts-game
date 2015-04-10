@@ -1,12 +1,15 @@
 package noteworthyframework;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
+
+import utils.JsonSerializable;
 
 /**
  * Created by eric on 3/6/15.
  */
-public class Unit {
+public class Unit implements JsonSerializable {
     public Hashtable<String, Object> fields = new Hashtable<String, Object>(64);
 
     private Hashtable<String, Node> nodes = new Hashtable<String, Node>(32);
@@ -45,4 +48,33 @@ public class Unit {
     //public ArrayList<Integer> labels() {
     //    return labels;
     //}
+
+    public String json() {
+        StringBuilder sb = new StringBuilder();
+
+        Enumeration<String> keys = this.fields.keys();
+
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+
+            // Skip event handlers
+            if (key.startsWith("on")) {
+                continue;
+            }
+
+            sb.append(key + ":");
+            Object field = this.fields.get(key);
+
+            sb.append(((JsonSerializable)field).json());
+
+            if (keys.hasMoreElements()) {
+                sb.append(",\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public void step(BaseEngine engine, double dt) {
+    }
 }

@@ -1,6 +1,6 @@
 package utils;
 
-public class Vector2 {
+public class Vector2 implements JsonSerializable {
 
     public static final Vector2 RIGHT = new Vector2(1, 0);
     public static final Vector2 UP = new Vector2(0, 1);
@@ -131,5 +131,9 @@ public class Vector2 {
 
     public String toString() {
         return "(" + String.format("%.3f", x) + "," + String.format("%.3f", y) + ")";
+    }
+
+    public String json() {
+        return "[" + x + "," + y + "]";
     }
 }

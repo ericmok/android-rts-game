@@ -1,6 +1,6 @@
 package noteworthyengine;
 
-import noteworthyframework.DoublePtr;
+import utils.DoublePtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 

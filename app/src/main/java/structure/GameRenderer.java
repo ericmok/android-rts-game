@@ -1,6 +1,7 @@
 package structure;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -31,7 +32,8 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
     private float[] tempMatrix;
 	//private float[] cameraMatrix;
-	private float[] projectionMatrix;
+
+	//private float[] projectionMatrix;
 
 	public Object drawingMutex = new Object();
 
@@ -42,13 +44,21 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
     private float aspectRatio = INTIAL_ASPECT_RATIO_VALUE;
 
-    private float leftBounds = -INTIAL_ASPECT_RATIO_VALUE;
-    private float rightBounds = INTIAL_ASPECT_RATIO_VALUE;
-    private float bottomBounds = -1;
-    private float topBounds = 1;
-    private float near = 1;
-    private float far = 1000;
-    private float scale = 1.0f;
+//    private float leftBounds = -INTIAL_ASPECT_RATIO_VALUE;
+//    private float rightBounds = INTIAL_ASPECT_RATIO_VALUE;
+//    private float bottomBounds = -1;
+//    private float topBounds = 1;
+//    private float near = 1;
+//    private float far = 1000;
+//    private float scale = 1.0f;
+
+    public GameCamera mainCamera = new GameCamera();
+    public GameCamera auxCamera = new GameCamera();
+
+    private ArrayList<GameCamera> cameras = new ArrayList<GameCamera>(2) {{
+        this.add(mainCamera);
+        this.add(auxCamera);
+    }};
 
 	public GameRenderer(Context parentActivity, Game game) {
 		this.context = parentActivity;
@@ -56,8 +66,21 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
         tempMatrix = new float[16];
 		//cameraMatrix = new float[16];
-		projectionMatrix = new float[16];
+		//projectionMatrix = new float[16];
 	}
+
+
+    public void addCamera(GameCamera camera) {
+        this.cameras.add(camera);
+    }
+
+    public void removeCamera(GameCamera camera) {
+        this.cameras.remove(camera);
+    }
+
+    public ArrayList<GameCamera> getCameras() {
+        return cameras;
+    }
 
 	public Graphics getGraphics() {
 		return game.graphics;
@@ -91,42 +114,12 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
         game.gameCamera.aspectRatio = aspectRatio;
         game.gameInput.setScreenDimensions(width, height);
 
-        /*
-         * Landscape and portrait mode will change how big a unit length looks on the screen.
-         * The game is tailored for landscape. The dimensions will wind up being the reciprocal
-         * of the aspect ratio larger in portrait mode. Have to rescale to normalization.
-         *
-         * Landscape:
-         * Left and right bounds: [-asp, +asp]
-         * Bottom and top bounds: [-1, +1]
-         *
-         * Portrait:
-         * Left and right bounds: [-1, +1]
-         * Bottom and top bounds: [-asp, +asp]
-         */
-        if (aspectRatio > 1.0f) {
 
-            // Landscape
-            leftBounds = aspectRatio * -1.0f * scale;
-            rightBounds = aspectRatio * 1.0f * scale;
+        //Matrix.orthoM(projectionMatrix, 0, leftBounds, rightBounds, bottomBounds, topBounds, near, far);
 
-            bottomBounds = -1.0f * scale;
-            topBounds = 1.0f * scale;
+        for (int i = cameras.size() - 1; i >= 0; i--) {
+            cameras.get(i).configure(width, height);
         }
-        else {
-
-            // Portrait
-            bottomBounds = aspectRatio * -1.0f * scale;
-            topBounds = aspectRatio * 1.0f * scale;
-
-            leftBounds = -1.0f * scale;
-            rightBounds = 1.0f * scale;
-        }
-
-        near = 1.0f;
-        far = 1000.0f;
-
-        Matrix.orthoM(projectionMatrix, 0, leftBounds, rightBounds, bottomBounds, topBounds, near, far);
 
 		// Set up cameraMatrix
 		//Matrix.setIdentityM(cameraMatrix, 0);
@@ -136,16 +129,16 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
         //Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
 	}
 
-    public float getAspectRatio() {
-        return aspectRatio;
-    }
-    public float getLeftBounds() { return leftBounds; }
-    public float rightBounds() { return rightBounds; }
-    public float getBottomBounds() { return bottomBounds; }
-    public float getTopBounds() { return topBounds; }
-    public float getNear() { return near; }
-    public float getFar() { return far; }
-    public float getScale() { return scale; }
+//    public float getAspectRatio() {
+//        return aspectRatio;
+//    }
+//    public float getLeftBounds() { return leftBounds; }
+//    public float rightBounds() { return rightBounds; }
+//    public float getBottomBounds() { return bottomBounds; }
+//    public float getTopBounds() { return topBounds; }
+//    public float getNear() { return near; }
+//    public float getFar() { return far; }
+//    public float getScale() { return scale; }
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -169,12 +162,13 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		synchronized(drawingMutex) {
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-            float[] cameraMatrix = game.graphics.getCameraMatrix();
+            //float[] cameraMatrix = game.graphics.getCameraMatrix();
 
             // Temporarily rename a matrix
-            float[] mvpMatrix = tempMatrix;
+            //float[] mvpMatrix = tempMatrix;
 
-            Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
+            //Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
+            //Matrix.multiplyMM(mvpMatrix, 0, game.gameCamera.projectionMatrix, 0, cameraMatrix, 0);
 
 			game.graphics.getSimpleSpriteBatch().beginDrawing();
 
@@ -203,7 +197,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
                     temp = sprite.gfxInterpolation;
                     sprite.oldPosition.copy(sprite.gfxInterpolation);
                 }
-				game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
+				game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(sprite.cameraIndex).viewProjectionMatrix,
 															(float)temp.x, (float)temp.y,
                                                             0,
 															sprite.angle,
@@ -236,7 +230,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
                 }
 
 				tempSprite.progress.update(tickDifference);
-				game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
+				game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(tempSprite.cameraIndex).viewProjectionMatrix,
 															(float)tempSprite.position.x, (float)tempSprite.position.y,
                                                             0,
 															tempSprite.angle,
@@ -255,7 +249,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 				for (int i = 0; i < textDrawItem.stringBuilder.length(); i++) {
 					Character characterToDraw = textDrawItem.stringBuilder.charAt(i);
 					TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
-					game.graphics.getSimpleSpriteBatch().draw2d(mvpMatrix,
+					game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(0).viewProjectionMatrix,
 							(float) (accumulator + textDrawItem.position.x), (float)textDrawItem.position.y,
                             0,
 							(float)textDrawItem.angle,

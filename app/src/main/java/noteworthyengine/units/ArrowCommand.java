@@ -1,7 +1,11 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
 import android.graphics.Color;
 
+import noteworthyengine.DecayNode;
+import noteworthyengine.FieldNode;
+import noteworthyengine.RenderNode;
+import noteworthyengine.RenderSystem;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
@@ -33,7 +37,7 @@ public class ArrowCommand extends Unit {
         decayNode.timeToLive.v = 10;
 
         renderNode = new RenderNode(this);
-        renderNode.animationName = ANIMATION_FIELD_ARROW_EXISTING;
+        renderNode.animationName.v = ANIMATION_FIELD_ARROW_EXISTING;
         renderNode.color.v = Color.WHITE;
         renderNode.width.v = WIDTH;
         renderNode.height.v = HEIGHT;

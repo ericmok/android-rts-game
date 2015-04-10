@@ -60,7 +60,7 @@ public class RenderSystem extends noteworthyframework.System {
 //            drawList2DItem.width = (float)renderNode.width.v;
 //            drawList2DItem.height = (float)renderNode.height.v;
 
-            sprite2dDefTemp.animationName = renderNode.animationName;
+            sprite2dDefTemp.animationName = renderNode.animationName.v;
             sprite2dDefTemp.animationProgress = renderNode.animationProgress.v;
 
             if (renderNode.isGfxInterpolated.v == 1) {
@@ -80,6 +80,8 @@ public class RenderSystem extends noteworthyframework.System {
             sprite2dDefTemp.color = renderNode.color.v;
             sprite2dDefTemp.width = renderNode.width.v;
             sprite2dDefTemp.height = renderNode.height.v;
+
+            sprite2dDefTemp.cameraIndex = renderNode.cameraType.v;
 
             drawCompat.drawSprite(sprite2dDefTemp);
         }

@@ -4,10 +4,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import noteworthyengine.units.Archer;
+import noteworthyengine.units.Cannon;
+import noteworthyengine.units.City;
+import noteworthyengine.units.Mine;
+import noteworthyengine.units.TimelineCommand;
 import noteworthyframework.Coords;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.EngineDataLoader;
 import noteworthyframework.Gamer;
+import noteworthyframework.GamerPtr;
 import noteworthyframework.Unit;
 import noteworthyframework.UnitPool;
 
@@ -39,17 +45,18 @@ public class DataLoader implements EngineDataLoader {
                 // Allied or enemy team
             }
 
+            City city = new City(player);
+            city.battleNode.coords.pos.set(Math.random() * 30 - 15, Math.random() * 30 - 15);
+            baseEngine.addUnit(city);
+
             JSONArray troopArr = jPlayerObj.getJSONArray("troop");
 
             for (int i = 0; i < troopArr.length(); i++) {
 
                 JSONObject jEntity = troopArr.getJSONObject(i);
 
-                //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
                 Unit troopy = UnitPool.troopyMemoryPool.fetchMemory();
 
-                //GamerPtr gamer = (GamerPtr)troopy.fields.put("gamer", player);
-                //gamer.v = player;
                 GamerPtr gamerPtr = (GamerPtr)troopy.field("gamer");
                 gamerPtr.v = player;
 
@@ -57,16 +64,20 @@ public class DataLoader implements EngineDataLoader {
                 coords.pos.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
                 coords.rot.setDegrees(jEntity.getDouble("r"));
 
-                FieldNode fieldNode = (FieldNode)troopy.node(FieldNode._NAME);
-                //fieldNode.isFieldControl.v = 0;
-                //fieldNode._movementNode = (MovementNode)troopy.node(MovementNode._NAME);
-
                 baseEngine.addUnit(troopy);
-                //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
 
-                for (int k = 0; k < 1; k++) {
+                for (int k = 0; k < 3; k++) {
                     //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
-                    troopy = UnitPool.troopyMemoryPool.fetchMemory();
+                    if (player.name.equals("evilempire")) {
+                        troopy = new Archer(player);
+                    }
+                    if (player.name.equals("enemy")) {
+                        //troopy = new Mine(player);
+                        troopy = UnitPool.troopyMemoryPool.fetchMemory();
+                    }
+                    else {
+                        troopy = UnitPool.troopyMemoryPool.fetchMemory();
+                    }
 
                     //GamerPtr gamer = (GamerPtr)troopy.fields.put("gamer", player);
                     //gamer.v = player;
@@ -77,12 +88,7 @@ public class DataLoader implements EngineDataLoader {
                     coords.pos.set(jEntity.getDouble("x") + Math.random(), jEntity.getDouble("y") + Math.random());
                     coords.rot.setDegrees(jEntity.getDouble("r"));
 
-                    fieldNode = (FieldNode) troopy.node(FieldNode._NAME);
-                    //fieldNode.isFieldControl.v = 0;
-                    //fieldNode._movementNode = (MovementNode)troopy.node(MovementNode._NAME);
-
                     baseEngine.addUnit(troopy);
-                    //engineData.movementNodes.items.add((MovementNode)troopy.node(MovementNode._NAME));
                 }
 
                 if (Math.random() > 0.2) {
@@ -92,17 +98,6 @@ public class DataLoader implements EngineDataLoader {
                     archer.movementNode.coords.pos.set(jEntity.getDouble("x") + Math.random(), jEntity.getDouble("y") + Math.random());
                     baseEngine.addUnit(archer);
                 }
-                //ArrowCommand arrowCommand = new ArrowCommand();
-                //double randX = Math.ceil(30 * Math.random() - 15);
-                //double randY = Math.ceil(30 * Math.random() - 15);
-
-                //arrowCommand.set(player,
-                //        randX,
-                //        randY,
-                //        -randX + 0.3 * ((Math.random()) - 0.5),
-                //        -randY + 0.3 * ((Math.random()) - 0.5));
-
-                //baseEngine.addUnit(arrowCommand);
 
                 if (Math.random() > 0.8) {
                     Mine mine = new Mine(player);
@@ -124,33 +119,6 @@ public class DataLoader implements EngineDataLoader {
                         -timelineCommand.timelineNode.coords.pos.y);
                 timelineCommand.timelineNode.frameTime.v = i * 4;
                 baseEngine.addUnit(timelineCommand);
-
-                //Vector2 fieldDirection = (Vector2)arrowCommand.field("fieldDirection");
-                //fieldDirection.set((2 * Math.random()) - 1, (2 * Math.random()) - 1);
-
-//                fieldNode = (FieldNode) fieldUnit.node(FieldNode._NAME);
-//                fieldNode._arrowCommand = fieldUnit.arrowCommand;
-//
-//                fieldUnit.arrowCommand.position.copy(coords.pos);
-//                fieldUnit.arrowCommand.direction.set(0, 1);
-
-                //engineData.unitsByNodes.addDenormalizable(troopy);
-                //player.filters.addDenormalizable(troopy);
-//
-//                pc.set(jEntity.getDouble("x"), jEntity.getDouble("y"));
-//                pc.rot.setDegrees(jEntity.getDouble("r"));
-//
-//                // Destination deserialization
-//                JSONObject jDest = jEntity.getJSONObject("dest");
-//                if (jDest != null) {
-//                    DestinationComponent dc = (DestinationComponent) troop.cData.get(DestinationComponent.class);
-//                    double destX = jDest.getDouble("x");
-//                    double destY = jDest.getDouble("y");
-//                    dc.dest.set(destX, destY);
-//                    dc.hasDestination = true;
-//                }
-//
-//                player.denorms.addDenormalizable(troop);
             }
         }
 

@@ -5,10 +5,14 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
+import art.Animations;
+import noteworthyengine.units.ArrowCommand;
 import noteworthyframework.*;
 import structure.Game;
+import structure.GameCamera;
 import structure.GameInput;
-import structure.Sprite2dDef;
+import utils.FloatPtr;
+import utils.IntegerPtr;
 import utils.Vector2;
 
 /**
@@ -51,16 +55,18 @@ public class CommandSystem extends noteworthyframework.System {
         int currentGesture = game.gameInput.takeCurrentGesture();
         int currentAction = game.gameInput.takeCurrentMouseEventAction();
 
+        GameCamera gameCamera = ((NoteworthyEngine)this.getBaseEngine()).mainCamera;
+
         if (currentGesture == GameInput.GESTURE_ON_SCROLL) {
             commandNode.coords.pos.copy(game.gameInput.touchPosition);
-            commandNode.coords.pos.scale(1 / game.gameCamera.scale, 1 / game.gameCamera.scale);
+            commandNode.coords.pos.scale(1 /gameCamera.scale , 1 / gameCamera.scale);
 
             Vector2.subtract(temp, game.gameInput.touchPosition2, game.gameInput.touchPosition);
             commandNode.coords.rot.setDirection(temp.x, temp.y);
         }
         if (currentAction == MotionEvent.ACTION_DOWN) {
             commandNode.coords.pos.copy(game.gameInput.touchPosition);
-            commandNode.coords.pos.scale(1 / game.gameCamera.scale, 1 / game.gameCamera.scale);
+            commandNode.coords.pos.scale(1 / gameCamera.scale, 1 / gameCamera.scale);
 
             FloatPtr width = (FloatPtr)feedback.field("width");
             width.v = Command.ACTIVE_RADIUS;
@@ -122,7 +128,7 @@ public class CommandSystem extends noteworthyframework.System {
             renderNode.width.v = RADIUS;
             renderNode.height.v = RADIUS;
             renderNode.color.v = Color.argb(0, 0, 0, 0);
-            renderNode.animationName = Sprite2dDef.ANIMATION_TRIGGER_FIELDS_EXISTING;
+            renderNode.animationName.v = Animations.ANIMATION_TRIGGER_FIELDS_EXISTING;
         }
     }
 }

@@ -85,6 +85,22 @@ public class TimedProgress {
 		return this.progress;
 	}
 
+    public void set(float progress, float duration, boolean recurrent) {
+        this.progress = progress;
+        this.duration = duration;
+        this.recurrent = recurrent;
+        this.directionMultiplier = 1;
+        this.direction = true;
+    }
+
+    public void reset() {
+        this.progress = 1;
+        this.duration = 1000.0f;
+        this.recurrent = false;
+        this.directionMultiplier = 1;
+        this.direction = true;
+    }
+
     public void copy(TimedProgress other) {
         this.name = other.name;
         this.progress = other.progress;

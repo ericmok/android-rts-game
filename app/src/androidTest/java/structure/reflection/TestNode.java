@@ -1,6 +1,6 @@
 package structure.reflection;
 
-import noteworthyframework.IntegerPtr;
+import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.VoidFunc;

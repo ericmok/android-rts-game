@@ -3,7 +3,7 @@ package structure.reflection;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
-import noteworthyengine.Mech;
+import noteworthyengine.units.Mech;
 import noteworthyframework.Unit;
 
 /**
@@ -17,8 +17,6 @@ public class ReflectionTest extends ApplicationTestCase<Application> {
         Unit mech = new Mech();
         assertNotNull(mech.field("coords"));
         assertNotNull(mech.field("velocity"));
-        assertNotNull(mech.field("crowdSpeed"));
-        assertTrue((Double)mech.field("crowdSpeed") == 1);
 
         assertNull(mech.field("_name"));
         assertNull(mech.field("NAME"));
@@ -36,6 +34,8 @@ public class ReflectionTest extends ApplicationTestCase<Application> {
         assertNull(testUnit.field("truePrivateVariable"));
 
         assertNull(testUnit.field("CONSTANT"));
+
+        assertNull(testUnit.field("unit")); // This is in Node
 
         //assertNull(testUnit.field("isActive"));
     }

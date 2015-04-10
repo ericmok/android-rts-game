@@ -54,7 +54,8 @@ public class SeparationSystem extends noteworthyframework.System {
                 // Don't separate with self
                 //if (i == j) continue;
 
-                SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j).unit.node(SeparationNode.NAME);
+                //SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j).unit.node(SeparationNode.NAME);
+                SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j)._separationNode;
 
                 // Not all gridNodes belong to units that have separationNodes
                 if (otherNode == null || node == otherNode) { continue; }

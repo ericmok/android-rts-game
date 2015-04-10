@@ -10,15 +10,15 @@ import java.util.ArrayList;
 public class Gamer {
 
     public static ArrayList<Integer> TeamColors = new ArrayList<Integer>() {{
-        this.add(Color.argb(240, 0, 201, 255));
-        this.add(Color.argb(240, 198, 71, 132));
+        this.add(Color.argb(240, 0, 191, 255));
+        this.add(Color.argb(240, 208, 71, 132));
+        this.add(Color.argb(240, 46, 204, 103)); // Emerald
 
         // From flatcolors
-        this.add(Color.argb(240, 46, 204, 113)); // Emerald
-        this.add(Color.argb(240, 44, 62, 80)); // Midnight blue
         this.add(Color.argb(240, 230, 126, 34)); // Carrot
         this.add(Color.argb(240, 155, 89, 182)); // Amethyst
         this.add(Color.argb(240, 241, 196, 15)); // Sunflower
+        this.add(Color.argb(240, 189, 195, 199)); // Silver
     }};
 
     public String name = "player_" + Math.floor(Math.random() * 10000);

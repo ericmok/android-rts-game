@@ -1,9 +1,10 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
-import noteworthyframework.DoublePtr;
+import utils.DoublePtr;
 import noteworthyframework.Gamer;
-import noteworthyframework.IntegerPtr;
+import noteworthyframework.GamerPtr;
+import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 

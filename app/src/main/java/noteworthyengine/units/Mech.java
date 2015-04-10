@@ -1,5 +1,7 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
+import noteworthyengine.MovementNode;
+import noteworthyengine.RenderNode;
 import noteworthyframework.Unit;
 
 /**
@@ -9,10 +11,13 @@ public class Mech extends Unit {
 
     public static final String NAME = "Mech";
 
+    public MovementNode movementNode;
+    public RenderNode renderNode;
+
     public Mech() {
         this.name = NAME;
-        MovementNode movementNode = new MovementNode(this);
-        RenderNode renderNode = new RenderNode(this);
+        movementNode = new MovementNode(this);
+        renderNode = new RenderNode(this);
 
         renderNode.width.v = 0.7f;
         renderNode.height.v = 0.7f;

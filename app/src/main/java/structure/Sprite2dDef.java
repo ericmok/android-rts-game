@@ -13,52 +13,11 @@ import utils.Vector3;
  */
 public class Sprite2dDef implements Comparable<Sprite2dDef> {
 
-    public static final String ANIMATION_SPLASH_SPLASH = "Animations/Splash/Splash";
-    public static final String ANIMATION_SPLASH_LOADER = "Animations/Splash/Loader";
-
-    public static final String ANIMATION_SMOKE_GUNPOWDER = "Animations/Smoke/Gunpowder";
-	public static final String ANIMATION_TROOPS_IDLING = "Animations/Troops/Idling";
-	public static final String ANIMATION_TROOPS_MOVING = "Animations/Troops/Moving";
-	public static final String ANIMATION_TROOPS_DYING = "Animations/Troops/Dying";
-	public static final String ANIMATION_TROOPS_SELECTED = "Animations/Troops/Selected";
-
-    public static final String ANIMATION_TROOPS_TARGETED = "Animations/Troops/Targeted";
-
-    public static final String ANIMATION_TROOPS_SWING = "Animations/Troops/Swing";
-    public static final String ANIMATION_TROOPS_COOLDOWN = "Animations/Troops/Cooldown";
-
-    public static final String ANIMATION_TROOPS_PROJECTILE = "Animations/Troops/Projectile";
-
-    public static final String ANIMATION_MINE_IDLING = "Animations/Mine/Idling";
-    public static final String ANIMATION_MINE_EXPLODING = "Animations/Mine/Exploding";
-
-    public static final String ANIMATION_PROJECTILE_BASIC = "Animations/Projectiles/Basic";
-    public static final String ANIMATION_PROJECTILE_EXPLOSION = "Animations/Projectiles/Explosion";
-
-	public static final String ANIMATION_ENEMY_TROOPS_IDLING = "Animations/EnemyTroops/Idling";
-	public static final String ANIMATION_ENEMY_TROOPS_MOVING = "Animations/EnemyTroops/Moving";
-	
-	public static final String ANIMATION_CAPITAL_SHIPS_IDLING = "Animations/CapitalShips/Idling";
-	public static final String ANIMATION_CAPITAL_SHIPS_DYING = "Animations/CapitalShips/Dying";
-	
-	public static final String ANIMATION_TRIGGER_FIELDS_EXISTING = "Animations/TriggerFields/Existing";
-	
-	public static final String ANIMATION_RETICLE_TAP = "Animations/Reticle/Tap";
-	
-	public static final String ANIMATION_WAYPOINTS_MOVE = "Animations/Waypoints/Move";
-
-    public static final String ANIMATION_BUTTONS_PLAY = "Animations/Buttons/Play";
-
-	public static final String ANIMATION_BUTTONS_MOVE = "Animations/Buttons/Move";
-	public static final String ANIMATION_BUTTONS_ATTACK = "Animations/Buttons/Attack";
-
-    public static final String ANIMATION_BUTTONS_DEFEND = "Animations/Buttons/Defend";
-
     /// Old position is used to interpolate positions on the gfx thread
     public Vector3 oldPosition = new Vector3();
 
     /// New position, update this using update function instead, if you want interpolation
-	public Vector3 position = new Vector3();
+    public Vector3 position = new Vector3();
 
     /// If turned on, the oldPosition and position will interpolate, incurs extra function calls
     public boolean isGfxInterpolated = false;
@@ -67,22 +26,94 @@ public class Sprite2dDef implements Comparable<Sprite2dDef> {
     /// thread if isGfxInterpolated is true
     public Vector3 gfxInterpolation = new Vector3();
 
-	public float width = 1.0f;
-	public float height = 1.0f;
-	
-	public float angle = 0.0f;
+    public float width = 1.0f;
+    public float height = 1.0f;
 
-	public int color = Color.WHITE;
-	
+    public float angle = 0.0f;
+
+    public int color = Color.WHITE;
+
+    public int cameraIndex = 0;
+
 	/**
 	 * Use string constants for GC friendliness. Denotes the animation to be played
 	 * in terms of the location of the assets for the animation
 	 */
-	public String animationName = ANIMATION_TROOPS_IDLING; 
-	public int animationProgress = 0;
+    public String animationName = null;
+    public int animationProgress = 0;
 	
 	public Sprite2dDef() {
 	}
+
+    public void set(String animationName, int animationProgress,
+                    float x, float y, float z,
+                    float width, float height,
+                    float angle,
+                    int color,
+                    int cameraIndex) {
+        this.animationName = animationName;
+        this.animationProgress = animationProgress;
+        this.isGfxInterpolated = false;
+        this.position.x = x;
+        this.position.y = y;
+        this.position.z = z;
+        this.width = width;
+        this.height = height;
+        this.angle = angle;
+        this.color = color;
+        this.cameraIndex = cameraIndex;
+    }
+
+    public void setInterpolationOn(float oldX, float oldY, float oldZ) {
+        this.isGfxInterpolated = true;
+        this.oldPosition.x = oldX;
+        this.oldPosition.y = oldY;
+        this.oldPosition.z = oldZ;
+    }
+
+    public Sprite2dDef setPosition(double x, double y, double z) {
+        this.position.set(x, y, z);
+        return this;
+    }
+
+    public Sprite2dDef setAnimation(String animationName, int animationProgress) {
+        this.animationName = animationName;
+        this.animationProgress = animationProgress;
+        return  this;
+    }
+
+    public Sprite2dDef setDimensions(float width, float height) {
+        this.width = width;
+        this.height = height;
+        return this;
+    }
+
+    public Sprite2dDef setAngle(float angle) {
+        this.angle = angle;
+        return this;
+    }
+
+    public Sprite2dDef setColor(int color) {
+        this.color = color;
+        return this;
+    }
+
+    public Sprite2dDef setCamera(int index) {
+        this.cameraIndex = index;
+        return this;
+    }
+
+    public void reset() {
+        oldPosition.zero();
+        position.zero();
+        isGfxInterpolated = false;
+
+        width = 1.0f;
+        height = 1.0f;
+        angle = 0;
+        color = Color.WHITE;
+        cameraIndex = 0;
+    }
 
     /**
      * Mutates gfxInterpolation vector
@@ -108,6 +139,8 @@ public class Sprite2dDef implements Comparable<Sprite2dDef> {
         this.gfxInterpolation.copy(other.gfxInterpolation);
         this.isGfxInterpolated = other.isGfxInterpolated;
         this.oldPosition.copy(other.oldPosition);
+
+        this.cameraIndex = other.cameraIndex;
     }
 
     @Override

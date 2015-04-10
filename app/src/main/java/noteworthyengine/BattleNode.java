@@ -3,11 +3,16 @@ package noteworthyengine;
 import java.util.ArrayList;
 
 import noteworthyframework.Coords;
-import noteworthyframework.DoublePtr;
+import structure.RewriteOnlyArray;
+import utils.BooleanFunc2;
+import utils.BooleanFunc3;
+import utils.DoublePtr;
 import noteworthyframework.Gamer;
-import noteworthyframework.IntegerPtr;
+import noteworthyframework.GamerPtr;
+import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.JsonSerializable;
 import utils.Vector2;
 import utils.VoidFunc;
 import utils.VoidFunc2;
@@ -22,6 +27,8 @@ public class BattleNode extends Node {
     public static final String _NAME = "battleNode";
     public static final int MAX_POSSIBLE_TARGETS = 30;
 
+    public static final RewriteOnlyArray<Target> sharedTargetsPool = new RewriteOnlyArray<Target>(Target.class, 127);
+
     public static final VoidFunc2<BattleSystem, BattleNode> _DONOTHING2 =
         new VoidFunc2<BattleSystem, BattleNode>() {
             @Override
@@ -33,11 +40,11 @@ public class BattleNode extends Node {
                 public void apply(BattleSystem system, BattleNode element, BattleNode element2) { }
             };
 
-    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> INFLICT_DAMAGE_DEFAULT =
-            new VoidFunc4<BattleSystem, BattleNode, BattleNode, Double>() {
+    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> INFLICT_DAMAGE_DEFAULT =
+            new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
                 @Override
-                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, Double damage) {
-                    battleNode.hp.v -= damage;
+                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, DoublePtr damage) {
+                    battleNode.hp.v -= damage.v;
                 }
             };
 
@@ -45,7 +52,7 @@ public class BattleNode extends Node {
             new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
                 @Override
                 public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode otherBattleNode) {
-                    INFLICT_DAMAGE_DEFAULT.apply(battleSystem, otherBattleNode, battleNode, battleNode.attackDamage.v);
+                    INFLICT_DAMAGE_DEFAULT.apply(battleSystem, otherBattleNode, battleNode, battleNode.attackDamage);
                 }
             };
 
@@ -103,7 +110,7 @@ public class BattleNode extends Node {
 
     /// Target lock-on, also acts as a cache. The battleNode will pursue and attack this target
     /// which is obtained at target acquisition time.
-    public BattleNode[] target = new BattleNode[1];
+    public Ptr target = new Ptr();
 
     /// For dealing damage to multiple targets
     //public RewriteOnlyArray<Target> possibleTargets = new RewriteOnlyArray<Target>(Target.class, MAX_POSSIBLE_TARGETS);
@@ -114,8 +121,16 @@ public class BattleNode extends Node {
     /// but not re-evaluated during attack swing
     public IntegerPtr stickyAttack = new IntegerPtr() {{ v = 1; }};
 
+    /// The fudge factor for node to walk within attack range to deal with
+    /// various race conditions (attack swing time, round-off error)
+    public DoublePtr fractionToWalkIntoAttackRange = new DoublePtr() {{ v = 0.9; }};
+
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
+
+    public BooleanFunc2<BattleNode, BattleNode> targetCriteria = BattleSystem.DEFAULT_TARGET_CRITERIA;
+
+    public VoidFunc2<BattleSystem, BattleNode> onAcquireTarget = BattleSystem.DEFAULT_ON_ACQUIRE_TARGET;
 
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing = _DONOTHING3;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = ON_ATTACK_CAST;
@@ -123,7 +138,7 @@ public class BattleNode extends Node {
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady = _DONOTHING3;
     public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
 
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, Double> inflictDamage = INFLICT_DAMAGE_DEFAULT;
+    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> inflictDamage = INFLICT_DAMAGE_DEFAULT;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onArmorHit = _DONOTHING3;
 
     public ArrayList<String> events;
@@ -136,8 +151,13 @@ public class BattleNode extends Node {
         Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
     }
 
-    public static class Ptr {
+    public static class Ptr implements JsonSerializable {
         public BattleNode v = null;
+
+        @Override
+        public String json() {
+            return "\"To be implemented!\"";
+        }
     }
 
     public static class Target implements Comparable<Target>{

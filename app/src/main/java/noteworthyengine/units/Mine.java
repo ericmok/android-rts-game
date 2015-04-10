@@ -1,13 +1,19 @@
-package noteworthyengine;
+package noteworthyengine.units;
 
-import android.graphics.Color;
-
+import art.Animations;
+import noteworthyengine.BattleNode;
+import noteworthyengine.BattleSystem;
+import noteworthyengine.GridNode;
+import noteworthyengine.MovementNode;
+import noteworthyengine.RenderNode;
+import noteworthyengine.RenderSystem;
+import noteworthyengine.SeparationNode;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
 import structure.Sprite2dDef;
+import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
-import utils.VoidFunc2;
 import utils.VoidFunc3;
 
 /**
@@ -19,7 +25,7 @@ public class Mine extends Unit {
 
     public static final int MAX_BATTLE_NODES_AFFECTED = 20;
 
-    public GridNode gridNode = new GridNode(this);
+    public GridNode gridNode;
     public MovementNode movementNode = new MovementNode(this);
     public SeparationNode separationNode = new SeparationNode(this);
     public BattleNode battleNode = new BattleNode(this);
@@ -31,15 +37,18 @@ public class Mine extends Unit {
     public Mine(Gamer gamer) {
         this.name = NAME;
 
-        movementNode.maxSpeed.v = 1.3;
+        gridNode = new GridNode(this, separationNode, battleNode);
+
+        movementNode.maxSpeed.v = 0;
 
         battleNode.stickyAttack.v = 0;
+        battleNode.fractionToWalkIntoAttackRange.v = 0.3;
         battleNode.targetAcquisitionRange.v = 8;
         battleNode.attackRange.v = 2.5;
-        battleNode.attackDamage.v = 50;
+        battleNode.attackDamage.v = 90;
         battleNode.attackSwingTime.v = 4.5;
         battleNode.attackCooldown.v = 3;
-        battleNode.hp.v = 40;
+        battleNode.hp.v = 50;
         battleNode.isAttackable.v = 1;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
         battleNode.gamer.v = gamer;
@@ -53,16 +62,16 @@ public class Mine extends Unit {
         battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                battleSystem.findEnemiesWithinRange(battleTargets, battleNode, battleNode.attackRange.v);
+                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
 
                 for (int j = battleTargets.size() - 1; j >= 0; j--) {
                     BattleNode toInflict = battleTargets.get(j).v;
-                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage.v);
+                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage);
                 }
             }
         };
 
-        renderNode.animationName = Sprite2dDef.ANIMATION_MINE_IDLING;
+        renderNode.animationName.v = Animations.ANIMATION_MINE_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0x80ffffff;
 
@@ -72,13 +81,23 @@ public class Mine extends Unit {
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
+                if (battleNode.hp.v <= 0) {
+                    TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+
+                    tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
+                    tempSprite.setPosition((float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y, 1);
+
+                    system.drawCompat.drawTemporarySprite(tempSprite);
+                    system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
+                }
+
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
                     float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
                     float rad = (float)(battleNode.attackRange.v * ratio);
 
                     Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                     sprite2dDef.isGfxInterpolated = false;
-                    sprite2dDef.animationName = Sprite2dDef.ANIMATION_MINE_EXPLODING;
+                    sprite2dDef.animationName = Animations.ANIMATION_MINE_EXPLODING;
                     sprite2dDef.animationProgress = (int) (ratio * 100);
                     sprite2dDef.position.x = battleNode.coords.pos.x;
                     sprite2dDef.position.y = battleNode.coords.pos.y;

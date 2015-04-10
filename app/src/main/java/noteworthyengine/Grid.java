@@ -3,6 +3,8 @@ package noteworthyengine;
 import java.util.ArrayList;
 import java.util.List;
 
+import utils.BooleanFunc;
+import utils.BooleanFunc2;
 import utils.Vector2;
 
 /**
@@ -35,11 +37,13 @@ public class Grid {
     }
 
     public int getBucketX(double x) {
-        return Math.max(Math.min((int) Math.floor(x / cellSize) + (width / 2), width), 0);
+        int cell = (int) Math.round(x / cellSize);
+        int bias = (width / 2);
+        return Math.max(Math.min(cell + bias, width - 1), 0);
     }
 
     public int getBucketY(double y) {
-        return Math.max(Math.min((int) Math.floor(y / cellSize) + (height / 2), height), 0);
+        return Math.max(Math.min((int) Math.round(y / cellSize) + (height / 2), height - 1), 0);
     }
 
     public void index(GridNode node) {
@@ -60,10 +64,13 @@ public class Grid {
 
     public List<GridNode> getSurroundingNodes(int gridX, int gridY, double range) {
         ret.clear();
-        int lx = gridX - (int)Math.ceil(range / cellSize);
-        int ly = gridY - (int)Math.ceil(range / cellSize);
-        int lxMax = gridX + (int)Math.ceil(range / cellSize);
-        int lyMax = gridY + (int)Math.ceil(range / cellSize);
+
+        int discreteRange = (int)Math.ceil(range / cellSize);
+
+        int lx = Math.max(gridX - discreteRange, 0);
+        int ly = Math.max(gridY - discreteRange, 0);
+        int lxMax = Math.min(gridX + discreteRange, width - 1);
+        int lyMax = Math.min(gridY + discreteRange, height - 1);
 
         for (int i = lx; i <= lxMax; i++) {
             for (int j = ly; j <= lyMax; j++) {
@@ -74,11 +81,6 @@ public class Grid {
                 }
             }
         }
-//        for (int i = Math.max(lx, 0); i < Math.min(lx + 1, width); i++) {
-//            for (int j = Math.max(ly, 0); j < Math.min(ly + 1, height); j++) {
-//                ret.addAll(points[i][j]);
-//            }
-//        }
 
         return ret;
     }
@@ -99,11 +101,147 @@ public class Grid {
                 }
             }
         }
-//        for (int i = Math.max(lx, 0); i < Math.min(lx + 1, width); i++) {
-//            for (int j = Math.max(ly, 0); j < Math.min(ly + 1, height); j++) {
-//                ret.addAll(points[i][j]);
-//            }
-//        }
+
+        return ret;
+    }
+
+    public List<GridNode> getShell(GridNode gridNode, int cellRange) {
+        return getShell(gridNode.gridX.v, gridNode.gridY.v, cellRange);
+    }
+
+    /**
+     * Returns a list of units of the outer cells of the rectangular spatial query.
+     * An iterative search of increasing cellRanges from 0 to cellRange allows
+     * for a performant strategy.
+     *
+     * <pre>
+     * 0 0 0 0 0
+     * 0 0 0 1 0
+     * 0 0 2 0 0
+     * 0 1 0 0 0
+     * 1 0 0 0 0
+     * </pre>
+     *
+     * shell(x: 0, y: 0, cellRange: 0) => 2
+     * shell(x: 0, y: 0, cellRange: 1) => 2
+     * shell(x: 0, y: 0, cellRange: 2) => 1
+     *
+     * @param gridX
+     * @param gridY
+     * @param cellRange
+     * @return
+     */
+    public List<GridNode> getShell(int gridX, int gridY, int cellRange) {
+        ret.clear();
+
+        // Untested bounds check
+        gridX = Math.max(Math.min(gridX, width - 1), 0);
+        gridY = Math.max(Math.min(gridY, height - 1), 0);
+
+        // Boundary condition, at 0 range, there is no shell
+        if (cellRange == 0) {
+            List<GridNode> nodesToRet = points[gridX][gridY];
+            for (int k = nodesToRet.size() - 1; k >= 0; k--) {
+                ret.add(nodesToRet.get(k));
+            }
+
+            return ret;
+        }
+
+        int lowX = gridX - cellRange;
+        int lowY = gridY - cellRange;
+        int highX = gridX + cellRange;
+        int highY = gridY + cellRange;
+
+        for (int i = lowX; i <= highX; i++) {
+            for (int j = lowY; j <= highY; j++) {
+
+                // Bounds of shell
+                if (i < 0 || i > width - 1 || j < 0 || j > height - 1) {
+                    continue;
+                }
+
+                if (i > lowX && i < highX && j > lowY && j < highY) {
+                    continue;
+                }
+                else {
+                    List<GridNode> nodesToRet = points[i][j];
+                    for (int k = nodesToRet.size() - 1; k >= 0; k--) {
+                        ret.add(points[i][j].get(k));
+                    }
+                }
+
+            }
+        }
+
+        return ret;
+    }
+
+
+    // TODO: test
+    public List<GridNode> iterativeShellSearch(int gridX, int gridY, int cellRange, BooleanFunc<GridNode> filter) {
+        ret.clear();
+
+        int queryRange = 0;
+
+        while(queryRange <= cellRange) {
+
+            List<GridNode> query = getShell(gridX, gridY, queryRange);
+            for (int i = query.size() - 1; i >= 0; i--) {
+
+                GridNode nodeToTest = query.get(i);
+
+                if (filter.apply(nodeToTest)) {
+                    ret.add(nodeToTest);
+                }
+            }
+
+            queryRange += 1;
+        }
+
+        return ret;
+    }
+
+
+    public int numberCellsForRange(double range) {
+        return (int)Math.ceil(range / cellSize);
+    }
+
+
+    /**
+     * Returns the closest shell that is occupied by any gridNode
+     * Kind of useless..
+     * @param gridX
+     * @param gridY
+     * @return
+     */
+    public List<GridNode> findClosestShell(int gridX, int gridY) {
+        ret.clear();
+
+        int queryX = gridX;
+        int queryY = gridY;
+
+        // Get a shell around the query point, increase range
+        int range = 0;
+        List<GridNode> test = getShell(queryX, queryY, range);
+
+        if (test.size() != 0) {
+            return test;
+        }
+
+        range += 1;
+
+        // Sloppy bounds check...
+        while (range <= Math.max(width - 1, height - 1) && test.size() == 0) {
+
+            test = getShell(queryX, queryY, range);
+
+            if (test.size() != 0) {
+                return test;
+            }
+
+            range += 1;
+        }
 
         return ret;
     }

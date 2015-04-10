@@ -1,7 +1,7 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
-import noteworthyframework.IntegerPtr;
+import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.Vector2;

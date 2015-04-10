@@ -3,31 +3,20 @@ package structure;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.opengl.Matrix;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 
+import art.Animations;
 import noteworthyengine.BackgroundUnit;
-import noteworthyengine.BattleSystem;
 import noteworthyengine.ButtonSystem;
-import noteworthyengine.ButtonUnit;
-import noteworthyengine.CommandSystem;
+import noteworthyengine.units.ButtonUnit;
+import noteworthyengine.units.CameraUnit;
 import noteworthyengine.DataLoader;
-import noteworthyengine.DecaySystem;
-import noteworthyengine.FormationSystem;
 import noteworthyengine.LoaderUIEngine;
-import noteworthyengine.SeparationNode;
-import noteworthyengine.SeparationSystem;
-import noteworthyengine.TimelineSystem;
 import noteworthyframework.BaseEngine;
-import noteworthyframework.DrawCompat;
-import noteworthyengine.FieldSystem;
-import noteworthyengine.MovementSystem;
 import noteworthyengine.NoteworthyEngine;
-import noteworthyengine.RenderSystem;
-import noteworthyframework.Unit;
 import utils.VoidFunc;
 
 public class Game {
@@ -133,12 +122,23 @@ public class Game {
 
 	public void loadLevel() {
         activeEngine = loaderUIEngine;
+
+        CameraUnit loaderUICamera = new CameraUnit(gameRenderer.mainCamera, 4f);
+        CameraUnit activeGameCamera = new CameraUnit(gameRenderer.mainCamera, 0.068f);
+        CameraUnit auxGameCamera = new CameraUnit(gameRenderer.auxCamera, 4);
+
+        loaderUIEngine.addUnit(loaderUICamera);
+        loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
+        noteworthyEngine.addUnit(activeGameCamera);
+        noteworthyEngine.addUnit(auxGameCamera);
+        noteworthyEngine.mainCamera = activeGameCamera.cameraNode.camera;
+
         backgroundUnit.renderNode.width.v = 4;
         backgroundUnit.renderNode.height.v = 4;
         loaderUIEngine.addUnit(backgroundUnit);
 
         ButtonUnit buttonUnit = new ButtonUnit();
-        buttonUnit.renderNode.animationName = Sprite2dDef.ANIMATION_BUTTONS_PLAY;
+        buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
         buttonUnit.renderNode.coords.pos.set(-0.85, 0);
         buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
         buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
