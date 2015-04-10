@@ -1,8 +1,58 @@
 <!doctype html>
 <html>
   <head>
+    <link rel="stylesheet" href="css/index.css" />
+    <script>
+      window.onload = function() {
+        for (var i = 85; i >= 1; i--) {
+          var img = document.createElement("img");
+          img.classList.add('img-game');
+          img.src="images/screenshots_small/img" + i + ".jpg";
+          (function(i) {
+            img.onclick = function(ev) {
+              window.location = "images/screenshots/img" + i + ".png";
+            };
+          })(i);
+          document.querySelector("#img-panel").appendChild(img);
+        }
+      };
+    </script>
   </head>
   <body>
-    <h2>Project Page</h2>
+    <header class="main-header">
+      <h2 class="main-header-title">MiniCraft</h2>
+    </header>
+     <div id="img-panel">
+    </div>
+    <section class="unit-def">
+      <header>
+        <h1>Meet the units</h1>
+      </header>
+      <main>
+        <article>
+          <h3>Hi, I am troop!</h3>
+          <p>I am a core unit</p>
+          <img src="images/troop.png" />
+        </article>
+    
+        <article>
+          <h3>Vroom vroom! I am mech</h3>
+          <p>I flank armies and decoy missles</p>
+          <img src="images/mech.png" />
+        </article>
+     
+        <article>
+          <h3>POW! I am cannon</h3>
+          <p>I shoot homing missles</p>
+          <img src="images/cannon.png" />
+        </article>
+
+        <article>
+          <h3>Boom! I am a Mine</h3>
+          <p>I defend positions against charging units.</p>
+          <img src="images/mine.png" />
+        </article>
+      </main>
+    </section>
   </body>
 </html>
