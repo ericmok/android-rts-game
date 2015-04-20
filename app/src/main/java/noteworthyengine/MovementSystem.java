@@ -63,7 +63,9 @@ public class MovementSystem extends noteworthyframework.System {
 
             desiredVelocity.translate(fieldForce.x, fieldForce.y);
 
-            desiredVelocity.translate(movementNode.enemyAttractionForce.x, movementNode.enemyAttractionForce.y);
+            if (fieldForce.isZero()) {
+                desiredVelocity.translate(movementNode.enemyAttractionForce.x, movementNode.enemyAttractionForce.y);
+            }
 
             temp2.copy(desiredVelocity);
 
