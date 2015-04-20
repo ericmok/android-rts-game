@@ -71,7 +71,7 @@ public class BattleSystem extends noteworthyframework.System {
         // The unit walks towards the enemy with more force than it walks away from it
         // to maintain ~constant range
         if (numerator < 0) {
-            numerator *= 0.8;
+            numerator *= 0.4;
         }
 
         double ramp = battleNode.maxSpeed.v *
