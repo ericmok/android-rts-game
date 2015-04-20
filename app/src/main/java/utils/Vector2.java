@@ -18,6 +18,10 @@ public class Vector2 implements JsonSerializable {
 		this.y = e;
 	}
 
+    public boolean isZero() {
+        return x == 0 && y == 0;
+    }
+
     public Vector2 copy(Vector2 other) {
         this.x = other.x;
         this.y = other.y;
