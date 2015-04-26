@@ -2,6 +2,7 @@ package noteworthyengine;
 
 import org.json.JSONException;
 
+import noteworthyengine.units.ArrowCommandInput;
 import noteworthyframework.*;
 import structure.Game;
 import structure.GameCamera;
@@ -18,14 +19,15 @@ public class NoteworthyEngine extends BaseEngine {
 
     public Game game;
 
+    public InputSystem inputSystem;
     public CameraSystem cameraSystem;
 
     public GridSystem gridSystem;
-    public CommandSystem commandSystem;
+    //public CommandSystem commandSystem;
     public TimelineSystem timelineSystem;
     public SeparationSystem separationSystem;
     public FieldSystem fieldSystem;
-    //public FormationSystem formationSystem;
+    public FormationSystem formationSystem;
     public MovementSystem movementSystem;
     public BattleSystem battleSystem;
     public RenderSystem renderSystem;
@@ -41,25 +43,28 @@ public class NoteworthyEngine extends BaseEngine {
 
         this.game = game;
 
+        inputSystem = new InputSystem(game);
         cameraSystem = new CameraSystem(game);
+
         gridSystem = new GridSystem();
-        commandSystem = new CommandSystem(game);
+        //commandSystem = new CommandSystem(game);
         timelineSystem = new TimelineSystem();
         separationSystem = new SeparationSystem(gridSystem);
         fieldSystem = new FieldSystem();
-        //formationSystem = new FormationSystem();
+        formationSystem = new FormationSystem(gridSystem);
         movementSystem = new MovementSystem();
         battleSystem = new BattleSystem(gridSystem);
         renderSystem = new RenderSystem(new DrawCompat(game));
         decaySystem = new DecaySystem();
 
+        this.addSystem(inputSystem);
         this.addSystem(cameraSystem);
         this.addSystem(gridSystem);
-        this.addSystem(commandSystem);
+        //this.addSystem(commandSystem);
         this.addSystem(timelineSystem);
         this.addSystem(fieldSystem);
         this.addSystem(separationSystem);
-        //this.addSystem(formationSystem);
+        this.addSystem(formationSystem);
         this.addSystem(movementSystem);
         this.addSystem(battleSystem);
         this.addSystem(renderSystem);
@@ -68,6 +73,8 @@ public class NoteworthyEngine extends BaseEngine {
 
     public void initialize() {
         super.initialize();
+        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game);
+        this.addUnit(arrowCommandInput);
     }
 
     public void step(double dt) {

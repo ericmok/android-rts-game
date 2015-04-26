@@ -34,6 +34,7 @@ public class Platoon extends Unit {
     public BattleNode battleNode;
     public SeparationNode separationNode;
     public FormationNode formationNode;
+    public FormationNode.FormationSheep formationSheep;
 
     public RenderNode renderNode;
 
@@ -69,6 +70,8 @@ public class Platoon extends Unit {
         formationNode = new FormationNode(this);
 
         gridNode = new GridNode(this, separationNode, battleNode);
+
+        formationSheep = new FormationNode.FormationSheep(this);
     }
 
     public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =
@@ -111,6 +114,7 @@ public class Platoon extends Unit {
         @Override
         public void apply(RenderSystem system) {
             renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
+            //renderNode.color.v = Color.argb(10, 255, 255, 255);
 
             if (battleNode.hp.v <= 0) {
                 TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
@@ -151,6 +155,25 @@ public class Platoon extends Unit {
                 system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
 
                 onAttackSwingAnim = false;
+            }
+
+            if (formationSheep.hasLeader()) {
+//                Sprite2dDef tempSprite = system.drawCompat.spriteAllocator.takeNextWritable();
+//                tempSprite.set(Animations.ANIMATION_TRIGGER_FIELDS_EXISTING, 0,
+//                        (float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y, 0,
+//                        1.5f, 1.5f,
+//                        (float)Orientation.getDegrees(
+//                                battleNode.coords.pos.x, battleNode.coords.pos.y,
+//                                formationSheep.formationDestination.x, formationSheep.formationDestination.y
+//                                ),
+//                        Color.WHITE, 0);
+//
+//                tempSprite = system.drawCompat.spriteAllocator.takeNextWritable();
+//                tempSprite.set(Animations.ANIMATION_RETICLE_TAP, 0,
+//                        (float)formationSheep.formationDestination.x, (float)formationSheep.formationDestination.y, 0,
+//                        1.5f, 1.5f,
+//                        0,
+//                        Color.WHITE, 0);
             }
         }
     };

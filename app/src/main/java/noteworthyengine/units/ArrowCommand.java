@@ -18,8 +18,8 @@ public class ArrowCommand extends Unit {
 
     public static final String NAME = "ArrowCommand";
 
-    public static final float WIDTH = 3f;
-    public static final float HEIGHT = 3f;
+    //public static final float WIDTH = 3f;
+    //public static final float HEIGHT = 3f;
 
     public static final String ANIMATION_FIELD_ARROW_EXISTING = "Animations/FieldArrows/Existing";
 
@@ -39,8 +39,8 @@ public class ArrowCommand extends Unit {
         renderNode = new RenderNode(this);
         renderNode.animationName.v = ANIMATION_FIELD_ARROW_EXISTING;
         renderNode.color.v = Color.WHITE;
-        renderNode.width.v = WIDTH;
-        renderNode.height.v = HEIGHT;
+        renderNode.width.v = (float)fieldNode._fieldArrowNode.fieldArrowInfluenceRadius.v;
+        renderNode.height.v = (float)fieldNode._fieldArrowNode.fieldArrowInfluenceRadius.v;
         renderNode.onDraw = onDraw;
     }
 

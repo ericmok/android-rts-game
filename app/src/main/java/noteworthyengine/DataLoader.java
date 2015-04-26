@@ -4,10 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import noteworthyengine.units.Archer;
+import noteworthyengine.units.Mech;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.City;
 import noteworthyengine.units.Mine;
+import noteworthyengine.units.PlatoonLeader;
 import noteworthyengine.units.TimelineCommand;
 import noteworthyframework.Coords;
 import noteworthyframework.BaseEngine;
@@ -66,10 +67,18 @@ public class DataLoader implements EngineDataLoader {
 
                 baseEngine.addUnit(troopy);
 
+//                if (i < 2) {
+//                    PlatoonLeader platoonLeader = new PlatoonLeader();
+//                    platoonLeader.formationLeader.gamer.v = player;
+//                    platoonLeader.formationLeader.coords.pos.copy(coords.pos);
+//                    baseEngine.addUnit(platoonLeader);
+//                }
+
+
                 for (int k = 0; k < 3; k++) {
                     //Unit troop = GameEntities.troopsMemoryPool.fetchMemory();
                     if (player.name.equals("evilempire")) {
-                        troopy = new Archer(player);
+                        troopy = new Mech(player);
                     }
                     if (player.name.equals("enemy")) {
                         //troopy = new Mine(player);
@@ -92,11 +101,11 @@ public class DataLoader implements EngineDataLoader {
                 }
 
                 if (Math.random() > 0.2) {
-                    Archer archer = new Archer(player);
-                    gamerPtr = (GamerPtr) archer.field("gamer");
+                    Mech mech = new Mech(player);
+                    gamerPtr = (GamerPtr) mech.field("gamer");
                     gamerPtr.v = player;
-                    archer.movementNode.coords.pos.set(jEntity.getDouble("x") + Math.random(), jEntity.getDouble("y") + Math.random());
-                    baseEngine.addUnit(archer);
+                    mech.movementNode.coords.pos.set(jEntity.getDouble("x") + Math.random(), jEntity.getDouble("y") + Math.random());
+                    baseEngine.addUnit(mech);
                 }
 
                 if (Math.random() > 0.8) {

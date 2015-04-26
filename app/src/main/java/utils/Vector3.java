@@ -30,7 +30,11 @@ public class Vector3 implements JsonSerializable {
 		this.y = vector[1];
 		this.z = vector[2];
 	}
-	
+
+	public boolean isZero() {
+		return x == 0 && y == 0 && z == 0;
+	}
+
 	public double[] getPacked() {
 		double[] ret = new double[3];
 		ret[0] = x;

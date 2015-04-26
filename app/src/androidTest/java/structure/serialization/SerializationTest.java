@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import noteworthyengine.units.Mech;
-import noteworthyengine.units.Platoon;
 
 /**
  * Created by eric on 3/27/15.

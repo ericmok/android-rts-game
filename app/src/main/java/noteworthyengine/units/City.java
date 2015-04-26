@@ -1,7 +1,5 @@
 package noteworthyengine.units;
 
-import android.graphics.Color;
-
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.GridNode;
@@ -10,7 +8,6 @@ import noteworthyframework.BaseEngine;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import utils.DoublePtr;
-import utils.VoidFunc2;
 import utils.VoidFunc4;
 
 /**
@@ -66,9 +63,9 @@ public class City extends Unit {
                     engine.addUnit(platoon);
                     break;
                 case 1:
-                    Archer archer = new Archer(battleNode.gamer.v);
-                    archer.battleNode.coords.pos.copy(this.battleNode.coords.pos);
-                    engine.addUnit(archer);
+                    Mech mech = new Mech(battleNode.gamer.v);
+                    mech.battleNode.coords.pos.copy(this.battleNode.coords.pos);
+                    engine.addUnit(mech);
                     break;
                 case 2:
                     Cannon cannon = new Cannon(battleNode.gamer.v);
