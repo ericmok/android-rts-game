@@ -20,11 +20,11 @@ public class Cannon extends Platoon {
     public Cannon(Gamer gamer) {
         this.name = this.getClass().getSimpleName();
 
-        this.movementNode.maxSpeed.v = 0.2;
+        this.movementNode.maxSpeed.v = 0.3;
 
         this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 5;
-        this.battleNode.attackSwingTime.v = 8;
+        this.battleNode.attackSwingTime.v = 6;
         this.battleNode.attackCooldown.v = 10;
         this.battleNode.attackDamage.v = 0;
         this.battleNode.attackRange.v = 7.8;

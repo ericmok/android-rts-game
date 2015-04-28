@@ -3,6 +3,7 @@ package noteworthyengine.units;
 import art.Animations;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
+import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
@@ -39,16 +40,16 @@ public class Mine extends Unit {
 
         gridNode = new GridNode(this, separationNode, battleNode);
 
-        movementNode.maxSpeed.v = 0;
+        movementNode.maxSpeed.v = 0.1;
 
         battleNode.stickyAttack.v = 0;
         battleNode.fractionToWalkIntoAttackRange.v = 0.3;
         battleNode.targetAcquisitionRange.v = 8;
         battleNode.attackRange.v = 2.5;
-        battleNode.attackDamage.v = 90;
-        battleNode.attackSwingTime.v = 4.5;
+        battleNode.attackDamage.v = 40;
+        battleNode.attackSwingTime.v = 3.5;
         battleNode.attackCooldown.v = 3;
-        battleNode.hp.v = 50;
+        battleNode.hp.v = 100;
         battleNode.isAttackable.v = 1;
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
         battleNode.gamer.v = gamer;

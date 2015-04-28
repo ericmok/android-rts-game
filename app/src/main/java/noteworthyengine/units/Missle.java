@@ -24,7 +24,7 @@ public class Missle extends Mine {
         this.movementNode.maxSpeed.v = 0.7;
 
         this.battleNode.isAttackable.v = 0;
-        this.battleNode.attackDamage.v = 50;
+        this.battleNode.attackDamage.v = 25;
         this.battleNode.attackSwingTime.v = 3;
         this.battleNode.attackRange.v = 2.5;
         this.battleNode.targetAcquisitionRange.v = 20;
@@ -69,6 +69,7 @@ public class Missle extends Mine {
         this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
+        this.renderNode.color.v = Gamer.TeamColors.get(gamer.team);
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
