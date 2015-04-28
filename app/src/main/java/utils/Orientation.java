@@ -191,25 +191,32 @@ public class Orientation extends Vector2 {
 	}
 
     public static void getPerpendicular(Vector2 output, Vector2 in) {
-        double pointX = 0;
-        if (in.x != 0) {
-            pointX = (-in.y / in.x);
-        }
-        output.x = pointX;
-        output.y = 1;
-        output.setNormalized();
+        //double pointX = 0;
+        //if (in.x != 0) {
+        //    pointX = (-in.y / in.x);
+        //}
+        //output.x = pointX;
+        //output.y = 1;
+        //output.setNormalized();
+		output.x = -in.y;
+		output.y = in.x;
+		output.setNormalized();
     }
 
 	public void getPerpendicular(Vector2 output) {
-        double pointX = 0;
-        if (x != 0) {
-            pointX = (-y / x);
-        }
-		output.x = pointX;
-		output.y = 1;
-		output.setNormalized();
+        //double pointX = 0;
+        //if (x != 0) {
+        //    pointX = (-y / x);
+        //}
+		//output.x = pointX;
+		//output.y = 1;
+		//output.setNormalized();
+		Orientation.getPerpendicular(output, this);
 	}
-	
+
+	/**
+	 * To deprecate. It does not work!
+	 */
 	public void getPerpendicular(Vector3 output) {
 		// bug took 2 days!
 		if (x == 0) {
@@ -227,7 +234,10 @@ public class Orientation extends Vector2 {
 		output.z = 0;
 		output.setNormalized2d();
 	}
-	
+
+	/**
+	 * To deprecate. It does not work!
+	 */
 	public static void getPerpendicular(Vector3 output, Vector3 a) {
 		// bug took 2 days!
 		if (a.x == 0) {
