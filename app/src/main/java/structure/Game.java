@@ -11,9 +11,10 @@ import java.io.IOException;
 import art.Animations;
 import noteworthyengine.BackgroundUnit;
 import noteworthyengine.ButtonSystem;
+import noteworthyengine.levels.LevelOne;
 import noteworthyengine.units.ButtonUnit;
 import noteworthyengine.units.CameraUnit;
-import noteworthyengine.DataLoader;
+
 import noteworthyengine.LoaderUIEngine;
 import noteworthyframework.BaseEngine;
 import noteworthyengine.NoteworthyEngine;
@@ -152,17 +153,19 @@ public class Game {
         loaderUIEngine.addUnit(buttonUnit);
         loaderUIEngine.flushQueues();
 
-        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
+//        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
 
         try {
-            String json = levelFileLoader.jsonFromFile("level0.json");
-            DataLoader dataLoader = new DataLoader();
-            dataLoader.loadFromJson(noteworthyEngine, json);
+            //String json = levelFileLoader.jsonFromFile("level0.json");
+            //DataLoader dataLoader = new DataLoader();
+			LevelOne levelOne = new LevelOne();
+			levelOne.loadFromJson(noteworthyEngine, "");
+            //dataLoader.loadFromJson(noteworthyEngine, json);
             //noteworthyEngine.loadFromJson(json);
         }
-        catch (IOException io) {
-           io.printStackTrace();
-        }
+//        catch (IOException io) {
+//           io.printStackTrace();
+//        }
         catch (JSONException e) {
             e.printStackTrace();
         }
