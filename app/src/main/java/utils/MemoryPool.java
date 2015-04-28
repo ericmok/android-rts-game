@@ -24,20 +24,33 @@ public class MemoryPool<E> {
 			pointers.ensureCapacity(capacity);
 			
 			for (int i = 0; i < capacity; i++) {
-				try {
-					freeArray[i] = cls.newInstance();
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
+				// Careful
+				freeArray[i] = newInstance(cls);
+
 				pointers.add(freeArray[i]);
 			}
 			
 		}
-		
+
+
+		/**
+		 * The function to call to generate a new instance to be stored in the memory pool
+		 * awaiting to be used.
+		 * @param cls
+		 * @return
+		 */
+		public E newInstance(Class cls) {
+			try {
+				return (E)cls.newInstance();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
 
 		public int getCapacity() { return capacity; }
 
