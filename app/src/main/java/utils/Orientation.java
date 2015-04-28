@@ -190,6 +190,11 @@ public class Orientation extends Vector2 {
 		this.y = orientation.y;
 	}
 
+	/**
+	 * Gets counter-clockwise perpendicular
+	 * @param output
+	 * @param in
+	 */
     public static void getPerpendicular(Vector2 output, Vector2 in) {
         //double pointX = 0;
         //if (in.x != 0) {
@@ -203,6 +208,10 @@ public class Orientation extends Vector2 {
 		output.setNormalized();
     }
 
+	/**
+	 * Gets counter-clockwise perpendicular
+	 * @param output
+	 */
 	public void getPerpendicular(Vector2 output) {
         //double pointX = 0;
         //if (x != 0) {
