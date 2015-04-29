@@ -78,6 +78,9 @@ public class Platoon extends Unit {
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
         renderNode.setInterpolated(0, 0);
+
+        onAttackSwingAnim = false;
+        target[0] = null;
     }
 
     public void configure(Gamer gamer) {
