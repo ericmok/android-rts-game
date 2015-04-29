@@ -17,14 +17,35 @@ public class UnitPool {
         public Mech newInstance(Class cls) {
             return new Mech(NO_GAMER);
         }
+
+        @Override
+        public synchronized Mech fetchMemory() {
+            Mech ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
     };
 
-    public static final MemoryPool<Platoon> platoons = new MemoryPool<Platoon>(Platoon.class, NUMBER_UNITS);
+    public static final MemoryPool<Platoon> platoons = new MemoryPool<Platoon>(Platoon.class, NUMBER_UNITS) {
+        @Override
+        public synchronized Platoon fetchMemory() {
+            Platoon ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
+    };
 
     public static final MemoryPool<Cannon> cannons = new MemoryPool<Cannon>(Cannon.class, NUMBER_UNITS) {
         @Override
         public Cannon newInstance(Class cls) {
             return new Cannon(NO_GAMER);
+        }
+
+        @Override
+        public synchronized Cannon fetchMemory() {
+            Cannon ret = super.fetchMemory();
+            ret.reset();
+            return ret;
         }
     };
 
@@ -33,12 +54,26 @@ public class UnitPool {
         public Missle newInstance(Class cls) {
             return new Missle(NO_GAMER);
         }
+
+        @Override
+        public synchronized Missle fetchMemory() {
+            Missle ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
     };
 
     public static final MemoryPool<Mine> mines = new MemoryPool<Mine>(Mine.class, NUMBER_UNITS) {
         @Override
         public Mine newInstance(Class cls) {
             return new Mine(NO_GAMER);
+        }
+
+        @Override
+        public synchronized Mine fetchMemory() {
+            Mine ret = super.fetchMemory();
+            ret.reset();
+            return ret;
         }
     };
 
@@ -47,6 +82,13 @@ public class UnitPool {
         public City newInstance(Class cls) {
             return new City(NO_GAMER);
         }
+
+        @Override
+        public synchronized City fetchMemory() {
+            City ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
     };
 
     public static void load() {
@@ -54,41 +96,5 @@ public class UnitPool {
     }
 
     private UnitPool() {
-//        mechs = new MemoryPool<Mech>(Mech.class, numberUnits) {
-//            @Override
-//            public Mech newInstance(Class cls) {
-//                return new Mech(NO_GAMER);
-//            }
-//        };
-//
-//        platoons = new MemoryPool<Platoon>(Platoon.class, numberUnits);
-//
-//        cannons = new MemoryPool<Cannon>(Cannon.class, numberUnits) {
-//            @Override
-//            public Cannon newInstance(Class cls) {
-//                return new Cannon(NO_GAMER);
-//            }
-//        };
-//
-//        missles = new MemoryPool<Missle>(Missle.class, numberUnits) {
-//            @Override
-//            public Missle newInstance(Class cls) {
-//                return new Missle(NO_GAMER);
-//            }
-//        };
-//
-//        mines = new MemoryPool<Mine>(Mine.class, numberUnits) {
-//            @Override
-//            public Mine newInstance(Class cls) {
-//                return new Mine(NO_GAMER);
-//            }
-//        };
-//
-//        cities = new MemoryPool<City>(City.class, numberUnits) {
-//            @Override
-//            public City newInstance(Class cls) {
-//                return new City(NO_GAMER);
-//            }
-//        };
     }
 }

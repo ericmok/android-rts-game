@@ -17,30 +17,23 @@ import utils.VoidFunc3;
  */
 public class Cannon extends Platoon {
 
-    public Cannon(Gamer gamer) {
+    public Cannon(final Gamer gamer) {
         this.name = this.getClass().getSimpleName();
 
-        this.movementNode.maxSpeed.v = 0.3;
+        this.reset();
+        this.configure(gamer);
 
-        this.battleNode.gamer.v = gamer;
-        this.battleNode.hp.v = 5;
-        this.battleNode.attackSwingTime.v = 6;
-        this.battleNode.attackCooldown.v = 20;
-        this.battleNode.attackDamage.v = 0;
-        this.battleNode.attackRange.v = 7;
-        this.battleNode.targetAcquisitionRange.v = 18.5;
         this.battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                Missle missle = new Missle(battleNode.gamer.v);
+                //Missle missle = new Missle(battleNode.gamer.v);
+                Missle missle = UnitPool.missles.fetchMemory();
+                missle.configure(battleNode.gamer.v);
                 missle.movementNode.coords.pos.copy(movementNode.coords.pos);
                 battleSystem.getBaseEngine().addUnit(missle);
             }
         };
 
-        this.renderNode.animationName.v = "Animations/Cannons/Idling";
-        this.renderNode.width.v = 1.4f;
-        this.renderNode.height.v = 1.4f;
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
@@ -51,17 +44,6 @@ public class Cannon extends Platoon {
                     tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                     tempSprite.position.x = battleNode.coords.pos.x;
                     tempSprite.position.y = battleNode.coords.pos.y;
-
-//                    tempSprite.position.z = 1;
-//                    tempSprite.width = 1f;
-//                    tempSprite.height = 1f;
-//                    tempSprite.progress.progress = 1;
-//                    tempSprite.progress.duration = 1200;
-//                    tempSprite.isGfxInterpolated = false;
-//                    tempSprite.animationName = Animations.ANIMATION_TROOPS_DYING;
-//                    tempSprite.animationProgress = 0;
-//                    tempSprite.color = Color.WHITE;
-//                    tempSprite.angle = 90;
 
                     system.drawCompat.drawTemporarySprite(tempSprite);
                     system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
@@ -79,20 +61,28 @@ public class Cannon extends Platoon {
                                 90,
                                 Gamer.colorForTeam(battleNode.gamer.v.team), 0
                                 );
-//                        sprite2dDef.isGfxInterpolated = false;
-//                        sprite2dDef.position.x = ratio * (battleNode.target[0].coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x;
-//                        sprite2dDef.position.y = ratio * (battleNode.target[0].coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y;
-//                        sprite2dDef.position.z = 1;
-//                        sprite2dDef.animationName = Animations.ANIMATION_PROJECTILE_BASIC;
-//                        sprite2dDef.animationProgress = 1;
-//                        sprite2dDef.color = renderNode.color.v;
-//                        sprite2dDef.angle = (float) Orientation.getDegreesBaseX(battleNode.target[0].coords.pos.x - battleNode.coords.pos.x,
-//                                battleNode.target[0].coords.pos.y - battleNode.coords.pos.y);
-//                        sprite2dDef.width = 0.9f;
-//                        sprite2dDef.height = 0.9f;
                     }
                 }
             }
         };
+    }
+
+    public void configure(Gamer gamer) {
+        this.battleNode.gamer.v = gamer;
+    }
+
+    public void reset() {
+        this.movementNode.maxSpeed.v = 0.3;
+
+        this.battleNode.hp.v = 5;
+        this.battleNode.attackSwingTime.v = 6;
+        this.battleNode.attackCooldown.v = 20;
+        this.battleNode.attackDamage.v = 0;
+        this.battleNode.attackRange.v = 7;
+        this.battleNode.targetAcquisitionRange.v = 18.5;
+
+        this.renderNode.animationName.v = "Animations/Cannons/Idling";
+        this.renderNode.width.v = 1.4f;
+        this.renderNode.height.v = 1.4f;
     }
 }

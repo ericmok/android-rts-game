@@ -45,25 +45,17 @@ public class Platoon extends Unit {
         this.name = NAME;
 
         movementNode = new MovementNode(this);
-        movementNode.maxSpeed.v = 0.8;
 
         fieldNode = new FieldNode(this);
         fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
 
         battleNode = new BattleNode(this);
-        battleNode.hp.v = 50;
-        battleNode.attackRange.v = 4.5;
-        battleNode.attackDamage.v = 2;
-        battleNode.targetAcquisitionRange.v = 16.5;
         battleNode.onTargetAcquired = onTargetAcquired;
         battleNode.onAttackReady = onAttackReady;
         battleNode.onAttackSwing = onAttackSwing;
         battleNode.onAttackCast = onAttackCast;
 
         renderNode = new RenderNode(this);
-        float size = 0.95f;
-        renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
-        renderNode.setInterpolated(0, 0);
         renderNode.onDraw = this.onDraw;
 
         separationNode = new SeparationNode(this);
@@ -72,6 +64,24 @@ public class Platoon extends Unit {
         gridNode = new GridNode(this, separationNode, battleNode);
 
         formationSheep = new FormationNode.FormationSheep(this);
+
+        reset();
+    }
+
+    public void reset() {
+        movementNode.maxSpeed.v = 0.8;
+        battleNode.hp.v = 50;
+        battleNode.attackRange.v = 4.5;
+        battleNode.attackDamage.v = 2;
+        battleNode.targetAcquisitionRange.v = 16.5;
+
+        float size = 0.95f;
+        renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
+        renderNode.setInterpolated(0, 0);
+    }
+
+    public void configure(Gamer gamer) {
+        battleNode.gamer.v = gamer;
     }
 
     public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =

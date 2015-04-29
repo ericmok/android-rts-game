@@ -3,6 +3,12 @@ package noteworthyengine;
 import org.json.JSONException;
 
 import noteworthyengine.units.ArrowCommandInput;
+import noteworthyengine.units.Cannon;
+import noteworthyengine.units.City;
+import noteworthyengine.units.Mech;
+import noteworthyengine.units.Missle;
+import noteworthyengine.units.Platoon;
+import noteworthyengine.units.UnitPool;
 import noteworthyframework.*;
 import structure.Game;
 import structure.GameCamera;
@@ -69,12 +75,33 @@ public class NoteworthyEngine extends BaseEngine {
         this.addSystem(battleSystem);
         this.addSystem(renderSystem);
         this.addSystem(decaySystem);
+
+        UnitPool.load();
     }
 
     public void initialize() {
         super.initialize();
         ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game);
         this.addUnit(arrowCommandInput);
+    }
+
+    @Override
+    public void recycleUnit(Unit unit) {
+        if (unit.name == Platoon.NAME) {
+            UnitPool.platoons.recycleMemory((Platoon)unit);
+        }
+        else if (unit.name == Cannon.NAME) {
+            UnitPool.cannons.recycleMemory((Cannon)unit);
+        }
+        else if (unit.name == Missle.NAME) {
+            UnitPool.missles.recycleMemory((Missle)unit);
+        }
+        else if (unit.name == Mech.NAME) {
+            UnitPool.mechs.recycleMemory((Mech)unit);
+        }
+        else if (unit.name == City.NAME) {
+            UnitPool.cities.recycleMemory((City)unit);
+        }
     }
 
     public void step(double dt) {

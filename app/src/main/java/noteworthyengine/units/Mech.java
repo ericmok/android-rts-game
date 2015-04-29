@@ -26,20 +26,9 @@ public class Mech extends Platoon {
         super();
         this.name = NAME;
 
-        this.renderNode.width.v = 1.3f;
-        this.renderNode.height.v = 1.3f;
+        this.reset();
+        this.configure(gamer);
 
-        this.battleNode.gamer.v = gamer;
-        this.battleNode.hp.v = 90;
-        this.battleNode.maxSpeed.v = 1.3;
-        //this.battleNode.attackRange.v = 5.5;
-        this.battleNode.attackDamage.v = 3;
-        this.battleNode.attackRange.v = 1.5;
-        this.battleNode.targetAcquisitionRange.v = 17;
-        this.battleNode.attackSwingTime.v = 2;
-        this.battleNode.attackCooldown.v = 2;
-
-        this.renderNode.animationName.v = "Animations/Archers/Idling";
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
@@ -75,5 +64,21 @@ public class Mech extends Platoon {
                 }
             }
         };
+    }
+
+    public void reset() {
+
+        this.renderNode.width.v = 1.3f;
+        this.renderNode.height.v = 1.3f;
+        this.battleNode.hp.v = 90;
+        this.battleNode.maxSpeed.v = 1.3;
+        //this.battleNode.attackRange.v = 5.5;
+        this.battleNode.attackDamage.v = 3;
+        this.battleNode.attackRange.v = 1.5;
+        this.battleNode.targetAcquisitionRange.v = 17;
+        this.battleNode.attackSwingTime.v = 2;
+        this.battleNode.attackCooldown.v = 2;
+
+        this.renderNode.animationName.v = "Animations/Archers/Idling";
     }
 }

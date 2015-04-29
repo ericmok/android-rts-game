@@ -18,19 +18,11 @@ import utils.VoidFunc3;
  */
 public class Missle extends Mine {
 
+    public static final String NAME = "missle";
+
     public Missle(Gamer gamer) {
         super(gamer);
 
-        this.movementNode.maxSpeed.v = 0.7;
-
-        this.battleNode.isAttackable.v = 0;
-        this.battleNode.attackDamage.v = 25;
-        this.battleNode.attackSwingTime.v = 3;
-        this.battleNode.attackRange.v = 2.5;
-        this.battleNode.targetAcquisitionRange.v = 20;
-        this.battleNode.hp.v = 100;
-        this.battleNode.fractionToWalkIntoAttackRange.v = 0.02;
-        this.battleNode.stickyAttack.v = 0;
         this.battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
@@ -66,10 +58,6 @@ public class Missle extends Mine {
             }
         };
 
-        this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
-        this.renderNode.width.v = 1.2f;
-        this.renderNode.height.v = 1.2f;
-        this.renderNode.color.v = Gamer.TeamColors.get(gamer.team);
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
@@ -102,5 +90,29 @@ public class Missle extends Mine {
             }
         };
 
+    }
+
+    public void reset() {
+        super.reset();
+
+        this.movementNode.maxSpeed.v = 0.7;
+
+        this.battleNode.isAttackable.v = 0;
+        this.battleNode.attackDamage.v = 25;
+        this.battleNode.attackSwingTime.v = 3;
+        this.battleNode.attackRange.v = 2.5;
+        this.battleNode.targetAcquisitionRange.v = 20;
+        this.battleNode.hp.v = 100;
+        this.battleNode.fractionToWalkIntoAttackRange.v = 0.02;
+        this.battleNode.stickyAttack.v = 0;
+
+        this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
+        this.renderNode.width.v = 1.2f;
+        this.renderNode.height.v = 1.2f;
+    }
+
+    public void configure(Gamer gamer) {
+        this.battleNode.gamer.v = gamer;
+        this.renderNode.color.v = Gamer.TeamColors.get(gamer.team);
     }
 }
