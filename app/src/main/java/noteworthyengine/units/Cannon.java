@@ -72,6 +72,8 @@ public class Cannon extends Platoon {
     }
 
     public void reset() {
+        super.reset();
+
         this.movementNode.maxSpeed.v = 0.3;
 
         this.battleNode.hp.v = 5;
@@ -80,6 +82,7 @@ public class Cannon extends Platoon {
         this.battleNode.attackDamage.v = 0;
         this.battleNode.attackRange.v = 7;
         this.battleNode.targetAcquisitionRange.v = 18.5;
+        this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
 
         this.renderNode.animationName.v = "Animations/Cannons/Idling";
         this.renderNode.width.v = 1.4f;

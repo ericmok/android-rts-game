@@ -74,6 +74,7 @@ public class Platoon extends Unit {
         battleNode.attackRange.v = 4.5;
         battleNode.attackDamage.v = 2;
         battleNode.targetAcquisitionRange.v = 16.5;
+        battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
 
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);

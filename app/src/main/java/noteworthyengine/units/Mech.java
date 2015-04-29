@@ -67,6 +67,7 @@ public class Mech extends Platoon {
     }
 
     public void reset() {
+        super.reset();
 
         this.renderNode.width.v = 1.3f;
         this.renderNode.height.v = 1.3f;
@@ -78,6 +79,7 @@ public class Mech extends Platoon {
         this.battleNode.targetAcquisitionRange.v = 17;
         this.battleNode.attackSwingTime.v = 2;
         this.battleNode.attackCooldown.v = 2;
+        this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
 
         this.renderNode.animationName.v = "Animations/Archers/Idling";
     }
