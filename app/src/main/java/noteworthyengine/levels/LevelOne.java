@@ -10,6 +10,7 @@ import noteworthyengine.units.Mech;
 import noteworthyengine.units.Mine;
 import noteworthyengine.units.Platoon;
 import noteworthyengine.units.TimelineCommand;
+import noteworthyengine.units.UnitPool;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.EngineDataLoader;
 import noteworthyframework.Gamer;
@@ -32,32 +33,38 @@ public class LevelOne implements EngineDataLoader {
         Vector2 perp = new Vector2();
         Orientation.getPerpendicular(perp, rot);
 
-        City city = new City(gamer);
+        City city = UnitPool.cities.fetchMemory(); //new City(gamer);
+        city.configure(gamer);
         city.battleNode.coords.pos.copy(location);
         baseEngine.addUnit(city);
 
-        Mine mine = new Mine(gamer);
+        Mine mine = UnitPool.mines.fetchMemory(); //new Mine(gamer);
+        mine.configure(gamer);
         mine.battleNode.coords.pos.copy(location);
         mine.battleNode.coords.pos.translate(-2, -2);
         baseEngine.addUnit(mine);
 
-        mine = new Mine(gamer);
+        mine = UnitPool.mines.fetchMemory();
+        mine.configure(gamer);
         mine.battleNode.coords.pos.copy(location);
         mine.battleNode.coords.pos.translate(-2, 2);
         baseEngine.addUnit(mine);
 
-        mine = new Mine(gamer);
+        mine = UnitPool.mines.fetchMemory();
+        mine.configure(gamer);
         mine.battleNode.coords.pos.copy(location);
         mine.battleNode.coords.pos.translate(2, 2);
         baseEngine.addUnit(mine);
 
-        mine = new Mine(gamer);
+        mine = UnitPool.mines.fetchMemory();
+        mine.configure(gamer);
         mine.battleNode.coords.pos.copy(location);
         mine.battleNode.coords.pos.translate(2, -2);
         baseEngine.addUnit(mine);
 
         for (int i = -3; i <= 3; i++) {
-            Mech mech = new Mech(gamer);
+            Mech mech = UnitPool.mechs.fetchMemory(); //new Mech(gamer);
+            mech.configure(gamer);
             mech.battleNode.coords.pos.copy(location);
             mech.battleNode.coords.pos.translate(i * perp.x, i * perp.y);
             baseEngine.addUnit(mech);
@@ -65,16 +72,18 @@ public class LevelOne implements EngineDataLoader {
 
         for (int h = 0; h <= 2; h++) {
             for (int i = -4; i <= 4; i++) {
-                Platoon platoon = new Platoon();
+                Platoon platoon = UnitPool.platoons.fetchMemory(); //new Platoon();
+                platoon.configure(gamer);
                 platoon.battleNode.coords.pos.copy(location);
                 platoon.battleNode.coords.pos.translate((i) * perp.x + h * rot.x, (i) * perp.y + h * rot.y);
-                platoon.battleNode.gamer.v = gamer;
+                //platoon.battleNode.gamer.v = gamer;
                 baseEngine.addUnit(platoon);
             }
         }
 
         for (int i = 0; i < 4; i++) {
-            Cannon cannon = new Cannon(gamer);
+            Cannon cannon = UnitPool.cannons.fetchMemory(); // new Cannon(gamer);
+            cannon.configure(gamer);
             cannon.battleNode.coords.pos.copy(location);
             cannon.battleNode.coords.pos.translate((i) * perp.x + 2 * rot.x, ((i)) * perp.y + 2 * rot.y);
             baseEngine.addUnit(cannon);
