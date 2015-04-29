@@ -9,9 +9,11 @@ import structure.GameCamera;
  */
 public class MainGameCamera extends CameraUnit {
 
-    public FieldCameraNode fieldCameraNode = new FieldCameraNode(this);
+    public FieldCameraNode fieldCameraNode;
 
-    public MainGameCamera(int index, GameCamera gameCamera, float scale) {
+    public MainGameCamera(int index, GameCamera gameCamera, float scale, float zoomScale) {
         super(index, gameCamera, scale);
+
+        fieldCameraNode = new FieldCameraNode(this, scale, zoomScale);
     }
 }

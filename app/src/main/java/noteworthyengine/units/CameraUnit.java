@@ -16,5 +16,6 @@ public class CameraUnit extends Unit {
         cameraNode.index.v = index;
         cameraNode.camera = gameCamera;
         cameraNode.camera.scale = scale;
+        cameraNode.scale.v = scale;
     }
 }

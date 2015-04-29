@@ -48,7 +48,14 @@ public class CameraSystem extends noteworthyframework.System {
             CameraNode cameraNode = nodes.get(i);
 
             Matrix.setIdentityM(cameraNode.camera.cameraMatrix, 0);
-            Matrix.scaleM(cameraNode.camera.cameraMatrix, 0, cameraNode.camera.scale, cameraNode.camera.scale, 1);
+
+            // TODO: Refactor from:
+            //Matrix.scaleM(cameraNode.camera.cameraMatrix, 0, cameraNode.camera.scale, cameraNode.camera.scale, 1);
+
+            // To this...
+            Matrix.scaleM(cameraNode.camera.cameraMatrix, 0, cameraNode.scale.v, cameraNode.scale.v, 1);
+            cameraNode.camera.scale = cameraNode.scale.v;
+
             Matrix.translateM(cameraNode.camera.cameraMatrix, 0, -(float) cameraNode.coords.pos.x, -(float) cameraNode.coords.pos.y, -2f);
 
             cameraNode.camera.invalidate();

@@ -45,7 +45,9 @@ public class FieldCameraSystem extends noteworthyframework.System {
         int size = fieldNodes.size();
         if (size < 1) {
             for (int i = 0; i < fieldCameraNodes.size(); i++) {
-                Vector2 cameraPos = fieldCameraNodes.get(i).coords.pos;
+
+                FieldCameraNode fieldCameraNode = fieldCameraNodes.get(i);
+                Vector2 cameraPos = fieldCameraNode.coords.pos;
 
                 Vector2 cog = gridSystem.grid.calculateCenterOfMass();
                 Vector2.subtract(vector, cog, cameraPos);
@@ -54,6 +56,8 @@ public class FieldCameraSystem extends noteworthyframework.System {
                 vector.scale(1 / (dist * dist + 1), 1 / (dist * dist + 1));
 
                 cameraPos.translate(vector.x * dt, vector.y * dt);
+
+                fieldCameraNode.scale.v = (0.5f * (float)dt) * (fieldCameraNode._originalCameraScale - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
             }
 
             return;
@@ -61,6 +65,8 @@ public class FieldCameraSystem extends noteworthyframework.System {
 
         // Move to center of mass for the fields
         for (int i = 0; i < fieldCameraNodes.size(); i++) {
+
+            FieldCameraNode fieldCameraNode = fieldCameraNodes.get(i);
 
             vector.zero();
 
@@ -72,7 +78,7 @@ public class FieldCameraSystem extends noteworthyframework.System {
             }
             vector.scale(1.0 / size, 1.0 / size);
 
-            Vector2 cameraPos = fieldCameraNodes.get(i).coords.pos;
+            Vector2 cameraPos = fieldCameraNode.coords.pos;
 
             Vector2.subtract(vector, vector, cameraPos);
             double dist = vector.magnitude();
@@ -80,6 +86,8 @@ public class FieldCameraSystem extends noteworthyframework.System {
             vector.scale(2 / (dist * dist + 1), 2 / (dist * dist + 1));
 
             cameraPos.translate(vector.x * dt, vector.y * dt);
+
+            fieldCameraNode.scale.v = (0.5f * (float)dt) * (fieldCameraNode.zoomScale.v - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
         }
     }
 
