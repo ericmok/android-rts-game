@@ -22,6 +22,10 @@ public class Grid {
 
     private ArrayList<GridNode> ret = new ArrayList<GridNode>(EXPECT_NUMBER_POINTS_PER_CELL);
 
+    private final Vector2 centerOfMass = new Vector2();
+    private final Vector2 resultVector = new Vector2();
+    private int numberIndexed = 0;
+
     public Grid(int width, int height, double cellSize) {
         this.width = width;
         this.height = height;
@@ -47,11 +51,25 @@ public class Grid {
     }
 
     public void index(GridNode node) {
+        centerOfMass.translate(node.coords.pos.x, node.coords.pos.y);
+        numberIndexed += 1;
+
         int cellX = getBucketX(node.coords.pos.x);
         int cellY = getBucketY(node.coords.pos.y);
         node.gridX.v = cellX;
         node.gridY.v = cellY;
         points[cellX][cellY].add(node);
+    }
+
+    /**
+     * Get a vector representing the center of mass of all the units indexed.
+     * @return A vector owned by the grid
+     */
+    public Vector2 calculateCenterOfMass() {
+        resultVector.copy(centerOfMass);
+        resultVector.x = resultVector.x / numberIndexed;
+        resultVector.y = resultVector.y / numberIndexed;
+        return resultVector;
     }
 
     public List<GridNode> getBucketForCell(int inX, int inY) {
@@ -247,6 +265,9 @@ public class Grid {
     }
 
     public void clear() {
+
+        centerOfMass.zero();
+
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 points[i][j].clear();

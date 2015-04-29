@@ -133,6 +133,12 @@ public class Vector2 implements JsonSerializable {
         }
     }
 
+    public static void lerp(Vector2 output, Vector2 a, Vector2 b, double amount) {
+        Vector2.subtract(output, b, a);
+        output.x = a.x + (amount * output.x);
+        output.y = a.y + (amount * output.y);
+    }
+
     public String toString() {
         return "(" + String.format("%.3f", x) + "," + String.format("%.3f", y) + ")";
     }

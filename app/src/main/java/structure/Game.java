@@ -16,6 +16,7 @@ import noteworthyengine.units.ButtonUnit;
 import noteworthyengine.units.CameraUnit;
 
 import noteworthyengine.LoaderUIEngine;
+import noteworthyengine.units.MainGameCamera;
 import noteworthyframework.BaseEngine;
 import noteworthyengine.NoteworthyEngine;
 import utils.VoidFunc;
@@ -124,9 +125,9 @@ public class Game {
 	public void loadLevel() {
         activeEngine = loaderUIEngine;
 
-        CameraUnit loaderUICamera = new CameraUnit(gameRenderer.mainCamera, 4f);
-        CameraUnit activeGameCamera = new CameraUnit(gameRenderer.mainCamera, 0.068f);
-        CameraUnit auxGameCamera = new CameraUnit(gameRenderer.auxCamera, 4);
+        CameraUnit loaderUICamera = new CameraUnit(0, gameRenderer.mainCamera, 4f);
+        MainGameCamera activeGameCamera = new MainGameCamera(0, gameRenderer.mainCamera, 0.068f);
+        CameraUnit auxGameCamera = new CameraUnit(1, gameRenderer.auxCamera, 4);
 
         loaderUIEngine.addUnit(loaderUICamera);
         loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
