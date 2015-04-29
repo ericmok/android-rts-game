@@ -8,7 +8,9 @@ import utils.MemoryPool;
  */
 public class UnitPool {
 
-    public static final Gamer NO_GAMER = new Gamer("No gamer!");
+    public static final Gamer NO_GAMER = new Gamer("No gamer!") {{
+      this.team = Gamer.TeamColors.size() - 1;
+    }};
 
     public static final int NUMBER_UNITS = 512;
 

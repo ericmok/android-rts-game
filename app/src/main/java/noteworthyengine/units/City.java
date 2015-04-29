@@ -38,7 +38,7 @@ public class City extends Unit {
 
                 if (battleNode.hp.v <= 0) {
                     City city = UnitPool.cities.fetchMemory();
-                    city.configure(gamer);
+                    city.configure(attacker.gamer.v);
                     city.battleNode.coords.pos.copy(battleNode.coords.pos);
                     battleSystem.getBaseEngine().addUnit(city);
                 }
