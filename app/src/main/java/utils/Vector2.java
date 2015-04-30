@@ -53,9 +53,21 @@ public class Vector2 implements JsonSerializable {
         return this;
     }
 
+    public Vector2 scale(double d) {
+        x *= d;
+        y *= d;
+        return this;
+    }
+
     public Vector2 translate(double d, double e) {
         x += d;
         y += e;
+        return this;
+    }
+
+    public Vector2 translate(Vector2 other) {
+        x += other.x;
+        y += other.y;
         return this;
     }
 
