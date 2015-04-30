@@ -4,9 +4,12 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import noteworthyengine.units.Barracks;
 import noteworthyengine.units.Cannon;
+import noteworthyengine.units.CannonFactory;
 import noteworthyengine.units.City;
 import noteworthyengine.units.Mech;
+import noteworthyengine.units.MechFactory;
 import noteworthyengine.units.Mine;
 import noteworthyengine.units.Platoon;
 import noteworthyengine.units.TimelineCommand;
@@ -33,10 +36,27 @@ public class LevelOne implements EngineDataLoader {
         Vector2 perp = new Vector2();
         Orientation.getPerpendicular(perp, rot);
 
-        City city = UnitPool.cities.fetchMemory(); //new City(gamer);
-        city.configure(gamer);
-        city.battleNode.coords.pos.copy(location);
-        baseEngine.addUnit(city);
+//        City city = UnitPool.cities.fetchMemory(); //new City(gamer);
+//        city.configure(gamer);
+//        city.battleNode.coords.pos.copy(location);
+//        baseEngine.addUnit(city);
+
+        CannonFactory cannonFactory = new CannonFactory(gamer); //UnitPool.cities.fetchMemory(); //new City(gamer);
+        cannonFactory.configure(gamer);
+        cannonFactory.battleNode.coords.pos.copy(location);
+        baseEngine.addUnit(cannonFactory);
+
+        Barracks barracks = new Barracks(gamer); //new City(gamer);
+        barracks.configure(gamer);
+        barracks.battleNode.coords.pos.copy(location);
+        barracks.battleNode.coords.pos.translate(1, 1);
+        baseEngine.addUnit(barracks);
+
+        MechFactory mechFactory = new MechFactory(gamer); //UnitPool.cities.fetchMemory(); //new City(gamer);
+        mechFactory.configure(gamer);
+        mechFactory.battleNode.coords.pos.copy(location);
+        mechFactory.battleNode.coords.pos.translate(-1, 1);
+        baseEngine.addUnit(mechFactory);
 
         Mine mine = UnitPool.mines.fetchMemory(); //new Mine(gamer);
         mine.configure(gamer);

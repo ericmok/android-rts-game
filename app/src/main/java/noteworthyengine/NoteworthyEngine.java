@@ -40,6 +40,8 @@ public class NoteworthyEngine extends BaseEngine {
     public RenderSystem renderSystem;
     public DecaySystem decaySystem;
 
+    public FactorySystem factorySystem;
+
     public Vector2 gameCameraPosition = new Vector2();
     public double cameraScale = GameSettings.UNIT_LENGTH_MULTIPLIER;
 
@@ -65,6 +67,8 @@ public class NoteworthyEngine extends BaseEngine {
         renderSystem = new RenderSystem(new DrawCompat(game));
         decaySystem = new DecaySystem();
 
+        factorySystem = new FactorySystem();
+
         this.addSystem(inputSystem);
         this.addSystem(cameraSystem);
 
@@ -80,6 +84,8 @@ public class NoteworthyEngine extends BaseEngine {
         this.addSystem(battleSystem);
         this.addSystem(renderSystem);
         this.addSystem(decaySystem);
+
+        this.addSystem(factorySystem);
 
         UnitPool.load();
     }
