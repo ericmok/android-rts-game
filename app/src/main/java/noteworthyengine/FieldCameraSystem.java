@@ -68,7 +68,7 @@ public class FieldCameraSystem extends noteworthyframework.System {
                 Vector2.subtract(vector, cog, cameraPos);
                 double dist = vector.magnitude();
 
-                double curve = 0.1 * dt * Math.sqrt( Math.max(5, Math.min((5) - dist, 0)) );
+                double curve = 0.18 * dt * Math.sqrt( Math.max(5, Math.min((5) - dist, 0)) );
                 vector.scale(curve, curve);
 
                 //vector.scale(1 / (dist * dist + 1), 1 / (dist * dist + 1));
@@ -76,7 +76,7 @@ public class FieldCameraSystem extends noteworthyframework.System {
                 cameraPos.translate(vector.x * dt, vector.y * dt);
 
                 // Zoom out
-                fieldCameraNode.scale.v = (0.2f * (float)dt) * (fieldCameraNode._originalCameraScale - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
+                fieldCameraNode.scale.v = (0.15f * (float)dt) * (fieldCameraNode._originalCameraScale - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
             }
 
             return;
@@ -102,7 +102,7 @@ public class FieldCameraSystem extends noteworthyframework.System {
             Vector2.subtract(vector, vector, cameraPos);
             double dist = vector.magnitude();
 
-            double curve = dt * Math.sqrt( Math.max(5, Math.min((5) - dist, 0)) );
+            double curve = 0.5 * dt * Math.sqrt( Math.max(5, Math.min((5) - dist, 0)) );
             vector.scale(curve, curve);
 
             //vector.scale(2 / (dist * dist + 1), 2 / (dist * dist + 1));
@@ -110,7 +110,7 @@ public class FieldCameraSystem extends noteworthyframework.System {
             cameraPos.translate(vector.x * dt, vector.y * dt);
 
             // Zoom in
-            fieldCameraNode.scale.v = (0.2f * (float)dt) * (fieldCameraNode.zoomScale.v - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
+            fieldCameraNode.scale.v = (0.15f * (float)dt) * (fieldCameraNode.zoomScale.v - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
         }
     }
 
