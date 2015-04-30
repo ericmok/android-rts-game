@@ -41,6 +41,21 @@ public class FieldCameraSystem extends noteworthyframework.System {
         // Since this is a hashmap.get, the result could be null
         if (fieldNodes == null) return;
 
+        QueueMutationList<FieldNode> agents = fieldSystem.agentsByGamer.get(this.getBaseEngine().currentGamer);
+
+        vector.zero();
+
+        if (agents != null && agents.size() > 0) {
+            int numberAgents = agents.size();
+            for (int i = numberAgents - 1; i >= 0; i--) {
+                vector.translate(agents.get(i)._fieldAgentNode.coords.pos);
+            }
+            vector.scale(1.0 / numberAgents);
+        }
+        else {
+            vector = gridSystem.grid.calculateCenterOfMass();
+        }
+
         // Move towards center of mass for the units if no fields
         int size = fieldNodes.size();
         if (size < 1) {
@@ -49,15 +64,19 @@ public class FieldCameraSystem extends noteworthyframework.System {
                 FieldCameraNode fieldCameraNode = fieldCameraNodes.get(i);
                 Vector2 cameraPos = fieldCameraNode.coords.pos;
 
-                Vector2 cog = gridSystem.grid.calculateCenterOfMass();
+                Vector2 cog = vector;
                 Vector2.subtract(vector, cog, cameraPos);
                 double dist = vector.magnitude();
 
-                vector.scale(1 / (dist * dist + 1), 1 / (dist * dist + 1));
+                double curve = 0.1 * dt * Math.sqrt( Math.max(5, Math.min((5) - dist, 0)) );
+                vector.scale(curve, curve);
+
+                //vector.scale(1 / (dist * dist + 1), 1 / (dist * dist + 1));
 
                 cameraPos.translate(vector.x * dt, vector.y * dt);
 
-                fieldCameraNode.scale.v = (0.5f * (float)dt) * (fieldCameraNode._originalCameraScale - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
+                // Zoom out
+                fieldCameraNode.scale.v = (0.2f * (float)dt) * (fieldCameraNode._originalCameraScale - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
             }
 
             return;
@@ -83,11 +102,15 @@ public class FieldCameraSystem extends noteworthyframework.System {
             Vector2.subtract(vector, vector, cameraPos);
             double dist = vector.magnitude();
 
-            vector.scale(2 / (dist * dist + 1), 2 / (dist * dist + 1));
+            double curve = dt * Math.sqrt( Math.max(5, Math.min((5) - dist, 0)) );
+            vector.scale(curve, curve);
+
+            //vector.scale(2 / (dist * dist + 1), 2 / (dist * dist + 1));
 
             cameraPos.translate(vector.x * dt, vector.y * dt);
 
-            fieldCameraNode.scale.v = (0.5f * (float)dt) * (fieldCameraNode.zoomScale.v - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
+            // Zoom in
+            fieldCameraNode.scale.v = (0.2f * (float)dt) * (fieldCameraNode.zoomScale.v - fieldCameraNode.scale.v) + fieldCameraNode.scale.v;
         }
     }
 
