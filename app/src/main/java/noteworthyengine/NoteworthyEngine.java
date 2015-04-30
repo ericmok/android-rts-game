@@ -98,21 +98,7 @@ public class NoteworthyEngine extends BaseEngine {
 
     @Override
     public void recycleUnit(Unit unit) {
-        if (unit.name == Platoon.NAME) {
-            UnitPool.platoons.recycleMemory((Platoon)unit);
-        }
-        else if (unit.name == Cannon.NAME) {
-            UnitPool.cannons.recycleMemory((Cannon)unit);
-        }
-        else if (unit.name == Missle.NAME) {
-            UnitPool.missles.recycleMemory((Missle)unit);
-        }
-        else if (unit.name == Mech.NAME) {
-            UnitPool.mechs.recycleMemory((Mech)unit);
-        }
-        else if (unit.name == City.NAME) {
-            UnitPool.cities.recycleMemory((City)unit);
-        }
+        UnitPool.recycle(unit);
     }
 
     public void step(double dt) {

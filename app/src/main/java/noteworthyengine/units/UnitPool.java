@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
 import noteworthyframework.Gamer;
+import noteworthyframework.Unit;
 import utils.MemoryPool;
 
 /**
@@ -93,8 +94,63 @@ public class UnitPool {
         }
     };
 
+    public static final MemoryPool<MechFactory> mechFactories = new MemoryPool<MechFactory>(MechFactory.class, NUMBER_UNITS) {
+        @Override
+        public synchronized MechFactory fetchMemory() {
+            MechFactory ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
+    };
+
+    public static final MemoryPool<Barracks> barracks = new MemoryPool<Barracks>(Barracks.class, NUMBER_UNITS) {
+        @Override
+        public synchronized Barracks fetchMemory() {
+            Barracks ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
+    };
+
+    public static final MemoryPool<CannonFactory> cannonFactories = new MemoryPool<CannonFactory>(CannonFactory.class, NUMBER_UNITS) {
+        @Override
+        public synchronized CannonFactory fetchMemory() {
+            CannonFactory ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
+    };
+
+
     public static void load() {
         // Does nothing. Just load class static fields via class loader.
+    }
+
+    public static void recycle(Unit unit) {
+        if (unit.getClass() == Platoon.class) {
+            UnitPool.platoons.recycleMemory((Platoon)unit);
+        }
+        else if (unit.getClass() == Cannon.class) {
+            UnitPool.cannons.recycleMemory((Cannon)unit);
+        }
+        else if (unit.getClass() == Missle.class) {
+            UnitPool.missles.recycleMemory((Missle)unit);
+        }
+        else if (unit.getClass() == Mech.class) {
+            UnitPool.mechs.recycleMemory((Mech)unit);
+        }
+        else if (unit.getClass() == City.class) {
+            UnitPool.cities.recycleMemory((City)unit);
+        }
+        else if (unit.getClass() == MechFactory.class) {
+            UnitPool.mechFactories.recycleMemory((MechFactory)unit);
+        }
+        else if (unit.getClass() == Barracks.class) {
+            UnitPool.barracks.recycleMemory((Barracks)unit);
+        }
+        else if (unit.getClass() == CannonFactory.class) {
+            UnitPool.cannonFactories.recycleMemory((CannonFactory)unit);
+        }
     }
 
     private UnitPool() {
