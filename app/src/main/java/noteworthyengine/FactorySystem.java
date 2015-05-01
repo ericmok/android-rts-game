@@ -33,7 +33,7 @@ public class FactorySystem extends noteworthyframework.System {
 
             if (factoryNode.buildProgress.v >= factoryNode.buildTime.v) {
                 factoryNode.buildProgress.v = 0;
-                factoryNode.spawnFunction.apply(this);
+                factoryNode.spawnFunction.apply(this, factoryNode);
             }
         }
     }
