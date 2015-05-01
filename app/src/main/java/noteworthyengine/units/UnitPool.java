@@ -14,6 +14,7 @@ public class UnitPool {
     }};
 
     public static final int NUMBER_UNITS = 512;
+    public static final int NUMBER_BUILDINGS = 31;
 
     public static final MemoryPool<Mech> mechs = new MemoryPool<Mech>(Mech.class, NUMBER_UNITS) {
         @Override
@@ -80,7 +81,7 @@ public class UnitPool {
         }
     };
 
-    public static final MemoryPool<City> cities = new MemoryPool<City>(City.class, NUMBER_UNITS) {
+    public static final MemoryPool<City> cities = new MemoryPool<City>(City.class, NUMBER_BUILDINGS) {
         @Override
         public City newInstance(Class cls) {
             return new City(NO_GAMER);
@@ -94,7 +95,12 @@ public class UnitPool {
         }
     };
 
-    public static final MemoryPool<MechFactory> mechFactories = new MemoryPool<MechFactory>(MechFactory.class, NUMBER_UNITS) {
+    public static final MemoryPool<MechFactory> mechFactories = new MemoryPool<MechFactory>(MechFactory.class, NUMBER_BUILDINGS) {
+        @Override
+        public MechFactory newInstance(Class cls) {
+            return new MechFactory(NO_GAMER);
+        }
+
         @Override
         public synchronized MechFactory fetchMemory() {
             MechFactory ret = super.fetchMemory();
@@ -103,7 +109,12 @@ public class UnitPool {
         }
     };
 
-    public static final MemoryPool<Barracks> barracks = new MemoryPool<Barracks>(Barracks.class, NUMBER_UNITS) {
+    public static final MemoryPool<Barracks> barracks = new MemoryPool<Barracks>(Barracks.class, NUMBER_BUILDINGS) {
+        @Override
+        public Barracks newInstance(Class cls) {
+            return new Barracks(NO_GAMER);
+        }
+
         @Override
         public synchronized Barracks fetchMemory() {
             Barracks ret = super.fetchMemory();
@@ -112,7 +123,13 @@ public class UnitPool {
         }
     };
 
-    public static final MemoryPool<CannonFactory> cannonFactories = new MemoryPool<CannonFactory>(CannonFactory.class, NUMBER_UNITS) {
+    public static final MemoryPool<CannonFactory> cannonFactories = new MemoryPool<CannonFactory>(CannonFactory.class, NUMBER_BUILDINGS) {
+
+        @Override
+        public CannonFactory newInstance(Class cls) {
+            return new CannonFactory(NO_GAMER);
+        }
+
         @Override
         public synchronized CannonFactory fetchMemory() {
             CannonFactory ret = super.fetchMemory();
