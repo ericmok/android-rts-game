@@ -41,18 +41,19 @@ public class LevelOne implements EngineDataLoader {
 //        city.battleNode.coords.pos.copy(location);
 //        baseEngine.addUnit(city);
 
-        CannonFactory cannonFactory = new CannonFactory(gamer); //UnitPool.cities.fetchMemory(); //new City(gamer);
+        CannonFactory cannonFactory = UnitPool.cannonFactories.fetchMemory(); //UnitPool.cities.fetchMemory(); //new City(gamer);
         cannonFactory.configure(gamer);
         cannonFactory.battleNode.coords.pos.copy(location);
+        cannonFactory.battleNode.coords.pos.translate(0, -1);
         baseEngine.addUnit(cannonFactory);
 
-        Barracks barracks = new Barracks(gamer); //new City(gamer);
+        Barracks barracks = UnitPool.barracks.fetchMemory(); //new City(gamer);
         barracks.configure(gamer);
         barracks.battleNode.coords.pos.copy(location);
         barracks.battleNode.coords.pos.translate(1, 1);
         baseEngine.addUnit(barracks);
 
-        MechFactory mechFactory = new MechFactory(gamer); //UnitPool.cities.fetchMemory(); //new City(gamer);
+        MechFactory mechFactory = UnitPool.mechFactories.fetchMemory(); //UnitPool.cities.fetchMemory(); //new City(gamer);
         mechFactory.configure(gamer);
         mechFactory.battleNode.coords.pos.copy(location);
         mechFactory.battleNode.coords.pos.translate(-1, 1);
@@ -146,6 +147,29 @@ public class LevelOne implements EngineDataLoader {
 
         for (int i = 0; i < baseEngine.gamers.size(); i++) {
             spawnBase(baseEngine, baseEngine.gamers.get(i), spawnLocations.get(i));
+        }
+
+
+        Gamer gamer4 = new Gamer("neutral");
+        gamer4.team = 4;
+
+        baseEngine.addGamer(gamer4);
+
+        ArrayList<Vector2> neutralSpawnLocations = new ArrayList<Vector2>(4);
+        Vector2 spawnLocationN0 = new Vector2(-7, -7);
+        Vector2 spawnLocationN1 = new Vector2(7, 7);
+        Vector2 spawnLocationN2 = new Vector2(-7, 7);
+        Vector2 spawnLocationN3 = new Vector2(7, -7);
+        neutralSpawnLocations.add(spawnLocationN0);
+        neutralSpawnLocations.add(spawnLocationN1);
+        neutralSpawnLocations.add(spawnLocationN2);
+        neutralSpawnLocations.add(spawnLocationN3);
+
+        for (int i = 0; i < neutralSpawnLocations.size(); i++) {
+            Barracks barracks = UnitPool.barracks.fetchMemory();
+            barracks.configure(gamer4);
+            barracks.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
+            baseEngine.addUnit(barracks);
         }
 
         baseEngine.currentGamer = gamer0;

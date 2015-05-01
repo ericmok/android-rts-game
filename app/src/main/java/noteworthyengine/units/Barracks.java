@@ -11,6 +11,7 @@ import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import utils.DoublePtr;
 import utils.VoidFunc;
+import utils.VoidFunc2;
 import utils.VoidFunc4;
 
 /**
@@ -35,25 +36,13 @@ public class Barracks extends Unit {
 
         gridNode = new GridNode(this, null, battleNode);
 
-        battleNode.inflictDamage = new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
-                battleNode.hp.v -= damage.v;
+        battleNode.inflictDamage = this.createOnDieFunction();
 
-                if (battleNode.hp.v <= 0) {
-                    City city = UnitPool.cities.fetchMemory();
-                    city.configure(attacker.gamer.v);
-                    city.battleNode.coords.pos.copy(battleNode.coords.pos);
-                    battleSystem.getBaseEngine().addUnit(city);
-                }
-            }
-        };
-
-        factoryNode.spawnFunction = new VoidFunc<FactorySystem>() {
+        factoryNode.spawnFunction = new VoidFunc2<FactorySystem, FactoryNode>() {
             @Override
-            public void apply(FactorySystem factorySystem) {
+            public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
                 Platoon platoon = UnitPool.platoons.fetchMemory();
-                platoon.configure(gamer);
+                platoon.configure(factoryNode.gamer.v);
                 platoon.battleNode.coords.pos.copy(battleNode.coords.pos);
                 factorySystem.getBaseEngine().addUnit(platoon);
             }
@@ -70,7 +59,23 @@ public class Barracks extends Unit {
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
 
         factoryNode.configure(gamer);
-        factoryNode.buildTime.v = 20;
+        factoryNode.buildTime.v = 25;
         factoryNode.buildProgress.v = 0;
+    }
+
+    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> createOnDieFunction() {
+        return new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
+            @Override
+            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
+                battleNode.hp.v -= damage.v;
+
+                if (battleNode.hp.v <= 0) {
+                    Barracks barracks = UnitPool.barracks.fetchMemory();
+                    barracks.configure(attacker.gamer.v);
+                    barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
+                    battleSystem.getBaseEngine().addUnit(barracks);
+                }
+            }
+        };
     }
 }
