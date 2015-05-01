@@ -53,7 +53,7 @@ public class FieldCameraSystem extends noteworthyframework.System {
             vector.scale(1.0 / numberAgents);
         }
         else {
-            vector = gridSystem.grid.calculateCenterOfMass();
+            vector.copy(gridSystem.grid.calculateCenterOfMass());
         }
 
         // Move towards center of mass for the units if no fields
