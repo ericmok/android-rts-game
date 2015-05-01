@@ -55,7 +55,7 @@ public class Nanobot extends Unit {
         battleNode.attackCooldown.v = 1;
         battleNode.attackDamage.v = 2;
         battleNode.attackCooldown.v = 1;
-        battleNode.attackRange.v = 1.1;
+        battleNode.attackRange.v = 1.0;
 
         battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
         battleNode.target.v = null;
