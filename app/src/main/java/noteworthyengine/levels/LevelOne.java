@@ -134,10 +134,10 @@ public class LevelOne implements EngineDataLoader {
         baseEngine.addGamer(gamer2);
         baseEngine.addGamer(gamer3);
 
-        Vector2 spawnLocation0 = new Vector2(0, -13);
-        Vector2 spawnLocation1 = new Vector2(0, 13);
-        Vector2 spawnLocation2 = new Vector2(-13, 0);
-        Vector2 spawnLocation3 = new Vector2(13, 0);
+        Vector2 spawnLocation0 = new Vector2(0, -13.5);
+        Vector2 spawnLocation1 = new Vector2(0, 13.5);
+        Vector2 spawnLocation2 = new Vector2(-13.5, 0);
+        Vector2 spawnLocation3 = new Vector2(13.5, 0);
 
         ArrayList<Vector2> spawnLocations = new ArrayList<Vector2>(4);
         spawnLocations.add(spawnLocation0);
@@ -156,14 +156,15 @@ public class LevelOne implements EngineDataLoader {
         baseEngine.addGamer(gamer4);
 
         ArrayList<Vector2> neutralSpawnLocations = new ArrayList<Vector2>(8);
-        neutralSpawnLocations.add(new Vector2(-4, -4));
-        neutralSpawnLocations.add(new Vector2(4, 4));
-        neutralSpawnLocations.add(new Vector2(-4, 4));
-        neutralSpawnLocations.add(new Vector2(4, -4));
-        neutralSpawnLocations.add(new Vector2(-10.5, -10.5));
-        neutralSpawnLocations.add(new Vector2(10.5, 10.5));
-        neutralSpawnLocations.add(new Vector2(-10.5, 10.5));
-        neutralSpawnLocations.add(new Vector2(10.5, -10.5));
+        neutralSpawnLocations.add(new Vector2(-4.4, -4.4));
+        neutralSpawnLocations.add(new Vector2(4.4, 4.4));
+        neutralSpawnLocations.add(new Vector2(-4.4, 4.4));
+        neutralSpawnLocations.add(new Vector2(4.4, -4.4));
+        neutralSpawnLocations.add(new Vector2(-11.8, -11.8));
+        neutralSpawnLocations.add(new Vector2(11.8, 11.8));
+        neutralSpawnLocations.add(new Vector2(-11.8, 11.8));
+        neutralSpawnLocations.add(new Vector2(11.8, -11.8));
+        neutralSpawnLocations.add(new Vector2(0, 0));
 
         for (int i = 0; i < neutralSpawnLocations.size(); i++) {
             Barracks barracks = UnitPool.barracks.fetchMemory();
