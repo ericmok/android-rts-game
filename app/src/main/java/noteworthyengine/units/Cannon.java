@@ -74,7 +74,7 @@ public class Cannon extends Platoon {
     public void reset() {
         super.reset();
 
-        this.movementNode.maxSpeed.v = 0.3;
+        this.movementNode.maxSpeed.v = 0.32;
 
         this.battleNode.hp.v = 5;
         this.battleNode.attackSwingTime.v = 6;

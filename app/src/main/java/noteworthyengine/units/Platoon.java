@@ -69,7 +69,7 @@ public class Platoon extends Unit {
     }
 
     public void reset() {
-        movementNode.maxSpeed.v = 0.8;
+        movementNode.maxSpeed.v = 0.7;
         battleNode.hp.v = 50;
         battleNode.attackRange.v = 4.5;
         battleNode.attackDamage.v = 2;

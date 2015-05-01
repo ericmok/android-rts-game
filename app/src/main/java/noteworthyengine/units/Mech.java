@@ -72,7 +72,7 @@ public class Mech extends Platoon {
         this.renderNode.width.v = 1.3f;
         this.renderNode.height.v = 1.3f;
         this.battleNode.hp.v = 90;
-        this.battleNode.maxSpeed.v = 1.3;
+        this.battleNode.maxSpeed.v = 1.1;
         //this.battleNode.attackRange.v = 5.5;
         this.battleNode.attackDamage.v = 3;
         this.battleNode.attackRange.v = 1.5;

@@ -47,7 +47,7 @@ public class City extends Unit {
     }
 
     public void reset() {
-        battleNode.hp.v = 100;
+        battleNode.hp.v = 110;
         battleNode.attackDamage.v = 1;
     }
 
