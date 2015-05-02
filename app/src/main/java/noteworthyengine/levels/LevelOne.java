@@ -7,12 +7,11 @@ import java.util.ArrayList;
 import noteworthyengine.units.Barracks;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.CannonFactory;
-import noteworthyengine.units.City;
 import noteworthyengine.units.Mech;
 import noteworthyengine.units.MechFactory;
 import noteworthyengine.units.Mine;
+import noteworthyengine.units.NanobotFactory;
 import noteworthyengine.units.Platoon;
-import noteworthyengine.units.TimelineCommand;
 import noteworthyengine.units.UnitPool;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.EngineDataLoader;
@@ -91,7 +90,7 @@ public class LevelOne implements EngineDataLoader {
             baseEngine.addUnit(mech);
         }
 
-        for (int h = 0; h <= 2; h++) {
+        for (int h = 0; h <= 1; h++) {
             for (int i = -4; i <= 4; i++) {
                 Platoon platoon = UnitPool.platoons.fetchMemory(); //new Platoon();
                 platoon.configure(gamer);
@@ -102,7 +101,7 @@ public class LevelOne implements EngineDataLoader {
             }
         }
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             Cannon cannon = UnitPool.cannons.fetchMemory(); // new Cannon(gamer);
             cannon.configure(gamer);
             cannon.battleNode.coords.pos.copy(location);
@@ -134,10 +133,10 @@ public class LevelOne implements EngineDataLoader {
         baseEngine.addGamer(gamer2);
         baseEngine.addGamer(gamer3);
 
-        Vector2 spawnLocation0 = new Vector2(0, -13.5);
-        Vector2 spawnLocation1 = new Vector2(0, 13.5);
-        Vector2 spawnLocation2 = new Vector2(-13.5, 0);
-        Vector2 spawnLocation3 = new Vector2(13.5, 0);
+        Vector2 spawnLocation0 = new Vector2(0, -13.9);
+        Vector2 spawnLocation1 = new Vector2(0, 13.9);
+        Vector2 spawnLocation2 = new Vector2(-13.9, 0);
+        Vector2 spawnLocation3 = new Vector2(13.9, 0);
 
         ArrayList<Vector2> spawnLocations = new ArrayList<Vector2>(4);
         spawnLocations.add(spawnLocation0);
@@ -160,11 +159,15 @@ public class LevelOne implements EngineDataLoader {
         neutralSpawnLocations.add(new Vector2(4.4, 4.4));
         neutralSpawnLocations.add(new Vector2(-4.4, 4.4));
         neutralSpawnLocations.add(new Vector2(4.4, -4.4));
+//        neutralSpawnLocations.add(new Vector2(-10, -10));
+//        neutralSpawnLocations.add(new Vector2(10, 10));
+//        neutralSpawnLocations.add(new Vector2(-10, 10));
+//        neutralSpawnLocations.add(new Vector2(10, -10));
         neutralSpawnLocations.add(new Vector2(-11.8, -11.8));
         neutralSpawnLocations.add(new Vector2(11.8, 11.8));
         neutralSpawnLocations.add(new Vector2(-11.8, 11.8));
         neutralSpawnLocations.add(new Vector2(11.8, -11.8));
-        neutralSpawnLocations.add(new Vector2(0, 0));
+        //neutralSpawnLocations.add(new Vector2(0, 0));
 
         for (int i = 0; i < neutralSpawnLocations.size(); i++) {
             Barracks barracks = UnitPool.barracks.fetchMemory();
@@ -172,6 +175,24 @@ public class LevelOne implements EngineDataLoader {
             barracks.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
             baseEngine.addUnit(barracks);
         }
+
+        NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
+        nanobotFactory.configure(gamer4);
+        nanobotFactory.battleNode.coords.pos.zero();
+        baseEngine.addUnit(nanobotFactory);
+
+//        neutralSpawnLocations = new ArrayList<Vector2>(4);
+//        neutralSpawnLocations.add(new Vector2(-14, -14));
+//        neutralSpawnLocations.add(new Vector2(14, -14));
+//        neutralSpawnLocations.add(new Vector2(-14, 14));
+//        neutralSpawnLocations.add(new Vector2(14, 14));
+//
+//        for (int i = 0; i < neutralSpawnLocations.size(); i++) {
+//            NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
+//            nanobotFactory.configure(gamer4);
+//            nanobotFactory.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
+//            baseEngine.addUnit(nanobotFactory);
+//        }
 
         baseEngine.currentGamer = gamer0;
 

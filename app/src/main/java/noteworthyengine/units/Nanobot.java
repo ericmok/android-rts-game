@@ -48,7 +48,7 @@ public class Nanobot extends Unit {
     }
 
     public void reset() {
-        movementNode.maxSpeed.v = 1.2;
+        movementNode.maxSpeed.v = 1.1;
 
         battleNode.hp.v = 24;
         battleNode.targetAcquisitionRange.v = 20;
