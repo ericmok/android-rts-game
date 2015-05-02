@@ -51,7 +51,7 @@ public class Nanobot extends Unit {
         movementNode.maxSpeed.v = 1.2;
 
         battleNode.hp.v = 24;
-        battleNode.targetAcquisitionRange.v = 10;
+        battleNode.targetAcquisitionRange.v = 20;
         battleNode.attackCooldown.v = 1;
         battleNode.attackDamage.v = 2;
         battleNode.attackCooldown.v = 1;
