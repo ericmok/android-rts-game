@@ -80,17 +80,7 @@ public class MemoryPool<E> {
 //			freeUnits -= 1;
 //			return ret;
 			if (pointers.size() < 1) {
-				E obj;
-				try {
-					obj = cls.newInstance();
-					return obj;
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				return newInstance(cls);
 			}
 			E unit = (E) pointers.remove(pointers.size() - 1);
 			return unit;
