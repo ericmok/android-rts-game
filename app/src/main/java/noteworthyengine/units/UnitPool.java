@@ -14,7 +14,7 @@ public class UnitPool {
     }};
 
     public static final int NUMBER_UNITS = 512;
-    public static final int NUMBER_BUILDINGS = 31;
+    public static final int NUMBER_BUILDINGS = 63;
 
     public static final MemoryPool<Mech> mechs = new MemoryPool<Mech>(Mech.class, NUMBER_UNITS) {
         @Override
@@ -138,6 +138,30 @@ public class UnitPool {
         }
     };
 
+    public static final MemoryPool<Nanobot> nanobots = new MemoryPool<Nanobot>(Nanobot.class, NUMBER_UNITS) {
+        @Override
+        public synchronized Nanobot fetchMemory() {
+            Nanobot ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
+    };
+
+    public static final MemoryPool<NanobotFactory> nanobotFactories = new MemoryPool<NanobotFactory>(NanobotFactory.class, NUMBER_BUILDINGS) {
+
+        @Override
+        public NanobotFactory newInstance(Class cls) {
+            return new NanobotFactory(NO_GAMER);
+        }
+
+        @Override
+        public synchronized NanobotFactory fetchMemory() {
+            NanobotFactory ret = super.fetchMemory();
+            ret.reset();
+            return ret;
+        }
+    };
+
 
     public static void load() {
         // Does nothing. Just load class static fields via class loader.
@@ -167,6 +191,12 @@ public class UnitPool {
         }
         else if (unit.getClass() == CannonFactory.class) {
             UnitPool.cannonFactories.recycleMemory((CannonFactory)unit);
+        }
+        else if (unit.getClass() == Nanobot.class) {
+            UnitPool.nanobots.recycleMemory((Nanobot)unit);
+        }
+        else if (unit.getClass() == NanobotFactory.class) {
+            UnitPool.nanobotFactories.recycleMemory((NanobotFactory)unit);
         }
     }
 
