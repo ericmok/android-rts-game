@@ -67,8 +67,17 @@ public class Missle extends Mine {
                         (float)renderNode.coords.pos.x, (float)renderNode.coords.pos.y, 0,
                         1.4f, 1.4f,
                         90f,
-                        Color.argb(70, 255, 255, 255),
+                        Color.argb(80, 255, 255, 255),
                         0);
+
+                if (battleNode.target.v != null) {
+                    sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
+                            (float)battleNode.target.v.coords.pos.x, (float)battleNode.target.v.coords.pos.y, 0,
+                            2f, 2f,
+                            90f,
+                            renderNode.color.v,
+                            0);
+                }
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
                     float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
