@@ -71,6 +71,7 @@ public class Missle extends Mine {
                         0);
 
                 if (battleNode.target.v != null) {
+                    sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                     sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
                             (float)battleNode.target.v.coords.pos.x, (float)battleNode.target.v.coords.pos.y, 0,
                             2f, 2f,
