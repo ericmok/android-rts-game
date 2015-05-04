@@ -36,7 +36,7 @@ public class FieldNode extends Node {
         public String _name = _NAME;
 
         public Coords coords;
-        public DoublePtr fieldArrowInfluenceRadius = new DoublePtr() {{ v = 4; }};
+        public DoublePtr fieldArrowInfluenceRadius = new DoublePtr() {{ v = 3; }};
         public DoublePtr rampDistance = new DoublePtr() {{ v = 10; }};
 
         public FieldArrowNode(Unit unit) {
