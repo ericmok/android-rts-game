@@ -26,6 +26,10 @@ public class MovementNode extends Node implements JsonSerializable {
     public Vector2 separationForce;
     public Vector2 enemyAttractionForce;
 
+    public BattleNode.Ptr target;
+
+    public DoublePtr turnFactor = new DoublePtr() {{ v = 0.4; }};
+
     public DoublePtr maxSpeed = new DoublePtr() {{ v = 1; }};
 
     //public double crowdSpeed = 1;
