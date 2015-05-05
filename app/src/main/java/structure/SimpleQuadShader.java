@@ -266,6 +266,8 @@ public class SimpleQuadShader {
     }
 
     public void drawUsingShaderBuffers(float[] projectionMatrix, float scalingX, float scalingY, float angle, float translationX, float translationY, int color, int textureHandle, int mode, int count) {
+
+        // TODO: Should this be moved to batch?
         if (textureHandle != cacheGlTexture) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle);
             cacheGlTexture = textureHandle;
