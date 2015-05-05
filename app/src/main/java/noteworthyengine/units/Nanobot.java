@@ -85,15 +85,20 @@ public class Nanobot extends Unit {
                 }
 
                 if (battleNode.hp.v <= 0) {
-                    TemporarySprite2dDef temporarySprite2dDef = renderSystem.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                    //TemporarySprite2dDef temporarySprite2dDef = renderSystem.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
+                    TemporarySprite2dDef temporarySprite2dDef = renderSystem.beginNewTempSprite();
+
+                    //renderSystem.drawCompat.tempSpritesMemoryPool.fetchMemory();
                     temporarySprite2dDef.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                     temporarySprite2dDef.position.x = battleNode.coords.pos.x;
                     temporarySprite2dDef.position.y = battleNode.coords.pos.y;
                     temporarySprite2dDef.width = 0.78f;
                     temporarySprite2dDef.height = 0.78f;
 
-                    renderSystem.drawCompat.drawTemporarySprite(temporarySprite2dDef);
-                    renderSystem.drawCompat.tempSpritesMemoryPool.recycleMemory(temporarySprite2dDef);
+                    renderSystem.endNewTempSprite(temporarySprite2dDef, 0);
+
+                    //renderSystem.drawCompat.drawTemporarySprite(temporarySprite2dDef);
+                    //renderSystem.drawCompat.tempSpritesMemoryPool.recycleMemory(temporarySprite2dDef);
                 }
             }
         };

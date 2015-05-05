@@ -49,31 +49,7 @@ public class DrawCompat {
 
     public void drawSprite(Sprite2dDef sprite2dDef) {
         Sprite2dDef toFill = spriteAllocator.takeNextWritable();
-        //toFill.cameraIndex = renderSystem.cameraSystem.nodes.get(toFill.cameraIndex).index.v;
         toFill.copy(sprite2dDef);
-    }
-
-    public TemporarySprite2dDef defineNewTempSprite(int cameraNodeIndex) {
-        TemporarySprite2dDef temporarySprite2dDef = tempSpritesMemoryPool.fetchMemory();
-        temporarySprite2dDef.cameraIndex = renderSystem.cameraSystem.nodes.get(cameraNodeIndex).index.v;
-        return temporarySprite2dDef;
-    }
-
-    public Sprite2dDef defineNewSprite(int cameraNodeIndex) {
-        Sprite2dDef toFill = spriteAllocator.takeNextWritable();
-        toFill.cameraIndex = renderSystem.cameraSystem.nodes.get(cameraNodeIndex).index.v;
-        return toFill;
-    }
-
-    public Sprite2dDef defineNewSprite(String animationName, int animationProgress,
-                           float x, float y, float z,
-                           float width, float height,
-                           float angle,
-                           int color, int cameraNodeIndex) {
-        Sprite2dDef toFill = spriteAllocator.takeNextWritable();
-        toFill.set(animationName, animationProgress, x, y, z, width, height, angle, color,
-                renderSystem.cameraSystem.nodes.get(cameraNodeIndex).index.v);
-        return toFill;
     }
 
     // TODO:

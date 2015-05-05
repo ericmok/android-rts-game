@@ -62,18 +62,20 @@ public class Missle extends Mine {
             @Override
             public void apply(RenderSystem system) {
 
-                Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
-                        (float)renderNode.coords.pos.x, (float)renderNode.coords.pos.y, 0,
+                //Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
+                //sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
+                system.defineNewSprite(Animations.ANIMATION_TROOPS_SELECTED, 1,
+                        (float) renderNode.coords.pos.x, (float) renderNode.coords.pos.y, 0,
                         1.4f, 1.4f,
                         90f,
                         Color.argb(80, 255, 255, 255),
                         0);
 
                 if (battleNode.target.v != null) {
-                    sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                    sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
-                            (float)battleNode.target.v.coords.pos.x, (float)battleNode.target.v.coords.pos.y, 0,
+                    //sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
+                    //sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
+                    system.defineNewSprite(Animations.ANIMATION_TROOPS_SELECTED, 1,
+                            (float) battleNode.target.v.coords.pos.x, (float) battleNode.target.v.coords.pos.y, 0,
                             2f, 2f,
                             90f,
                             renderNode.color.v,
@@ -84,17 +86,26 @@ public class Missle extends Mine {
                     float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
                     float rad = (float)(battleNode.attackRange.v * ratio);
 
-                    sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                    sprite2dDef.isGfxInterpolated = false;
-                    sprite2dDef.animationName = Animations.ANIMATION_MINE_EXPLODING;
-                    sprite2dDef.animationProgress = (int) (ratio * 100);
-                    sprite2dDef.position.x = battleNode.coords.pos.x;
-                    sprite2dDef.position.y = battleNode.coords.pos.y;
-                    sprite2dDef.position.z = 3;
-                    sprite2dDef.angle = 0;
-                    sprite2dDef.width = 2 * rad;
-                    sprite2dDef.height = 2 * rad;
-                    sprite2dDef.color = renderNode.color.v;
+                    system.defineNewSprite(Animations.ANIMATION_MINE_EXPLODING, (int) (ratio * 100),
+                            (float) battleNode.coords.pos.x,
+                            (float) battleNode.coords.pos.y,
+                            3,
+                            (float) 2 * rad,
+                            (float) 2 * rad,
+                            0,
+                            renderNode.color.v,
+                            0);
+//                    sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
+//                    sprite2dDef.isGfxInterpolated = false;
+//                    sprite2dDef.animationName = Animations.ANIMATION_MINE_EXPLODING;
+//                    sprite2dDef.animationProgress = (int) (ratio * 100);
+//                    sprite2dDef.position.x = battleNode.coords.pos.x;
+//                    sprite2dDef.position.y = battleNode.coords.pos.y;
+//                    sprite2dDef.position.z = 3;
+//                    sprite2dDef.angle = 0;
+//                    sprite2dDef.width = 2 * rad;
+//                    sprite2dDef.height = 2 * rad;
+//                    sprite2dDef.color = renderNode.color.v;
                     //sprite2dDef.color = Color.argb(128, 255, 255, 255);
                 }
             }

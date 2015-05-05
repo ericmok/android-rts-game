@@ -40,13 +40,15 @@ public class Cannon extends Platoon {
                 renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
                 if (battleNode.hp.v <= 0) {
-                    TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                    //system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                    TemporarySprite2dDef tempSprite = system.beginNewTempSprite(); //system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                     tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                     tempSprite.position.x = battleNode.coords.pos.x;
                     tempSprite.position.y = battleNode.coords.pos.y;
+                    system.endNewTempSprite(tempSprite, 0);
 
-                    system.drawCompat.drawTemporarySprite(tempSprite);
-                    system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
+                    //system.drawCompat.drawTemporarySprite(tempSprite);
+                    //system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
                 }
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
@@ -54,8 +56,10 @@ public class Cannon extends Platoon {
                     if (battleNode.target.v != null) {
                         double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
 
-                        Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                        sprite2dDef.set(Animations.ANIMATION_TROOPS_SWING, (int)ratio * 100,
+                        //Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
+                        //sprite2dDef.set(
+                        Sprite2dDef sprite2dDef = system.defineNewSprite(
+                                Animations.ANIMATION_TROOPS_SWING, (int)ratio * 100,
                                 (float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y - renderNode.height.v, 0,
                                 1f, 1f,
                                 90,

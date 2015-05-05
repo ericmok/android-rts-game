@@ -2,12 +2,13 @@ package noteworthyengine;
 
 import noteworthyframework.*;
 import structure.Sprite2dDef;
+import structure.TemporarySprite2dDef;
 
 /**
  * Created by eric on 3/7/15.
  */
 public class RenderSystem extends noteworthyframework.System {
-    public DrawCompat drawCompat;
+    private DrawCompat drawCompat;
     private Sprite2dDef sprite2dDefTemp = new Sprite2dDef();
 
     public QueueMutationList<RenderNode> renderNodes = new QueueMutationList<RenderNode>(127);
@@ -23,14 +24,14 @@ public class RenderSystem extends noteworthyframework.System {
     @Override
     public void addNode(Node node) {
         if (node.getClass() == RenderNode.class) {
-            renderNodes.queueToAdd((RenderNode)node);
+            renderNodes.queueToAdd((RenderNode) node);
         }
     }
 
     @Override
     public void removeNode(Node node) {
         if (node.getClass() == RenderNode.class) {
-            renderNodes.queueToRemove((RenderNode)node);
+            renderNodes.queueToRemove((RenderNode) node);
         }
     }
 
@@ -98,4 +99,64 @@ public class RenderSystem extends noteworthyframework.System {
 
         drawCompat.endDraw();
     }
+
+    public int getCameraId(int name) {
+        return cameraSystem.nodes.get(name).index.v;
+    }
+
+    public Sprite2dDef defineNewSprite(Sprite2dDef toCopy, int cameraName) {
+        Sprite2dDef toFill = drawCompat.spriteAllocator.takeNextWritable();
+        toFill.copy(toCopy);
+        toFill.cameraIndex = getCameraId(cameraName);
+        return toFill;
+    }
+
+    public Sprite2dDef defineNewSprite(String animationName, int animationProgress,
+                                       float x, float y, float z,
+                                       float width, float height,
+                                       float angle,
+                                       int color, int cameraNodeIndex) {
+        Sprite2dDef toFill = drawCompat.spriteAllocator.takeNextWritable();
+        toFill.set(animationName, animationProgress, x, y, z, width, height, angle, color,
+                getCameraId(cameraNodeIndex));
+        return toFill;
+    }
+
+    public TemporarySprite2dDef beginNewTempSprite() {
+        TemporarySprite2dDef temporarySprite2dDef = drawCompat.tempSpritesMemoryPool.fetchMemory();
+        return temporarySprite2dDef;
+    }
+
+    public void endNewTempSprite(TemporarySprite2dDef temporarySprite2dDef, int cameraName) {
+        temporarySprite2dDef.cameraIndex = getCameraId(cameraName);
+        drawCompat.drawTemporarySprite(temporarySprite2dDef);
+    }
+
+//    public TemporarySprite2dDef defineNewTempSprite(Sprite2dDef toCopy, int cameraName) {
+//        TemporarySprite2dDef temporarySprite2dDef = drawCompat.tempSpritesMemoryPool.fetchMemory();
+//        temporarySprite2dDef.copy(toCopy);
+//        temporarySprite2dDef.cameraIndex = getCameraId(cameraName);
+//        drawCompat.drawTemporarySprite(temporarySprite2dDef);
+//        return temporarySprite2dDef;
+//    }
+//
+//    public TemporarySprite2dDef defineNewTempSprite(TemporarySprite2dDef toCopy, int cameraName) {
+//        TemporarySprite2dDef temporarySprite2dDef = drawCompat.tempSpritesMemoryPool.fetchMemory();
+//        temporarySprite2dDef.copy(toCopy);
+//        temporarySprite2dDef.cameraIndex = getCameraId(cameraName);
+//        drawCompat.drawTemporarySprite(temporarySprite2dDef);
+//        return temporarySprite2dDef;
+//    }
+//
+//    public TemporarySprite2dDef defineNewTempSprite(String animationName, int animationProgress,
+//                                                    float x, float y, float z,
+//                                                    float width, float height,
+//                                                    float angle,
+//                                                    int color, int cameraNodeIndex)  {
+//        TemporarySprite2dDef temporarySprite2dDef = drawCompat.tempSpritesMemoryPool.fetchMemory();
+//        temporarySprite2dDef.set(animationName, animationProgress, x, y, z, width, height, angle, color, getCameraId(cameraNodeIndex));
+//        drawCompat.drawTemporarySprite(temporarySprite2dDef);
+//        return temporarySprite2dDef;
+//    }
+
 }

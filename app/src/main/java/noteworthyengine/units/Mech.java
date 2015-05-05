@@ -36,13 +36,17 @@ public class Mech extends Platoon {
                 renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
                 if (battleNode.hp.v <= 0) {
-                    TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                    //TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                    //TemporarySprite2dDef tempSprite = system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
+                    TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
 
                     tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
-                    tempSprite.setPosition((float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y, 1);
+                    tempSprite.setPosition((float) battleNode.coords.pos.x, (float) battleNode.coords.pos.y, 1);
 
-                    system.drawCompat.drawTemporarySprite(tempSprite);
-                    system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
+                    system.endNewTempSprite(tempSprite, 0);
+
+                    //system.drawCompat.drawTemporarySprite(tempSprite);
+                    //system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
                 }
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
@@ -50,8 +54,10 @@ public class Mech extends Platoon {
                     if (battleNode.target.v != null) {
                         double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
 
-                        Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                        sprite2dDef.set("Animations/Troops/Sword", 0,
+                        //Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
+                        //sprite2dDef.set("Animations/Troops/Sword", 0,
+                        Sprite2dDef sprite2dDef = system.defineNewSprite(
+                                "Animations/Troops/Sword", 0,
                                 (float)(ratio * (battleNode.target.v.coords.pos.x - battleNode.coords.pos.x) + battleNode.coords.pos.x),
                                 (float)(ratio * (battleNode.target.v.coords.pos.y - battleNode.coords.pos.y) + battleNode.coords.pos.y),
                                 1f,
@@ -80,6 +86,8 @@ public class Mech extends Platoon {
         this.battleNode.attackSwingTime.v = 2;
         this.battleNode.attackCooldown.v = 2;
         this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+
+        this.battleNode.target.v = null;
 
         this.renderNode.animationName.v = "Animations/Archers/Idling";
     }
