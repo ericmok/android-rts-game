@@ -2,7 +2,6 @@ package structure;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -13,8 +12,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
-import android.os.SystemClock;
 import android.util.Log;
 
 import utils.Vector3;
@@ -52,8 +49,13 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 //    private float far = 1000;
 //    private float scale = 1.0f;
 
-    public GameCamera mainCamera = new GameCamera();
-    public GameCamera auxCamera = new GameCamera();
+	/**
+	 * All new cameras start at index 2, since we start off we 2 cameras initially
+	 */
+	private int nextCameraIndexToAssign = 2;
+
+    public GameCamera mainCamera = new OrthographicCamera(0);
+    public GameCamera auxCamera = new OrthographicCamera(1);
 
     private ArrayList<GameCamera> cameras = new ArrayList<GameCamera>(2) {{
         this.add(mainCamera);
@@ -69,11 +71,22 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		//projectionMatrix = new float[16];
 	}
 
+	public OrthographicCamera registerNewOrthoCamera() {
+		OrthographicCamera newCamera = new OrthographicCamera(nextCameraIndexToAssign);
+		nextCameraIndexToAssign += 1;
+
+		this.addCamera(newCamera);
+		return newCamera;
+	}
 
     public void addCamera(GameCamera camera) {
         this.cameras.add(camera);
     }
 
+	/**
+	 * DO NOT USE, camera indices will get screwed up...
+	 * @param camera
+	 */
     public void removeCamera(GameCamera camera) {
         this.cameras.remove(camera);
     }
@@ -196,7 +209,9 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
                     temp = sprite.gfxInterpolation;
                     sprite.oldPosition.copy(sprite.gfxInterpolation);
                 }
-				game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(sprite.cameraIndex).viewProjectionMatrix,
+				game.graphics.getSimpleSpriteBatch().draw2d(
+															//cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
+															cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
 															(float)temp.x, (float)temp.y,
                                                             0,
 															sprite.angle,
@@ -229,7 +244,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
                 }
 
 				tempSprite.progress.update(tickDifference);
-				game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(tempSprite.cameraIndex).viewProjectionMatrix,
+				game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(tempSprite.cameraIndex).getViewProjectionMatrix(),
 															(float)tempSprite.position.x, (float)tempSprite.position.y,
                                                             0,
 															tempSprite.angle,
@@ -248,7 +263,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 				for (int i = 0; i < textDrawItem.stringBuilder.length(); i++) {
 					Character characterToDraw = textDrawItem.stringBuilder.charAt(i);
 					TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
-					game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(0).viewProjectionMatrix,
+					game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(0).getViewProjectionMatrix(),
 							(float) (accumulator + textDrawItem.position.x), (float)textDrawItem.position.y,
                             0,
 							(float)textDrawItem.angle,

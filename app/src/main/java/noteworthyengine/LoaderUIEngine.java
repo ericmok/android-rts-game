@@ -22,11 +22,12 @@ public class LoaderUIEngine extends BaseEngine {
         this.game = game;
 
         cameraSystem = new CameraSystem(game);
+        this.addSystem(cameraSystem);
 
         buttonSystem = new ButtonSystem(game);
         this.addSystem(buttonSystem);
 
-        renderSystem = new RenderSystem(new DrawCompat(game));
+        renderSystem = new RenderSystem(new DrawCompat(game), cameraSystem);
         this.addSystem(renderSystem);
 
 //        game.graphics.setCameraPositionAndScale(0, 0, 1);

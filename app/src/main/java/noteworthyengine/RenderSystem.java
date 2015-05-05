@@ -12,8 +12,12 @@ public class RenderSystem extends noteworthyframework.System {
 
     public QueueMutationList<RenderNode> renderNodes = new QueueMutationList<RenderNode>(127);
 
-    public RenderSystem(DrawCompat drawCompat) {
+    public final CameraSystem cameraSystem;
+
+    public RenderSystem(DrawCompat drawCompat, CameraSystem cameraSystem) {
         this.drawCompat = drawCompat;
+        this.drawCompat.setRenderSystem(this);
+        this.cameraSystem = cameraSystem;
     }
 
     @Override
@@ -49,6 +53,11 @@ public class RenderSystem extends noteworthyframework.System {
                 continue;
             }
 
+            // If no cameras, then don't render anything...
+            if (!(renderNode.cameraType.v >= 0 && renderNode.cameraType.v < cameraSystem.nodes.size())) {
+                continue;
+            }
+
             renderNode.onDraw.apply(this);
 
 //            DrawList2DItem drawList2DItem = spriteAllocater.takeNextWritable();
@@ -81,7 +90,8 @@ public class RenderSystem extends noteworthyframework.System {
             sprite2dDefTemp.width = renderNode.width.v;
             sprite2dDefTemp.height = renderNode.height.v;
 
-            sprite2dDefTemp.cameraIndex = renderNode.cameraType.v;
+            //sprite2dDefTemp.cameraIndex = renderNode.cameraType.v;
+            sprite2dDefTemp.cameraIndex = cameraSystem.nodes.get(renderNode.cameraType.v).index.v;
 
             drawCompat.drawSprite(sprite2dDefTemp);
         }

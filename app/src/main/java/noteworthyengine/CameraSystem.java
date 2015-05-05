@@ -26,6 +26,9 @@ public class CameraSystem extends noteworthyframework.System {
 //            if (!game.getGameRenderer().getCameras().contains(((CameraNode) node).camera)) {
 //                game.getGameRenderer().addCamera(cameraNode.camera);
 //            }
+            cameraNode.camera = game.getGameRenderer().registerNewOrthoCamera();
+            cameraNode.index.v = cameraNode.camera.getCameraIndex();
+            cameraNode.camera.setView((float)cameraNode.coords.pos.x, (float)cameraNode.coords.pos.y, (float)cameraNode.scale.v);
 
             nodes.queueToAdd(cameraNode);
         }
@@ -36,6 +39,7 @@ public class CameraSystem extends noteworthyframework.System {
         if (node.getClass() == CameraNode.class) {
             CameraNode cameraNode = (CameraNode)node;
 
+            // TODO: Possible bug, where cameras are removed out of order
             game.getGameRenderer().removeCamera(cameraNode.camera);
 
             nodes.queueToRemove(cameraNode);
@@ -47,18 +51,7 @@ public class CameraSystem extends noteworthyframework.System {
         for (int i = nodes.size() - 1; i >= 0; i--) {
             CameraNode cameraNode = nodes.get(i);
 
-            Matrix.setIdentityM(cameraNode.camera.cameraMatrix, 0);
-
-            // TODO: Refactor from:
-            //Matrix.scaleM(cameraNode.camera.cameraMatrix, 0, cameraNode.camera.scale, cameraNode.camera.scale, 1);
-
-            // To this...
-            Matrix.scaleM(cameraNode.camera.cameraMatrix, 0, cameraNode.scale.v, cameraNode.scale.v, 1);
-            cameraNode.camera.scale = cameraNode.scale.v;
-
-            Matrix.translateM(cameraNode.camera.cameraMatrix, 0, -(float) cameraNode.coords.pos.x, -(float) cameraNode.coords.pos.y, -2f);
-
-            cameraNode.camera.invalidate();
+            cameraNode.camera.setView((float) cameraNode.coords.pos.x, (float) cameraNode.coords.pos.y, (float) cameraNode.scale.v);
         }
     }
 

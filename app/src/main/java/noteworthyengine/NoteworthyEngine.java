@@ -12,6 +12,7 @@ import noteworthyengine.units.UnitPool;
 import noteworthyframework.*;
 import structure.Game;
 import structure.GameCamera;
+import structure.OrthographicCamera;
 import utils.Vector2;
 
 /**
@@ -42,10 +43,7 @@ public class NoteworthyEngine extends BaseEngine {
 
     public FactorySystem factorySystem;
 
-    public Vector2 gameCameraPosition = new Vector2();
-    public double cameraScale = GameSettings.UNIT_LENGTH_MULTIPLIER;
-
-    public GameCamera mainCamera;
+    public OrthographicCamera mainCamera;
 
     public NoteworthyEngine(Game game) {
         super();
@@ -64,7 +62,7 @@ public class NoteworthyEngine extends BaseEngine {
         formationSystem = new FormationSystem(gridSystem);
         movementSystem = new MovementSystem();
         battleSystem = new BattleSystem(gridSystem);
-        renderSystem = new RenderSystem(new DrawCompat(game));
+        renderSystem = new RenderSystem(new DrawCompat(game), cameraSystem);
         decaySystem = new DecaySystem();
 
         factorySystem = new FactorySystem();

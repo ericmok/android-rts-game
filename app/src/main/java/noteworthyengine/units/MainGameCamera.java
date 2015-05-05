@@ -11,8 +11,8 @@ public class MainGameCamera extends CameraUnit {
 
     public FieldCameraNode fieldCameraNode;
 
-    public MainGameCamera(int index, GameCamera gameCamera, float scale, float zoomScale) {
-        super(index, gameCamera, scale);
+    public MainGameCamera(float scale, float zoomScale) {
+        super(scale);
 
         fieldCameraNode = new FieldCameraNode(this, scale, zoomScale);
     }

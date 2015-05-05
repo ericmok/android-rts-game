@@ -46,10 +46,19 @@ public class InputSystem extends noteworthyframework.System {
             InputNode inputNode = nodes.get(i);
 
             CameraNode cameraNode = null;
-            for (int c = 0; c < cameraSystem.nodes.size(); c++) {
-                if (inputNode.cameraIndex.v == cameraSystem.nodes.get(c).index.v) {
-                    cameraNode = cameraSystem.nodes.get(c);
-                }
+
+//            for (int c = 0; c < cameraSystem.nodes.size(); c++) {
+//                if (inputNode.cameraIndex.v == cameraSystem.nodes.get(c).index.v) {
+//                    cameraNode = cameraSystem.nodes.get(c);
+//                }
+//            }
+
+            // Get the camera as indexed by cameraSystem
+            if (inputNode.cameraIndex.v >= 0 && inputNode.cameraIndex.v < cameraSystem.nodes.size()) {
+                cameraNode = cameraSystem.nodes.get(inputNode.cameraIndex.v);
+            }
+            else {
+                continue;
             }
 
             int mouseEventAction = game.gameInput.takeCurrentMouseEventAction();

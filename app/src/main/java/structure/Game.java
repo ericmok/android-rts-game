@@ -124,25 +124,34 @@ public class Game {
 	public void loadLevel() {
         activeEngine = loaderUIEngine;
 
-        CameraUnit loaderUICamera = new CameraUnit(0, gameRenderer.mainCamera, 4f);
-        MainGameCamera activeGameCamera = new MainGameCamera(0, gameRenderer.mainCamera, 0.068f, 0.081f);
-        CameraUnit auxGameCamera = new CameraUnit(1, gameRenderer.auxCamera, 4);
+        //CameraUnit loaderUICamera = new CameraUnit(0, gameRenderer.mainCamera, 4f);
+		CameraUnit loaderUICamera = new CameraUnit(4f);
+        //MainGameCamera activeGameCamera = new MainGameCamera(0, gameRenderer.mainCamera, 0.068f, 0.081f);
+		MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
+        //CameraUnit auxGameCamera = new CameraUnit(1, gameRenderer.auxCamera, 4);
+		CameraUnit auxGameCamera = new CameraUnit(4);
 
         loaderUIEngine.addUnit(loaderUICamera);
         loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
         noteworthyEngine.addUnit(activeGameCamera);
         noteworthyEngine.addUnit(auxGameCamera);
-        noteworthyEngine.mainCamera = activeGameCamera.cameraNode.camera;
 
-        backgroundUnit.renderNode.width.v = 4;
-        backgroundUnit.renderNode.height.v = 4;
+		// TODO: Fix relationship with input system
+        //noteworthyEngine.mainCamera = activeGameCamera.cameraNode.camera;
+
+		backgroundUnit.renderNode.cameraType.v = 0;
+        backgroundUnit.renderNode.width.v = 1;
+        backgroundUnit.renderNode.height.v = 1;
         loaderUIEngine.addUnit(backgroundUnit);
 
         ButtonUnit buttonUnit = new ButtonUnit();
         buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
-        buttonUnit.renderNode.coords.pos.set(-0.85, 0);
-        buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
-        buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
+        //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
+		buttonUnit.renderNode.coords.pos.set(0, 0);
+        //buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
+        //buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
+		buttonUnit.renderNode.width.v = 0.1f;// (float)(1 / gameCamera.scale);
+		buttonUnit.renderNode.height.v = 0.1f; //(float)(1 / gameCamera.scale);
         buttonUnit.renderNode.color.v = Color.WHITE;
         buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
             @Override
