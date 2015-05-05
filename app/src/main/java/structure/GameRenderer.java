@@ -111,7 +111,6 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
         aspectRatio = (float) width / height;
 
-        game.gameCamera.aspectRatio = aspectRatio;
         game.gameInput.setScreenDimensions(width, height);
 
 

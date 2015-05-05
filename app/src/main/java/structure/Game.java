@@ -40,7 +40,6 @@ public class Game {
 
     public GameInput gameInput;
 
-    public GameCamera gameCamera = new GameCamera();
     public UIOverlay uiOverlay = new UIOverlay();
 
     BackgroundUnit backgroundUnit = new BackgroundUnit();
