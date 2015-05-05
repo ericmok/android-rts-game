@@ -1,6 +1,5 @@
 package structure;
 
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
@@ -47,6 +46,8 @@ public class SimpleSpriteBatch {
 	public void beginDrawing() {
 		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		GLES20.glEnable(GLES20.GL_BLEND);
+
+		simpleQuadShader.setupShaderBuffers(reusableQuad.vertexBuffer, reusableQuad.textureBuffer);
 	}
 	
 	/** 
@@ -73,6 +74,8 @@ public class SimpleSpriteBatch {
 		return tempMatrix;
 	}
 
+	int previousGlTexture = -1;
+
     /**
      * Sprites are better sorted, rather than relying on z index
      * @param viewProjectionMatrix
@@ -86,7 +89,6 @@ public class SimpleSpriteBatch {
      * @param color
      */
     public void draw2d(float[] projectionMatrix, float x, float y, float z, float angle, float width, float height, int glTexture, int color) {
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
 
         //this.setScaleQuadTempMatrix(x, y, 1, width, height);
 
@@ -110,12 +112,14 @@ public class SimpleSpriteBatch {
 //        Matrix.multiplyMM(finalMatrix, 0, rotationMatrix, 0, scalingMatrix, 0);
 //        Matrix.multiplyMM(finalMatrix, 0, translationMatrix, 0, finalMatrix, 0);
 
-        simpleQuadShader.draw(projectionMatrix, width, height, angle, x, y,
-                reusableQuad.vertexBuffer,
-                color,
-                glTexture,
-                reusableQuad.textureBuffer,
-                GLES20.GL_TRIANGLE_STRIP, 4);
+//        simpleQuadShader.draw(projectionMatrix, width, height, angle, x, y,
+//                reusableQuad.vertexBuffer,
+//                color,
+//                glTexture,
+//                reusableQuad.textureBuffer,
+//                GLES20.GL_TRIANGLE_STRIP, 4);
+
+		simpleQuadShader.drawUsingShaderBuffers(projectionMatrix, width, height, angle, x, y, color, glTexture, GLES20.GL_TRIANGLE_STRIP, 4);
     }
 
 //	/**
