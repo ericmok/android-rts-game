@@ -77,7 +77,9 @@ public class SimpleSpriteBatch {
 	int previousGlTexture = -1;
 
 	/**
-	 * Set the texture and texture coords. These are cached for the next call.
+	 * Set the texture and texture coords for the internally shared quad.
+	 * Texture bindings are cached for the next call.
+	 *
 	 * @param glTexture
 	 * @param x1 Upper Left x
 	 * @param y1 Upper Left y
