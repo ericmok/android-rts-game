@@ -125,11 +125,11 @@ public class Game {
         activeEngine = loaderUIEngine;
 
         //CameraUnit loaderUICamera = new CameraUnit(0, gameRenderer.mainCamera, 4f);
-		CameraUnit loaderUICamera = new CameraUnit(4f);
+		CameraUnit loaderUICamera = new CameraUnit(1f);
         //MainGameCamera activeGameCamera = new MainGameCamera(0, gameRenderer.mainCamera, 0.068f, 0.081f);
 		MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
         //CameraUnit auxGameCamera = new CameraUnit(1, gameRenderer.auxCamera, 4);
-		CameraUnit auxGameCamera = new CameraUnit(4);
+		CameraUnit auxGameCamera = new CameraUnit(1);
 
         loaderUIEngine.addUnit(loaderUICamera);
         loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
@@ -144,21 +144,26 @@ public class Game {
         backgroundUnit.renderNode.height.v = 1;
         loaderUIEngine.addUnit(backgroundUnit);
 
-        ButtonUnit buttonUnit = new ButtonUnit();
+        ButtonUnit buttonUnit = new ButtonUnit() {
+			@Override
+			public void onTap() {
+				activeEngine = noteworthyEngine;
+			}
+		};
         buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
         //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
 		buttonUnit.renderNode.coords.pos.set(0, 0);
         //buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
         //buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
-		buttonUnit.renderNode.width.v = 0.1f;// (float)(1 / gameCamera.scale);
-		buttonUnit.renderNode.height.v = 0.1f; //(float)(1 / gameCamera.scale);
+		buttonUnit.renderNode.width.v = 1f;// (float)(1 / gameCamera.scale);
+		buttonUnit.renderNode.height.v = 1f; //(float)(1 / gameCamera.scale);
         buttonUnit.renderNode.color.v = Color.WHITE;
-        buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
-            @Override
-            public void apply(ButtonSystem element) {
-                activeEngine = noteworthyEngine;
-            }
-        };
+//        buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
+//            @Override
+//            public void apply(ButtonSystem element) {
+//                activeEngine = noteworthyEngine;
+//            }
+//        };
         loaderUIEngine.addUnit(buttonUnit);
         loaderUIEngine.flushQueues();
 

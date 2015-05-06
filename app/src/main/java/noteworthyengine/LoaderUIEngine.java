@@ -13,6 +13,7 @@ public class LoaderUIEngine extends BaseEngine {
     private Game game;
 
     public CameraSystem cameraSystem;
+    public InputSystem inputSystem;
     public ButtonSystem buttonSystem;
     public RenderSystem renderSystem;
 
@@ -23,6 +24,9 @@ public class LoaderUIEngine extends BaseEngine {
 
         cameraSystem = new CameraSystem(game);
         this.addSystem(cameraSystem);
+
+        inputSystem = new InputSystem(game, cameraSystem);
+        this.addSystem(inputSystem);
 
         buttonSystem = new ButtonSystem(game);
         this.addSystem(buttonSystem);
