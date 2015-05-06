@@ -182,7 +182,8 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
             //Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
             //Matrix.multiplyMM(mvpMatrix, 0, game.gameCamera.projectionMatrix, 0, cameraMatrix, 0);
 
-			game.graphics.getSimpleSpriteBatch().beginDrawing();
+			SimpleSpriteBatch simpleSpriteBatch = game.graphics.getSimpleSpriteBatch();
+			simpleSpriteBatch.beginDrawing();
 
 			RewriteOnlyArray<Sprite2dDef> sprites = game.graphics.drawLists.regularSprites.swapBuffer();
             //sprites.sort(); Transparency and z problems if sorted by texture ...
@@ -212,16 +213,17 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria(sprite.animationProgress);
 
-				game.graphics.getSimpleSpriteBatch()
+				simpleSpriteBatch
 						.setTextureParams(textureFrame.texture.glHandle,
 								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
 								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
-						.draw2d(cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
+						.setQuadParams(cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
 								(float) temp.x, (float) temp.y,
 								0,
 								sprite.angle,
 								sprite.width, sprite.height,
-								sprite.color);
+								sprite.color)
+						.draw2d();
 
 			}
 
@@ -248,18 +250,19 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 				tempSprite.progress.update(tickDifference);
 
-				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria(tempSprite.animationProgress);
+				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria((int)tempSprite.progress.progress);
 
-				game.graphics.getSimpleSpriteBatch()
+				simpleSpriteBatch
 						.setTextureParams(textureFrame.texture.glHandle,
 								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
 								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
-						.draw2d(cameras.get(tempSprite.cameraIndex).getViewProjectionMatrix(),
+						.setQuadParams(cameras.get(tempSprite.cameraIndex).getViewProjectionMatrix(),
 								(float) tempSprite.position.x, (float) tempSprite.position.y,
 								0,
-															tempSprite.angle,
-															tempSprite.width, tempSprite.height,
-															tempSprite.color);
+								tempSprite.angle,
+								tempSprite.width, tempSprite.height,
+								tempSprite.color)
+						.draw2d();
 			}
 
 			RewriteOnlyArray<TextDrawItem> textDrawItems = game.graphics.drawLists.textDrawItems.swapBuffer();
@@ -271,14 +274,17 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 				for (int i = 0; i < textDrawItem.stringBuilder.length(); i++) {
 					Character characterToDraw = textDrawItem.stringBuilder.charAt(i);
 					TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
-					game.graphics.getSimpleSpriteBatch()
+
+					simpleSpriteBatch
 							.setTextureParams(texture.texture.glHandle, 0, 0, 1, 1)
-							.draw2d(cameras.get(0).getViewProjectionMatrix(),
+							.setQuadParams(cameras.get(0).getViewProjectionMatrix(),
 									(float) (accumulator + textDrawItem.position.x), (float) textDrawItem.position.y,
 									0,
 									(float) textDrawItem.angle,
 									textDrawItem.height * texture.widthRatio, textDrawItem.height,
-									textDrawItem.color);
+									textDrawItem.color)
+							.draw2d();
+					
 					accumulator += texture.widthRatio * 0.1f;
 				}
 			}

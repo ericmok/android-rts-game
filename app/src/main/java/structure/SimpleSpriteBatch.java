@@ -47,7 +47,7 @@ public class SimpleSpriteBatch {
 		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		GLES20.glEnable(GLES20.GL_BLEND);
 
-		simpleQuadShader.setupShaderBuffers(reusableQuad.vertexBuffer, reusableQuad.textureBuffer);
+		simpleQuadShader.setVertexAttributePointers(reusableQuad.vertexBuffer, reusableQuad.textureBuffer);
 	}
 	
 	/** 
@@ -98,19 +98,16 @@ public class SimpleSpriteBatch {
 		return this;
 	}
 
+	public SimpleSpriteBatch setQuadParams(float[] projectionMatrix, float x, float y, float z, float angle, float width, float height, int color) {
+		simpleQuadShader.setUniforms(projectionMatrix, width, height, angle, x, y, color);
+		return this;
+	}
+
     /**
-	 * Draw a sprite
+	 * Draw the internal quad. Make sure to <strong>setTextureParams</strong> and <strong>setQuadParams</strong> first.
      */
-    public void draw2d(float[] projectionMatrix, float x, float y, float z, float angle, float width, float height, int color) {
-
-//        simpleQuadShader.draw(projectionMatrix, width, height, angle, x, y,
-//                reusableQuad.vertexBuffer,
-//                color,
-//                glTexture,
-//                reusableQuad.textureBuffer,
-//                GLES20.GL_TRIANGLE_STRIP, 4);
-
-		simpleQuadShader.drawUsingShaderBuffers(projectionMatrix, width, height, angle, x, y, color, GLES20.GL_TRIANGLE_STRIP, 4);
+    public void draw2d() {
+		simpleQuadShader.drawArrays(GLES20.GL_TRIANGLE_STRIP, 4);
     }
 
 //	/**
