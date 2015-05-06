@@ -76,41 +76,30 @@ public class SimpleSpriteBatch {
 
 	int previousGlTexture = -1;
 
+	/**
+	 * Set the texture and texture coords. These are cached for the next call.
+	 * @param glTexture
+	 * @param x1 Upper Left x
+	 * @param y1 Upper Left y
+	 * @param x2 Lower Right x
+	 * @param y2 Lower Right y
+	 * @return
+	 */
+	public SimpleSpriteBatch setTextureParams(int glTexture, float x1, float y1, float x2, float y2) {
+		if (glTexture != previousGlTexture) {
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
+			reusableQuad.reBufferTextureData(x1, y1, x2, y2);
+
+			previousGlTexture = glTexture;
+		}
+
+		return this;
+	}
+
     /**
-     * Sprites are better sorted, rather than relying on z index
-     * @param viewProjectionMatrix
-     * @param x
-     * @param y
-     * @param z
-     * @param angle
-     * @param width
-     * @param height
-     * @param glTexture
-     * @param color
+	 * Draw a sprite
      */
-    public void draw2d(float[] projectionMatrix, float x, float y, float z, float angle, float width, float height, int glTexture, int color) {
-
-        //this.setScaleQuadTempMatrix(x, y, 1, width, height);
-
-//        float[] scalingMatrix = tempMatrix;
-//        Matrix.setIdentityM(scalingMatrix, 0);
-//        Matrix.scaleM(scalingMatrix, 0, width, height, 1);
-//
-//        float[] rotationMatrix = tempMatrix2;
-//        Matrix.setIdentityM(rotationMatrix, 0);
-//
-//        // TODO: zero degree rotation problem
-//        Matrix.rotateM(rotationMatrix, 0, angle, 0, 0, 1);
-//
-//        float[] translationMatrix = tempMatrix3;
-//        Matrix.setIdentityM(translationMatrix, 0);
-//        Matrix.translateM(translationMatrix, 0, x, y, z);
-//
-//        float[] finalMatrix = tempMatrix4;
-//        Matrix.setIdentityM(finalMatrix, 0);
-//
-//        Matrix.multiplyMM(finalMatrix, 0, rotationMatrix, 0, scalingMatrix, 0);
-//        Matrix.multiplyMM(finalMatrix, 0, translationMatrix, 0, finalMatrix, 0);
+    public void draw2d(float[] projectionMatrix, float x, float y, float z, float angle, float width, float height, int color) {
 
 //        simpleQuadShader.draw(projectionMatrix, width, height, angle, x, y,
 //                reusableQuad.vertexBuffer,
@@ -119,7 +108,7 @@ public class SimpleSpriteBatch {
 //                reusableQuad.textureBuffer,
 //                GLES20.GL_TRIANGLE_STRIP, 4);
 
-		simpleQuadShader.drawUsingShaderBuffers(projectionMatrix, width, height, angle, x, y, color, glTexture, GLES20.GL_TRIANGLE_STRIP, 4);
+		simpleQuadShader.drawUsingShaderBuffers(projectionMatrix, width, height, angle, x, y, color, GLES20.GL_TRIANGLE_STRIP, 4);
     }
 
 //	/**

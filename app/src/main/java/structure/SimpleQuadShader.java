@@ -265,14 +265,7 @@ public class SimpleQuadShader {
         GLES20.glEnableVertexAttribArray(shaderAttributeTextureLocation);
     }
 
-    public void drawUsingShaderBuffers(float[] projectionMatrix, float scalingX, float scalingY, float angle, float translationX, float translationY, int color, int textureHandle, int mode, int count) {
-
-        // TODO: Should this be moved to batch?
-        if (textureHandle != cacheGlTexture) {
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle);
-            cacheGlTexture = textureHandle;
-        }
-
+    public void drawUsingShaderBuffers(float[] projectionMatrix, float scalingX, float scalingY, float angle, float translationX, float translationY, int color, int mode, int count) {
         GLES20.glUniformMatrix4fv(shaderUniformProjectionMatrix, 1, false, projectionMatrix, 0);
         GLES20.glUniform1f(shaderUniformScalingX, scalingX);
         GLES20.glUniform1f(shaderUniformScalingY, scalingY);

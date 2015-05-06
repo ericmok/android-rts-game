@@ -90,14 +90,17 @@ public class TextureLoader {
 	 */
 	public static class TextureFrame {
 		public int frameNumber;
-		
-		public int glTexture;
+
+		public Texture texture = new Texture();
+		//public int glTexture;
 		//public boolean rotated;
 		
 		public TextureFrame(int frameNumber, int glTexture) {
 			this.frameNumber = frameNumber;
 
-			this.glTexture = glTexture;
+			//this.glTexture = glTexture;
+			texture.glHandle = glTexture;
+
 			//this.rotated = rotated;
 		}
 		
@@ -107,7 +110,9 @@ public class TextureLoader {
 		public char character;
 		public Bitmap bitmap;
 		
-		public int glTexture;
+		//public int glTexture;
+		public Texture texture = new Texture();
+
 		public float widthRatio;
 	}
 	
@@ -297,7 +302,8 @@ public class TextureLoader {
 			LetterTexture letterTexture = new LetterTexture();
 			letterTexture.bitmap = bitmap;
 			letterTexture.character = alphabet.charAt(i);
-			letterTexture.glTexture = texture;
+			//letterTexture.glTexture = texture;
+			letterTexture.texture.glHandle = texture;
 			letterTexture.widthRatio = (float)bitmap.getWidth() / bitmap.getHeight();
 			
 			letterTextures.put(alphabet.charAt(i), letterTexture);

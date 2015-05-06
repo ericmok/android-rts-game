@@ -209,16 +209,19 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
                     temp = sprite.gfxInterpolation;
                     sprite.oldPosition.copy(sprite.gfxInterpolation);
                 }
-				game.graphics.getSimpleSpriteBatch().draw2d(
-															//cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
-															cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
-															(float)temp.x, (float)temp.y,
-                                                            0,
-															sprite.angle,
-															sprite.width, sprite.height,
-															cacheAnimation.
-															maxFrameUnderCriteria(sprite.animationProgress).glTexture,
-															sprite.color);
+
+				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria(sprite.animationProgress);
+
+				game.graphics.getSimpleSpriteBatch()
+						.setTextureParams(textureFrame.texture.glHandle,
+								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
+								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
+						.draw2d(cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
+								(float) temp.x, (float) temp.y,
+								0,
+								sprite.angle,
+								sprite.width, sprite.height,
+								sprite.color);
 
 			}
 
@@ -244,13 +247,18 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
                 }
 
 				tempSprite.progress.update(tickDifference);
-				game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(tempSprite.cameraIndex).getViewProjectionMatrix(),
-															(float)tempSprite.position.x, (float)tempSprite.position.y,
-                                                            0,
+
+				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria(tempSprite.animationProgress);
+
+				game.graphics.getSimpleSpriteBatch()
+						.setTextureParams(textureFrame.texture.glHandle,
+								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
+								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
+						.draw2d(cameras.get(tempSprite.cameraIndex).getViewProjectionMatrix(),
+								(float) tempSprite.position.x, (float) tempSprite.position.y,
+								0,
 															tempSprite.angle,
 															tempSprite.width, tempSprite.height,
-															cacheAnimation.
-															maxFrameUnderCriteria((int)tempSprite.progress.progress).glTexture,
 															tempSprite.color);
 			}
 
@@ -263,13 +271,14 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 				for (int i = 0; i < textDrawItem.stringBuilder.length(); i++) {
 					Character characterToDraw = textDrawItem.stringBuilder.charAt(i);
 					TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
-					game.graphics.getSimpleSpriteBatch().draw2d(cameras.get(0).getViewProjectionMatrix(),
-							(float) (accumulator + textDrawItem.position.x), (float)textDrawItem.position.y,
-                            0,
-							(float)textDrawItem.angle,
-							textDrawItem.height * texture.widthRatio, textDrawItem.height,
-							texture.glTexture,
-							textDrawItem.color);
+					game.graphics.getSimpleSpriteBatch()
+							.setTextureParams(texture.texture.glHandle, 0, 0, 1, 1)
+							.draw2d(cameras.get(0).getViewProjectionMatrix(),
+									(float) (accumulator + textDrawItem.position.x), (float) textDrawItem.position.y,
+									0,
+									(float) textDrawItem.angle,
+									textDrawItem.height * texture.widthRatio, textDrawItem.height,
+									textDrawItem.color);
 					accumulator += texture.widthRatio * 0.1f;
 				}
 			}
