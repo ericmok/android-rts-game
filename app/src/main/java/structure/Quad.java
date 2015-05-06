@@ -5,6 +5,7 @@ import java.nio.FloatBuffer;
 import android.graphics.Color;
 import android.opengl.Matrix;
 
+import utils.Vector2;
 import utils.Vector3;
 
 /**
@@ -176,6 +177,23 @@ public class Quad {
 		buffer.put(colorData, 0, colorData.length);
 		buffer.flip();
 		colorBuffer.bufferSubData(buffer);
+	}
+
+	public void reBufferTextureData(float x1, float y1, float x2, float y2) {
+		FloatBuffer buffer = textureBuffer.getFloatBuffer();
+
+		textureData[0] = x1;
+		textureData[1] = y2;
+		textureData[2] = x2;
+		textureData[3] = y2;
+		textureData[4] = x1;
+		textureData[5] = y1;
+		textureData[6] = x2;
+		textureData[7] = y1;
+
+		buffer.put(textureData, 0, textureData.length);
+		buffer.flip();
+		textureBuffer.bufferSubData(buffer);
 	}
 	
 	/**
