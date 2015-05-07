@@ -304,6 +304,8 @@ public class TextureLoader {
 			Object boundsX2 = folderContext.scopeSearch("x2");
 			Object boundsY2 = folderContext.scopeSearch("y2");
 
+			// TODO: Create gl vertex buffer
+			
 			if (boundsX1 != null) {
 				frame.texture.offsetX1 = ((float)(int)boundsX1) / bitmap.getWidth();
 			}
