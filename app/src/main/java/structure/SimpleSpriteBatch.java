@@ -78,19 +78,15 @@ public class SimpleSpriteBatch {
 
 	/**
 	 * Set the texture and texture coords for the internally shared quad.
-	 * Texture bindings are cached for the next call.
+	 * Texture bindings are cached for the next call using glTexture as the key.
 	 *
 	 * @param glTexture
-	 * @param x1 Upper Left x
-	 * @param y1 Upper Left y
-	 * @param x2 Lower Right x
-	 * @param y2 Lower Right y
 	 * @return
 	 */
 	public SimpleSpriteBatch setTextureParams(int glTexture) {
 		if (glTexture != previousGlTexture) {
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
-			//reusableQuad.reBufferTextureData(x1, y1, x2, y2);
+
 			simpleQuadShader.setTextureVertexAttributePointer(reusableQuad.textureBuffer.getGLHandle());
 
 			previousGlTexture = glTexture;
@@ -100,7 +96,9 @@ public class SimpleSpriteBatch {
 	}
 
 	/**
-	 * Change texture coords
+	 * Change texture and also texture coords.
+	 * Texture bindings are cached for the next call using glTexture as the key.
+	 *
 	 * @param glTexture
 	 * @param glTexCoordsBuffer
 	 * @return
@@ -128,47 +126,6 @@ public class SimpleSpriteBatch {
 		simpleQuadShader.drawArrays(GLES20.GL_TRIANGLE_STRIP, 4);
     }
 
-//	/**
-//	 * Does appropriate scaling and rotation and translation for rendering the glTexture on a quad
-//	 *
-//	 * TODO: Use model matrix in shader
-//	 *
-//	 * @param viewProjectionMatrix
-//	 * @param x Position x of sprite
-//	 * @param y Position y of sprite
-//	 * @param z Layering
-//	 * @param angle In degrees
-//	 * @param width Quad width
-//	 * @param height Quad height
-//	 * @param glTexture GL handle
-//	 */
-//	public void draw2d(float[] viewProjectionMatrix, float x, float y, float angle, float width, float height, int glTexture, int color) {
-//        this.draw2dz(viewProjectionMatrix, x, y, 0, angle, width, height, glTexture, color);
-//	}
-	
-	
-//	/**
-//	 * <strong>To be deprecated.</strong><br/>
-//	 * Renders a centered unit quad.<br/>
-//	 * A matrix is input to affect the rendering of the quad.<br/>
-//	 *
-//	 * @param mvpMatrix Should account for view projection and other model transformations
-//	 * @param x [deprecated]
-//	 * @param y [deprecated]
-//	 * @param z [deprecated]
-//	 * @param width Width [deprecated]
-//	 * @param height Height [deprecated]
-//	 * @param glTexture Texture handle
-//	 */
-//	public void draw(float[] mvpMatrix, int glTexture) {
-//		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
-//		simpleShader.draw(mvpMatrix,
-//						reusableQuad.vertexBuffer,
-//						reusableQuad.colorBuffer,
-//						glTexture, reusableQuad.textureBuffer,
-//						GLES20.GL_TRIANGLE_STRIP, 4);
-//	}
-	
 	public void endDrawing() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 		GLES20.glDisable(GLES20.GL_BLEND);
