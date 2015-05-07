@@ -34,19 +34,7 @@ import android.util.Log;
  * Textures are not expected to be invalidated individually...
  */
 public class TextureLoader {
-			
-//	public static class TexturePack {
-//		public String name;
-//
-//		// Animation Name to Animation Map
-//		public HashMap<String, TextureAnimation> textureAnimations;
-//
-//		public TexturePack() {
-//			this.name = "";
-//			this.textureAnimations = new HashMap<String, TextureAnimation>();
-//		}
-//	}
-	
+
 	public static class TextureAnimation {
 		public String name;
 		public ArrayList<TextureFrame> textureFrames;
@@ -94,16 +82,11 @@ public class TextureLoader {
 		public int frameNumber;
 
 		public Texture texture = new Texture();
-		//public int glTexture;
-		//public boolean rotated;
 		
 		public TextureFrame(int frameNumber, int glTexture) {
 			this.frameNumber = frameNumber;
 
-			//this.glTexture = glTexture;
 			texture.glHandle = glTexture;
-
-			//this.rotated = rotated;
 		}
 		
 	}
@@ -111,25 +94,16 @@ public class TextureLoader {
 	public static class LetterTexture {
 		public char character;
 		public Bitmap bitmap;
-		
-		//public int glTexture;
+
 		public Texture texture = new Texture();
 
 		public float widthRatio;
 	}
-	
-	/** For storing OpenGL texture ids **/
-	//private HashMap<String, Texture> textures;
-	
+
 	public HashMap<Character, LetterTexture> letterTextures = new HashMap<Character, LetterTexture>(64);
-	
+
 	/**
-	 * Deprecate?
-	 */
-	//public HashMap<String, TexturePack> texturePacks;
-	
-	/**
-	 * Examples:<br/>
+	 * Examples:
 	 * <ul>
 	 *  <li>"Troops/Moving"</li>
 	 *  <li>"Troops/Idling"</li>
@@ -146,16 +120,9 @@ public class TextureLoader {
 
 	public TextureLoader(Context context) {
 		m.context = context;
-		//m.textures = new HashMap<String, Texture>();
-		//m.texturePacks = new HashMap<String, TexturePack>();
-		
 		m.animations = new HashMap<String, TextureAnimation>();
 	}
-	
-	public Bitmap getBitmapFromPath(String texturePath, boolean rotated) {
-		return null;
-	}
-	
+
 	/**
 	 * Read a JSON config file. Format must be a mapping
 	 * @param fileName
@@ -164,7 +131,7 @@ public class TextureLoader {
 	 * @throws java.io.FileNotFoundException
 	 * @throws org.json.JSONException
 	 */
-	public JSONObject readJSONFile(String fileName) throws IOException, FileNotFoundException, JSONException {
+	public JSONObject readJSONFile(String fileName) throws IOException, JSONException {
 
 			Log.i("CONFIG CONFIG", "CONFIG CONFIG: " + fileName);
 
@@ -305,7 +272,7 @@ public class TextureLoader {
 			Object boundsY2 = folderContext.scopeSearch("y2");
 
 			// TODO: Create gl vertex buffer
-			
+
 			if (boundsX1 != null) {
 				frame.texture.offsetX1 = ((float)(int)boundsX1) / bitmap.getWidth();
 			}
@@ -329,107 +296,6 @@ public class TextureLoader {
 		});
 	}
 
-	public void loadUnit(String directory) throws IOException {
-
-		// Default
-		boolean pointingUpAtZeroDegrees = true;
-
-		try {
-			JSONObject obj = readJSONFile(directory + "/" + "config.json");
-			pointingUpAtZeroDegrees = obj.getBoolean("axisAligned");
-		} catch (JSONException e) {
-			Log.e(this.getClass().getSimpleName(), directory);
-			e.printStackTrace();
-		}
-
-		HashMap<String, Object> scope = new HashMap<String, Object>();
-		scope.put("pointingUpAtZeroDegrees", pointingUpAtZeroDegrees);
-
-		loadUnitStates(directory, scope);
-	}
-	
-	/**
-	 * Loads all bitmaps in the double nested directory
-	 * Example: Troop > Dying > Frame1
-	 * TODO: Clean up this code
-	 * 
-	 * @param directory
-	 * @return
-	 */
-	public int loadUnitStates(String directory, HashMap<String, Object> scope) {
-		
-		Log.i("LOADTEXTUREFROMASSETS", "Loading");
-		try {
-			//TexturePack texturePack = new TexturePack();
-			//texturePack.name = directory;
-
-			Log.i("LOADTEXTUREFROMASSETS", "texturePackName: " + directory);
-
-			// type > (states) > 1,2,3
-			String[] animationStates = m.context.getAssets().list(directory);
-
-
-			// animations > type > (loop through states) > 1,2,3
-			for (int i = 0; i < animationStates.length; i++) {
-
-				//Log.i("rotationConfig1", "rotationConfig1: " + rotated);
-				
-				TextureAnimation animation = new TextureAnimation();
-				animation.name = animationStates[i];
-			
-				//texturePack.textureAnimations.put(animationStates[i], animation);
-				animations.put(directory + "/" + animationStates[i], animation);
-				
-				Log.i("LOADTEXTUREFROMASSETS", "animations key: " + directory + "/" + animationStates[i]);
-				//Log.i("LOADTEXTUREFROMASSETS", "textureAnimationName: " + animation.name);
-
-
-				//Log.i("LOADTEXTUREFROMASSETS", "bitmapFrameNames length: " + bitmapFrameNames.length);
-				
-				//loadFrames();
-
-				Collections.sort(animation.textureFrames, new Comparator<TextureFrame>() {
-					@SuppressLint("NewApi")
-					@Override
-					public int compare(TextureFrame lhs, TextureFrame rhs) {
-						return Integer.compare(lhs.frameNumber, rhs.frameNumber);
-					}
-				});
-				
-				//texturePacks.put(directory, texturePack);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return 0;
-	}
-
-
-	public void loadFrames(String texturePackName) {
-		// animations > type > states > (1,2,3)
-//		String[] bitmapFrameNames = m.context.getAssets().list(texturePackName + "/" + animationStates[i]);
-//
-//		for (int f = 0; f < bitmapFrameNames.length; f++) {
-//			String bitmapFileLocation = texturePackName + "/" + animationStates[i] + "/" + bitmapFrameNames[f];
-//
-//			Bitmap bitmap = BitmapFactory.decodeStream(m.context.getAssets().open(bitmapFileLocation));
-//			//Log.i("generate from rotationConfig", "generate from rotationConfig: " + rotated);
-//
-//
-//			boolean rotated = (boolean)scope.get("pointingUpAtZeroDegrees");
-//
-//			int glHandle = this.generateGLTextureFromBitmap(bitmap, rotated);
-//
-//			int frameNumber = Integer.parseInt( bitmapFrameNames[f].substring(0, bitmapFrameNames[f].lastIndexOf('.')));
-//			animation.addFrame(frameNumber, glHandle);
-
-			//Log.i("LOADTEXTUREFROMASSETS", "frameNumber: " + frameNumber);
-			//Log.i("LOADTEXTUREFROMASSETS", "animation.textureFrames length: " + animation.name + ", " + animation.textureFrames.size());
-//		}
-	}
-
-	
 	/**
 	 * Loads all letters of alphabet
 	 */
@@ -534,75 +400,10 @@ public class TextureLoader {
 		
 		return textureHandle[0];
 	}
-	
-	/**
-	 * Creates OpenGL textures out of the resource.<br/>
-	 * Preconditions: Needs to have OpenGL context
-	 * textureLoader.loadTexture(UNIT1_TEXTURE, R.drawable.sprite1, true);
-	 * 
-	 * @param textureName
-	 * @param resource
-	 */
-//	public int loadTexture(String textureName, int resource, boolean rotated) {
-//		Bitmap bitmap = BitmapFactory.decodeResource(m.context.getResources(), resource);
-//		
-//		if (rotated == true) {
-//			//Matrix matrix = new Matrix();
-//			//matrix.postRotate(90);
-//			
-//			// Since bitmap is readonly, we create a mutable one
-//			Bitmap result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-//			Canvas tempCanvas = new Canvas(result); 
-//			
-//			// Draw bitmap onto mutable bitmap
-//			tempCanvas.rotate(90, bitmap.getWidth()/2, bitmap.getHeight()/2);
-//			tempCanvas.drawBitmap(bitmap, 0, 0, null);
-//			
-//			// Swap!
-//			bitmap = result;
-//		}			
-//		
-//		int[] textureHandle = new int[1];
-//	
-//		GLES20.glGenTextures(1, textureHandle, 0);
-//		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-//		
-//		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-//		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-//		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-//        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-//		
-//        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-//		bitmap.recycle();
-//		
-//		if (textureHandle[0] == 0)
-//	    {
-//	        throw new RuntimeException("Error loading texture.");
-//	    }
-//		
-//		if (textureName.length() != 0 && textureName != null) {
-//			Texture texture = new Texture(textureName, resource, textureHandle[0], rotated);
-//			m.textures.put(textureName, texture);
-//		}
-//				
-//		Log.d("TextureHandle", Integer.toString(textureHandle[0]) );
-//		
-//		return textureHandle[0];
-//	}
-//	
-//	public Texture getTexture(String textureName) {
-//		return m.textures.get(textureName);
-//	}
-//	
-//	public int getTextureGL(String textureName) {
-//		return m.textures.get(textureName).glTexture;
-//	}
-//	
-//	public void reloadAllTextures() {
-//		for (Texture texture : m.textures.values()) {
-//			m.loadTexture(null, texture.resourceID, texture.rotated);
-//		}
-//	}
+
+	public TextureAnimation getTextureAnimation(String textureName) {
+		return animations.get(textureName);
+	}
 
 	private static class FolderContext {
 		public FolderContext parent = null;
