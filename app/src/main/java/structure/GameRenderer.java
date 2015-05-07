@@ -284,7 +284,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 									textDrawItem.height * texture.widthRatio, textDrawItem.height,
 									textDrawItem.color)
 							.draw2d();
-					
+
 					accumulator += texture.widthRatio * 0.1f;
 				}
 			}
