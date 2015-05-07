@@ -251,6 +251,25 @@ public class SimpleQuadShader {
 
         GLES20.glEnableVertexAttribArray(shaderAttributePositionLocation);
 
+        setTextureVertexAttributePointer(textureBuffer);
+    }
+
+    public void setTextureVertexAttributePointer(int glTextureCoordsBuffer) {
+        // Tell texture uniform sampler to use texture in shader
+        GLES20.glUniform1i(shaderUniformTextureLocation, 0);
+
+        // Set Texture coords
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, glTextureCoordsBuffer);
+
+        GLES20.glVertexAttribPointer(shaderAttributeTextureLocation,
+                NUMBER_TEXTURE_ELEMENTS,
+                GLES20.GL_FLOAT, false,
+                0, 0);
+
+        GLES20.glEnableVertexAttribArray(shaderAttributeTextureLocation);
+    }
+
+    public void setTextureVertexAttributePointer(VertexBuffer textureBuffer) {
         // Tell texture uniform sampler to use texture in shader
         GLES20.glUniform1i(shaderUniformTextureLocation, 0);
 

@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,7 +40,9 @@ public class TextureLoader {
 	public static class TextureAnimation {
 		public String name;
 		public ArrayList<TextureFrame> textureFrames;
-		
+
+		public VertexBuffer textureCoordsBuffer;
+
 		public TextureAnimation() {
 			textureFrames = new ArrayList<TextureFrame>();
 		}
@@ -284,6 +288,24 @@ public class TextureLoader {
 			}
 			if (boundsY2 != null) {
 				frame.texture.offsetY2 = ((float)(int)boundsY2) / bitmap.getHeight();
+			}
+
+
+			if (boundsX1 != null && boundsX2 != null && boundsY1 != null && boundsY2 != null) {
+				float[] coords = new float[] {
+					frame.texture.offsetX1,
+					frame.texture.offsetY2,
+					frame.texture.offsetX2,
+					frame.texture.offsetY2,
+					frame.texture.offsetX1,
+					frame.texture.offsetY1,
+					frame.texture.offsetX2,
+					frame.texture.offsetY1
+				};
+
+				animation.textureCoordsBuffer = new VertexBuffer(6);
+				animation.textureCoordsBuffer.initialize();
+				animation.textureCoordsBuffer.bufferData(coords);
 			}
 		}
 

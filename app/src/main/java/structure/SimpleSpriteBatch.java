@@ -87,11 +87,29 @@ public class SimpleSpriteBatch {
 	 * @param y2 Lower Right y
 	 * @return
 	 */
-	public SimpleSpriteBatch setTextureParams(int glTexture, float x1, float y1, float x2, float y2) {
+	public SimpleSpriteBatch setTextureParams(int glTexture) {
 		if (glTexture != previousGlTexture) {
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
-			reusableQuad.reBufferTextureData(x1, y1, x2, y2);
+			//reusableQuad.reBufferTextureData(x1, y1, x2, y2);
+			simpleQuadShader.setTextureVertexAttributePointer(reusableQuad.textureBuffer.getGLHandle());
 
+			previousGlTexture = glTexture;
+		}
+
+		return this;
+	}
+
+	/**
+	 * Change texture coords
+	 * @param glTexture
+	 * @param glTexCoordsBuffer
+	 * @return
+	 */
+	public SimpleSpriteBatch setTextureParams(int glTexture, int glTexCoordsBuffer) {
+		if (glTexture != previousGlTexture) {
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
+
+			simpleQuadShader.setTextureVertexAttributePointer(glTexCoordsBuffer);
 			previousGlTexture = glTexture;
 		}
 

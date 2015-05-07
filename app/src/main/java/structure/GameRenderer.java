@@ -213,10 +213,17 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria(sprite.animationProgress);
 
+				if (cacheAnimation.textureCoordsBuffer != null) {
+					simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle());
+				}
+				else {
+					simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle);
+				}
+
 				simpleSpriteBatch
-						.setTextureParams(textureFrame.texture.glHandle,
-								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
-								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
+//						.setTextureParams(textureFrame.texture.glHandle,
+//								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
+//								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
 						.setQuadParams(cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
 								(float) temp.x, (float) temp.y,
 								0,
@@ -252,10 +259,17 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria((int)tempSprite.progress.progress);
 
+				if (cacheAnimation.textureCoordsBuffer != null) {
+					simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle());
+				} else {
+					simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle);
+				}
+
 				simpleSpriteBatch
-						.setTextureParams(textureFrame.texture.glHandle,
-								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
-								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
+//						.setTextureParams(textureFrame.texture.glHandle,
+//								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
+//								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
+//						.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle())
 						.setQuadParams(cameras.get(tempSprite.cameraIndex).getViewProjectionMatrix(),
 								(float) tempSprite.position.x, (float) tempSprite.position.y,
 								0,
@@ -276,7 +290,8 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 					TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
 
 					simpleSpriteBatch
-							.setTextureParams(texture.texture.glHandle, 0, 0, 1, 1)
+							//.setTextureParams(texture.texture.glHandle, 0, 0, 1, 1)
+							.setTextureParams(texture.texture.glHandle)
 							.setQuadParams(cameras.get(0).getViewProjectionMatrix(),
 									(float) (accumulator + textDrawItem.position.x), (float) textDrawItem.position.y,
 									0,
