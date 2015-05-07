@@ -142,9 +142,6 @@ public class TextureLoader {
 	private TextureLoader m = this;
 
 
-	private ArrayList<String> folderNamesToExplore = new ArrayList<String>();
-
-	
 	public TextureLoader(Context context) {
 		m.context = context;
 		//m.textures = new HashMap<String, Texture>();
@@ -196,20 +193,9 @@ public class TextureLoader {
 			Log.i("ANIMATIONS FOLDER", "ANIMATIONS FOLDER " + animations.length);
 			
 			for (int i = 0; i < animations.length; i++) {
-				//loadUnit(rootFolderName + "/" + animations[i]);
-				folderNamesToExplore.add(rootFolderName + "/" + animations[i]);
+				exploreFolder(rootFolderName + "/" + animations[i]);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			while (folderNamesToExplore.size() > 0) {
-				String toExplore = folderNamesToExplore.remove(0);
-				exploreFolder(toExplore);
-			}
-		}
-		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -243,7 +229,7 @@ public class TextureLoader {
 		}
 		else {
 			for (int i = 0; i < directories.length; i++) {
-				folderNamesToExplore.add(directory + "/" + directories[i]);
+				exploreFolder(directory + "/" + directories[i]);
 			}
 		}
 	}
