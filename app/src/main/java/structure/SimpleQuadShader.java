@@ -241,8 +241,12 @@ public class SimpleQuadShader {
     }
 
     public void setVertexAttributePointers(VertexBuffer positionBuffer, VertexBuffer textureBuffer) {
-        // Pass in the position information
-        positionBuffer.bindBuffer();
+        setPositionVertexAttributePointers(positionBuffer);
+        setTextureVertexAttributePointer(textureBuffer);
+    }
+
+    public void setPositionVertexAttributePointers(int glPositionBuffer) {
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, glPositionBuffer);
 
         GLES20.glVertexAttribPointer(shaderAttributePositionLocation,
                 NUMBER_POSITION_ELEMENTS,
@@ -250,8 +254,10 @@ public class SimpleQuadShader {
                 0, 0);
 
         GLES20.glEnableVertexAttribArray(shaderAttributePositionLocation);
+    }
 
-        setTextureVertexAttributePointer(textureBuffer);
+    public void setPositionVertexAttributePointers(VertexBuffer positionBuffer) {
+        setPositionVertexAttributePointers(positionBuffer.getGLHandle());
     }
 
     public void setTextureVertexAttributePointer(int glTextureCoordsBuffer) {
@@ -270,18 +276,7 @@ public class SimpleQuadShader {
     }
 
     public void setTextureVertexAttributePointer(VertexBuffer textureBuffer) {
-        // Tell texture uniform sampler to use texture in shader
-        GLES20.glUniform1i(shaderUniformTextureLocation, 0);
-
-        // Set Texture coords
-        textureBuffer.bindBuffer();
-
-        GLES20.glVertexAttribPointer(shaderAttributeTextureLocation,
-                NUMBER_TEXTURE_ELEMENTS,
-                GLES20.GL_FLOAT, false,
-                0, 0);
-
-        GLES20.glEnableVertexAttribArray(shaderAttributeTextureLocation);
+        setTextureVertexAttributePointer(textureBuffer.getGLHandle());
     }
 
     public SimpleQuadShader setUniforms(float[] projectionMatrix, float scalingX, float scalingY, float angle, float translationX, float translationY, int color) {
