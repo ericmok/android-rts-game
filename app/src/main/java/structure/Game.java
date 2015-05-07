@@ -153,10 +153,11 @@ public class Game {
         buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
         //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
 		buttonUnit.renderNode.coords.pos.set(0, 0);
+		buttonUnit.renderNode.coords.rot.setDegrees(0);
         //buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
         //buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
 		buttonUnit.renderNode.width.v = 1f;// (float)(1 / gameCamera.scale);
-		buttonUnit.renderNode.height.v = 1f; //(float)(1 / gameCamera.scale);
+		buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
         buttonUnit.renderNode.color.v = Color.WHITE;
 //        buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
 //            @Override

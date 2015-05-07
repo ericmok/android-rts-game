@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,9 +55,10 @@ public class TextureLoader {
 			textureFrames = new ArrayList<TextureFrame>();
 		}
 		
-		public void addFrame(int frameNumber, int glHandle) {
+		public TextureFrame addFrame(int frameNumber, int glHandle) {
 			TextureFrame frame = new TextureFrame(frameNumber, glHandle);
 			textureFrames.add(frame);
+			return frame;
 		}
 		
 		/**
@@ -187,13 +189,16 @@ public class TextureLoader {
 
 
 	public void loadAssetsInRoot(String rootFolderName)
-			throws FileNotFoundException {
+			throws FileNotFoundException, JSONException {
 		try {
 			String[] animations = m.context.getAssets().list(rootFolderName);
 			Log.i("ANIMATIONS FOLDER", "ANIMATIONS FOLDER " + animations.length);
-			
+
+			FolderContext folderContext = new FolderContext(rootFolderName);
+
 			for (int i = 0; i < animations.length; i++) {
-				exploreFolder(rootFolderName + "/" + animations[i]);
+				String fileName = rootFolderName + "/" + animations[i];
+				exploreFolder(fileName, folderContext);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -220,21 +225,46 @@ public class TextureLoader {
 		}
 	}
 
-	public void exploreFolder(String directory) throws IOException {
-		String[] directories = m.context.getAssets().list(directory);
+	public void loadConfigFilesIfAny(String directory, FolderContext folderContext) throws JSONException, IOException {
 
-		if (containsFrame(directories)) {
-			// Load textures
-			loadImages(directory);
-		}
-		else {
-			for (int i = 0; i < directories.length; i++) {
-				exploreFolder(directory + "/" + directories[i]);
+		String[] fileNames = m.context.getAssets().list(directory);
+
+		for (int i = 0; i < fileNames.length; i++) {
+			if (fileNames[i].equals("config.json")) {
+				JSONObject obj = readJSONFile(directory + "/" + fileNames[i]);
+
+				Iterator<String> itr = obj.keys();
+
+				while (itr.hasNext()) {
+					String key = itr.next();
+					folderContext.scope.put(key, obj.get(key));
+				}
 			}
 		}
 	}
 
-	public void loadImages(String directory) throws IOException {
+	public void exploreFolder(String directory, FolderContext folderContext) throws JSONException, IOException {
+		String[] directories = m.context.getAssets().list(directory);
+
+		FolderContext childContext = new FolderContext(directory);
+		childContext.parent = folderContext;
+
+		loadConfigFilesIfAny(directory, childContext);
+
+		// TODO: Load .json config vars into childContext
+
+		if (containsFrame(directories)) {
+			// Load textures
+			loadImages(directory, childContext);
+		}
+		else {
+			for (int i = 0; i < directories.length; i++) {
+				exploreFolder(directory + "/" + directories[i], childContext);
+			}
+		}
+	}
+
+	public void loadImages(String directory, FolderContext folderContext) throws IOException {
 
 		TextureAnimation animation = new TextureAnimation();
 		animation.name = directory;
@@ -255,12 +285,37 @@ public class TextureLoader {
 			Bitmap bitmap = BitmapFactory.decodeStream(m.context.getAssets().open(imagePath));
 
 			//boolean rotated = (boolean)scope.get("pointingUpAtZeroDegrees");
-			boolean rotated = true; // TODO: Make FolderContext objects
+			Object rotatedOption = folderContext.scopeSearch("pointingUpAtZeroDegrees");
 
-			int glHandle = this.generateGLTextureFromBitmap(bitmap, rotated);
+			//boolean rotated = true; // TODO: Make FolderContext objects
+			boolean pointingUpAtZeroDegrees = false;
+
+			if (rotatedOption != null) {
+				pointingUpAtZeroDegrees = (boolean) rotatedOption;
+			}
+
+			int glHandle = this.generateGLTextureFromBitmap(bitmap, pointingUpAtZeroDegrees);
 
 			int frameNumber = Integer.parseInt(imageFileNames[i].substring(0, imageFileNames[i].lastIndexOf('.')));
-			animation.addFrame(frameNumber, glHandle);
+			TextureFrame frame = animation.addFrame(frameNumber, glHandle);
+
+			Object boundsX1 = folderContext.scopeSearch("x1");
+			Object boundsY1 = folderContext.scopeSearch("y1");
+			Object boundsX2 = folderContext.scopeSearch("x2");
+			Object boundsY2 = folderContext.scopeSearch("y2");
+
+			if (boundsX1 != null) {
+				frame.texture.offsetX1 = ((float)(int)boundsX1) / bitmap.getWidth();
+			}
+			if (boundsY1 != null) {
+				frame.texture.offsetY1 = ((float)(int)boundsY1) / bitmap.getHeight();
+			}
+			if (boundsX2 != null) {
+				frame.texture.offsetX2 = ((float)(int)boundsX2) / bitmap.getWidth();
+			}
+			if (boundsY2 != null) {
+				frame.texture.offsetY2 = ((float)(int)boundsY2) / bitmap.getHeight();
+			}
 		}
 
 		Collections.sort(animation.textureFrames, new Comparator<TextureFrame>() {
@@ -439,7 +494,7 @@ public class TextureLoader {
 
 	public int generateGLTextureFromBitmap(Bitmap bitmap, boolean pointingUpAtZeroDegrees) {
 		
-		if (pointingUpAtZeroDegrees == true) {
+		if (pointingUpAtZeroDegrees != true) {
 			//Matrix matrix = new Matrix();
 			//matrix.postRotate(90);
 			
@@ -548,7 +603,24 @@ public class TextureLoader {
 //	}
 
 	private static class FolderContext {
+		public FolderContext parent = null;
 		public String uri;
 		public HashMap<String, Object> scope = new HashMap<String, Object>();
+
+		public FolderContext() {}
+
+		public FolderContext(String uri) { this.uri = uri; }
+
+		public Object scopeSearch(String key) {
+			FolderContext search = this;
+			Object ret = scope.get(key);
+
+			while (ret == null && search.parent != null) {
+				search = search.parent;
+				ret = search.scope.get(key);
+			}
+
+			return ret;
+		}
 	}
 }
