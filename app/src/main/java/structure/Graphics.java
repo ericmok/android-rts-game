@@ -74,10 +74,10 @@ public class Graphics {
 			simpleQuadShader.initializeResources();
 			simpleSpriteBatch.load();
 
-			textureLoader.loadAllAssetsInFolder("Animations", true);
+			textureLoader.loadAssetsInRoot("Animations");
 			textureLoader.loadLetterTextures();
 
-//			textureLoader.loadTextureFromAssets(TROOPS_ASSETS, true);
+//			textureLoader.loadUnitStates(TROOPS_ASSETS, true);
 //			textureLoader.loadTexture(UNIT1_TEXTURE, R.drawable.sprite1, true);
 
 			isLoaded = true;
@@ -85,6 +85,7 @@ public class Graphics {
 			rc.gc();
 		} catch (Exception e) {
 			Log.e("Graphics", "Failed to initialize!");
+			e.printStackTrace();
 		}
 	}
 

@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 import art.Animations;
+import noteworthyengine.CameraNode;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.InputNode;
 import noteworthyengine.NoteworthyEngine;
@@ -51,32 +52,34 @@ public class ArrowCommandInput extends Unit {
             super(unit);
         }
 
-        public void onDown(Vector2 touchPosition) {}
-        public void onShowPress(Vector2 touchPosition) {}
-        public void onSingleTapUp(Vector2 touchPosition) {}
+        public void onDown(CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onShowPress(CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onSingleTapUp(CameraNode cameraNode, Vector2 touchPosition) {}
 
-        public void onScroll(Vector2 touchPosition, Vector2 touchPosition2, Vector2 touchScrollDeltas) {
+        public void onScroll(CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2, Vector2 touchScrollDeltas) {
 
         }
 
-        public void onLongPress(Vector2 touchPosition) {}
-        public void onFling(Vector2 touchPosition, Vector2 touchPosition2) {}
-        public void onScale(float touchScale) {}
+        public void onLongPress(CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onFling(CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2) {}
+        public void onScale(CameraNode cameraNode, float touchScale) {}
 
-        public void update(int currentGesture, int currentAction) {
+        public void update(CameraNode cameraNode, int currentGesture, int currentAction) {
 
-            GameCamera gameCamera = game.getGameRenderer().mainCamera;
+            //GameCamera gameCamera = game.getGameRenderer().mainCamera;
 
             if (currentGesture == GameInput.GESTURE_ON_SCROLL) {
                 renderNode.coords.pos.copy(game.gameInput.touchPosition);
-                renderNode.coords.pos.scale(1 /gameCamera.scale , 1 / gameCamera.scale);
+                renderNode.coords.pos.scale(1 / cameraNode.camera.scale, 1 / cameraNode.camera.scale);
+                renderNode.coords.pos.translate(cameraNode.coords.pos.x, cameraNode.coords.pos.y);
 
                 Vector2.subtract(temp, game.gameInput.touchPosition2, game.gameInput.touchPosition);
                 renderNode.coords.rot.setDirection(temp.x, temp.y);
             }
             if (currentAction == MotionEvent.ACTION_DOWN) {
                 renderNode.coords.pos.copy(game.gameInput.touchPosition);
-                renderNode.coords.pos.scale(1 / gameCamera.scale, 1 / gameCamera.scale);
+                renderNode.coords.pos.scale(1 / cameraNode.camera.scale, 1 / cameraNode.camera.scale);
+                renderNode.coords.pos.translate(cameraNode.coords.pos.x, cameraNode.coords.pos.y);
 
                 //FloatPtr width = (FloatPtr)feedback.field("width");
                 renderNode.width.v = 8;

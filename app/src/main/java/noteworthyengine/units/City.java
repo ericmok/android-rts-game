@@ -26,24 +26,33 @@ public class City extends Unit {
     public City(final Gamer gamer) {
         this.name = NAME;
 
+        this.reset();
+        this.configure(gamer);
+
         gridNode = new GridNode(this, null, battleNode);
 
-        battleNode.gamer.v = gamer;
-        battleNode.hp.v = 100;
-        battleNode.attackDamage.v = 1;
         battleNode.inflictDamage = new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
             @Override
             public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
                 battleNode.hp.v -= damage.v;
 
                 if (battleNode.hp.v <= 0) {
-                    City city = new City(attacker.gamer.v);
+                    City city = UnitPool.cities.fetchMemory();
+                    city.configure(attacker.gamer.v);
                     city.battleNode.coords.pos.copy(battleNode.coords.pos);
                     battleSystem.getBaseEngine().addUnit(city);
                 }
             }
         };
+    }
 
+    public void reset() {
+        battleNode.hp.v = 110;
+        battleNode.attackDamage.v = 1;
+    }
+
+    public void configure(Gamer gamer) {
+        battleNode.gamer.v = gamer;
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
     }
 
@@ -57,18 +66,23 @@ public class City extends Unit {
 
             switch (d) {
                 case 0:
-                    Platoon platoon = new Platoon();
-                    platoon.battleNode.gamer.v = battleNode.gamer.v;
+                    //Platoon platoon = new Platoon();
+                    Platoon platoon = UnitPool.platoons.fetchMemory();
+                    platoon.configure(battleNode.gamer.v);
                     platoon.battleNode.coords.pos.copy(this.battleNode.coords.pos);
                     engine.addUnit(platoon);
                     break;
                 case 1:
-                    Mech mech = new Mech(battleNode.gamer.v);
+                    //Mech mech = new Mech(battleNode.gamer.v);
+                    Mech mech = UnitPool.mechs.fetchMemory();
+                    mech.configure(battleNode.gamer.v);
                     mech.battleNode.coords.pos.copy(this.battleNode.coords.pos);
                     engine.addUnit(mech);
                     break;
                 case 2:
-                    Cannon cannon = new Cannon(battleNode.gamer.v);
+                    //Cannon cannon = new Cannon(battleNode.gamer.v);
+                    Cannon cannon = UnitPool.cannons.fetchMemory();
+                    cannon.configure(battleNode.gamer.v);
                     cannon.battleNode.coords.pos.copy(this.battleNode.coords.pos);
                     engine.addUnit(cannon);
                     break;

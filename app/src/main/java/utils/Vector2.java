@@ -53,9 +53,21 @@ public class Vector2 implements JsonSerializable {
         return this;
     }
 
+    public Vector2 scale(double d) {
+        x *= d;
+        y *= d;
+        return this;
+    }
+
     public Vector2 translate(double d, double e) {
         x += d;
         y += e;
+        return this;
+    }
+
+    public Vector2 translate(Vector2 other) {
+        x += other.x;
+        y += other.y;
         return this;
     }
 
@@ -131,6 +143,12 @@ public class Vector2 implements JsonSerializable {
             this.x = this.x * clamp;
             this.y = this.y * clamp;
         }
+    }
+
+    public static void lerp(Vector2 output, Vector2 a, Vector2 b, double amount) {
+        Vector2.subtract(output, b, a);
+        output.x = a.x + (amount * output.x);
+        output.y = a.y + (amount * output.y);
     }
 
     public String toString() {

@@ -77,7 +77,11 @@ public class BaseEngine {
             removeNode(node);
         }
 
-        UnitPool.recycle(unit);
+        this.recycleUnit(unit);
+    }
+
+    public void recycleUnit(Unit unit) {
+        //UnitPool.recycle(unit);
     }
 
     public void flushQueues() {

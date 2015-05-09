@@ -7,10 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,30 +36,21 @@ import android.util.Log;
  * Textures are not expected to be invalidated individually...
  */
 public class TextureLoader {
-			
-	public static class TexturePack {
-		public String name;
-		
-		// Animation Name to Animation Map 
-		public HashMap<String, TextureAnimation> textureAnimations;
-		
-		public TexturePack() {
-			this.name = "";
-			this.textureAnimations = new HashMap<String, TextureAnimation>();
-		}
-	}
-	
+
 	public static class TextureAnimation {
 		public String name;
 		public ArrayList<TextureFrame> textureFrames;
-		
+
+		public VertexBuffer textureCoordsBuffer;
+
 		public TextureAnimation() {
 			textureFrames = new ArrayList<TextureFrame>();
 		}
 		
-		public void addFrame(int frameNumber, int glHandle) {
+		public TextureFrame addFrame(int frameNumber, int glHandle) {
 			TextureFrame frame = new TextureFrame(frameNumber, glHandle);
 			textureFrames.add(frame);
+			return frame;
 		}
 		
 		/**
@@ -90,15 +84,13 @@ public class TextureLoader {
 	 */
 	public static class TextureFrame {
 		public int frameNumber;
-		
-		public int glTexture;
-		//public boolean rotated;
+
+		public Texture texture = new Texture();
 		
 		public TextureFrame(int frameNumber, int glTexture) {
 			this.frameNumber = frameNumber;
 
-			this.glTexture = glTexture;
-			//this.rotated = rotated;
+			texture.glHandle = glTexture;
 		}
 		
 	}
@@ -106,23 +98,16 @@ public class TextureLoader {
 	public static class LetterTexture {
 		public char character;
 		public Bitmap bitmap;
-		
-		public int glTexture;
+
+		public Texture texture = new Texture();
+
 		public float widthRatio;
 	}
-	
-	/** For storing OpenGL texture ids **/
-	//private HashMap<String, Texture> textures;
-	
+
 	public HashMap<Character, LetterTexture> letterTextures = new HashMap<Character, LetterTexture>(64);
-	
+
 	/**
-	 * Deprecate?
-	 */
-	public HashMap<String, TexturePack> texturePacks;
-	
-	/**
-	 * Examples:<br/>
+	 * Examples:
 	 * <ul>
 	 *  <li>"Troops/Moving"</li>
 	 *  <li>"Troops/Idling"</li>
@@ -135,20 +120,13 @@ public class TextureLoader {
 	
 	/** Replacement for this **/
 	private TextureLoader m = this;
-	
-	
+
+
 	public TextureLoader(Context context) {
 		m.context = context;
-		//m.textures = new HashMap<String, Texture>();
-		m.texturePacks = new HashMap<String, TexturePack>();
-		
 		m.animations = new HashMap<String, TextureAnimation>();
 	}
-	
-	public Bitmap getBitmapFromPath(String texturePath, boolean rotated) {
-		return null;
-	}
-	
+
 	/**
 	 * Read a JSON config file. Format must be a mapping
 	 * @param fileName
@@ -157,10 +135,10 @@ public class TextureLoader {
 	 * @throws java.io.FileNotFoundException
 	 * @throws org.json.JSONException
 	 */
-	public JSONObject readJSONFile(String fileName) throws IOException, FileNotFoundException, JSONException {
+	public JSONObject readJSONFile(String fileName) throws IOException, JSONException {
 
 			Log.i("CONFIG CONFIG", "CONFIG CONFIG: " + fileName);
-			
+
 			InputStream inputStream = m.context.getAssets().open(fileName);
 			
 			InputStreamReader reader = new InputStreamReader(inputStream);
@@ -179,104 +157,167 @@ public class TextureLoader {
 			
 			return (JSONObject) jsonTokener.nextValue();
 	}
-	
-	
-	public void loadAllAssetsInFolder(String folderName, boolean rotated) {
+
+
+	public void loadAssetsInRoot(String rootFolderName)
+			throws FileNotFoundException, JSONException {
 		try {
-			String[] animations = m.context.getAssets().list(folderName);
+			String[] animations = m.context.getAssets().list(rootFolderName);
 			Log.i("ANIMATIONS FOLDER", "ANIMATIONS FOLDER " + animations.length);
-			
+
+			FolderContext folderContext = new FolderContext(rootFolderName);
+
 			for (int i = 0; i < animations.length; i++) {
-
-				boolean rotationConfiguration = rotated;
-				
-				try {
-					JSONObject obj = readJSONFile(folderName + "/" + animations[i] + "/" + "config.json");
-					rotationConfiguration = obj.getBoolean("axisAligned");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				} catch (FileNotFoundException fe) {
-					// Do nothing
-				}
-				
-				loadTextureFromAssets(folderName + "/" + animations[i], rotationConfiguration);
+				String fileName = rootFolderName + "/" + animations[i];
+				exploreFolder(fileName, folderContext);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * Loads all bitmaps in the double nested directory
-	 * Example: Troop > Dying > Frame1
-	 * TODO: Clean up this code
-	 * 
-	 * @param texturePackName
-	 * @param rotated
-	 * @return
-	 */
-	public int loadTextureFromAssets(String texturePackName, boolean rotated) {
-		
-		Log.i("LOADTEXTUREFROMASSETS", "Loading");
+
+	public boolean containsFrame(String[] filenames) {
+
+		for (int i = 0; i < filenames.length; i++) {
+			if (isFrame(filenames[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isFrame(String filename) {
 		try {
-			TexturePack texturePack = new TexturePack();
-			texturePack.name = texturePackName;
-			
-			Log.i("LOADTEXTUREFROMASSETS", "texturePackName: " + texturePackName);
-			
-			// type > (states) > 1,2,3
-			String[] animationStates = m.context.getAssets().list(texturePackName);
+			String toParse = filename.substring(0, filename.lastIndexOf('.'));
+			Integer.parseInt(toParse);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
-			
-			// animations > type > (loop through states) > 1,2,3
-			for (int i = 0; i < animationStates.length; i++) {
+	public void loadConfigFilesIfAny(String directory, FolderContext folderContext) throws JSONException, IOException {
 
-				//Log.i("rotationConfig1", "rotationConfig1: " + rotated);
-				
-				TextureAnimation animation = new TextureAnimation();
-				animation.name = animationStates[i];
-			
-				texturePack.textureAnimations.put(animationStates[i], animation);
-				animations.put(texturePackName + "/" + animationStates[i], animation);
-				
-				Log.i("LOADTEXTUREFROMASSETS", "animations key: " + texturePackName + "/" + animationStates[i]);
-				//Log.i("LOADTEXTUREFROMASSETS", "textureAnimationName: " + animation.name);
-				
-				// animations > type > states > (1,2,3)
-				String[] bitmapFrameNames = m.context.getAssets().list(texturePackName + "/" + animationStates[i]);				
+		String[] fileNames = m.context.getAssets().list(directory);
 
-				//Log.i("LOADTEXTUREFROMASSETS", "bitmapFrameNames length: " + bitmapFrameNames.length);
-				
-				for (int f = 0; f < bitmapFrameNames.length; f++) {
-					String bitmapFileLocation = texturePackName + "/" + animationStates[i] + "/" + bitmapFrameNames[f];					
-					
-					Bitmap bitmap = BitmapFactory.decodeStream(m.context.getAssets().open(bitmapFileLocation));
-					//Log.i("generate from rotationConfig", "generate from rotationConfig: " + rotated);
-					int glHandle = this.generateGLTextureFromBitmap(bitmap, rotated);
-					
-					int frameNumber = Integer.parseInt( bitmapFrameNames[f].substring(0, bitmapFrameNames[f].lastIndexOf('.')) ); 
-					animation.addFrame(frameNumber, glHandle);
+		for (int i = 0; i < fileNames.length; i++) {
+			if (fileNames[i].equals("config.json")) {
+				JSONObject obj = readJSONFile(directory + "/" + fileNames[i]);
 
-					//Log.i("LOADTEXTUREFROMASSETS", "frameNumber: " + frameNumber);
-					//Log.i("LOADTEXTUREFROMASSETS", "animation.textureFrames length: " + animation.name + ", " + animation.textureFrames.size());
+				Iterator<String> itr = obj.keys();
+
+				while (itr.hasNext()) {
+					String key = itr.next();
+					folderContext.scope.put(key, obj.get(key));
 				}
-				
-				Collections.sort(animation.textureFrames, new Comparator<TextureFrame>() {
-					@SuppressLint("NewApi")
-					@Override
-					public int compare(TextureFrame lhs, TextureFrame rhs) { return Integer.compare(lhs.frameNumber, rhs.frameNumber); }
-				});
-				
-				texturePacks.put(texturePackName, texturePack);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		}
+	}
+
+	public void exploreFolder(String directory, FolderContext folderContext) throws JSONException, IOException {
+		String[] directories = m.context.getAssets().list(directory);
+
+		FolderContext childContext = new FolderContext(directory);
+		childContext.parent = folderContext;
+
+		loadConfigFilesIfAny(directory, childContext);
+
+		// TODO: Load .json config vars into childContext
+
+		if (containsFrame(directories)) {
+			// Load textures
+			loadImages(directory, childContext);
+		}
+		else {
+			for (int i = 0; i < directories.length; i++) {
+				exploreFolder(directory + "/" + directories[i], childContext);
+			}
+		}
+	}
+
+	public void loadImages(String directory, FolderContext folderContext) throws IOException {
+
+		TextureAnimation animation = new TextureAnimation();
+		animation.name = directory;
+
+		animations.put(directory, animation);
+
+		String[] imageFileNames = m.context.getAssets().list(directory);
+
+		for (int i = 0; i < imageFileNames.length; i++) {
+
+			if (!isFrame(imageFileNames[i])) {
+				// TODO: Check if json file
+				continue;
+			}
+
+			String imagePath = directory + "/" + imageFileNames[i];
+
+			Bitmap bitmap = BitmapFactory.decodeStream(m.context.getAssets().open(imagePath));
+
+			//boolean rotated = (boolean)scope.get("pointingUpAtZeroDegrees");
+			Object rotatedOption = folderContext.scopeSearch("pointingUpAtZeroDegrees");
+
+			//boolean rotated = true; // TODO: Make FolderContext objects
+			boolean pointingUpAtZeroDegrees = false;
+
+			if (rotatedOption != null) {
+				pointingUpAtZeroDegrees = (boolean) rotatedOption;
+			}
+
+			int glHandle = this.generateGLTextureFromBitmap(bitmap, pointingUpAtZeroDegrees);
+
+			int frameNumber = Integer.parseInt(imageFileNames[i].substring(0, imageFileNames[i].lastIndexOf('.')));
+			TextureFrame frame = animation.addFrame(frameNumber, glHandle);
+
+			Object boundsX1 = folderContext.scopeSearch("x1");
+			Object boundsY1 = folderContext.scopeSearch("y1");
+			Object boundsX2 = folderContext.scopeSearch("x2");
+			Object boundsY2 = folderContext.scopeSearch("y2");
+
+			// TODO: Create gl vertex buffer
+
+			if (boundsX1 != null) {
+				frame.texture.offsetX1 = ((float)(int)boundsX1) / bitmap.getWidth();
+			}
+			if (boundsY1 != null) {
+				frame.texture.offsetY1 = ((float)(int)boundsY1) / bitmap.getHeight();
+			}
+			if (boundsX2 != null) {
+				frame.texture.offsetX2 = ((float)(int)boundsX2) / bitmap.getWidth();
+			}
+			if (boundsY2 != null) {
+				frame.texture.offsetY2 = ((float)(int)boundsY2) / bitmap.getHeight();
+			}
+
+
+			if (boundsX1 != null && boundsX2 != null && boundsY1 != null && boundsY2 != null) {
+				float[] coords = new float[] {
+					frame.texture.offsetX1,
+					frame.texture.offsetY2,
+					frame.texture.offsetX2,
+					frame.texture.offsetY2,
+					frame.texture.offsetX1,
+					frame.texture.offsetY1,
+					frame.texture.offsetX2,
+					frame.texture.offsetY1
+				};
+
+				animation.textureCoordsBuffer = new VertexBuffer(6);
+				animation.textureCoordsBuffer.initialize();
+				animation.textureCoordsBuffer.bufferData(coords);
+			}
 		}
 
-		return 0;
+		Collections.sort(animation.textureFrames, new Comparator<TextureFrame>() {
+			@SuppressLint("NewApi")
+			@Override
+			public int compare(TextureFrame lhs, TextureFrame rhs) {
+				return Integer.compare(lhs.frameNumber, rhs.frameNumber);
+			}
+		});
 	}
-		
-	
+
 	/**
 	 * Loads all letters of alphabet
 	 */
@@ -297,7 +338,8 @@ public class TextureLoader {
 			LetterTexture letterTexture = new LetterTexture();
 			letterTexture.bitmap = bitmap;
 			letterTexture.character = alphabet.charAt(i);
-			letterTexture.glTexture = texture;
+			//letterTexture.glTexture = texture;
+			letterTexture.texture.glHandle = texture;
 			letterTexture.widthRatio = (float)bitmap.getWidth() / bitmap.getHeight();
 			
 			letterTextures.put(alphabet.charAt(i), letterTexture);
@@ -340,9 +382,9 @@ public class TextureLoader {
 	}
 	
 
-	public int generateGLTextureFromBitmap(Bitmap bitmap, boolean rotated) {
+	public int generateGLTextureFromBitmap(Bitmap bitmap, boolean pointingUpAtZeroDegrees) {
 		
-		if (rotated == true) {
+		if (pointingUpAtZeroDegrees != true) {
 			//Matrix matrix = new Matrix();
 			//matrix.postRotate(90);
 			
@@ -380,73 +422,30 @@ public class TextureLoader {
 		
 		return textureHandle[0];
 	}
-	
-	/**
-	 * Creates OpenGL textures out of the resource.<br/>
-	 * Preconditions: Needs to have OpenGL context
-	 * textureLoader.loadTexture(UNIT1_TEXTURE, R.drawable.sprite1, true);
-	 * 
-	 * @param textureName
-	 * @param resource
-	 */
-//	public int loadTexture(String textureName, int resource, boolean rotated) {
-//		Bitmap bitmap = BitmapFactory.decodeResource(m.context.getResources(), resource);
-//		
-//		if (rotated == true) {
-//			//Matrix matrix = new Matrix();
-//			//matrix.postRotate(90);
-//			
-//			// Since bitmap is readonly, we create a mutable one
-//			Bitmap result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-//			Canvas tempCanvas = new Canvas(result); 
-//			
-//			// Draw bitmap onto mutable bitmap
-//			tempCanvas.rotate(90, bitmap.getWidth()/2, bitmap.getHeight()/2);
-//			tempCanvas.drawBitmap(bitmap, 0, 0, null);
-//			
-//			// Swap!
-//			bitmap = result;
-//		}			
-//		
-//		int[] textureHandle = new int[1];
-//	
-//		GLES20.glGenTextures(1, textureHandle, 0);
-//		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-//		
-//		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-//		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-//		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-//        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-//		
-//        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-//		bitmap.recycle();
-//		
-//		if (textureHandle[0] == 0)
-//	    {
-//	        throw new RuntimeException("Error loading texture.");
-//	    }
-//		
-//		if (textureName.length() != 0 && textureName != null) {
-//			Texture texture = new Texture(textureName, resource, textureHandle[0], rotated);
-//			m.textures.put(textureName, texture);
-//		}
-//				
-//		Log.d("TextureHandle", Integer.toString(textureHandle[0]) );
-//		
-//		return textureHandle[0];
-//	}
-//	
-//	public Texture getTexture(String textureName) {
-//		return m.textures.get(textureName);
-//	}
-//	
-//	public int getTextureGL(String textureName) {
-//		return m.textures.get(textureName).glTexture;
-//	}
-//	
-//	public void reloadAllTextures() {
-//		for (Texture texture : m.textures.values()) {
-//			m.loadTexture(null, texture.resourceID, texture.rotated);
-//		}
-//	}
+
+	public TextureAnimation getTextureAnimation(String textureName) {
+		return animations.get(textureName);
+	}
+
+	private static class FolderContext {
+		public FolderContext parent = null;
+		public String uri;
+		public HashMap<String, Object> scope = new HashMap<String, Object>();
+
+		public FolderContext() {}
+
+		public FolderContext(String uri) { this.uri = uri; }
+
+		public Object scopeSearch(String key) {
+			FolderContext search = this;
+			Object ret = scope.get(key);
+
+			while (ret == null && search.parent != null) {
+				search = search.parent;
+				ret = search.scope.get(key);
+			}
+
+			return ret;
+		}
+	}
 }

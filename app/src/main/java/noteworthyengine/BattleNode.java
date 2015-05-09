@@ -51,8 +51,8 @@ public class BattleNode extends Node {
     public static final VoidFunc3<BattleSystem, BattleNode, BattleNode> ON_ATTACK_CAST =
             new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
                 @Override
-                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode otherBattleNode) {
-                    INFLICT_DAMAGE_DEFAULT.apply(battleSystem, otherBattleNode, battleNode, battleNode.attackDamage);
+                public void apply(BattleSystem battleSystem, BattleNode attacker, BattleNode otherBattleNode) {
+                    otherBattleNode.inflictDamage.apply(battleSystem, otherBattleNode, attacker, attacker.attackDamage);
                 }
             };
 

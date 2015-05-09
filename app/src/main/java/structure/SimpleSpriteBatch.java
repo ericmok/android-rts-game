@@ -1,6 +1,5 @@
 package structure;
 
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
@@ -47,6 +46,8 @@ public class SimpleSpriteBatch {
 	public void beginDrawing() {
 		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		GLES20.glEnable(GLES20.GL_BLEND);
+
+		simpleQuadShader.setVertexAttributePointers(reusableQuad.vertexBuffer, reusableQuad.textureBuffer);
 	}
 	
 	/** 
@@ -73,92 +74,58 @@ public class SimpleSpriteBatch {
 		return tempMatrix;
 	}
 
+	int previousGlTexture = -1;
+
+	/**
+	 * Set the texture and texture coords for the internally shared quad.
+	 * Texture bindings are cached for the next call using glTexture as the key.
+	 *
+	 * @param glTexture
+	 * @return
+	 */
+	public SimpleSpriteBatch setTextureParams(int glTexture) {
+		if (glTexture != previousGlTexture) {
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
+
+			simpleQuadShader.setTextureVertexAttributePointer(reusableQuad.textureBuffer.getGLHandle());
+
+			previousGlTexture = glTexture;
+		}
+
+		return this;
+	}
+
+	/**
+	 * Change texture and also texture coords.
+	 * Texture bindings are cached for the next call using glTexture as the key.
+	 *
+	 * @param glTexture
+	 * @param glTexCoordsBuffer
+	 * @return
+	 */
+	public SimpleSpriteBatch setTextureParams(int glTexture, int glTexCoordsBuffer) {
+		if (glTexture != previousGlTexture) {
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
+
+			simpleQuadShader.setTextureVertexAttributePointer(glTexCoordsBuffer);
+			previousGlTexture = glTexture;
+		}
+
+		return this;
+	}
+
+	public SimpleSpriteBatch setQuadParams(float[] projectionMatrix, float x, float y, float z, float angle, float width, float height, int color) {
+		simpleQuadShader.setUniforms(projectionMatrix, width, height, angle, x, y, color);
+		return this;
+	}
+
     /**
-     * Sprites are better sorted, rather than relying on z index
-     * @param viewProjectionMatrix
-     * @param x
-     * @param y
-     * @param z
-     * @param angle
-     * @param width
-     * @param height
-     * @param glTexture
-     * @param color
+	 * Draw the internal quad. Make sure to <strong>setTextureParams</strong> and <strong>setQuadParams</strong> first.
      */
-    public void draw2d(float[] projectionMatrix, float x, float y, float z, float angle, float width, float height, int glTexture, int color) {
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
-
-        //this.setScaleQuadTempMatrix(x, y, 1, width, height);
-
-//        float[] scalingMatrix = tempMatrix;
-//        Matrix.setIdentityM(scalingMatrix, 0);
-//        Matrix.scaleM(scalingMatrix, 0, width, height, 1);
-//
-//        float[] rotationMatrix = tempMatrix2;
-//        Matrix.setIdentityM(rotationMatrix, 0);
-//
-//        // TODO: zero degree rotation problem
-//        Matrix.rotateM(rotationMatrix, 0, angle, 0, 0, 1);
-//
-//        float[] translationMatrix = tempMatrix3;
-//        Matrix.setIdentityM(translationMatrix, 0);
-//        Matrix.translateM(translationMatrix, 0, x, y, z);
-//
-//        float[] finalMatrix = tempMatrix4;
-//        Matrix.setIdentityM(finalMatrix, 0);
-//
-//        Matrix.multiplyMM(finalMatrix, 0, rotationMatrix, 0, scalingMatrix, 0);
-//        Matrix.multiplyMM(finalMatrix, 0, translationMatrix, 0, finalMatrix, 0);
-
-        simpleQuadShader.draw(projectionMatrix, width, height, angle, x, y,
-                reusableQuad.vertexBuffer,
-                color,
-                glTexture,
-                reusableQuad.textureBuffer,
-                GLES20.GL_TRIANGLE_STRIP, 4);
+    public void draw2d() {
+		simpleQuadShader.drawArrays(GLES20.GL_TRIANGLE_STRIP, 4);
     }
 
-//	/**
-//	 * Does appropriate scaling and rotation and translation for rendering the glTexture on a quad
-//	 *
-//	 * TODO: Use model matrix in shader
-//	 *
-//	 * @param viewProjectionMatrix
-//	 * @param x Position x of sprite
-//	 * @param y Position y of sprite
-//	 * @param z Layering
-//	 * @param angle In degrees
-//	 * @param width Quad width
-//	 * @param height Quad height
-//	 * @param glTexture GL handle
-//	 */
-//	public void draw2d(float[] viewProjectionMatrix, float x, float y, float angle, float width, float height, int glTexture, int color) {
-//        this.draw2dz(viewProjectionMatrix, x, y, 0, angle, width, height, glTexture, color);
-//	}
-	
-	
-//	/**
-//	 * <strong>To be deprecated.</strong><br/>
-//	 * Renders a centered unit quad.<br/>
-//	 * A matrix is input to affect the rendering of the quad.<br/>
-//	 *
-//	 * @param mvpMatrix Should account for view projection and other model transformations
-//	 * @param x [deprecated]
-//	 * @param y [deprecated]
-//	 * @param z [deprecated]
-//	 * @param width Width [deprecated]
-//	 * @param height Height [deprecated]
-//	 * @param glTexture Texture handle
-//	 */
-//	public void draw(float[] mvpMatrix, int glTexture) {
-//		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTexture);
-//		simpleShader.draw(mvpMatrix,
-//						reusableQuad.vertexBuffer,
-//						reusableQuad.colorBuffer,
-//						glTexture, reusableQuad.textureBuffer,
-//						GLES20.GL_TRIANGLE_STRIP, 4);
-//	}
-	
 	public void endDrawing() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 		GLES20.glDisable(GLES20.GL_BLEND);

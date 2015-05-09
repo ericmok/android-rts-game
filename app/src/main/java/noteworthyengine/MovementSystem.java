@@ -12,6 +12,7 @@ public class MovementSystem extends noteworthyframework.System {
 
     public Vector2 temp = new Vector2();
     public Vector2 temp2 = new Vector2();
+    public Vector2 temp3 = new Vector2();
 
     public MovementSystem() {
     }
@@ -84,9 +85,18 @@ public class MovementSystem extends noteworthyframework.System {
 
             position.translate(velocity.x * dt, velocity.y * dt);
 
-            if (velocity.magnitude() != 0) {
+            if (!fieldForce.isZero()) {
+                movementNode.coords.rot.addVector(fieldForce.x, fieldForce.y, movementNode.turnFactor.v);
+            }
+            else if (movementNode.target.v != null) {
+                Vector2.subtract(temp3, movementNode.target.v.coords.pos, movementNode.coords.pos);
+                temp3.setNormalized();
+                movementNode.coords.rot.addVector(temp3.x, temp3.y, movementNode.turnFactor.v);
+            }
+            else if (velocity.magnitude() != 0) {
+                movementNode.coords.rot.addVector(velocity.x, velocity.y, movementNode.turnFactor.v);
                 //movementNode.coords.rot.setDirection(velocity);
-                movementNode.coords.rot.setDirection(temp2);
+                //movementNode.coords.rot.setDirection(temp2);
             }
         }
     }

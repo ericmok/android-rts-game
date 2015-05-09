@@ -160,7 +160,7 @@ public class Orientation extends Vector2 {
 	
 	/**
 	 * Adds the scaled vector to the orientation vector.
-	 * A random component is added if the velocity is opposite the orientation
+	 * A positive component is added if the velocity is opposite the orientation
 	 * @param vx
 	 * @param vy
 	 * @param turningRate
@@ -170,15 +170,30 @@ public class Orientation extends Vector2 {
 		
 		if (vx == -x && vy == -y) {
 		//if (vx == x && vy == y) {
-			vx += (Math.random() > 0.5 ? -1 : 1) * 0.0001;
-			vy += (Math.random() > 0.5 ? -1 : 1) * 0.0001;
+			vx += 0.0001;
+			vy += 0.0001;
 		}
 	
 		this.x += vx * turningRate;
 		this.y += vy * turningRate;
 		this.setNormalized();
+		cacheDirty = true;
 	}
-	
+
+	@Override
+	public Vector2 translate(double d, double e) {
+		super.translate(d, e);
+		cacheDirty = true;
+		return this;
+	}
+
+	@Override
+	public Vector2 translate(Vector2 other) {
+		super.translate(other);
+		cacheDirty = true;
+		return this;
+	}
+
 	/**
 	 * Deep copy without allocation.
 	 * @param orientation
@@ -190,26 +205,42 @@ public class Orientation extends Vector2 {
 		this.y = orientation.y;
 	}
 
+	/**
+	 * Gets counter-clockwise perpendicular
+	 * @param output
+	 * @param in
+	 */
     public static void getPerpendicular(Vector2 output, Vector2 in) {
-        double pointX = 0;
-        if (in.x != 0) {
-            pointX = (-in.y / in.x);
-        }
-        output.x = pointX;
-        output.y = 1;
-        output.setNormalized();
+        //double pointX = 0;
+        //if (in.x != 0) {
+        //    pointX = (-in.y / in.x);
+        //}
+        //output.x = pointX;
+        //output.y = 1;
+        //output.setNormalized();
+		output.x = -in.y;
+		output.y = in.x;
+		output.setNormalized();
     }
 
+	/**
+	 * Gets counter-clockwise perpendicular
+	 * @param output
+	 */
 	public void getPerpendicular(Vector2 output) {
-        double pointX = 0;
-        if (x != 0) {
-            pointX = (-y / x);
-        }
-		output.x = pointX;
-		output.y = 1;
-		output.setNormalized();
+        //double pointX = 0;
+        //if (x != 0) {
+        //    pointX = (-y / x);
+        //}
+		//output.x = pointX;
+		//output.y = 1;
+		//output.setNormalized();
+		Orientation.getPerpendicular(output, this);
 	}
-	
+
+	/**
+	 * To deprecate. It does not work!
+	 */
 	public void getPerpendicular(Vector3 output) {
 		// bug took 2 days!
 		if (x == 0) {
@@ -227,7 +258,10 @@ public class Orientation extends Vector2 {
 		output.z = 0;
 		output.setNormalized2d();
 	}
-	
+
+	/**
+	 * To deprecate. It does not work!
+	 */
 	public static void getPerpendicular(Vector3 output, Vector3 a) {
 		// bug took 2 days!
 		if (a.x == 0) {

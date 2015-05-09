@@ -2,6 +2,8 @@ package noteworthyframework;
 
 import java.util.List;
 
+import noteworthyengine.RenderNode;
+import noteworthyengine.RenderSystem;
 import structure.DoubleBufferredRewriteOnlyArray;
 import structure.Sprite2dDef;
 import structure.Game;
@@ -21,13 +23,18 @@ public class DrawCompat {
     public DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItem;
     public MemoryPool<TemporarySprite2dDef> tempSpritesMemoryPool;
 
-    private Game game;
+    private final Game game;
+    private RenderSystem renderSystem;
 
     public DrawCompat(Game game) {
         this.game = game;
         tempSprites = game.graphics.drawLists.temporarySprites;
         textDrawItem = game.graphics.drawLists.textDrawItems;
         tempSpritesMemoryPool = game.gamePool.temporaryDrawItems;
+    }
+
+    public void setRenderSystem(RenderSystem renderSystem) {
+        this.renderSystem = renderSystem;
     }
 
     public void beginDraw() {

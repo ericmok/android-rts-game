@@ -11,10 +11,12 @@ import java.io.IOException;
 import art.Animations;
 import noteworthyengine.BackgroundUnit;
 import noteworthyengine.ButtonSystem;
+import noteworthyengine.levels.LevelOne;
 import noteworthyengine.units.ButtonUnit;
 import noteworthyengine.units.CameraUnit;
-import noteworthyengine.DataLoader;
+
 import noteworthyengine.LoaderUIEngine;
+import noteworthyengine.units.MainGameCamera;
 import noteworthyframework.BaseEngine;
 import noteworthyengine.NoteworthyEngine;
 import utils.VoidFunc;
@@ -38,7 +40,6 @@ public class Game {
 
     public GameInput gameInput;
 
-    public GameCamera gameCamera = new GameCamera();
     public UIOverlay uiOverlay = new UIOverlay();
 
     BackgroundUnit backgroundUnit = new BackgroundUnit();
@@ -123,46 +124,63 @@ public class Game {
 	public void loadLevel() {
         activeEngine = loaderUIEngine;
 
-        CameraUnit loaderUICamera = new CameraUnit(gameRenderer.mainCamera, 4f);
-        CameraUnit activeGameCamera = new CameraUnit(gameRenderer.mainCamera, 0.068f);
-        CameraUnit auxGameCamera = new CameraUnit(gameRenderer.auxCamera, 4);
+        //CameraUnit loaderUICamera = new CameraUnit(0, gameRenderer.mainCamera, 4f);
+		CameraUnit loaderUICamera = new CameraUnit(1f);
+        //MainGameCamera activeGameCamera = new MainGameCamera(0, gameRenderer.mainCamera, 0.068f, 0.081f);
+		MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
+        //CameraUnit auxGameCamera = new CameraUnit(1, gameRenderer.auxCamera, 4);
+		CameraUnit auxGameCamera = new CameraUnit(1);
 
         loaderUIEngine.addUnit(loaderUICamera);
         loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
         noteworthyEngine.addUnit(activeGameCamera);
         noteworthyEngine.addUnit(auxGameCamera);
-        noteworthyEngine.mainCamera = activeGameCamera.cameraNode.camera;
 
-        backgroundUnit.renderNode.width.v = 4;
-        backgroundUnit.renderNode.height.v = 4;
+		// TODO: Fix relationship with input system
+        //noteworthyEngine.mainCamera = activeGameCamera.cameraNode.camera;
+
+		backgroundUnit.renderNode.cameraType.v = 0;
+        backgroundUnit.renderNode.width.v = 1;
+        backgroundUnit.renderNode.height.v = 1;
         loaderUIEngine.addUnit(backgroundUnit);
 
-        ButtonUnit buttonUnit = new ButtonUnit();
+        ButtonUnit buttonUnit = new ButtonUnit() {
+			@Override
+			public void onTap() {
+				activeEngine = noteworthyEngine;
+			}
+		};
         buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
-        buttonUnit.renderNode.coords.pos.set(-0.85, 0);
-        buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
-        buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
+        //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
+		buttonUnit.renderNode.coords.pos.set(0, 0);
+		buttonUnit.renderNode.coords.rot.setDegrees(0);
+        //buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
+        //buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
+		buttonUnit.renderNode.width.v = 1f;// (float)(1 / gameCamera.scale);
+		buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
         buttonUnit.renderNode.color.v = Color.WHITE;
-        buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
-            @Override
-            public void apply(ButtonSystem element) {
-                activeEngine = noteworthyEngine;
-            }
-        };
+//        buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
+//            @Override
+//            public void apply(ButtonSystem element) {
+//                activeEngine = noteworthyEngine;
+//            }
+//        };
         loaderUIEngine.addUnit(buttonUnit);
         loaderUIEngine.flushQueues();
 
-        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
+//        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
 
         try {
-            String json = levelFileLoader.jsonFromFile("level0.json");
-            DataLoader dataLoader = new DataLoader();
-            dataLoader.loadFromJson(noteworthyEngine, json);
+            //String json = levelFileLoader.jsonFromFile("level0.json");
+            //DataLoader dataLoader = new DataLoader();
+			LevelOne levelOne = new LevelOne();
+			levelOne.loadFromJson(noteworthyEngine, "");
+            //dataLoader.loadFromJson(noteworthyEngine, json);
             //noteworthyEngine.loadFromJson(json);
         }
-        catch (IOException io) {
-           io.printStackTrace();
-        }
+//        catch (IOException io) {
+//           io.printStackTrace();
+//        }
         catch (JSONException e) {
             e.printStackTrace();
         }

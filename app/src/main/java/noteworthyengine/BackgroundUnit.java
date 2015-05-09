@@ -23,7 +23,7 @@ public class BackgroundUnit extends Unit {
 
         renderNode.coords.pos.zero();
         renderNode.z.v = 0;
-        renderNode.coords.rot.setDegrees(90);
+        renderNode.coords.rot.setDegrees(0);
         renderNode.isGfxInterpolated.v = 0;
     }
 }

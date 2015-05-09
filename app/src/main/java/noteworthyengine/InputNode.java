@@ -13,15 +13,17 @@ public class InputNode extends Node {
 
     public static final String NAME = "inputNode";
 
-    public void onDown(Vector2 touchPosition) {}
-    public void onShowPress(Vector2 touchPosition) {}
-    public void onSingleTapUp(Vector2 touchPosition) {}
-    public void onScroll(Vector2 touchPosition, Vector2 touchPosition2, Vector2 touchScrollDeltas) {}
-    public void onLongPress(Vector2 touchPosition) {}
-    public void onFling(Vector2 touchPosition, Vector2 touchPosition2) {}
-    public void onScale(float touchScale) {}
+    public IntegerPtr cameraIndex = new IntegerPtr() {{ v = 0; }};
 
-    public void update(int gesture, int mouseAction) {
+    public void onDown(CameraNode cameraNode, Vector2 touchPosition) {}
+    public void onShowPress(CameraNode cameraNode, Vector2 touchPosition) {}
+    public void onSingleTapUp(CameraNode cameraNode, Vector2 touchPosition) {}
+    public void onScroll(CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2, Vector2 touchScrollDeltas) {}
+    public void onLongPress(CameraNode cameraNode, Vector2 touchPosition) {}
+    public void onFling(CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2) {}
+    public void onScale(CameraNode cameraNode, float touchScale) {}
+
+    public void update(CameraNode cameraNode, int gesture, int mouseAction) {
     }
 
     public InputNode(Unit unit) {

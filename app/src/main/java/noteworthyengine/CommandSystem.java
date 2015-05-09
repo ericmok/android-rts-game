@@ -11,6 +11,7 @@ import noteworthyframework.*;
 import structure.Game;
 import structure.GameCamera;
 import structure.GameInput;
+import structure.OrthographicCamera;
 import utils.FloatPtr;
 import utils.IntegerPtr;
 import utils.Vector2;
@@ -55,11 +56,11 @@ public class CommandSystem extends noteworthyframework.System {
         int currentGesture = game.gameInput.takeCurrentGesture();
         int currentAction = game.gameInput.takeCurrentMouseEventAction();
 
-        GameCamera gameCamera = ((NoteworthyEngine)this.getBaseEngine()).mainCamera;
+        OrthographicCamera gameCamera = ((NoteworthyEngine)this.getBaseEngine()).mainCamera;
 
         if (currentGesture == GameInput.GESTURE_ON_SCROLL) {
             commandNode.coords.pos.copy(game.gameInput.touchPosition);
-            commandNode.coords.pos.scale(1 /gameCamera.scale , 1 / gameCamera.scale);
+            commandNode.coords.pos.scale(1 / gameCamera.scale , 1 / gameCamera.scale);
 
             Vector2.subtract(temp, game.gameInput.touchPosition2, game.gameInput.touchPosition);
             commandNode.coords.rot.setDirection(temp.x, temp.y);
