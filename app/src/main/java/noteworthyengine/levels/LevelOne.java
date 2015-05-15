@@ -4,15 +4,18 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import noteworthyengine.events.GameEvents;
 import noteworthyengine.units.Barracks;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.CannonFactory;
+import noteworthyengine.units.DefeatUnit;
 import noteworthyengine.units.Mech;
 import noteworthyengine.units.MechFactory;
 import noteworthyengine.units.Mine;
 import noteworthyengine.units.NanobotFactory;
 import noteworthyengine.units.Platoon;
 import noteworthyengine.units.UnitPool;
+import noteworthyengine.units.WinUnit;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.EngineDataLoader;
 import noteworthyframework.Gamer;
@@ -112,7 +115,7 @@ public class LevelOne implements EngineDataLoader {
     }
 
     @Override
-    public boolean loadFromJson(BaseEngine baseEngine, String json) throws JSONException {
+    public boolean loadFromJson(final BaseEngine baseEngine, String json) throws JSONException {
 
         baseEngine.gameTime = 0;
 
@@ -197,6 +200,19 @@ public class LevelOne implements EngineDataLoader {
         baseEngine.currentGamer = gamer0;
 
         baseEngine.flushQueues();
+
+        baseEngine.addEventListener(new BaseEngine.EventListener() {
+            @Override
+            public void onEvent(int event) {
+                if (event == GameEvents.WIN) {
+                    WinUnit winUnit = new WinUnit();
+                    baseEngine.addUnit(winUnit);
+                } else if (event == GameEvents.LOSE) {
+                    DefeatUnit defeatUnit = new DefeatUnit();
+                    baseEngine.addUnit(defeatUnit);
+                }
+            }
+        });
 
         return true;
     }

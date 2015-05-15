@@ -85,6 +85,8 @@ public class NoteworthyEngine extends BaseEngine {
 
         this.addSystem(factorySystem);
 
+        this.addSystem(new CityWinLoseConditionSystem(game));
+
         UnitPool.load();
     }
 
