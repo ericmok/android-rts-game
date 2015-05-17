@@ -41,6 +41,9 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
     private float aspectRatio = INTIAL_ASPECT_RATIO_VALUE;
 
+	private int currentWidth = 1;
+	private int currentHeight = 1;
+
 //    private float leftBounds = -INTIAL_ASPECT_RATIO_VALUE;
 //    private float rightBounds = INTIAL_ASPECT_RATIO_VALUE;
 //    private float bottomBounds = -1;
@@ -75,11 +78,16 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		OrthographicCamera newCamera = new OrthographicCamera(nextCameraIndexToAssign);
 		nextCameraIndexToAssign += 1;
 
+		newCamera.configure(currentWidth, currentHeight);
+
 		this.addCamera(newCamera);
 		return newCamera;
 	}
 
     public void addCamera(GameCamera camera) {
+
+		camera.configure(currentWidth, currentHeight);
+
         this.cameras.add(camera);
     }
 
@@ -119,6 +127,9 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
      * @param height
      */
 	public void setupViewport(int width, int height) {
+		currentWidth = width;
+		currentHeight = height;
+
 		// Set the OpenGL viewport to the same size as the surface.
 		GLES20.glViewport(0, 0, width, height);
 
