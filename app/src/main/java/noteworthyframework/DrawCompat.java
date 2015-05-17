@@ -47,16 +47,25 @@ public class DrawCompat {
         game.graphics.drawLists.regularSprites.finalizeUpdate();
     }
 
-    public void drawSprite(Sprite2dDef sprite2dDef) {
+    public void drawCopySprite(Sprite2dDef sprite2dDef) {
         Sprite2dDef toFill = spriteAllocator.takeNextWritable();
         toFill.copy(sprite2dDef);
     }
 
-    // TODO:
-    public void drawTemporarySprite(TemporarySprite2dDef inTempSprite) {
+    public TemporarySprite2dDef fetchTempSprite() {
         TemporarySprite2dDef temporarySprite2dDef = tempSpritesMemoryPool.fetchMemory();
-        temporarySprite2dDef.copy(inTempSprite);
-        tempSprites.add(temporarySprite2dDef);
+        return  temporarySprite2dDef;
+    }
+
+    public void recycleTempSprite(TemporarySprite2dDef inTempSprite) {
+        tempSpritesMemoryPool.recycleMemory(inTempSprite);
+    }
+
+    public void drawTemporarySprite(TemporarySprite2dDef inTempSprite) {
+        //TemporarySprite2dDef temporarySprite2dDef = tempSpritesMemoryPool.fetchMemory();
+        //temporarySprite2dDef.copy(inTempSprite);
+        //tempSprites.add(temporarySprite2dDef);
+        tempSprites.add(inTempSprite);
     }
 
 
