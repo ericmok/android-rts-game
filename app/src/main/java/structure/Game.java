@@ -118,26 +118,19 @@ public class Game {
         noteworthyEngine = new NoteworthyEngine(this);
 
         loaderUIEngine.initialize();
-        noteworthyEngine.initialize();
+        //noteworthyEngine.initialize(); delegated tin play button
     }
 
 	public void loadLevel() {
         activeEngine = loaderUIEngine;
 
+		// TODO: Set these camera params in render system?
+
         //CameraUnit loaderUICamera = new CameraUnit(0, gameRenderer.mainCamera, 4f);
 		CameraUnit loaderUICamera = new CameraUnit(1f);
-        //MainGameCamera activeGameCamera = new MainGameCamera(0, gameRenderer.mainCamera, 0.068f, 0.081f);
-		MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
-        //CameraUnit auxGameCamera = new CameraUnit(1, gameRenderer.auxCamera, 4);
-		CameraUnit auxGameCamera = new CameraUnit(1);
 
         loaderUIEngine.addUnit(loaderUICamera);
         loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
-        noteworthyEngine.addUnit(activeGameCamera);
-        noteworthyEngine.addUnit(auxGameCamera);
-
-		// TODO: Fix relationship with input system
-        //noteworthyEngine.mainCamera = activeGameCamera.cameraNode.camera;
 
 		backgroundUnit.renderNode.cameraType.v = 0;
         backgroundUnit.renderNode.width.v = 1;
@@ -147,6 +140,17 @@ public class Game {
         ButtonUnit buttonUnit = new ButtonUnit() {
 			@Override
 			public void onTap() {
+
+				noteworthyEngine.initialize();
+
+				try {
+					LevelOne levelOne = new LevelOne(m);
+					levelOne.loadFromJson(noteworthyEngine, "");
+				}
+				catch (JSONException e) {
+					e.printStackTrace();
+				}
+
 				activeEngine = noteworthyEngine;
 			}
 		};
@@ -154,39 +158,11 @@ public class Game {
         //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
 		buttonUnit.renderNode.coords.pos.set(0, 0);
 		buttonUnit.renderNode.coords.rot.setDegrees(0);
-        //buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
-        //buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
-		buttonUnit.renderNode.width.v = 1f;// (float)(1 / gameCamera.scale);
-		buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
+		buttonUnit.renderNode.width.v = 1f;
+		buttonUnit.renderNode.height.v = 0.5f;
         buttonUnit.renderNode.color.v = Color.WHITE;
-//        buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
-//            @Override
-//            public void apply(ButtonSystem element) {
-//                activeEngine = noteworthyEngine;
-//            }
-//        };
         loaderUIEngine.addUnit(buttonUnit);
         loaderUIEngine.flushQueues();
-
-//        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
-
-        try {
-            //String json = levelFileLoader.jsonFromFile("level0.json");
-            //DataLoader dataLoader = new DataLoader();
-			LevelOne levelOne = new LevelOne();
-			levelOne.loadFromJson(noteworthyEngine, "");
-            //dataLoader.loadFromJson(noteworthyEngine, json);
-            //noteworthyEngine.loadFromJson(json);
-        }
-//        catch (IOException io) {
-//           io.printStackTrace();
-//        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-//        uiOverlay.buttons.add(GameEntities.attackButtonPool.fetchMemory());
-//        uiOverlay.buttons.add(GameEntities.defendButtonPool.fetchMemory());
 	}
 	
 	public GameRenderer getGameRenderer() {

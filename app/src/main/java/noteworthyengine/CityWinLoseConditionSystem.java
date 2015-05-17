@@ -66,15 +66,19 @@ public class CityWinLoseConditionSystem extends noteworthyframework.System {
             }
         }
 
+        // TODO: Deactivate this system once events are emitted
+
         // Remember we check against number players minus the current player
         if (checks == size - 1) {
             this.getBaseEngine().emitEvent(GameEvents.WIN);
+            this.getBaseEngine().removeSystem(this);
         }
 
         QueueMutationList currentGamerUnits = nodesByGamer.getListFor(currentGamer);
 
         if (currentGamerUnits != null && currentGamerUnits.size() == 0) {
             this.getBaseEngine().emitEvent(GameEvents.LOSE);
+            this.getBaseEngine().removeSystem(this);
         }
     }
 

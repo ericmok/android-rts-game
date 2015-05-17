@@ -94,7 +94,7 @@ public class RenderSystem extends noteworthyframework.System {
             //sprite2dDefTemp.cameraIndex = renderNode.cameraType.v;
             sprite2dDefTemp.cameraIndex = cameraSystem.nodes.get(renderNode.cameraType.v).index.v;
 
-            drawCompat.drawSprite(sprite2dDefTemp);
+            drawCompat.drawCopySprite(sprite2dDefTemp);
         }
 
         drawCompat.endDraw();

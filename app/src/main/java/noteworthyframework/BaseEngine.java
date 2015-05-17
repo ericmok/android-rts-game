@@ -82,6 +82,21 @@ public class BaseEngine {
         this.recycleUnit(unit);
     }
 
+    public void clear() {
+
+        // TODO: This may grow the size of the removal lists
+        for (int i = 0; i < units.size(); i++) {
+            this.removeUnit(units.get(i));
+        }
+
+        // TODO: gc trigger
+        gamers.clear();
+
+        // TODO: each system : system.clear()
+
+        this.flushQueues();
+    }
+
     public void recycleUnit(Unit unit) {
         //UnitPool.recycle(unit);
     }
@@ -153,8 +168,6 @@ public class BaseEngine {
         for (int i = 0; i < size; i++) {
             eventListeners.get(i).onEvent(code);
         }
-
-        eventListeners.clear();
     }
 
     public interface EventListener {
