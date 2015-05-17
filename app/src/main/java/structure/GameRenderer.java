@@ -306,7 +306,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 							.setQuadParams(cameras.get(0).getViewProjectionMatrix(),
 									(float) (accumulator + textDrawItem.position.x), (float) textDrawItem.position.y,
 									0,
-									(float) textDrawItem.angle,
+									textDrawItem.angle,
 									textDrawItem.height * texture.widthRatio, textDrawItem.height,
 									textDrawItem.color)
 							.draw2d();
