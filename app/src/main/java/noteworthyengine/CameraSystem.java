@@ -40,7 +40,7 @@ public class CameraSystem extends noteworthyframework.System {
             CameraNode cameraNode = (CameraNode)node;
 
             // TODO: Possible bug, where cameras are removed out of order
-            game.getGameRenderer().removeCamera(cameraNode.camera);
+            //game.getGameRenderer().removeCamera(cameraNode.camera);
 
             nodes.queueToRemove(cameraNode);
         }
