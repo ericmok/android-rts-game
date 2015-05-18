@@ -62,9 +62,6 @@ public class DrawCompat {
     }
 
     public void drawTemporarySprite(TemporarySprite2dDef inTempSprite) {
-        //TemporarySprite2dDef temporarySprite2dDef = tempSpritesMemoryPool.fetchMemory();
-        //temporarySprite2dDef.copy(inTempSprite);
-        //tempSprites.add(temporarySprite2dDef);
         tempSprites.add(inTempSprite);
     }
 
