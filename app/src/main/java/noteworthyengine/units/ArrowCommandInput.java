@@ -43,7 +43,7 @@ public class ArrowCommandInput extends Unit {
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 6;
         renderNode.height.v = 6;
-        renderNode.color.v = Color.argb(200, 255, 255, 255);
+        renderNode.color.v = Color.argb(0, 255, 255, 255);
         renderNode.animationName.v = Animations.ANIMATION_TRIGGER_FIELDS_EXISTING;
     }
 
