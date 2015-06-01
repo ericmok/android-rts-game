@@ -12,6 +12,7 @@ import noteworthyengine.InputNode;
 import noteworthyengine.InputSystem;
 import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.RenderNode;
+import noteworthyframework.BaseEngine;
 import noteworthyframework.Coords;
 import noteworthyframework.Unit;
 import structure.Game;
@@ -31,14 +32,16 @@ public class ArrowCommandInput extends Unit {
     public RenderNode renderNode = new RenderNode(this);
 
     final private Game game;
+    private BaseEngine baseEngine;
 
     private CommandSystem.Command feedback = new CommandSystem.Command();
 
     private Vector2 temp = new Vector2();
 
-    public ArrowCommandInput(Game game) {
+    public ArrowCommandInput(Game game, BaseEngine baseEngine) {
         this.name = NAME;
         this.game = game;
+        this.baseEngine = baseEngine;
 
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 6;
@@ -92,13 +95,14 @@ public class ArrowCommandInput extends Unit {
             }
             if (currentAction == MotionEvent.ACTION_UP) {
                 ArrowCommand arrowCommand = new ArrowCommand();
-                arrowCommand.set(game.noteworthyEngine.currentGamer,
+                //arrowCommand.set(game.noteworthyEngine.currentGamer,
+                arrowCommand.set(baseEngine.currentGamer,
                         renderNode.coords.pos.x,
                         renderNode.coords.pos.y,
                         renderNode.coords.rot.x,
                         renderNode.coords.rot.y);
 
-                game.noteworthyEngine.addUnit(arrowCommand);
+                baseEngine.addUnit(arrowCommand);
 
                 //IntegerPtr color = (IntegerPtr)feedback.field("color");
                 renderNode.color.v = Color.argb(0, 255, 255, 255);

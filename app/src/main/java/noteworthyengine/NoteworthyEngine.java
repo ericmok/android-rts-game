@@ -90,19 +90,8 @@ public class NoteworthyEngine extends BaseEngine {
         this.addUnit(activeGameCamera);
         this.addUnit(auxGameCamera);
 
-        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game);
+        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game, this);
         this.addUnit(arrowCommandInput);
-
-
-        this.addEventListener(new BaseEngine.EventListener() {
-            @Override
-            public void onEvent(int event) {
-            if (event == GameEvents.QUIT_WIN || event == GameEvents.QUIT_LOSE) {
-                game.noteworthyEngine.clear();
-                game.activeEngine = game.loaderUIEngine;
-            }
-            }
-        });
     }
 
     @Override

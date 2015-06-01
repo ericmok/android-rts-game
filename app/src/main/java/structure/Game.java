@@ -11,7 +11,9 @@ import java.io.IOException;
 import art.Animations;
 import noteworthyengine.BackgroundUnit;
 import noteworthyengine.ButtonSystem;
+import noteworthyengine.WrapperEngine;
 import noteworthyengine.levels.LevelOne;
+import noteworthyengine.levels.LevelTwo;
 import noteworthyengine.units.ButtonUnit;
 import noteworthyengine.units.CameraUnit;
 
@@ -23,9 +25,11 @@ import utils.VoidFunc;
 
 public class Game {
 
-    public BaseEngine activeEngine;
-    public LoaderUIEngine loaderUIEngine;
-    public NoteworthyEngine noteworthyEngine;
+    //public BaseEngine activeEngine;
+    //public LoaderUIEngine loaderUIEngine;
+    //public NoteworthyEngine noteworthyEngine;
+
+	public WrapperEngine wrapperEngine;
 
 	private Game m = this;
 	
@@ -114,55 +118,20 @@ public class Game {
 	//}
 
     public void loadEngine() {
-        loaderUIEngine = new LoaderUIEngine(this);
-        noteworthyEngine = new NoteworthyEngine(this);
 
-        loaderUIEngine.initialize();
+		wrapperEngine = new WrapperEngine(this);
+		wrapperEngine.initialize();
+
+        //loaderUIEngine = new LoaderUIEngine(this);
+        //noteworthyEngine = new NoteworthyEngine(this);
+
+        //loaderUIEngine.initialize();
         //noteworthyEngine.initialize(); delegated tin play button
     }
 
 	public void loadLevel() {
-        activeEngine = loaderUIEngine;
+		//activeEngine = loaderUIEngine;
 
-		// TODO: Set these camera params in render system?
-
-        //CameraUnit loaderUICamera = new CameraUnit(0, gameRenderer.mainCamera, 4f);
-		CameraUnit loaderUICamera = new CameraUnit(1f);
-
-        loaderUIEngine.addUnit(loaderUICamera);
-        loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
-
-		backgroundUnit.renderNode.cameraType.v = 0;
-        backgroundUnit.renderNode.width.v = 1;
-        backgroundUnit.renderNode.height.v = 1;
-        loaderUIEngine.addUnit(backgroundUnit);
-
-        ButtonUnit buttonUnit = new ButtonUnit() {
-			@Override
-			public void onTap() {
-
-				noteworthyEngine.initialize();
-
-				try {
-					LevelOne levelOne = new LevelOne(m);
-					levelOne.loadFromJson(noteworthyEngine, "");
-				}
-				catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-				activeEngine = noteworthyEngine;
-			}
-		};
-        buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
-        //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
-		buttonUnit.renderNode.coords.pos.set(0, 0);
-		buttonUnit.renderNode.coords.rot.setDegrees(0);
-		buttonUnit.renderNode.width.v = 1f;
-		buttonUnit.renderNode.height.v = 0.5f;
-        buttonUnit.renderNode.color.v = Color.WHITE;
-        loaderUIEngine.addUnit(buttonUnit);
-        loaderUIEngine.flushQueues();
 	}
 	
 	public GameRenderer getGameRenderer() {

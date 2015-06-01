@@ -116,7 +116,7 @@ public class Missle extends Mine {
     public void reset() {
         super.reset();
 
-        this.movementNode.maxSpeed.v = 0.65;
+        this.movementNode.maxSpeed.v = 0.75;
 
         this.battleNode.isAttackable.v = 1;
         this.battleNode.attackDamage.v = 25;
