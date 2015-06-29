@@ -170,6 +170,133 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		game.onSurfaceReady();
 	}
 
+	private void drawRegularSprites(SimpleSpriteBatch simpleSpriteBatch) {
+		RewriteOnlyArray<Sprite2dDef> sprites = game.graphics.drawLists.regularSprites.swapBuffer();
+		//sprites.sort(); Transparency and z problems if sorted by texture ...
+
+		String cacheAnimationName = null;
+		TextureLoader.TextureAnimation cacheAnimation = null;
+
+		sprites.resetIterator();
+
+		while (sprites.canIterateNext()) {
+
+			Sprite2dDef sprite = sprites.getNextIteratorItem();
+
+			if (sprite.animationName != cacheAnimationName) {
+				cacheAnimationName = sprite.animationName;
+				cacheAnimation = game.graphics.getTextureLoader().animations.get(sprite.animationName);
+			}
+
+			Vector3 temp = sprite.position;
+
+			if (sprite.isGfxInterpolated) {
+				//sprite.calculateGfxInterpolation(Math.min(1, tickDifference / 12)); // tickDifference / 12ms
+				sprite.calculateGfxInterpolation(0.8);
+				temp = sprite.gfxInterpolation;
+				sprite.oldPosition.copy(sprite.gfxInterpolation);
+			}
+
+			TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria(sprite.animationProgress);
+
+			if (cacheAnimation.textureCoordsBuffer != null) {
+				simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle());
+			}
+			else {
+				simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle);
+			}
+
+			simpleSpriteBatch
+//						.setTextureParams(textureFrame.texture.glHandle,
+//								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
+//								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
+					.setQuadParams(cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
+							(float) temp.x, (float) temp.y,
+							0,
+							sprite.angle,
+							sprite.width, sprite.height,
+							sprite.color)
+					.draw2d();
+
+		}
+	}
+
+	private void drawTemporarySprites(SimpleSpriteBatch simpleSpriteBatch) {
+		// Need to buffer this
+		List<TemporarySprite2dDef> tempSprites = game.graphics.drawLists.temporarySprites;
+
+		String cacheAnimationName = null;
+		TextureLoader.TextureAnimation cacheAnimation = null;
+
+		// For this synchronized list containing many sprites of similar texture, avoid
+		// sorting by texture
+
+		for (int i = 0; i < tempSprites.size(); i++) {
+			TemporarySprite2dDef tempSprite = tempSprites.get(i);
+
+			if (tempSprite.progress.progress > 99) {
+				tempSprites.remove(i);
+				game.gamePool.temporaryDrawItems.recycleMemory(tempSprite);
+				i = i - 1;
+				continue;
+			}
+
+			if (tempSprite.animationName != cacheAnimationName) {
+				cacheAnimationName = tempSprite.animationName;
+				cacheAnimation = game.graphics.getTextureLoader().animations.get(cacheAnimationName);
+			}
+
+			tempSprite.progress.update(tickDifference);
+
+			TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria((int)tempSprite.progress.progress);
+
+			if (cacheAnimation.textureCoordsBuffer != null) {
+				simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle());
+			} else {
+				simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle);
+			}
+
+			simpleSpriteBatch
+//						.setTextureParams(textureFrame.texture.glHandle,
+//								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
+//								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
+//						.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle())
+					.setQuadParams(cameras.get(tempSprite.cameraIndex).getViewProjectionMatrix(),
+							(float) tempSprite.position.x, (float) tempSprite.position.y,
+							0,
+							tempSprite.angle,
+							tempSprite.width, tempSprite.height,
+							tempSprite.color)
+					.draw2d();
+		}
+	}
+
+	private void drawText(SimpleSpriteBatch simpleSpriteBatch) {
+		RewriteOnlyArray<TextDrawItem> textDrawItems = game.graphics.drawLists.textDrawItems.swapBuffer();
+		textDrawItems.resetIterator();
+
+		while (textDrawItems.canIterateNext()) {
+			TextDrawItem textDrawItem = textDrawItems.getNextIteratorItem();
+			float accumulator = 0;
+			for (int i = 0; i < textDrawItem.stringBuilder.length(); i++) {
+				Character characterToDraw = textDrawItem.stringBuilder.charAt(i);
+				TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
+
+				simpleSpriteBatch
+						//.setTextureParams(texture.texture.glHandle, 0, 0, 1, 1)
+						.setTextureParams(texture.texture.glHandle)
+						.setQuadParams(cameras.get(0).getViewProjectionMatrix(),
+								(float) (accumulator + textDrawItem.position.x), (float) textDrawItem.position.y,
+								0,
+								textDrawItem.angle,
+								textDrawItem.height * texture.widthRatio, textDrawItem.height,
+								textDrawItem.color)
+						.draw2d();
+
+				accumulator += texture.widthRatio * 0.1f;
+			}
+		}
+	}
 
 	@SuppressLint("NewApi")
 	@Override
@@ -188,138 +315,22 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 			SimpleSpriteBatch simpleSpriteBatch = game.graphics.getSimpleSpriteBatch();
 			simpleSpriteBatch.beginDrawing();
 
-			RewriteOnlyArray<Sprite2dDef> sprites = game.graphics.drawLists.regularSprites.swapBuffer();
-            //sprites.sort(); Transparency and z problems if sorted by texture ...
+			drawRegularSprites(simpleSpriteBatch);
+			drawTemporarySprites(simpleSpriteBatch);
+			drawText(simpleSpriteBatch);
 
-            String cacheAnimationName = null;
-            TextureLoader.TextureAnimation cacheAnimation = null;
-
-			sprites.resetIterator();
-
-			while (sprites.canIterateNext()) {
-
-				Sprite2dDef sprite = sprites.getNextIteratorItem();
-
-                if (sprite.animationName != cacheAnimationName) {
-                    cacheAnimationName = sprite.animationName;
-                    cacheAnimation = game.graphics.getTextureLoader().animations.get(sprite.animationName);
-                }
-
-                Vector3 temp = sprite.position;
-
-                if (sprite.isGfxInterpolated) {
-                    //sprite.calculateGfxInterpolation(Math.min(1, tickDifference / 12)); // tickDifference / 12ms
-                    sprite.calculateGfxInterpolation(0.8);
-                    temp = sprite.gfxInterpolation;
-                    sprite.oldPosition.copy(sprite.gfxInterpolation);
-                }
-
-				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria(sprite.animationProgress);
-
-				if (cacheAnimation.textureCoordsBuffer != null) {
-					simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle());
-				}
-				else {
-					simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle);
-				}
-
-				simpleSpriteBatch
-//						.setTextureParams(textureFrame.texture.glHandle,
-//								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
-//								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
-						.setQuadParams(cameras.get(sprite.cameraIndex).getViewProjectionMatrix(),
-								(float) temp.x, (float) temp.y,
-								0,
-								sprite.angle,
-								sprite.width, sprite.height,
-								sprite.color)
-						.draw2d();
-
-			}
-
-			// Need to buffer this
-			List<TemporarySprite2dDef> tempSprites = game.graphics.drawLists.temporarySprites;
-
-            // For this synchronized list containing many sprites of similar texture, avoid
-            // sorting by texture
-
-            for (int i = 0; i < tempSprites.size(); i++) {
-				TemporarySprite2dDef tempSprite = tempSprites.get(i);
-
-                if (tempSprite.progress.progress > 99) {
-					tempSprites.remove(i);
-					game.gamePool.temporaryDrawItems.recycleMemory(tempSprite);
-					i = i - 1;
-					continue;
-				}
-
-                if (tempSprite.animationName != cacheAnimationName) {
-                    cacheAnimationName = tempSprite.animationName;
-                    cacheAnimation = game.graphics.getTextureLoader().animations.get(cacheAnimationName);
-                }
-
-				tempSprite.progress.update(tickDifference);
-
-				TextureLoader.TextureFrame textureFrame = cacheAnimation.maxFrameUnderCriteria((int)tempSprite.progress.progress);
-
-				if (cacheAnimation.textureCoordsBuffer != null) {
-					simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle());
-				} else {
-					simpleSpriteBatch.setTextureParams(textureFrame.texture.glHandle);
-				}
-
-				simpleSpriteBatch
-//						.setTextureParams(textureFrame.texture.glHandle,
-//								textureFrame.texture.offsetX1, textureFrame.texture.offsetY1,
-//								textureFrame.texture.offsetX2, textureFrame.texture.offsetY2)
-//						.setTextureParams(textureFrame.texture.glHandle, cacheAnimation.textureCoordsBuffer.getGLHandle())
-						.setQuadParams(cameras.get(tempSprite.cameraIndex).getViewProjectionMatrix(),
-								(float) tempSprite.position.x, (float) tempSprite.position.y,
-								0,
-								tempSprite.angle,
-								tempSprite.width, tempSprite.height,
-								tempSprite.color)
-						.draw2d();
-			}
-
-			RewriteOnlyArray<TextDrawItem> textDrawItems = game.graphics.drawLists.textDrawItems.swapBuffer();
-			textDrawItems.resetIterator();
-
-			while (textDrawItems.canIterateNext()) {
-				TextDrawItem textDrawItem = textDrawItems.getNextIteratorItem();
-				float accumulator = 0;
-				for (int i = 0; i < textDrawItem.stringBuilder.length(); i++) {
-					Character characterToDraw = textDrawItem.stringBuilder.charAt(i);
-					TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
-
-					simpleSpriteBatch
-							//.setTextureParams(texture.texture.glHandle, 0, 0, 1, 1)
-							.setTextureParams(texture.texture.glHandle)
-							.setQuadParams(cameras.get(0).getViewProjectionMatrix(),
-									(float) (accumulator + textDrawItem.position.x), (float) textDrawItem.position.y,
-									0,
-									textDrawItem.angle,
-									textDrawItem.height * texture.widthRatio, textDrawItem.height,
-									textDrawItem.color)
-							.draw2d();
-
-					accumulator += texture.widthRatio * 0.1f;
-				}
-			}
-
-			game.graphics.getSimpleSpriteBatch().endDrawing();
-
+			simpleSpriteBatch.endDrawing();
 		}
 	}
-	
+
 	/**
-	 * Called when MainActivity/Game pauses/stops 
+	 * Called when MainActivity/Game pauses/stops
 	 */
 	public void onSurfaceLost() {
 		Log.i("SURFACELOST", "SurfaceLost");
 		surfaceIsReady = false;
 		game.graphics.invalidate();
 	}
-	
-	
+
+
 }
