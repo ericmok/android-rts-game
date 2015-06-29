@@ -1,5 +1,9 @@
 ## Notes
 
+### Version 0.2.5
+- Levels and screens
+- Camera improvements
+
 ### Version 0.2.4
 - More optimal grid stuff
 - Faster battleSystem
