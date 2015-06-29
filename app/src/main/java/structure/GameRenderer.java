@@ -185,14 +185,6 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		synchronized(drawingMutex) {
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-            //float[] cameraMatrix = game.graphics.getCameraMatrix();
-
-            // Temporarily rename a matrix
-            //float[] mvpMatrix = tempMatrix;
-
-            //Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
-            //Matrix.multiplyMM(mvpMatrix, 0, game.gameCamera.projectionMatrix, 0, cameraMatrix, 0);
-
 			SimpleSpriteBatch simpleSpriteBatch = game.graphics.getSimpleSpriteBatch();
 			simpleSpriteBatch.beginDrawing();
 
