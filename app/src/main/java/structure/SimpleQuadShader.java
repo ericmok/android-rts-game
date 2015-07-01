@@ -63,11 +63,6 @@ public class SimpleQuadShader {
     public static final int VERTEX_SHADER_RESOURCE = R.raw.simple_quad_vertex_shader;
     public static final int FRAGMENT_SHADER_RESOURCE = R.raw.simple_quad_fragment_shader;
 
-    /**
-     * Stores the locations of the shader variables
-     */
-    private HashMap<String, Integer> locations;
-
     private Resources resources;
 
     private String vertexShaderSource;
@@ -82,8 +77,6 @@ public class SimpleQuadShader {
 
     public SimpleQuadShader(Resources resources) {
         this.resources = resources;
-
-        locations = new HashMap<String, Integer>();
     }
 
     public void initializeResources() throws Exception {
@@ -221,18 +214,6 @@ public class SimpleQuadShader {
         //shaderAttributeColorLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_COLOR);
         shaderAttributeTextureLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_TEXTURE);
 
-        //locations.put(SHADER_UNIFORM_MVPMATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MVPMATRIX) );
-        locations.put(SHADER_UNIFORM_TEXTURE, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_TEXTURE) );
-        locations.put(SHADER_UNIFORM_PROJECTION_MATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_PROJECTION_MATRIX) );
-        locations.put(SHADER_UNIFORM_MODEL_MATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MODEL_MATRIX) );
-        //locations.put(SHADER_UNIFORM_SCALING, shaderUniformScaling);
-        //locations.put(SHADER_UNIFORM_ANGLE, shaderUniformAngle);
-        //locations.put(SHADER_UNIFORM_TRANSLATION, shaderUniformTranslation);
-
-        locations.put(SHADER_ATTRIBUTE_POSITION, GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_POSITION) );
-        locations.put(SHADER_UNIFORM_FLAT_COLOR, GLES20.glGetAttribLocation(programHandle, SHADER_UNIFORM_FLAT_COLOR) );
-        locations.put(SHADER_ATTRIBUTE_TEXTURE, GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_TEXTURE) );
-
         isInitialized = true;
     }
 
@@ -333,29 +314,24 @@ public class SimpleQuadShader {
      */
     public void draw(float[] projectionMatrix, float[] modelMatrix, FloatBuffer positionBuffer, FloatBuffer colorBuffer, int textureHandle, FloatBuffer textureBuffer, int mode, int count) {
         // Pass in mvpMatrix
-        //GLES20.glUniformMatrix4fv(locations.get(SHADER_UNIFORM_MVPMATRIX), 1, false, mvpMatrix, 0);
         //GLES20.glUniformMatrix4fv(shaderUniformMvpMatrixLocation, 1, false, mvpMatrix, 0);
         GLES20.glUniformMatrix4fv(shaderUniformProjectionMatrix, 1, false, projectionMatrix, 0);
         GLES20.glUniformMatrix4fv(shaderUniformModelMatrix, 1, false, modelMatrix, 0);
 
         // Pass in the position information
         positionBuffer.position(0);
-        //GLES20.glVertexAttribPointer(locations.get(SHADER_ATTRIBUTE_POSITION),
         GLES20.glVertexAttribPointer(shaderAttributePositionLocation,
                 NUMBER_POSITION_ELEMENTS,
                 GLES20.GL_FLOAT, false,
                 0, positionBuffer);
-        //GLES20.glEnableVertexAttribArray(locations.get(SHADER_ATTRIBUTE_POSITION));
         GLES20.glEnableVertexAttribArray(shaderAttributePositionLocation);
 
         // Pass in the color information
         colorBuffer.position(0);
-        //GLES20.glVertexAttribPointer(locations.get(SHADER_ATTRIBUTE_COLOR),
         GLES20.glVertexAttribPointer(shaderAttributeColorLocation,
                 NUMBER_COLOR_ELEMENTS,
                 GLES20.GL_FLOAT, false,
                 0, colorBuffer);
-        //GLES20.glEnableVertexAttribArray(locations.get(SHADER_ATTRIBUTE_COLOR));
         GLES20.glEnableVertexAttribArray(shaderAttributeColorLocation);
 
 
@@ -364,17 +340,16 @@ public class SimpleQuadShader {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle);
 
         // Tell texture uniform sampler to use texture in shader
-        //GLES20.glUniform1i(locations.get(SHADER_UNIFORM_TEXTURE), 0);
         GLES20.glUniform1i(shaderUniformTextureLocation, 0);
 
         // Set Texture coords
         textureBuffer.position(0);
-        //GLES20.glVertexAttribPointer(locations.get(SHADER_ATTRIBUTE_TEXTURE),
+
         GLES20.glVertexAttribPointer(shaderAttributeTextureLocation,
                 NUMBER_TEXTURE_ELEMENTS,
                 GLES20.GL_FLOAT, false,
                 0, textureBuffer);
-        //GLES20.glEnableVertexAttribArray(locations.get(SHADER_ATTRIBUTE_TEXTURE));
+
         GLES20.glEnableVertexAttribArray(shaderAttributeTextureLocation);
 
         GLES20.glDrawArrays(mode, 0, count);
