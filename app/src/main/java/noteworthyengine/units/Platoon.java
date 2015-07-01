@@ -128,6 +128,11 @@ public class Platoon extends Unit {
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem system) {
+            system.drawLine(system.getCameraId(renderNode.cameraType.v),
+                    (float)renderNode.coords.pos.x - 0.5f, (float)renderNode.coords.pos.y + 0.7f,
+                    (float)renderNode.coords.pos.x + 0.5f * (float)(battleNode.hp.v / 50), (float)renderNode.coords.pos.y + 0.7f, 5,
+                    (battleNode.hp.v > 30) ? Color.GREEN : (battleNode.hp.v > 15) ? Color.YELLOW : Color.RED);
+
             renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
             //renderNode.color.v = Color.argb(10, 255, 255, 255);
 

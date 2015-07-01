@@ -1,8 +1,10 @@
 package noteworthyengine;
 
 import noteworthyframework.*;
+import structure.Line2dDef;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
+import utils.Vector2;
 
 /**
  * Created by eric on 3/7/15.
@@ -130,6 +132,15 @@ public class RenderSystem extends noteworthyframework.System {
     public void endNewTempSprite(TemporarySprite2dDef temporarySprite2dDef, int cameraName) {
         temporarySprite2dDef.cameraIndex = getCameraId(cameraName);
         drawCompat.drawTemporarySprite(temporarySprite2dDef);
+    }
+
+    public void drawLine(int camera, float x1, float y1, float x2, float y2, int width, int color) {
+        Line2dDef line2dDef = drawCompat.declareLine2dDef();
+        line2dDef.src.set(x1, y1);
+        line2dDef.dest.set(x2, y2);
+        line2dDef.cameraIndex = camera;
+        line2dDef.color = color;
+        line2dDef.width = width;
     }
 
 //    public TemporarySprite2dDef defineNewTempSprite(Sprite2dDef toCopy, int cameraName) {

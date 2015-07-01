@@ -13,6 +13,7 @@ public class Graphics {
 	//private SimpleShader simpleShader;
     private SimpleQuadShader simpleQuadShader;
 	private SimpleSpriteBatch simpleSpriteBatch;
+	private LineBatch lineBatch;
 	private TextureLoader textureLoader;
 	private boolean isLoaded = false;
 
@@ -53,6 +54,7 @@ public class Graphics {
         simpleQuadShader = new SimpleQuadShader(context.getResources());
 
 		simpleSpriteBatch = new SimpleSpriteBatch(simpleQuadShader);
+		lineBatch = new LineBatch(simpleQuadShader);
 		textureLoader = new TextureLoader(context);
 
         cameraMatrix = new float[16];
@@ -73,6 +75,7 @@ public class Graphics {
 		try {
 			simpleQuadShader.initializeResources();
 			simpleSpriteBatch.load();
+			lineBatch.load();
 
 			textureLoader.loadAssetsInRoot("Animations");
 			textureLoader.loadLetterTextures();
@@ -151,6 +154,8 @@ public class Graphics {
 	 */
 	public SimpleSpriteBatch getSimpleSpriteBatch() { return this.simpleSpriteBatch; }
 
+	public LineBatch getLineBatch() { return this.lineBatch; }
+	
     /**
      * Remember to flush changes
      */

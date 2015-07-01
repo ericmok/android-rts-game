@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
@@ -298,6 +299,27 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		}
 	}
 
+	private void drawLines() {
+		DoubleBufferredRewriteOnlyArray<Line2dDef> linesToDraw = game.graphics.drawLists.linesToDraw;
+		RewriteOnlyArray<Line2dDef> linesToDrawBuffer = linesToDraw.lockWritableBuffer();
+
+		linesToDrawBuffer.resetIterator();
+
+
+		LineBatch lineBatch = game.graphics.getLineBatch();
+		lineBatch.beginDrawing(game.graphics.getTextureLoader().getTextureAnimation("Animations/Blank/White").textureFrames.get(0).texture.glHandle);
+
+		while (linesToDrawBuffer.canIterateNext()) {
+			Line2dDef line = linesToDrawBuffer.getNextIteratorItem();
+			lineBatch.draw(cameras.get(line.cameraIndex).getViewProjectionMatrix(),
+					(float)line.src.x, (float)line.src.y, 0,
+					(float)line.dest.x, (float)line.dest.y, 0,
+					line.width, line.color);
+		}
+
+		lineBatch.endDrawing();
+	}
+
 	@SuppressLint("NewApi")
 	@Override
 	public void onDrawFrame(GL10 gl) {
@@ -320,6 +342,8 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 			drawText(simpleSpriteBatch);
 
 			simpleSpriteBatch.endDrawing();
+
+			drawLines();
 		}
 	}
 

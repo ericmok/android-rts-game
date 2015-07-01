@@ -2,9 +2,9 @@ package noteworthyframework;
 
 import java.util.List;
 
-import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import structure.DoubleBufferredRewriteOnlyArray;
+import structure.Line2dDef;
 import structure.Sprite2dDef;
 import structure.Game;
 import structure.RewriteOnlyArray;
@@ -23,6 +23,9 @@ public class DrawCompat {
     public DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItem;
     public MemoryPool<TemporarySprite2dDef> tempSpritesMemoryPool;
 
+    public DoubleBufferredRewriteOnlyArray<Line2dDef> linesToDrawDoubleBuffer;
+    public RewriteOnlyArray<Line2dDef> linesAllocator;
+
     private final Game game;
     private RenderSystem renderSystem;
 
@@ -31,6 +34,8 @@ public class DrawCompat {
         tempSprites = game.graphics.drawLists.temporarySprites;
         textDrawItem = game.graphics.drawLists.textDrawItems;
         tempSpritesMemoryPool = game.gamePool.temporaryDrawItems;
+
+        linesToDrawDoubleBuffer = game.graphics.drawLists.linesToDraw;
     }
 
     public void setRenderSystem(RenderSystem renderSystem) {
@@ -40,11 +45,17 @@ public class DrawCompat {
     public void beginDraw() {
         spriteAllocator = game.graphics.drawLists.regularSprites.lockWritableBuffer();
         spriteAllocator.resetWriteIndex();
+
+        linesAllocator = linesToDrawDoubleBuffer.lockWritableBuffer();
+        linesAllocator.resetWriteIndex();
     }
 
     public void endDraw() {
         game.graphics.drawLists.regularSprites.unlockWritableBuffer();
         game.graphics.drawLists.regularSprites.finalizeUpdate();
+
+        linesToDrawDoubleBuffer.unlockWritableBuffer();
+        linesToDrawDoubleBuffer.finalizeUpdate();
     }
 
     public void drawCopySprite(Sprite2dDef sprite2dDef) {
@@ -65,5 +76,8 @@ public class DrawCompat {
         tempSprites.add(inTempSprite);
     }
 
+    public Line2dDef declareLine2dDef() {
+        return linesAllocator.takeNextWritable();
+    }
 
 }
