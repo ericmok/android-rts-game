@@ -1,0 +1,12 @@
+precision mediump float;
+
+uniform vec4 u_FlatColor;
+
+varying vec4 v_Position;
+
+void main()
+{
+    // Normalizes [0, 255] to [0, 1]
+	//vec4 temp = vec4(0.00392156862, 0.00392156862, 0.00392156862, 0.00392156862);
+	gl_FragColor = u_FlatColor * temp * v_Position;
+}
