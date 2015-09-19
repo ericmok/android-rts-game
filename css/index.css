@@ -21,12 +21,24 @@ header
   font-family: Arial, Helvetica, sans-serif;
   box-shadow: 0px 20px 20px -19px black;
   padding: 5px 10px;
-  background: #000;
+  background: #222;
 }
 
 .main-header-title
 {
   text-align: center;
+}
+
+.video_wrapper
+{
+  margin: 0;
+  padding: 0;
+  
+  width: 100%;
+  
+  text-align: center;
+  
+  background: #000;
 }
 
 #img-panel
