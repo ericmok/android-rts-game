@@ -11,7 +11,9 @@ import java.io.IOException;
 import art.Animations;
 import noteworthyengine.BackgroundUnit;
 import noteworthyengine.ButtonSystem;
+import noteworthyengine.WrapperEngine;
 import noteworthyengine.levels.LevelOne;
+import noteworthyengine.levels.LevelTwo;
 import noteworthyengine.units.ButtonUnit;
 import noteworthyengine.units.CameraUnit;
 
@@ -23,9 +25,11 @@ import utils.VoidFunc;
 
 public class Game {
 
-    public BaseEngine activeEngine;
-    public LoaderUIEngine loaderUIEngine;
-    public NoteworthyEngine noteworthyEngine;
+    //public BaseEngine activeEngine;
+    //public LoaderUIEngine loaderUIEngine;
+    //public NoteworthyEngine noteworthyEngine;
+
+	public WrapperEngine wrapperEngine;
 
 	private Game m = this;
 	
@@ -114,79 +118,20 @@ public class Game {
 	//}
 
     public void loadEngine() {
-        loaderUIEngine = new LoaderUIEngine(this);
-        noteworthyEngine = new NoteworthyEngine(this);
 
-        loaderUIEngine.initialize();
-        noteworthyEngine.initialize();
+		wrapperEngine = new WrapperEngine(this);
+		wrapperEngine.initialize();
+
+        //loaderUIEngine = new LoaderUIEngine(this);
+        //noteworthyEngine = new NoteworthyEngine(this);
+
+        //loaderUIEngine.initialize();
+        //noteworthyEngine.initialize(); delegated tin play button
     }
 
 	public void loadLevel() {
-        activeEngine = loaderUIEngine;
+		//activeEngine = loaderUIEngine;
 
-        //CameraUnit loaderUICamera = new CameraUnit(0, gameRenderer.mainCamera, 4f);
-		CameraUnit loaderUICamera = new CameraUnit(1f);
-        //MainGameCamera activeGameCamera = new MainGameCamera(0, gameRenderer.mainCamera, 0.068f, 0.081f);
-		MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
-        //CameraUnit auxGameCamera = new CameraUnit(1, gameRenderer.auxCamera, 4);
-		CameraUnit auxGameCamera = new CameraUnit(1);
-
-        loaderUIEngine.addUnit(loaderUICamera);
-        loaderUIEngine.mainCamera = loaderUICamera.cameraNode.camera;
-        noteworthyEngine.addUnit(activeGameCamera);
-        noteworthyEngine.addUnit(auxGameCamera);
-
-		// TODO: Fix relationship with input system
-        //noteworthyEngine.mainCamera = activeGameCamera.cameraNode.camera;
-
-		backgroundUnit.renderNode.cameraType.v = 0;
-        backgroundUnit.renderNode.width.v = 1;
-        backgroundUnit.renderNode.height.v = 1;
-        loaderUIEngine.addUnit(backgroundUnit);
-
-        ButtonUnit buttonUnit = new ButtonUnit() {
-			@Override
-			public void onTap() {
-				activeEngine = noteworthyEngine;
-			}
-		};
-        buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
-        //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
-		buttonUnit.renderNode.coords.pos.set(0, 0);
-		buttonUnit.renderNode.coords.rot.setDegrees(0);
-        //buttonUnit.renderNode.width.v = 0.5f;// (float)(1 / gameCamera.scale);
-        //buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
-		buttonUnit.renderNode.width.v = 1f;// (float)(1 / gameCamera.scale);
-		buttonUnit.renderNode.height.v = 0.5f; //(float)(1 / gameCamera.scale);
-        buttonUnit.renderNode.color.v = Color.WHITE;
-//        buttonUnit.buttonNode.onTap = new VoidFunc<ButtonSystem>() {
-//            @Override
-//            public void apply(ButtonSystem element) {
-//                activeEngine = noteworthyEngine;
-//            }
-//        };
-        loaderUIEngine.addUnit(buttonUnit);
-        loaderUIEngine.flushQueues();
-
-//        LevelFileLoader levelFileLoader = new LevelFileLoader(this.context);
-
-        try {
-            //String json = levelFileLoader.jsonFromFile("level0.json");
-            //DataLoader dataLoader = new DataLoader();
-			LevelOne levelOne = new LevelOne();
-			levelOne.loadFromJson(noteworthyEngine, "");
-            //dataLoader.loadFromJson(noteworthyEngine, json);
-            //noteworthyEngine.loadFromJson(json);
-        }
-//        catch (IOException io) {
-//           io.printStackTrace();
-//        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-//        uiOverlay.buttons.add(GameEntities.attackButtonPool.fetchMemory());
-//        uiOverlay.buttons.add(GameEntities.defendButtonPool.fetchMemory());
 	}
 	
 	public GameRenderer getGameRenderer() {

@@ -67,29 +67,29 @@ public class InputSystem extends noteworthyframework.System {
                 case GameInput.GESTURE_NONE:
                     break;
                 case GameInput.GESTURE_ON_DOWN:
-                    inputNode.onDown(cameraNode, game.gameInput.touchPosition);
+                    inputNode.onDown(this, cameraNode, game.gameInput.touchPosition);
                     break;
                 case GameInput.GESTURE_ON_SHOW_PRESS:
-                    inputNode.onShowPress(cameraNode, game.gameInput.touchPosition);
+                    inputNode.onShowPress(this, cameraNode, game.gameInput.touchPosition);
                     break;
                 case GameInput.GESTURE_ON_SINGLE_TAP_UP:
-                    inputNode.onSingleTapUp(cameraNode, game.gameInput.touchPosition);
+                    inputNode.onSingleTapUp(this, cameraNode, game.gameInput.touchPosition);
                     break;
                 case GameInput.GESTURE_ON_SCROLL:
-                    inputNode.onScroll(cameraNode, game.gameInput.touchPosition, game.gameInput.touchPosition2, game.gameInput.touchScrollDeltas);
+                    inputNode.onScroll(this, cameraNode, game.gameInput.touchPosition, game.gameInput.touchPosition2, game.gameInput.touchScrollDeltas);
                     break;
                 case GameInput.GESTURE_ON_LONG_PRESS:
-                    inputNode.onLongPress(cameraNode, game.gameInput.touchPosition);
+                    inputNode.onLongPress(this, cameraNode, game.gameInput.touchPosition);
                     break;
                 case GameInput.GESTURE_ON_FLING:
-                    inputNode.onFling(cameraNode, game.gameInput.touchPosition, game.gameInput.touchPosition2);
+                    inputNode.onFling(this, cameraNode, game.gameInput.touchPosition, game.gameInput.touchPosition2);
                     break;
                 case GameInput.GESTURE_ON_SCALE:
-                    inputNode.onScale(cameraNode, game.gameInput.touchScale);
+                    inputNode.onScale(this, cameraNode, game.gameInput.touchScale);
                     break;
             }
 
-            inputNode.update(cameraNode, gesture, mouseEventAction);
+            inputNode.update(this, cameraNode, gesture, mouseEventAction);
         }
     }
 

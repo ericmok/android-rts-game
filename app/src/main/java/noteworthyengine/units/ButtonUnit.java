@@ -3,6 +3,7 @@ package noteworthyengine.units;
 import noteworthyengine.ButtonSystem;
 import noteworthyengine.CameraNode;
 import noteworthyengine.InputNode;
+import noteworthyengine.InputSystem;
 import noteworthyengine.RenderNode;
 import noteworthyframework.Unit;
 import utils.Vector2;
@@ -23,8 +24,8 @@ public class ButtonUnit extends Unit {
 
         inputNode = new InputNode(this) {
             @Override
-            public void onSingleTapUp(CameraNode cameraNode, Vector2 touchPosition) {
-                super.onSingleTapUp(cameraNode, touchPosition);
+            public void onSingleTapUp(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {
+                super.onSingleTapUp(inputSystem, cameraNode, touchPosition);
                 temp.copy(touchPosition);
                 cameraNode.camera.unProject(temp);
 

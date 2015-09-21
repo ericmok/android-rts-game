@@ -1,19 +1,13 @@
 package noteworthyengine;
 
-import org.json.JSONException;
-
+import noteworthyengine.events.GameEvents;
 import noteworthyengine.units.ArrowCommandInput;
-import noteworthyengine.units.Cannon;
-import noteworthyengine.units.City;
-import noteworthyengine.units.Mech;
-import noteworthyengine.units.Missle;
-import noteworthyengine.units.Platoon;
+import noteworthyengine.units.CameraUnit;
+import noteworthyengine.units.MainGameCamera;
 import noteworthyengine.units.UnitPool;
 import noteworthyframework.*;
 import structure.Game;
-import structure.GameCamera;
 import structure.OrthographicCamera;
-import utils.Vector2;
 
 /**
  * Created by eric on 3/6/15.
@@ -90,7 +84,13 @@ public class NoteworthyEngine extends BaseEngine {
 
     public void initialize() {
         super.initialize();
-        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game);
+
+        MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
+        CameraUnit auxGameCamera = new CameraUnit(1);
+        this.addUnit(activeGameCamera);
+        this.addUnit(auxGameCamera);
+
+        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game, this);
         this.addUnit(arrowCommandInput);
     }
 

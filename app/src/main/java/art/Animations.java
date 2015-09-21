@@ -53,4 +53,7 @@ public class Animations {
     public static final String ANIMATION_BUTTONS_ATTACK = "Animations/Buttons/Attack";
 
     public static final String ANIMATION_BUTTONS_DEFEND = "Animations/Buttons/Defend";
+
+    public static final String ANIMATIONS_WIN_DEFEAT_WIN = "Animations/WinDefeat/Win";
+    public static final String ANIMATIONS_WIN_DEFEAT_DEFEAT = "Animations/WinDefeat/Defeat";
 }

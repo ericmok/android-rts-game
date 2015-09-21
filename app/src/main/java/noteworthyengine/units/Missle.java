@@ -68,7 +68,7 @@ public class Missle extends Mine {
                         (float) renderNode.coords.pos.x, (float) renderNode.coords.pos.y, 0,
                         1.4f, 1.4f,
                         90f,
-                        Color.argb(80, 255, 255, 255),
+                        Color.argb(40, 255, 255, 255),
                         0);
 
                 if (battleNode.target.v != null) {
@@ -76,9 +76,9 @@ public class Missle extends Mine {
                     //sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
                     system.defineNewSprite(Animations.ANIMATION_TROOPS_SELECTED, 1,
                             (float) battleNode.target.v.coords.pos.x, (float) battleNode.target.v.coords.pos.y, 0,
-                            2f, 2f,
+                            1.8f, 1.8f,
                             90f,
-                            renderNode.color.v,
+                            renderNode.color.v & 0x88FFFFFF,
                             0);
                 }
 
@@ -116,14 +116,14 @@ public class Missle extends Mine {
     public void reset() {
         super.reset();
 
-        this.movementNode.maxSpeed.v = 0.7;
+        this.movementNode.maxSpeed.v = 0.75;
 
-        this.battleNode.isAttackable.v = 0;
+        this.battleNode.isAttackable.v = 1;
         this.battleNode.attackDamage.v = 25;
         this.battleNode.attackSwingTime.v = 3;
         this.battleNode.attackRange.v = 2.5;
         this.battleNode.targetAcquisitionRange.v = 20;
-        this.battleNode.hp.v = 100;
+        this.battleNode.hp.v = 60;
         this.battleNode.fractionToWalkIntoAttackRange.v = 0.02;
         this.battleNode.stickyAttack.v = 0;
 

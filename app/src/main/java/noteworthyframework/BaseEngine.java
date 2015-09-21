@@ -16,6 +16,8 @@ public class BaseEngine {
     // TODO: Systems go here?
     private ArrayList<System> systems = new ArrayList<System>(8);
 
+    private ArrayList<EventListener> eventListeners = new ArrayList<>(15);
+
     // TODO: Move into system? Denormalize?
     //public QueueMutationList<MovementNode> movementNodes = new QueueMutationList<MovementNode>(127);
     //public QueueMutationList<RenderNode> renderNodes = new QueueMutationList<RenderNode>(127);
@@ -80,6 +82,21 @@ public class BaseEngine {
         this.recycleUnit(unit);
     }
 
+    public void clear() {
+
+        // TODO: This may grow the size of the removal lists
+        for (int i = 0; i < units.size(); i++) {
+            this.removeUnit(units.get(i));
+        }
+
+        // TODO: gc trigger
+        gamers.clear();
+
+        // TODO: each system : system.clear()
+
+        this.flushQueues();
+    }
+
     public void recycleUnit(Unit unit) {
         //UnitPool.recycle(unit);
     }
@@ -136,4 +153,24 @@ public class BaseEngine {
 //        //dataLoader.loadFromJson(this, json);
 //        engineDataLoader.loadFromJson(this, json);
 //    }
+
+    public void addEventListener(EventListener eventListener) {
+        this.eventListeners.add(eventListener);
+    }
+
+    public void removeEventListener(EventListener eventListener) {
+        this.eventListeners.remove(eventListener);
+    }
+
+    public void emitEvent(int code) {
+        int size = eventListeners.size();
+
+        for (int i = 0; i < size; i++) {
+            eventListeners.get(i).onEvent(code);
+        }
+    }
+
+    public interface EventListener {
+        public void onEvent(int event);
+    }
 }

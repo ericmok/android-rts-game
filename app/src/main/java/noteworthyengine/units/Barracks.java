@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
+import noteworthyengine.CityWinLoseConditionNode;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
 import noteworthyengine.GridNode;
@@ -27,6 +28,8 @@ public class Barracks extends Unit {
 
     public BattleNode battleNode = new BattleNode(this);
     public RenderNode renderNode = new RenderNode(this);
+
+    public CityWinLoseConditionNode cityWinLoseConditionNode = new CityWinLoseConditionNode(this);
 
     public Barracks(final Gamer gamer) {
         this.name = NAME;

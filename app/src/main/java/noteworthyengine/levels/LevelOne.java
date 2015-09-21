@@ -4,18 +4,23 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import noteworthyengine.CityWinLoseConditionSystem;
+import noteworthyengine.events.GameEvents;
 import noteworthyengine.units.Barracks;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.CannonFactory;
+import noteworthyengine.units.DefeatUnit;
 import noteworthyengine.units.Mech;
 import noteworthyengine.units.MechFactory;
 import noteworthyengine.units.Mine;
 import noteworthyengine.units.NanobotFactory;
 import noteworthyengine.units.Platoon;
 import noteworthyengine.units.UnitPool;
+import noteworthyengine.units.WinUnit;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.EngineDataLoader;
 import noteworthyframework.Gamer;
+import structure.Game;
 import utils.Orientation;
 import utils.Vector2;
 
@@ -23,6 +28,12 @@ import utils.Vector2;
  * Created by eric on 4/27/15.
  */
 public class LevelOne implements EngineDataLoader {
+
+    private Game game;
+
+    public LevelOne(Game game) {
+        this.game = game;
+    }
 
     public void spawnBase(BaseEngine baseEngine, Gamer gamer, Vector2 location) {
 
@@ -112,7 +123,9 @@ public class LevelOne implements EngineDataLoader {
     }
 
     @Override
-    public boolean loadFromJson(BaseEngine baseEngine, String json) throws JSONException {
+    public boolean loadFromJson(final BaseEngine baseEngine, String json) throws JSONException {
+
+        baseEngine.addSystem(new CityWinLoseConditionSystem(game));
 
         baseEngine.gameTime = 0;
 
@@ -195,6 +208,19 @@ public class LevelOne implements EngineDataLoader {
 //        }
 
         baseEngine.currentGamer = gamer0;
+
+        baseEngine.addEventListener(new BaseEngine.EventListener() {
+            @Override
+            public void onEvent(int event) {
+                if (event == GameEvents.WIN) {
+                    WinUnit winUnit = new WinUnit();
+                    baseEngine.addUnit(winUnit);
+                } else if (event == GameEvents.LOSE) {
+                    DefeatUnit defeatUnit = new DefeatUnit();
+                    baseEngine.addUnit(defeatUnit);
+                }
+            }
+        });
 
         baseEngine.flushQueues();
 

@@ -94,7 +94,7 @@ public class RenderSystem extends noteworthyframework.System {
             //sprite2dDefTemp.cameraIndex = renderNode.cameraType.v;
             sprite2dDefTemp.cameraIndex = cameraSystem.nodes.get(renderNode.cameraType.v).index.v;
 
-            drawCompat.drawSprite(sprite2dDefTemp);
+            drawCompat.drawCopySprite(sprite2dDefTemp);
         }
 
         drawCompat.endDraw();
@@ -123,7 +123,7 @@ public class RenderSystem extends noteworthyframework.System {
     }
 
     public TemporarySprite2dDef beginNewTempSprite() {
-        TemporarySprite2dDef temporarySprite2dDef = drawCompat.tempSpritesMemoryPool.fetchMemory();
+        TemporarySprite2dDef temporarySprite2dDef = drawCompat.fetchTempSprite();
         return temporarySprite2dDef;
     }
 

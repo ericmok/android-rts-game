@@ -120,7 +120,8 @@ public class GameLoop implements Runnable {
 //        }
 
         //game.noteworthyEngine.step(accumulatedFrames, TIME_PER_FRAME);
-        game.activeEngine.step(TIME_PER_FRAME);
+        //game.activeEngine.step(TIME_PER_FRAME);
+		game.wrapperEngine.step(TIME_PER_FRAME);
     }
 	
 	/**

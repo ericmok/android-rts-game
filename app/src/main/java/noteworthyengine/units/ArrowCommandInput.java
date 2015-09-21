@@ -9,8 +9,10 @@ import art.Animations;
 import noteworthyengine.CameraNode;
 import noteworthyengine.CommandSystem;
 import noteworthyengine.InputNode;
+import noteworthyengine.InputSystem;
 import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.RenderNode;
+import noteworthyframework.BaseEngine;
 import noteworthyframework.Coords;
 import noteworthyframework.Unit;
 import structure.Game;
@@ -30,19 +32,21 @@ public class ArrowCommandInput extends Unit {
     public RenderNode renderNode = new RenderNode(this);
 
     final private Game game;
+    private BaseEngine baseEngine;
 
     private CommandSystem.Command feedback = new CommandSystem.Command();
 
     private Vector2 temp = new Vector2();
 
-    public ArrowCommandInput(Game game) {
+    public ArrowCommandInput(Game game, BaseEngine baseEngine) {
         this.name = NAME;
         this.game = game;
+        this.baseEngine = baseEngine;
 
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 6;
         renderNode.height.v = 6;
-        renderNode.color.v = Color.argb(200, 255, 255, 255);
+        renderNode.color.v = Color.argb(0, 255, 255, 255);
         renderNode.animationName.v = Animations.ANIMATION_TRIGGER_FIELDS_EXISTING;
     }
 
@@ -52,19 +56,19 @@ public class ArrowCommandInput extends Unit {
             super(unit);
         }
 
-        public void onDown(CameraNode cameraNode, Vector2 touchPosition) {}
-        public void onShowPress(CameraNode cameraNode, Vector2 touchPosition) {}
-        public void onSingleTapUp(CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onDown(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onShowPress(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onSingleTapUp(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {}
 
-        public void onScroll(CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2, Vector2 touchScrollDeltas) {
+        public void onScroll(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2, Vector2 touchScrollDeltas) {
 
         }
 
-        public void onLongPress(CameraNode cameraNode, Vector2 touchPosition) {}
-        public void onFling(CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2) {}
-        public void onScale(CameraNode cameraNode, float touchScale) {}
+        public void onLongPress(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onFling(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2) {}
+        public void onScale(InputSystem inputSystem, CameraNode cameraNode, float touchScale) {}
 
-        public void update(CameraNode cameraNode, int currentGesture, int currentAction) {
+        public void update(InputSystem inputSystem, CameraNode cameraNode, int currentGesture, int currentAction) {
 
             //GameCamera gameCamera = game.getGameRenderer().mainCamera;
 
@@ -91,13 +95,14 @@ public class ArrowCommandInput extends Unit {
             }
             if (currentAction == MotionEvent.ACTION_UP) {
                 ArrowCommand arrowCommand = new ArrowCommand();
-                arrowCommand.set(game.noteworthyEngine.currentGamer,
+                //arrowCommand.set(game.noteworthyEngine.currentGamer,
+                arrowCommand.set(baseEngine.currentGamer,
                         renderNode.coords.pos.x,
                         renderNode.coords.pos.y,
                         renderNode.coords.rot.x,
                         renderNode.coords.rot.y);
 
-                game.noteworthyEngine.addUnit(arrowCommand);
+                baseEngine.addUnit(arrowCommand);
 
                 //IntegerPtr color = (IntegerPtr)feedback.field("color");
                 renderNode.color.v = Color.argb(0, 255, 255, 255);
