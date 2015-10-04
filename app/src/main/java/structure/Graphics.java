@@ -13,6 +13,7 @@ public class Graphics {
 	//private SimpleShader simpleShader;
     private SimpleQuadShader simpleQuadShader;
 	private SimpleSpriteBatch simpleSpriteBatch;
+	private LineShader lineShader;
 	private LineBatch lineBatch;
 	private TextureLoader textureLoader;
 	private boolean isLoaded = false;
@@ -52,9 +53,10 @@ public class Graphics {
 		this.context = context;
 		//simpleShader = new SimpleShader(context.getResources());
         simpleQuadShader = new SimpleQuadShader(context.getResources());
+		lineShader = new LineShader(context.getResources());
 
 		simpleSpriteBatch = new SimpleSpriteBatch(simpleQuadShader);
-		lineBatch = new LineBatch(simpleQuadShader);
+		lineBatch = new LineBatch(lineShader);
 		textureLoader = new TextureLoader(context);
 
         cameraMatrix = new float[16];

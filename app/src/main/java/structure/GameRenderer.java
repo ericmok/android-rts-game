@@ -15,6 +15,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
+import utils.Orientation;
 import utils.Vector3;
 
 public class GameRenderer implements GLSurfaceView.Renderer  {
@@ -302,9 +303,11 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	private void drawLines() {
 		DoubleBufferredRewriteOnlyArray<Line2dDef> linesToDraw = game.graphics.drawLists.linesToDraw;
 		RewriteOnlyArray<Line2dDef> linesToDrawBuffer = linesToDraw.lockWritableBuffer();
+		
+		// TODO: Map host memory to GPU memory ONCE
+		// Then draw arrays
 
 		linesToDrawBuffer.resetIterator();
-
 
 		LineBatch lineBatch = game.graphics.getLineBatch();
 		lineBatch.beginDrawing(game.graphics.getTextureLoader().getTextureAnimation("Animations/Blank/White").textureFrames.get(0).texture.glHandle);
