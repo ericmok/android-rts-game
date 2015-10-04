@@ -49,7 +49,7 @@ public class VertexBuffer {
 		
 		backingBuffer = verticesBuffer;
 	}
-	
+
 	public int getGLHandle() {
 		return bufferHandle;
 	}
@@ -61,10 +61,15 @@ public class VertexBuffer {
 	public FloatBuffer getFloatBuffer() {
 		return backingBuffer;
 	}
-	
+
 	public void bufferSubData(Buffer buffer) {
 		this.bindBuffer();
 		GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, vertices.length * BYTES_PER_FLOAT, buffer);
+	}
+
+	public void bufferSubData(Buffer buffer, int count) {
+		this.bindBuffer();
+		GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, count * BYTES_PER_FLOAT, buffer);
 	}
 	
 	public void draw() {
