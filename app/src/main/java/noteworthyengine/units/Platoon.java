@@ -128,10 +128,11 @@ public class Platoon extends Unit {
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem system) {
-            system.drawLine(system.getCameraId(renderNode.cameraType.v),
-                    (float)renderNode.coords.pos.x - 0.5f, (float)renderNode.coords.pos.y + 0.7f,
-                    (float)renderNode.coords.pos.x + 0.5f * (float)(battleNode.hp.v / 50), (float)renderNode.coords.pos.y + 0.7f, 5,
-                    (battleNode.hp.v > 30) ? Color.GREEN : (battleNode.hp.v > 15) ? Color.YELLOW : Color.RED);
+            // HP Bars:
+//            system.drawLine(system.getCameraId(renderNode.cameraType.v),
+//                    (float)renderNode.coords.pos.x - 0.5f, (float)renderNode.coords.pos.y + 0.7f,
+//                    (float)renderNode.coords.pos.x + 0.5f * (float)(battleNode.hp.v / 50), (float)renderNode.coords.pos.y + 0.7f, 2,
+//                    (battleNode.hp.v > 30) ? Color.GREEN : (battleNode.hp.v > 15) ? Color.YELLOW : Color.RED);
 
             renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
             //renderNode.color.v = Color.argb(10, 255, 255, 255);
@@ -159,12 +160,13 @@ public class Platoon extends Unit {
                 Sprite2dDef tempSprite = system.defineNewSprite(
                         Animations.ANIMATION_TROOPS_PROJECTILE,
                         0,
-                        (float)((0.45 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.15) * rx  + battleNode.coords.pos.x),
-                        (float)((0.45 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.15) * ry  + battleNode.coords.pos.y),
+                        (float)((0.60 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.2) * rx  + battleNode.coords.pos.x),
+                        (float)((0.60 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.2) * ry  + battleNode.coords.pos.y),
                         1,
-                        0.39f, 0.39f,
+                        0.4f, 0.4f,
                         (float) Orientation.getDegreesBaseX(rx, ry),
-                        Color.argb(120, 255, 255, 255),
+                        //Color.argb(128, 255, 255, 255),
+                        battleNode.gamer.v.color(),
                         0
                         );
                 //system.drawCompat.spriteAllocator.takeNextWritable();
