@@ -15,7 +15,7 @@ public class GameLoop implements Runnable {
 
     private boolean firstRun = true;
 	
-	public final static long TARGET_MILLISEC_PER_FRAME = 12;
+	public final static long TARGET_MILLISEC_PER_FRAME = 15;
 
     public double accumulator = 0;
 
