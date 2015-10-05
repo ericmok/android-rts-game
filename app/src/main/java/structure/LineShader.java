@@ -126,6 +126,11 @@ public class LineShader {
         return this;
     }
 
+    public LineShader setProjectionMatrixUniform(float[] projectionMatrix) {
+        GLES20.glUniformMatrix4fv(shaderUniformProjectionMatrix, 1, false, projectionMatrix, 0);
+        return this;
+    }
+
     public LineShader setColorUniform(int color) {
         GLES20.glUniform4f(shaderUniformFlatColorLocation,
                 Color.red(color),

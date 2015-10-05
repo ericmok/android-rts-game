@@ -303,24 +303,26 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	private void drawLines() {
 		DoubleBufferredRewriteOnlyArray<Line2dDef> linesToDraw = game.graphics.drawLists.linesToDraw;
 		RewriteOnlyArray<Line2dDef> linesToDrawBuffer = linesToDraw.lockWritableBuffer();
-		
-		// TODO: Map host memory to GPU memory ONCE
-		// Then draw arrays
+
+		// TODO: Map host memory to GPU memory ONCE for faster batch drawing
+		// (Need to overhaul camera system)
 
 		linesToDrawBuffer.resetIterator();
 
 		LineBatch lineBatch = game.graphics.getLineBatch();
-		lineBatch.beginDrawing(game.graphics.getTextureLoader().getTextureAnimation("Animations/Blank/White").textureFrames.get(0).texture.glHandle);
+		//lineBatch.beginDrawing(game.graphics.getTextureLoader().getTextureAnimation("Animations/Blank/White").textureFrames.get(0).texture.glHandle);
+		lineBatch.beginDrawing();
 
 		while (linesToDrawBuffer.canIterateNext()) {
 			Line2dDef line = linesToDrawBuffer.getNextIteratorItem();
 			lineBatch.draw(cameras.get(line.cameraIndex).getViewProjectionMatrix(),
-					(float)line.src.x, (float)line.src.y, 0,
-					(float)line.dest.x, (float)line.dest.y, 0,
+					(float) line.src.x, (float) line.src.y, 0,
+					(float) line.dest.x, (float) line.dest.y, 0,
 					line.width, line.color);
 		}
 
 		lineBatch.endDrawing();
+
 	}
 
 	@SuppressLint("NewApi")
@@ -335,7 +337,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		previousTick = startTick; // Leapfrog previous tick
 
 		synchronized(drawingMutex) {
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 			SimpleSpriteBatch simpleSpriteBatch = game.graphics.getSimpleSpriteBatch();
 			simpleSpriteBatch.beginDrawing();

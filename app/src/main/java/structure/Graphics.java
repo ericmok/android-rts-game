@@ -77,6 +77,7 @@ public class Graphics {
 		try {
 			simpleQuadShader.initializeResources();
 			simpleSpriteBatch.load();
+			lineShader.initializeResources();
 			lineBatch.load();
 
 			textureLoader.loadAssetsInRoot("Animations");
