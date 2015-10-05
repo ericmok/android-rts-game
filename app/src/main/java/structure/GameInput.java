@@ -152,24 +152,21 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
         // TODO: This may be called duplicate
        // getCoordsTranslatedAndNormalized(touchPosition, event.getX(), event.getY());
 
-        this.currentMotionEventAction = event.getAction();
+        this.currentMotionEventAction = event.getActionMasked();
 
-        if (currentMotionEventAction == MotionEvent.ACTION_DOWN) {
-            touchDown = true;
-            //lastTouchDown.copy(touchPosition);
-            //Log.v("GAMEINPUT", "down");
-        }
-
-        if (currentMotionEventAction == MotionEvent.ACTION_MOVE) {
-            touchDown = true;
-            //Log.v("GAMEINPUT", "move");
-        }
-
-        // Unclear if other actions will trigger flag to false
-        if (currentMotionEventAction == MotionEvent.ACTION_UP) {
-            touchDown = false;
-            //lastTouchUp.copy(touchPosition);
-            //Log.v("GAMEINPUT", "up");
+        switch (currentMotionEventAction) {
+            case MotionEvent.ACTION_DOWN:
+                // set lastTouchDown?
+                touchDown = true;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                touchDown = true;
+                break;
+            case MotionEvent.ACTION_UP:
+                // set lastTouchUp?
+                touchDown = false;
+                break;
+            // Deal with pointer up and downs?
         }
     }
 
