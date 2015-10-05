@@ -302,7 +302,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 	private void drawLines() {
 		DoubleBufferredRewriteOnlyArray<Line2dDef> linesToDraw = game.graphics.drawLists.linesToDraw;
-		RewriteOnlyArray<Line2dDef> linesToDrawBuffer = linesToDraw.lockWritableBuffer();
+		RewriteOnlyArray<Line2dDef> linesToDrawBuffer = linesToDraw.swapBuffer();
 
 		// TODO: Map host memory to GPU memory ONCE for faster batch drawing
 		// (Need to overhaul camera system)
