@@ -39,7 +39,7 @@ public class MoveInputModifier extends Unit {
 
     private Vector2 arrowFeedbackPosition = new Vector2();
     private Orientation arrowFeedbackOrientation = new Orientation();
-    private boolean arrowFeedback = false;
+    private boolean isMakingNewArrowCommand = false;
 
     public MoveInputModifier(Game game, BaseEngine baseEngine) {
         this.name = NAME;
@@ -78,7 +78,7 @@ public class MoveInputModifier extends Unit {
                 }
 
                 // Draw feedback
-                if (arrowFeedback) {
+                if (isMakingNewArrowCommand) {
                     system.defineNewSprite(Animations.ANIMATION_TRIGGER_FIELDS_EXISTING, 0,
                             (float) arrowFeedbackPosition.x, (float) arrowFeedbackPosition.y, 0,
                             7.6f, 7.6f,
@@ -143,7 +143,6 @@ public class MoveInputModifier extends Unit {
                 if (MoveInputModifier.this.buttonIsActivated) {
 
                     for (int i = 0; i < pointerCount; i++) {
-                        int id = mocap.getPointerId(i);
 
                         if (mocap.getPointerId(i) != buttonPointerID) {
                             // Use the pointer that is not on the button
@@ -151,58 +150,76 @@ public class MoveInputModifier extends Unit {
                             // TODO: Deal with multiple pointers
 
                             NoteworthyEngine noteworthyEngine = (NoteworthyEngine)inputSystem.getBaseEngine();
-                            processArrowCommand(noteworthyEngine.activeGameCamera.fieldCameraNode, mocap, id);
+                            processArrowCommand(noteworthyEngine.activeGameCamera.fieldCameraNode, mocap, i);
                         }
                     }
                 }
+
+                // Prevent consecutive ACTION_POINTER_UP's / ACTION_UP's
+                //
+                // Also Edge Case: Button finger moves off bounds and lifts before 2nd finger
+                // Without this: the isMakingNewArrowCommand sprite gets displayed
+                // even when button is not activated
+                // processArrowCommand will not be able to capture ACTION_POINTER_UP events
+                if (mocap.getActionMasked() == MotionEvent.ACTION_POINTER_UP ||
+                        mocap.getActionMasked() == MotionEvent.ACTION_UP ||
+                        mocap.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                    isMakingNewArrowCommand = false;
+                }
             } else {
+                // Don't track the button finger anymore
                 buttonPointerID = -1;
 
                 // Fall through when no ACTION_POINTER_UP action, and only get ACTION_UP
-                arrowFeedback = false;
+                isMakingNewArrowCommand = false;
             }
 
             mocap.recycle();
         }
 
 
-        public void processArrowCommand(FieldCameraNode camera, MotionEvent motionEvent, int pointerID) {
+        public void processArrowCommand(FieldCameraNode camera, MotionEvent mocap, int pointerIndex) {
 
-            int currentGesture = motionEvent.getActionMasked();
+            int mocapAction = mocap.getActionMasked();
 
-            if (currentGesture == MotionEvent.ACTION_POINTER_DOWN) {
-                arrowFeedback = true;
+            if (mocapAction == MotionEvent.ACTION_POINTER_DOWN) {
+                isMakingNewArrowCommand = true;
 
-                game.gameInput.getCoordsCenteredAndNormalized(arrowFeedbackPosition, motionEvent.getX(pointerID), motionEvent.getY(pointerID));
+                game.gameInput.getCoordsCenteredAndNormalized(arrowFeedbackPosition, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
                 arrowFeedbackPosition.scale(1 / camera.scale.v, 1 / camera.scale.v);
                 arrowFeedbackPosition.translate(camera.coords.pos.x, camera.coords.pos.y);
             }
-            if (currentGesture == MotionEvent.ACTION_MOVE) {
-                game.gameInput.getCoordsCenteredAndNormalized(temp2, motionEvent.getX(pointerID), motionEvent.getY(pointerID));
-                temp2.scale(1 / camera.scale.v, 1 / camera.scale.v);
-                temp2.translate(camera.coords.pos.x, camera.coords.pos.y);
 
-                Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
-                arrowFeedbackOrientation.setNormalized();
-                arrowFeedbackOrientation.set();
-            }
-            if (currentGesture == MotionEvent.ACTION_POINTER_UP && arrowFeedback == true) {
+            // Only when there is an ACTION_POINTER_DOWN do we consider the further mechanics
+            if (isMakingNewArrowCommand) {
+                if (mocapAction == MotionEvent.ACTION_MOVE) {
+                    game.gameInput.getCoordsCenteredAndNormalized(temp2, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
+                    temp2.scale(1 / camera.scale.v, 1 / camera.scale.v);
+                    temp2.translate(camera.coords.pos.x, camera.coords.pos.y);
 
-                // The motion event sticks when there are no events (UP, MOVE, DOWN)
-                // so you may wind up with stale continuous POINTER_UP events
-                // event after the 2nd touch as lifted...
+                    Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
+                    arrowFeedbackOrientation.setNormalized();
+                    arrowFeedbackOrientation.set();
+                }
+                if (mocapAction == MotionEvent.ACTION_POINTER_UP) {
 
-                arrowFeedback = false;
+                    // MotionEvent state sticks when there are no events (UP, MOVE, DOWN)
+                    // so you may wind up with stale continuous POINTER_UP events
+                    // event after the 2nd touch as lifted but modifier button is still pressed.
+                    // In addition, this function body is in a loop, don't want multiple
+                    // ACTION_POINTER_UP's:
+                    isMakingNewArrowCommand = false;
 
-                ArrowCommand arrowCommand = new ArrowCommand();
-                //arrowCommand.set(game.noteworthyEngine.currentGamer,
-                arrowCommand.set(baseEngine.currentGamer,
-                        arrowFeedbackPosition.x,
-                        arrowFeedbackPosition.y,
-                        arrowFeedbackOrientation.x,
-                        arrowFeedbackOrientation.y);
+                    ArrowCommand arrowCommand = new ArrowCommand();
+                    //arrowCommand.set(game.noteworthyEngine.currentGamer,
+                    arrowCommand.set(baseEngine.currentGamer,
+                            arrowFeedbackPosition.x,
+                            arrowFeedbackPosition.y,
+                            arrowFeedbackOrientation.x,
+                            arrowFeedbackOrientation.y);
 
-                baseEngine.addUnit(arrowCommand);
+                    baseEngine.addUnit(arrowCommand);
+                }
             }
         }
     }
