@@ -1,17 +1,21 @@
 package noteworthyengine.units;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import art.Animations;
 import noteworthyengine.CameraNode;
+import noteworthyengine.FieldCameraNode;
 import noteworthyengine.InputNode;
 import noteworthyengine.InputSystem;
+import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.Unit;
 import structure.Game;
+import utils.Orientation;
 import utils.Vector2;
 import utils.VoidFunc;
 
@@ -32,6 +36,11 @@ public class MoveInputModifier extends Unit {
 
     private float circularAnimation = 0;
     private boolean buttonIsActivated = false;
+    int buttonPointerID = -1;
+
+    private Vector2 arrowFeedbackPosition = new Vector2();
+    private Orientation arrowFeedbackOrientation = new Orientation();
+    private boolean arrowFeedback = false;
 
     public MoveInputModifier(Game game, BaseEngine baseEngine) {
         this.name = NAME;
@@ -68,6 +77,16 @@ public class MoveInputModifier extends Unit {
 
                     circularAnimation = circularAnimation + 0.3f;
                 }
+
+                // Draw feedback
+                if (arrowFeedback) {
+                    system.defineNewSprite(Animations.ANIMATION_TRIGGER_FIELDS_EXISTING, 0,
+                            (float) arrowFeedbackPosition.x, (float) arrowFeedbackPosition.y, 0,
+                            7.6f, 7.6f,
+                            (float)arrowFeedbackOrientation.getDegrees(),
+                            Color.argb(240, 255, 255, 255),
+                            0);
+                }
             }
         };
     }
@@ -94,14 +113,16 @@ public class MoveInputModifier extends Unit {
             renderNode.width.v = 0.42f;
             renderNode.height.v = 0.42f;
             renderNode.color.v = 0xff999999;
-
-            MotionEvent mocap = MotionEvent.obtain(game.gameInput.motionEvent);
             MoveInputModifier.this.buttonIsActivated = false;
 
-            if (game.gameInput.touchDown) {
-                int pointerCount = mocap.getPointerCount();
-                int buttonPointerID = -1;
+            // MotionEvent may asynchronously change during this function call, so cache this
+            MotionEvent mocap = MotionEvent.obtain(game.gameInput.motionEvent);
 
+            if (game.gameInput.touchDown) {
+
+                int pointerCount = mocap.getPointerCount();
+
+                // Search all touches to see if any is on the button
                 for (int i = 0; i < pointerCount; i++) {
                     float x = mocap.getX(i);
                     float y = mocap.getY(i);
@@ -119,18 +140,71 @@ public class MoveInputModifier extends Unit {
                     }
                 }
 
-                // TODO
-                if (isActive) {
+                // If button is down, check for scroll gesture
+                if (MoveInputModifier.this.buttonIsActivated) {
+
                     for (int i = 0; i < pointerCount; i++) {
+                        int id = mocap.getPointerId(i);
+
                         if (mocap.getPointerId(i) != buttonPointerID) {
-                            // This pointer can be used for arrow commands
-                            // Simpler if there was a non-variable amount of active arrow commands
+                            // Use the pointer that is not on the button
+                            // There may be several to track...
+                            // TODO: Deal with multiple pointers
+
+                            NoteworthyEngine noteworthyEngine = (NoteworthyEngine)inputSystem.getBaseEngine();
+                            processArrowCommand(noteworthyEngine.activeGameCamera.fieldCameraNode, mocap, id);
                         }
                     }
                 }
+            } else {
+                buttonPointerID = -1;
+
+                // Fall through when no ACTION_POINTER_UP action, and only get ACTION_UP
+                arrowFeedback = false;
             }
 
             mocap.recycle();
+        }
+
+
+        public void processArrowCommand(FieldCameraNode camera, MotionEvent motionEvent, int pointerID) {
+
+            int currentGesture = motionEvent.getActionMasked();
+
+            if (currentGesture == MotionEvent.ACTION_POINTER_DOWN) {
+                arrowFeedback = true;
+
+                game.gameInput.getCoordsTranslatedAndNormalized(arrowFeedbackPosition, motionEvent.getX(pointerID), motionEvent.getY(pointerID));
+                arrowFeedbackPosition.scale(1 / camera.scale.v, 1 / camera.scale.v);
+                arrowFeedbackPosition.translate(camera.coords.pos.x, camera.coords.pos.y);
+            }
+            if (currentGesture == MotionEvent.ACTION_MOVE) {
+                game.gameInput.getCoordsTranslatedAndNormalized(temp2, motionEvent.getX(pointerID), motionEvent.getY(pointerID));
+                temp2.scale(1 / camera.scale.v, 1 / camera.scale.v);
+                temp2.translate(camera.coords.pos.x, camera.coords.pos.y);
+
+                Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
+                arrowFeedbackOrientation.setNormalized();
+                arrowFeedbackOrientation.set();
+            }
+            if (currentGesture == MotionEvent.ACTION_POINTER_UP && arrowFeedback == true) {
+
+                // The motion event sticks when there are no events (UP, MOVE, DOWN)
+                // so you may wind up with stale continuous POINTER_UP events
+                // event after the 2nd touch as lifted...
+
+                arrowFeedback = false;
+
+                ArrowCommand arrowCommand = new ArrowCommand();
+                //arrowCommand.set(game.noteworthyEngine.currentGamer,
+                arrowCommand.set(baseEngine.currentGamer,
+                        arrowFeedbackPosition.x,
+                        arrowFeedbackPosition.y,
+                        arrowFeedbackOrientation.x,
+                        arrowFeedbackOrientation.y);
+
+                baseEngine.addUnit(arrowCommand);
+            }
         }
     }
 }
