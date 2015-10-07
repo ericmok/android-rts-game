@@ -61,6 +61,8 @@ public class RenderSystem extends noteworthyframework.System {
                 continue;
             }
 
+            // This appears before the drawing so that the function has a chance
+            // to operate on the renderNode before it is processed.
             renderNode.onDraw.apply(this);
 
 //            DrawList2DItem drawList2DItem = spriteAllocater.takeNextWritable();
