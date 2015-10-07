@@ -1,7 +1,6 @@
 package noteworthyengine.units;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import art.Animations;
@@ -127,7 +126,7 @@ public class MoveInputModifier extends Unit {
                     float x = mocap.getX(i);
                     float y = mocap.getY(i);
 
-                    game.gameInput.getCoordsTranslatedAndNormalized(temp, x, y);
+                    game.gameInput.getCoordsCenteredAndNormalized(temp, x, y);
                     cameraNode.camera.getScreenToWorldCoords(temp, temp);
 
                     if (temp.distanceTo(renderNode.coords.pos) < renderNode.width.v) {
@@ -174,12 +173,12 @@ public class MoveInputModifier extends Unit {
             if (currentGesture == MotionEvent.ACTION_POINTER_DOWN) {
                 arrowFeedback = true;
 
-                game.gameInput.getCoordsTranslatedAndNormalized(arrowFeedbackPosition, motionEvent.getX(pointerID), motionEvent.getY(pointerID));
+                game.gameInput.getCoordsCenteredAndNormalized(arrowFeedbackPosition, motionEvent.getX(pointerID), motionEvent.getY(pointerID));
                 arrowFeedbackPosition.scale(1 / camera.scale.v, 1 / camera.scale.v);
                 arrowFeedbackPosition.translate(camera.coords.pos.x, camera.coords.pos.y);
             }
             if (currentGesture == MotionEvent.ACTION_MOVE) {
-                game.gameInput.getCoordsTranslatedAndNormalized(temp2, motionEvent.getX(pointerID), motionEvent.getY(pointerID));
+                game.gameInput.getCoordsCenteredAndNormalized(temp2, motionEvent.getX(pointerID), motionEvent.getY(pointerID));
                 temp2.scale(1 / camera.scale.v, 1 / camera.scale.v);
                 temp2.translate(camera.coords.pos.x, camera.coords.pos.y);
 

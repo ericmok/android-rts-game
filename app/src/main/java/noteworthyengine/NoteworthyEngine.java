@@ -26,7 +26,6 @@ public class NoteworthyEngine extends BaseEngine {
     public FieldCameraSystem fieldCameraSystem;
 
     public GridSystem gridSystem;
-    //public CommandSystem commandSystem;
     public TimelineSystem timelineSystem;
     public SeparationSystem separationSystem;
     public FieldSystem fieldSystem;
@@ -38,7 +37,6 @@ public class NoteworthyEngine extends BaseEngine {
 
     public FactorySystem factorySystem;
 
-    public OrthographicCamera mainCamera;
     public MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
     public CameraUnit auxGameCamera = new CameraUnit(1);
 
@@ -51,7 +49,6 @@ public class NoteworthyEngine extends BaseEngine {
         inputSystem = new InputSystem(game, cameraSystem);
 
         gridSystem = new GridSystem();
-        //commandSystem = new CommandSystem(game);
         timelineSystem = new TimelineSystem();
         separationSystem = new SeparationSystem(gridSystem);
         fieldSystem = new FieldSystem();
@@ -68,7 +65,6 @@ public class NoteworthyEngine extends BaseEngine {
         this.addSystem(cameraSystem);
 
         this.addSystem(gridSystem);
-        //this.addSystem(commandSystem);
         this.addSystem(timelineSystem);
         this.addSystem(fieldSystem);
         this.addSystem(fieldCameraSystem);

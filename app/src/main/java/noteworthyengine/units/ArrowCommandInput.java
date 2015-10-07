@@ -3,23 +3,15 @@ package noteworthyengine.units;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
-import java.util.ArrayList;
-
 import art.Animations;
 import noteworthyengine.CameraNode;
-import noteworthyengine.CommandSystem;
 import noteworthyengine.InputNode;
 import noteworthyengine.InputSystem;
-import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.RenderNode;
 import noteworthyframework.BaseEngine;
-import noteworthyframework.Coords;
 import noteworthyframework.Unit;
 import structure.Game;
-import structure.GameCamera;
 import structure.GameInput;
-import utils.FloatPtr;
-import utils.IntegerPtr;
 import utils.Vector2;
 
 /**
@@ -33,8 +25,6 @@ public class ArrowCommandInput extends Unit {
 
     final private Game game;
     private BaseEngine baseEngine;
-
-    private CommandSystem.Command feedback = new CommandSystem.Command();
 
     private Vector2 temp = new Vector2();
 
