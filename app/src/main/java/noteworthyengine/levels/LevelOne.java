@@ -106,13 +106,13 @@ public class LevelOne implements EngineDataLoader {
                 Platoon platoon = UnitPool.platoons.fetchMemory(); //new Platoon();
                 platoon.configure(gamer);
                 platoon.battleNode.coords.pos.copy(location);
-                platoon.battleNode.coords.pos.translate((i) * perp.x + h * rot.x, (i) * perp.y + h * rot.y);
+                platoon.battleNode.coords.pos.translate((1.5 * i) * perp.x + h * rot.x, (1.5 * i) * perp.y + h * rot.y);
                 //platoon.battleNode.gamer.v = gamer;
                 baseEngine.addUnit(platoon);
             }
         }
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             Cannon cannon = UnitPool.cannons.fetchMemory(); // new Cannon(gamer);
             cannon.configure(gamer);
             cannon.battleNode.coords.pos.copy(location);
@@ -146,10 +146,10 @@ public class LevelOne implements EngineDataLoader {
         baseEngine.addGamer(gamer2);
         baseEngine.addGamer(gamer3);
 
-        Vector2 spawnLocation0 = new Vector2(0, -13.9);
-        Vector2 spawnLocation1 = new Vector2(0, 13.9);
-        Vector2 spawnLocation2 = new Vector2(-13.9, 0);
-        Vector2 spawnLocation3 = new Vector2(13.9, 0);
+        Vector2 spawnLocation0 = new Vector2(0, -12 + Math.random() * 2 - 1);
+        Vector2 spawnLocation1 = new Vector2(0, 12 + Math.random() * 2 - 1);
+        Vector2 spawnLocation2 = new Vector2(-12 + Math.random() * 2 - 1, 0);
+        Vector2 spawnLocation3 = new Vector2(12 + Math.random() * 2 - 1, 0);
 
         ArrayList<Vector2> spawnLocations = new ArrayList<Vector2>(4);
         spawnLocations.add(spawnLocation0);
@@ -168,19 +168,19 @@ public class LevelOne implements EngineDataLoader {
         baseEngine.addGamer(gamer4);
 
         ArrayList<Vector2> neutralSpawnLocations = new ArrayList<Vector2>(8);
-        neutralSpawnLocations.add(new Vector2(-4.4, -4.4));
-        neutralSpawnLocations.add(new Vector2(4.4, 4.4));
-        neutralSpawnLocations.add(new Vector2(-4.4, 4.4));
-        neutralSpawnLocations.add(new Vector2(4.4, -4.4));
-//        neutralSpawnLocations.add(new Vector2(-10, -10));
-//        neutralSpawnLocations.add(new Vector2(10, 10));
-//        neutralSpawnLocations.add(new Vector2(-10, 10));
-//        neutralSpawnLocations.add(new Vector2(10, -10));
-        neutralSpawnLocations.add(new Vector2(-11.8, -11.8));
-        neutralSpawnLocations.add(new Vector2(11.8, 11.8));
-        neutralSpawnLocations.add(new Vector2(-11.8, 11.8));
-        neutralSpawnLocations.add(new Vector2(11.8, -11.8));
-        //neutralSpawnLocations.add(new Vector2(0, 0));
+//        neutralSpawnLocations.add(new Vector2(-4.4, -4.4));
+//        neutralSpawnLocations.add(new Vector2(4.4, 4.4));
+//        neutralSpawnLocations.add(new Vector2(-4.4, 4.4));
+//        neutralSpawnLocations.add(new Vector2(4.4, -4.4));
+////        neutralSpawnLocations.add(new Vector2(-10, -10));
+////        neutralSpawnLocations.add(new Vector2(10, 10));
+////        neutralSpawnLocations.add(new Vector2(-10, 10));
+////        neutralSpawnLocations.add(new Vector2(10, -10));
+//        neutralSpawnLocations.add(new Vector2(-11.8, -11.8));
+//        neutralSpawnLocations.add(new Vector2(11.8, 11.8));
+//        neutralSpawnLocations.add(new Vector2(-11.8, 11.8));
+//        neutralSpawnLocations.add(new Vector2(11.8, -11.8));
+//        //neutralSpawnLocations.add(new Vector2(0, 0));
 
         for (int i = 0; i < neutralSpawnLocations.size(); i++) {
             Barracks barracks = UnitPool.barracks.fetchMemory();
