@@ -39,6 +39,8 @@ public class NoteworthyEngine extends BaseEngine {
     public FactorySystem factorySystem;
 
     public OrthographicCamera mainCamera;
+    public MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
+    public CameraUnit auxGameCamera = new CameraUnit(1);
 
     public NoteworthyEngine(Game game) {
         super();
@@ -86,13 +88,11 @@ public class NoteworthyEngine extends BaseEngine {
     public void initialize() {
         super.initialize();
 
-        MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
-        CameraUnit auxGameCamera = new CameraUnit(1);
         this.addUnit(activeGameCamera);
         this.addUnit(auxGameCamera);
 
-        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game, this);
-        this.addUnit(arrowCommandInput);
+//        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game, this);
+//        this.addUnit(arrowCommandInput);
 
         this.addUnit(new MoveInputModifier(game, this));
     }
