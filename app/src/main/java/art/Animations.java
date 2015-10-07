@@ -47,6 +47,8 @@ public class Animations {
 
     public static final String ANIMATION_WAYPOINTS_MOVE = "Animations/Waypoints/Move";
 
+    public static final String ANIMATION_BUTTONS_ACTIVATED = "Animations/Buttons/Activated";
+
     public static final String ANIMATION_BUTTONS_PLAY = "Animations/Buttons/Play";
 
     public static final String ANIMATION_BUTTONS_MOVE = "Animations/Buttons/Move";
