@@ -4,6 +4,7 @@ import noteworthyengine.events.GameEvents;
 import noteworthyengine.units.ArrowCommandInput;
 import noteworthyengine.units.CameraUnit;
 import noteworthyengine.units.MainGameCamera;
+import noteworthyengine.units.MoveInputModifier;
 import noteworthyengine.units.UnitPool;
 import noteworthyframework.*;
 import structure.Game;
@@ -92,6 +93,8 @@ public class NoteworthyEngine extends BaseEngine {
 
         ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game, this);
         this.addUnit(arrowCommandInput);
+
+        this.addUnit(new MoveInputModifier(game, this));
     }
 
     @Override

@@ -5,6 +5,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
+import java.util.ArrayList;
+
 import utils.Vector2;
 
 /**
@@ -33,6 +35,9 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
 
     // Direct Access
     public MotionEvent motionEvent = null;
+
+    /// Number of fingers on screen
+    public int numberTouches = 0;
 
     public int currentMotionEventAction = -1;
 
@@ -157,16 +162,38 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
         switch (currentMotionEventAction) {
             case MotionEvent.ACTION_DOWN:
                 // set lastTouchDown?
+                numberTouches += 1;
                 touchDown = true;
+
                 break;
             case MotionEvent.ACTION_MOVE:
                 touchDown = true;
+
                 break;
             case MotionEvent.ACTION_UP:
                 // set lastTouchUp?
+                numberTouches -= 1;
                 touchDown = false;
+
                 break;
-            // Deal with pointer up and downs?
+            case MotionEvent.ACTION_POINTER_DOWN:
+                numberTouches += 1;
+
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                numberTouches -= 1;
+
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                numberTouches = 0;
+                touchDown = false;
+
+                break;
+            default:
+                numberTouches = 0;
+                touchDown = false;
+
+                break;
         }
     }
 
