@@ -109,48 +109,7 @@ public class Graphics {
 	//public SimpleShader getSimpleShader() { return simpleShader; }
 	public TextureLoader getTextureLoader() { return textureLoader; }
 	public boolean isLoaded() { return isLoaded; }
-	
-	/**
-	 * On path to deprecation
-	 */
-	public void beginDrawSprite() {
-		if (!this.isLoaded) {
-			return;
-		}
-		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		GLES20.glEnable(GLES20.GL_BLEND);
-	}
-	
-	/**
-	 * On path to deprecation
-	 * @param mvpMatrix
-	 * @param sprite
-	 */
-	public void drawSprite(float[] mvpMatrix, Sprite sprite) {
-		if (!this.isLoaded) {
-			return;
-		}
- 
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.glTexture);
-//		simpleShader.draw(mvpMatrix,
-//						sprite.quad.vertexBuffer,
-//						sprite.quad.colorBuffer,
-//						sprite.glTexture, sprite.quad.textureBuffer,
-//						GLES20.GL_TRIANGLE_STRIP, 4);
-		
-	}
-	
-	/**
-	 * On path to deprecation
-	 */
-	public void endDrawSprite() {
-		if (!this.isLoaded) {
-			return;
-		}
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-		GLES20.glDisable(GLES20.GL_BLEND);
-	}
-	
+
 	/**
 	 * Access drawing 2d api
 	 * @return
