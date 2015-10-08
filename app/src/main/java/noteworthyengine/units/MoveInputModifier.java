@@ -161,7 +161,8 @@ public class MoveInputModifier extends Unit {
                 // Without this: the isMakingNewArrowCommand sprite gets displayed
                 // even when button is not activated
                 // processArrowCommand will not be able to capture ACTION_POINTER_UP events
-                if (mocap.getActionMasked() == MotionEvent.ACTION_POINTER_UP ||
+                if (mocap.getPointerCount() < 2 ||
+                        mocap.getActionMasked() == MotionEvent.ACTION_POINTER_UP ||
                         mocap.getActionMasked() == MotionEvent.ACTION_UP ||
                         mocap.getActionMasked() == MotionEvent.ACTION_CANCEL) {
                     isMakingNewArrowCommand = false;
@@ -201,6 +202,8 @@ public class MoveInputModifier extends Unit {
                     arrowFeedbackOrientation.setNormalized();
                     arrowFeedbackOrientation.set();
                 }
+
+                // TODO ACTION_POINTER_UP events are unreliable when both fingers are moving
                 if (mocapAction == MotionEvent.ACTION_POINTER_UP) {
 
                     // MotionEvent state sticks when there are no events (UP, MOVE, DOWN)
