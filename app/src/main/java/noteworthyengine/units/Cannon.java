@@ -84,7 +84,7 @@ public class Cannon extends Platoon {
         this.battleNode.attackSwingTime.v = 6;
         this.battleNode.attackCooldown.v = 20;
         this.battleNode.attackDamage.v = 0;
-        this.battleNode.attackRange.v = 7;
+        this.battleNode.attackRange.v = 6;
         this.battleNode.targetAcquisitionRange.v = 18.5;
         this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
 
