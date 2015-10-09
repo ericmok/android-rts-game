@@ -88,8 +88,6 @@ public class Missle extends Mine {
                         (float) (battleNode.coords.pos.y - 0.5 * (temp.y)),
                         1, Color.argb(50, 255, 200, 200));
 
-                //Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                //sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
                 system.defineNewSprite(Animations.ANIMATION_TROOPS_SELECTED, 1,
                         (float) renderNode.coords.pos.x, (float) renderNode.coords.pos.y, 0,
                         1.4f, 1.4f,
@@ -98,8 +96,6 @@ public class Missle extends Mine {
                         0);
 
                 if (battleNode.target.v != null) {
-                    //sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                    //sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
                     system.defineNewSprite(Animations.ANIMATION_TROOPS_SELECTED, 1,
                             (float) battleNode.target.v.coords.pos.x, (float) battleNode.target.v.coords.pos.y, 0,
                             1.8f, 1.8f,
@@ -121,18 +117,6 @@ public class Missle extends Mine {
                             0,
                             renderNode.color.v,
                             0);
-//                    sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-//                    sprite2dDef.isGfxInterpolated = false;
-//                    sprite2dDef.animationName = Animations.ANIMATION_MINE_EXPLODING;
-//                    sprite2dDef.animationProgress = (int) (ratio * 100);
-//                    sprite2dDef.position.x = battleNode.coords.pos.x;
-//                    sprite2dDef.position.y = battleNode.coords.pos.y;
-//                    sprite2dDef.position.z = 3;
-//                    sprite2dDef.angle = 0;
-//                    sprite2dDef.width = 2 * rad;
-//                    sprite2dDef.height = 2 * rad;
-//                    sprite2dDef.color = renderNode.color.v;
-                    //sprite2dDef.color = Color.argb(128, 255, 255, 255);
                 }
             }
         };
