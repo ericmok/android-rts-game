@@ -5,10 +5,12 @@ import android.graphics.Color;
 import art.Animations;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
+import noteworthyengine.DestinationMovementNode;
+import noteworthyengine.DestinationMovementSystem;
 import noteworthyengine.RenderSystem;
 import noteworthyframework.Gamer;
-import structure.Sprite2dDef;
 import utils.BooleanFunc2;
+import utils.Vector2;
 import utils.VoidFunc;
 import utils.VoidFunc2;
 import utils.VoidFunc3;
@@ -19,9 +21,15 @@ import utils.VoidFunc3;
 public class Missle extends Mine {
 
     public static final String NAME = "missle";
+    public DestinationMovementNode destinationMovementNode = new DestinationMovementNode(this);
+
+    private Vector2 firingSource = new Vector2();
+    private Vector2 temp = new Vector2();
 
     public Missle(Gamer gamer) {
         super(gamer);
+
+        this.movementNode._enabled = false;
 
         this.battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
             @Override
@@ -58,9 +66,27 @@ public class Missle extends Mine {
             }
         };
 
+        this.destinationMovementNode.onDestinationReached = new VoidFunc<DestinationMovementSystem>() {
+            @Override
+            public void apply(DestinationMovementSystem element) {
+                battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
+                battleNode.attackProgress.v = 0;
+                battleNode.hp.v = 0;
+            }
+        };
+
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
+                Vector2.subtract(temp, battleNode.coords.pos, firingSource);
+                temp.setNormalized();
+
+                system.drawLine(system.getCameraId(renderNode.cameraType.v),
+                        (float) (firingSource.x + 0.5 * (temp.x)),
+                        (float) (firingSource.y + 0.5 * (temp.y)),
+                        (float) (battleNode.coords.pos.x - 0.5 * (temp.x)),
+                        (float) (battleNode.coords.pos.y - 0.5 * (temp.y)),
+                        1, Color.argb(50, 255, 200, 200));
 
                 //Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                 //sprite2dDef.set(Animations.ANIMATION_TROOPS_SELECTED, 1,
@@ -132,8 +158,11 @@ public class Missle extends Mine {
         this.renderNode.height.v = 1.2f;
     }
 
-    public void configure(Gamer gamer) {
+    public void configure(Gamer gamer, Vector2 firingSource, Vector2 destination) {
         this.battleNode.gamer.v = gamer;
         this.renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+
+        this.firingSource.copy(firingSource);
+        destinationMovementNode.destination.copy(destination);
     }
 }

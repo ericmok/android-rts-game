@@ -28,7 +28,7 @@ public class Cannon extends Platoon {
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
                 //Missle missle = new Missle(battleNode.gamer.v);
                 Missle missle = UnitPool.missles.fetchMemory();
-                missle.configure(battleNode.gamer.v);
+                missle.configure(battleNode.gamer.v, battleNode.coords.pos, battleNode2.coords.pos);
                 missle.movementNode.coords.pos.copy(movementNode.coords.pos);
                 battleSystem.getBaseEngine().addUnit(missle);
             }

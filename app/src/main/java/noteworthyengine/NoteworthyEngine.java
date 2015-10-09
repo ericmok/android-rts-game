@@ -31,6 +31,7 @@ public class NoteworthyEngine extends BaseEngine {
     public FieldSystem fieldSystem;
     public FormationSystem formationSystem;
     public MovementSystem movementSystem;
+    public DestinationMovementSystem destinationMovementSystem;
     public BattleSystem battleSystem;
     public RenderSystem renderSystem;
     public DecaySystem decaySystem;
@@ -55,6 +56,7 @@ public class NoteworthyEngine extends BaseEngine {
         fieldCameraSystem = new FieldCameraSystem(gridSystem, fieldSystem);
         formationSystem = new FormationSystem(gridSystem);
         movementSystem = new MovementSystem();
+        destinationMovementSystem = new DestinationMovementSystem();
         battleSystem = new BattleSystem(gridSystem);
         renderSystem = new RenderSystem(new DrawCompat(game), cameraSystem);
         decaySystem = new DecaySystem();
@@ -72,6 +74,7 @@ public class NoteworthyEngine extends BaseEngine {
         this.addSystem(separationSystem);
         this.addSystem(formationSystem);
         this.addSystem(movementSystem);
+        this.addSystem(destinationMovementSystem);
         this.addSystem(battleSystem);
         this.addSystem(renderSystem);
         this.addSystem(decaySystem);
