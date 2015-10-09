@@ -9,6 +9,7 @@ import noteworthyengine.DestinationMovementNode;
 import noteworthyengine.DestinationMovementSystem;
 import noteworthyengine.RenderSystem;
 import noteworthyframework.Gamer;
+import structure.TemporarySprite2dDef;
 import utils.BooleanFunc2;
 import utils.Vector2;
 import utils.VoidFunc;
@@ -86,7 +87,7 @@ public class Missle extends Mine {
                         (float) (firingSource.y + 0.5 * (temp.y)),
                         (float) (battleNode.coords.pos.x - 0.5 * (temp.x)),
                         (float) (battleNode.coords.pos.y - 0.5 * (temp.y)),
-                        1, Color.argb(50, 255, 200, 200));
+                        1, Color.argb(50, 255, 255, 200));
 
                 system.defineNewSprite(Animations.ANIMATION_TROOPS_SELECTED, 1,
                         (float) renderNode.coords.pos.x, (float) renderNode.coords.pos.y, 0,
@@ -117,6 +118,16 @@ public class Missle extends Mine {
                             0,
                             renderNode.color.v,
                             0);
+                }
+
+                if (battleNode.hp.v <= 0) {
+                    TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
+
+                    tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
+                    tempSprite.position.x = battleNode.coords.pos.x;
+                    tempSprite.position.y = battleNode.coords.pos.y;
+
+                    system.endNewTempSprite(tempSprite, 0);
                 }
             }
         };
