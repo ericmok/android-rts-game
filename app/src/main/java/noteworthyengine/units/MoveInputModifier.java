@@ -81,7 +81,7 @@ public class MoveInputModifier extends Unit {
                 if (isMakingNewArrowCommand) {
                     system.defineNewSprite(Animations.ANIMATION_TRIGGER_FIELDS_EXISTING, 0,
                             (float) arrowFeedbackPosition.x, (float) arrowFeedbackPosition.y, 0,
-                            7.6f, 7.6f,
+                            7f, 7f,
                             (float)arrowFeedbackOrientation.getDegrees(),
                             Color.argb(240, 255, 255, 255),
                             0);
