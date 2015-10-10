@@ -93,15 +93,15 @@ public class Missle extends Mine {
                         (float) renderNode.coords.pos.x, (float) renderNode.coords.pos.y, 0,
                         1.4f, 1.4f,
                         90f,
-                        Color.argb(40, 255, 255, 255),
+                        Color.argb(50, 255, 255, 255),
                         0);
 
                 if (battleNode.target.v != null) {
                     system.defineNewSprite(Animations.ANIMATION_TROOPS_SELECTED, 1,
-                            (float) battleNode.target.v.coords.pos.x, (float) battleNode.target.v.coords.pos.y, 0,
-                            1.8f, 1.8f,
+                            (float) destinationMovementNode.destination.x, (float) destinationMovementNode.destination.y, 0,
+                            1.3f, 1.3f,
                             90f,
-                            renderNode.color.v & 0x88FFFFFF,
+                            renderNode.color.v,
                             0);
                 }
 
