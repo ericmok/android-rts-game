@@ -138,18 +138,13 @@ public class Platoon extends Unit {
             //renderNode.color.v = Color.argb(10, 255, 255, 255);
 
             if (battleNode.hp.v <= 0) {
-                //TemporarySprite2dDef tempSprite = system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                 TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
 
-                //system.drawCompat.tempSpritesMemoryPool.fetchMemory();
                 tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                 tempSprite.position.x = battleNode.coords.pos.x;
                 tempSprite.position.y = battleNode.coords.pos.y;
 
                 system.endNewTempSprite(tempSprite, 0);
-
-                //system.drawCompat.drawTemporarySprite(tempSprite);
-                //system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
             }
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
@@ -169,24 +164,11 @@ public class Platoon extends Unit {
                         battleNode.gamer.v.color(),
                         0
                         );
-                //system.drawCompat.spriteAllocator.takeNextWritable();
-
-//                tempSprite.position.x = (0.45 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.15) * rx  + battleNode.coords.pos.x;
-//                tempSprite.position.y = (0.45 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.15) * ry  + battleNode.coords.pos.y;
-//                tempSprite.position.z = 1;
-//                tempSprite.width = 0.39f;
-//                tempSprite.height = 0.39f;
-//                tempSprite.angle = (float) Orientation.getDegreesBaseX(rx, ry);
-//                tempSprite.isGfxInterpolated = false;
-//                tempSprite.animationName = Animations.ANIMATION_TROOPS_PROJECTILE;
-//                tempSprite.animationProgress = 0;
-//                tempSprite.color = Color.argb(120, 255, 255, 255);
             }
 
             if (onAttackSwingAnim) {
-                //TemporarySprite2dDef tempSprite = system.defineNewTempSprite(Animations.ANIMATION_SMOKE_GUNPOWDER_DEF, 0);
                 TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
-                //system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+
                 tempSprite.copy(Animations.ANIMATION_SMOKE_GUNPOWDER_DEF);
                 tempSprite.position.x = (battleNode.coords.pos.x + target[0].coords.pos.x) / 2;
                 tempSprite.position.y = (battleNode.coords.pos.y + target[0].coords.pos.y) / 2;
@@ -194,8 +176,6 @@ public class Platoon extends Unit {
                 tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
 
                 system.endNewTempSprite(tempSprite, 0);
-                //system.drawCompat.drawTemporarySprite(tempSprite);
-                //system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
 
                 onAttackSwingAnim = false;
             }
