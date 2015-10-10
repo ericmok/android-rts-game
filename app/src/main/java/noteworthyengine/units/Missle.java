@@ -141,7 +141,7 @@ public class Missle extends Mine {
 
         this.battleNode.isAttackable.v = 1;
         this.battleNode.attackDamage.v = 25;
-        this.battleNode.attackSwingTime.v = 3;
+        this.battleNode.attackSwingTime.v = 1.5;
         this.battleNode.attackRange.v = 2.5;
         this.battleNode.targetAcquisitionRange.v = 20;
         this.battleNode.hp.v = 60;
