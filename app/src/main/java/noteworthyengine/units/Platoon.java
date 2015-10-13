@@ -49,11 +49,11 @@ public class Platoon extends Unit {
         fieldNode = new FieldNode(this);
         fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
 
-        battleNode = new BattleNode(this);
+        battleNode = new PlatoonBattleNode(this);
         battleNode.onTargetAcquired = onTargetAcquired;
-        battleNode.onAttackReady = onAttackReady;
-        battleNode.onAttackSwing = onAttackSwing;
-        battleNode.onAttackCast = onAttackCast;
+        //battleNode.onAttackReady = onAttackReady;
+        //battleNode.onAttackSwing = onAttackSwing;
+        //battleNode.onAttackCast = onAttackCast;
 
         renderNode = new RenderNode(this);
         renderNode.onDraw = this.onDraw;
@@ -70,11 +70,8 @@ public class Platoon extends Unit {
 
     public void reset() {
         movementNode.maxSpeed.v = 0.6;
-        battleNode.hp.v = 50;
-        battleNode.attackRange.v = 4;
-        battleNode.attackDamage.v = 4;
-        battleNode.targetAcquisitionRange.v = 16.5;
-        battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+
+        battleNode.reset();
 
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
@@ -86,6 +83,7 @@ public class Platoon extends Unit {
     }
 
     public void configure(Gamer gamer) {
+        //this.reset();
         battleNode.gamer.v = gamer;
     }
 
@@ -97,33 +95,33 @@ public class Platoon extends Unit {
                 //selectedRenderNode.isActive = true;
             }
         };
-
-    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady =
-            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-                @Override
-                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                    onAttackSwingAnim = false;
-                }
-            };
-
-    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing =
-            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-                @Override
-                public void apply(BattleSystem system, BattleNode node, BattleNode otherNode) {
-                    onAttackSwingAnim = true;
-                    target[0] = otherNode;
-                }
-            };
-
-    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast =
-            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-                @Override
-                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                    //BattleNode.INFLICT_DAMAGE_DEFAULT.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
-                    battleNode2.inflictDamage.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
-                    onAttackSwingAnim = false;
-                }
-            };
+//
+//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady =
+//            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//                @Override
+//                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+//                    onAttackSwingAnim = false;
+//                }
+//            };
+//
+//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing =
+//            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//                @Override
+//                public void apply(BattleSystem system, BattleNode node, BattleNode otherNode) {
+//                    onAttackSwingAnim = true;
+//                    target[0] = otherNode;
+//                }
+//            };
+//
+//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast =
+//            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//                @Override
+//                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+//                    //BattleNode.INFLICT_DAMAGE_DEFAULT.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
+//                    battleNode2.inflictDamage.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
+//                    onAttackSwingAnim = false;
+//                }
+//            };
 
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
@@ -200,4 +198,44 @@ public class Platoon extends Unit {
             }
         }
     };
+
+    public static class PlatoonBattleNode extends BattleNode {
+        private Platoon platoon;
+
+        public PlatoonBattleNode(Platoon platoon) {
+            super(platoon);
+            this.platoon = platoon;
+
+            this.reset();
+        }
+
+        @Override
+        public void reset() {
+            this.hp.v = 50;
+            this.attackRange.v = 4;
+            this.attackDamage.v = 4;
+            this.targetAcquisitionRange.v = 16.5;
+            this.attackState.v = BattleNode.ATTACK_STATE_READY;
+        }
+
+        @Override
+        public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackReady(battleSystem, target);
+            platoon.onAttackSwingAnim = false;
+        }
+
+        @Override
+        public void onAttackSwing(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackSwing(battleSystem, target);
+            platoon.onAttackSwingAnim = true;
+            platoon.target[0] = target;
+        }
+
+        @Override
+        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackCast(battleSystem, target);
+            target.inflictDamage(battleSystem, this, this.attackDamage.v);
+            platoon.onAttackSwingAnim = false;
+        }
+    }
 }

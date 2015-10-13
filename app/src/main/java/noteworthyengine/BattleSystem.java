@@ -32,7 +32,7 @@ public class BattleSystem extends noteworthyframework.System {
 
     @Override
     public void addNode(Node node) {
-        if (node.getClass() == BattleNode.class) {
+        if (node instanceof BattleNode) {
             BattleNode battleNode = (BattleNode) node;
             battleNodes.queueToAdd(battleNode);
 
@@ -48,7 +48,7 @@ public class BattleSystem extends noteworthyframework.System {
 
     @Override
     public void removeNode(Node node) {
-        if (node.getClass() == BattleNode.class) {
+        if (node instanceof BattleNode) {
             BattleNode battleNode = (BattleNode)node;
             battleNodes.queueToRemove(battleNode);
 
@@ -244,7 +244,7 @@ public class BattleSystem extends noteworthyframework.System {
 
     public boolean cleanUpBattleNode(BattleNode battleNode) {
         if (battleNode.hp.v <= 0) {
-            battleNode.onDie.apply(this, battleNode);
+            battleNode.onDie(this);
             this.getBaseEngine().removeUnit(battleNode.unit);
             battleNode.target.v = null;
             return  true;
@@ -282,7 +282,7 @@ public class BattleSystem extends noteworthyframework.System {
                         battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
                         battleNode.attackProgress.v = 0;
 
-                        battleNode.onAttackSwing.apply(this, battleNode, battleNode.target.v);
+                        battleNode.onAttackSwing(this, battleNode.target.v);
                     }
                 }
             }
@@ -301,12 +301,12 @@ public class BattleSystem extends noteworthyframework.System {
 
                     if (!battleNodeHasAliveTarget(battleNode)) {
                         // Lost the target before the swing finished (death or out of range)
-                        battleNode.onAttackCastFail.apply(this, battleNode);
+                        battleNode.onAttackCastFail(this);
                     }
                     else {
                         // We do have a target at cast time
 
-                        battleNode.onAttackCast.apply(this, battleNode, battleNode.target.v);
+                        battleNode.onAttackCast(this, battleNode.target.v);
 
                         // Moved into attack cast
                         //battleNode.target[0].inflictDamage.apply(this, battleNode.target[0], battleNode, battleNode.attackDamage.v);
@@ -341,7 +341,7 @@ public class BattleSystem extends noteworthyframework.System {
                     battleNode.attackProgress.v = 0;
 
                     // TODO: Simplify this callback
-                    battleNode.onAttackReady.apply(this, battleNode, battleNode.target.v);
+                    battleNode.onAttackReady(this, battleNode.target.v);
                 }
                 else {
                     battleNode.attackProgress.v += dt;

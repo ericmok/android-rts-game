@@ -1,5 +1,7 @@
 package noteworthyengine;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import noteworthyframework.Coords;
@@ -39,31 +41,31 @@ public class BattleNode extends Node {
                 @Override
                 public void apply(BattleSystem system, BattleNode element, BattleNode element2) { }
             };
-
-    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> INFLICT_DAMAGE_DEFAULT =
-            new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-                @Override
-                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, DoublePtr damage) {
-                    battleNode.hp.v -= damage.v;
-                }
-            };
-
-    public static final VoidFunc3<BattleSystem, BattleNode, BattleNode> ON_ATTACK_CAST =
-            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-                @Override
-                public void apply(BattleSystem battleSystem, BattleNode attacker, BattleNode otherBattleNode) {
-                    otherBattleNode.inflictDamage.apply(battleSystem, otherBattleNode, attacker, attacker.attackDamage);
-                }
-            };
-
-    public static final VoidFunc2<BattleSystem, BattleNode> ON_ATTACK_CAST_FAIL_DEFAULT =
-            new VoidFunc2<BattleSystem, BattleNode>() {
-                @Override
-                public void apply(BattleSystem system, BattleNode node) {
-                    node.attackState.v = BattleNode.ATTACK_STATE_READY;
-                    node.attackProgress.v = 0;
-                }
-            };
+//
+//    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> INFLICT_DAMAGE_DEFAULT =
+//            new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
+//                @Override
+//                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, DoublePtr damage) {
+//                    battleNode.hp.v -= damage.v;
+//                }
+//            };
+//
+//    public static final VoidFunc3<BattleSystem, BattleNode, BattleNode> ON_ATTACK_CAST =
+//            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//                @Override
+//                public void apply(BattleSystem battleSystem, BattleNode attacker, BattleNode otherBattleNode) {
+//                    otherBattleNode.inflictDamage.apply(battleSystem, otherBattleNode, attacker, attacker.attackDamage);
+//                }
+//            };
+//
+//    public static final VoidFunc2<BattleSystem, BattleNode> ON_ATTACK_CAST_FAIL_DEFAULT =
+//            new VoidFunc2<BattleSystem, BattleNode>() {
+//                @Override
+//                public void apply(BattleSystem system, BattleNode node) {
+//                    node.attackState.v = BattleNode.ATTACK_STATE_READY;
+//                    node.attackProgress.v = 0;
+//                }
+//            };
 
     public static final int ATTACK_STATE_READY = 0;
     public static final int ATTACK_STATE_SWINGING = 1;
@@ -132,13 +134,13 @@ public class BattleNode extends Node {
 
     public VoidFunc2<BattleSystem, BattleNode> onAcquireTarget = BattleSystem.DEFAULT_ON_ACQUIRE_TARGET;
 
-    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing = _DONOTHING3;
-    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = ON_ATTACK_CAST;
-    public VoidFunc2<BattleSystem, BattleNode> onAttackCastFail = ON_ATTACK_CAST_FAIL_DEFAULT;
-    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady = _DONOTHING3;
-    public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
+    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing = _DONOTHING3;
+    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = ON_ATTACK_CAST;
+    //public VoidFunc2<BattleSystem, BattleNode> onAttackCastFail = ON_ATTACK_CAST_FAIL_DEFAULT;
+    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady = _DONOTHING3;
+    //public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
 
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> inflictDamage = INFLICT_DAMAGE_DEFAULT;
+    //public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> inflictDamage = INFLICT_DAMAGE_DEFAULT;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onArmorHit = _DONOTHING3;
 
     public ArrayList<String> events;
@@ -149,6 +151,33 @@ public class BattleNode extends Node {
     public BattleNode(Unit unit) {
         super(_NAME, unit);
         Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
+    }
+
+    public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
+    }
+
+    public void inflictDamage(BattleSystem battleSystem, BattleNode attacker, double damage) {
+        this.hp.v -= damage;
+    }
+
+    public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+        target.inflictDamage(battleSystem, target, target.attackDamage.v);
+    }
+
+    public void onAttackSwing(BattleSystem battleSystem, BattleNode target) {
+    }
+
+    public void onAttackCastFail(BattleSystem battleSystem) {
+        this.attackState.v = ATTACK_STATE_READY;
+        this.attackProgress.v = 0;
+    }
+
+    public void onDie(BattleSystem battleSystem) {
+
+    }
+
+    public void reset() {
+        Log.v("BattleNode reset", "SHOULD BE OVERRIDDEN");
     }
 
     public static class Ptr implements JsonSerializable {

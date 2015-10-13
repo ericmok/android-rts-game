@@ -27,45 +27,39 @@ public class Missle extends Mine {
     private Vector2 firingSource = new Vector2();
     private Vector2 temp = new Vector2();
 
+
     public Missle(Gamer gamer) {
         super(gamer);
 
         this.movementNode._enabled = false;
+//
+//        this.battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//            @Override
+//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+//                battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
+//                battleNode.attackProgress.v = 0;
+//            }
+//        };
+//        this.battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//            @Override
+//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+//                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, allTargetsEvenSelf);
+//
+//                for (int j = battleTargets.size() - 1; j >= 0; j--) {
+//                    BattleNode toInflict = battleTargets.get(j).v;
+//                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage);
+//                }
+//
+//                battleNode.hp.v = 0;
+//            }
+//        };
+//        this.battleNode.onAttackCastFail = new VoidFunc2<BattleSystem, BattleNode>() {
+//            @Override
+//            public void apply(BattleSystem battleSystem, BattleNode arg1) {
+//                battleNode.hp.v = 0;
+//            }
+//        };
 
-        this.battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
-                battleNode.attackProgress.v = 0;
-            }
-        };
-
-        final BooleanFunc2<BattleNode, BattleNode> allTargetsEvenSelf = new BooleanFunc2<BattleNode, BattleNode>() {
-            @Override
-            public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
-                return BattleSystem.battleNodeShouldAttackOther(battleNode, battleNode2);
-            }
-        };
-
-        this.battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, allTargetsEvenSelf);
-
-                for (int j = battleTargets.size() - 1; j >= 0; j--) {
-                    BattleNode toInflict = battleTargets.get(j).v;
-                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage);
-                }
-
-                battleNode.hp.v = 0;
-            }
-        };
-        this.battleNode.onAttackCastFail = new VoidFunc2<BattleSystem, BattleNode>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode arg1) {
-                battleNode.hp.v = 0;
-            }
-        };
 
         this.destinationMovementNode.onDestinationReached = new VoidFunc<DestinationMovementSystem>() {
             @Override
@@ -139,15 +133,6 @@ public class Missle extends Mine {
 
         this.movementNode.maxSpeed.v = 0.75;
 
-        this.battleNode.isAttackable.v = 1;
-        this.battleNode.attackDamage.v = 25;
-        this.battleNode.attackSwingTime.v = 1.5;
-        this.battleNode.attackRange.v = 2.5;
-        this.battleNode.targetAcquisitionRange.v = 20;
-        this.battleNode.hp.v = 60;
-        this.battleNode.fractionToWalkIntoAttackRange.v = 0.02;
-        this.battleNode.stickyAttack.v = 0;
-
         this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
@@ -159,5 +144,57 @@ public class Missle extends Mine {
 
         this.firingSource.copy(firingSource);
         destinationMovementNode.destination.copy(destination);
+    }
+
+    public static class MissileBattleNode extends BattleNode {
+
+        public Missle missle;
+
+        protected static final BooleanFunc2<BattleNode, BattleNode> allTargetsEvenSelf = new BooleanFunc2<BattleNode, BattleNode>() {
+            @Override
+            public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
+                return BattleSystem.battleNodeShouldAttackOther(battleNode, battleNode2);
+            }
+        };
+
+        public MissileBattleNode(Missle missle) {
+            super(missle);
+            this.missle = missle;
+
+            this.isAttackable.v = 1;
+            this.attackDamage.v = 25;
+            this.attackSwingTime.v = 1.5;
+            this.attackRange.v = 2.5;
+            this.targetAcquisitionRange.v = 20;
+            this.hp.v = 60;
+            this.fractionToWalkIntoAttackRange.v = 0.02;
+            this.stickyAttack.v = 0;
+        }
+
+        @Override
+        public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackReady(battleSystem, target);
+            this.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
+            this.attackProgress.v = 0;
+        }
+
+        @Override
+        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackCast(battleSystem, target);
+            battleSystem.findAttackablesWithinRange(missle.battleTargets, missle.battleNode, missle.battleNode.attackRange.v, allTargetsEvenSelf);
+
+            for (int j = missle.battleTargets.size() - 1; j >= 0; j--) {
+                BattleNode toInflict = missle.battleTargets.get(j).v;
+                toInflict.inflictDamage(battleSystem, this, this.attackDamage.v);
+            }
+
+            this.hp.v = 0;
+        }
+
+        @Override
+        public void onAttackCastFail(BattleSystem battleSystem) {
+            super.onAttackCastFail(battleSystem);
+            this.hp.v = 0;
+        }
     }
 }

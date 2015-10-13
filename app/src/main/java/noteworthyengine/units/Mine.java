@@ -42,25 +42,25 @@ public class Mine extends Unit {
 
         reset();
         configure(gamer);
-
-        battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                //battleSystem.getBaseEngine().removeUnit(battleNode.unit);
-                // Else go to swing
-            }
-        };
-        battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
-
-                for (int j = battleTargets.size() - 1; j >= 0; j--) {
-                    BattleNode toInflict = battleTargets.get(j).v;
-                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage);
-                }
-            }
-        };
+//
+//        battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//            @Override
+//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+//                //battleSystem.getBaseEngine().removeUnit(battleNode.unit);
+//                // Else go to swing
+//            }
+//        };
+//        battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//            @Override
+//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+//                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
+//
+//                for (int j = battleTargets.size() - 1; j >= 0; j--) {
+//                    BattleNode toInflict = battleTargets.get(j).v;
+//                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage);
+//                }
+//            }
+//        };
 
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -119,6 +119,32 @@ public class Mine extends Unit {
 //                }
             }
         };
+    }
+
+    public static class MineBattleNode extends BattleNode {
+        private Mine mine;
+
+        public MineBattleNode(Mine mine) {
+            super(mine);
+            this.mine = mine;
+        }
+
+        @Override
+        public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackReady(battleSystem, target);
+            battleSystem.getBaseEngine().removeUnit(this.unit);
+        }
+
+        @Override
+        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackCast(battleSystem, target);
+            battleSystem.findAttackablesWithinRange(mine.battleTargets, mine.battleNode, mine.battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
+
+            for (int j = mine.battleTargets.size() - 1; j >= 0; j--) {
+                BattleNode toInflict = mine.battleTargets.get(j).v;
+                toInflict.inflictDamage(battleSystem, mine.battleNode, mine.battleNode.attackDamage.v);
+            }
+        }
     }
 
     public void reset() {
