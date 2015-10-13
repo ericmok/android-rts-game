@@ -32,34 +32,6 @@ public class Missle extends Mine {
         super(gamer);
 
         this.movementNode._enabled = false;
-//
-//        this.battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//            @Override
-//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-//                battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
-//                battleNode.attackProgress.v = 0;
-//            }
-//        };
-//        this.battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//            @Override
-//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-//                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, allTargetsEvenSelf);
-//
-//                for (int j = battleTargets.size() - 1; j >= 0; j--) {
-//                    BattleNode toInflict = battleTargets.get(j).v;
-//                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage);
-//                }
-//
-//                battleNode.hp.v = 0;
-//            }
-//        };
-//        this.battleNode.onAttackCastFail = new VoidFunc2<BattleSystem, BattleNode>() {
-//            @Override
-//            public void apply(BattleSystem battleSystem, BattleNode arg1) {
-//                battleNode.hp.v = 0;
-//            }
-//        };
-
 
         this.destinationMovementNode.onDestinationReached = new VoidFunc<DestinationMovementSystem>() {
             @Override

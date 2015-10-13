@@ -95,33 +95,6 @@ public class Platoon extends Unit {
                 //selectedRenderNode.isActive = true;
             }
         };
-//
-//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady =
-//            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//                @Override
-//                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-//                    onAttackSwingAnim = false;
-//                }
-//            };
-//
-//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing =
-//            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//                @Override
-//                public void apply(BattleSystem system, BattleNode node, BattleNode otherNode) {
-//                    onAttackSwingAnim = true;
-//                    target[0] = otherNode;
-//                }
-//            };
-//
-//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast =
-//            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//                @Override
-//                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-//                    //BattleNode.INFLICT_DAMAGE_DEFAULT.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
-//                    battleNode2.inflictDamage.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
-//                    onAttackSwingAnim = false;
-//                }
-//            };
 
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override

@@ -42,25 +42,6 @@ public class Mine extends Unit {
 
         reset();
         configure(gamer);
-//
-//        battleNode.onAttackReady = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//            @Override
-//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-//                //battleSystem.getBaseEngine().removeUnit(battleNode.unit);
-//                // Else go to swing
-//            }
-//        };
-//        battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//            @Override
-//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-//                battleSystem.findAttackablesWithinRange(battleTargets, battleNode, battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
-//
-//                for (int j = battleTargets.size() - 1; j >= 0; j--) {
-//                    BattleNode toInflict = battleTargets.get(j).v;
-//                    toInflict.inflictDamage.apply(battleSystem, toInflict, battleNode, battleNode.attackDamage);
-//                }
-//            }
-//        };
 
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
