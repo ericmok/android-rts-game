@@ -36,6 +36,7 @@ public class MoveInputModifier extends Unit {
     private float circularAnimation = 0;
     private boolean buttonIsActivated = false;
     int buttonPointerID = -1;
+    int secondPointerID = -1;
 
     private Vector2 arrowFeedbackPosition = new Vector2();
     private Orientation arrowFeedbackOrientation = new Orientation();
@@ -142,15 +143,46 @@ public class MoveInputModifier extends Unit {
                 // If button is down, check for scroll gesture
                 if (MoveInputModifier.this.buttonIsActivated) {
 
+                    // Search for second pointer
                     for (int i = 0; i < pointerCount; i++) {
 
                         if (mocap.getPointerId(i) != buttonPointerID) {
                             // Use the pointer that is not on the button
                             // There may be several to track...
                             // TODO: Deal with multiple pointers
+                            if (secondPointerID == -1) {
+                                secondPointerID = mocap.getPointerId(i);
+                            }
 
+                            // Found then handle POINTER_DOWN, MOVE, POINTER_UP
                             NoteworthyEngine noteworthyEngine = (NoteworthyEngine)inputSystem.getBaseEngine();
                             processArrowCommand(noteworthyEngine.activeGameCamera.fieldCameraNode, mocap, i);
+                        }
+                    }
+
+                    if (secondPointerID != -1) {
+
+                        // If the second pointer disappeared, then interpret this as a POINTER_UP
+                        // and make new arrowCommand
+                        if (mocap.findPointerIndex(secondPointerID) == -1) {
+                            secondPointerID = -1;
+
+                            // MotionEvent state sticks when there are no events (UP, MOVE, DOWN)
+                            // so you may wind up with stale continuous POINTER_UP events
+                            // event after the 2nd touch as lifted but modifier button is still pressed.
+                            // In addition, this function body is in a loop, don't want multiple
+                            // ACTION_POINTER_UP's:
+                            isMakingNewArrowCommand = false;
+
+                            ArrowCommand arrowCommand = new ArrowCommand();
+                            //arrowCommand.set(game.noteworthyEngine.currentGamer,
+                            arrowCommand.set(baseEngine.currentGamer,
+                                    arrowFeedbackPosition.x,
+                                    arrowFeedbackPosition.y,
+                                    arrowFeedbackOrientation.x,
+                                    arrowFeedbackOrientation.y);
+
+                            baseEngine.addUnit(arrowCommand);
                         }
                     }
                 }
@@ -203,26 +235,27 @@ public class MoveInputModifier extends Unit {
                     arrowFeedbackOrientation.set();
                 }
 
-                // TODO ACTION_POINTER_UP events are unreliable when both fingers are moving
-                if (mocapAction == MotionEvent.ACTION_POINTER_UP) {
-
-                    // MotionEvent state sticks when there are no events (UP, MOVE, DOWN)
-                    // so you may wind up with stale continuous POINTER_UP events
-                    // event after the 2nd touch as lifted but modifier button is still pressed.
-                    // In addition, this function body is in a loop, don't want multiple
-                    // ACTION_POINTER_UP's:
-                    isMakingNewArrowCommand = false;
-
-                    ArrowCommand arrowCommand = new ArrowCommand();
-                    //arrowCommand.set(game.noteworthyEngine.currentGamer,
-                    arrowCommand.set(baseEngine.currentGamer,
-                            arrowFeedbackPosition.x,
-                            arrowFeedbackPosition.y,
-                            arrowFeedbackOrientation.x,
-                            arrowFeedbackOrientation.y);
-
-                    baseEngine.addUnit(arrowCommand);
-                }
+                // Following code is removed to handle ACTION_POINTER_UP bug
+//                // TODO ACTION_POINTER_UP events are unreliable when both fingers are moving
+//                if (mocapAction == MotionEvent.ACTION_POINTER_UP) {
+//
+//                    // MotionEvent state sticks when there are no events (UP, MOVE, DOWN)
+//                    // so you may wind up with stale continuous POINTER_UP events
+//                    // event after the 2nd touch as lifted but modifier button is still pressed.
+//                    // In addition, this function body is in a loop, don't want multiple
+//                    // ACTION_POINTER_UP's:
+//                    isMakingNewArrowCommand = false;
+//
+//                    ArrowCommand arrowCommand = new ArrowCommand();
+//                    //arrowCommand.set(game.noteworthyEngine.currentGamer,
+//                    arrowCommand.set(baseEngine.currentGamer,
+//                            arrowFeedbackPosition.x,
+//                            arrowFeedbackPosition.y,
+//                            arrowFeedbackOrientation.x,
+//                            arrowFeedbackOrientation.y);
+//
+//                    baseEngine.addUnit(arrowCommand);
+//                }
             }
         }
     }
