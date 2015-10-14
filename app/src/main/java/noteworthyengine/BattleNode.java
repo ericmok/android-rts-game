@@ -31,41 +31,12 @@ public class BattleNode extends Node {
 
     public static final RewriteOnlyArray<Target> sharedTargetsPool = new RewriteOnlyArray<Target>(Target.class, 127);
 
-    public static final VoidFunc2<BattleSystem, BattleNode> _DONOTHING2 =
-        new VoidFunc2<BattleSystem, BattleNode>() {
-            @Override
-            public void apply(BattleSystem system, BattleNode element) { }
-        };
+
     public static final VoidFunc3<BattleSystem, BattleNode, BattleNode> _DONOTHING3 =
             new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
                 @Override
                 public void apply(BattleSystem system, BattleNode element, BattleNode element2) { }
             };
-//
-//    public static final VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> INFLICT_DAMAGE_DEFAULT =
-//            new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-//                @Override
-//                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2, DoublePtr damage) {
-//                    battleNode.hp.v -= damage.v;
-//                }
-//            };
-//
-//    public static final VoidFunc3<BattleSystem, BattleNode, BattleNode> ON_ATTACK_CAST =
-//            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//                @Override
-//                public void apply(BattleSystem battleSystem, BattleNode attacker, BattleNode otherBattleNode) {
-//                    otherBattleNode.inflictDamage.apply(battleSystem, otherBattleNode, attacker, attacker.attackDamage);
-//                }
-//            };
-//
-//    public static final VoidFunc2<BattleSystem, BattleNode> ON_ATTACK_CAST_FAIL_DEFAULT =
-//            new VoidFunc2<BattleSystem, BattleNode>() {
-//                @Override
-//                public void apply(BattleSystem system, BattleNode node) {
-//                    node.attackState.v = BattleNode.ATTACK_STATE_READY;
-//                    node.attackProgress.v = 0;
-//                }
-//            };
 
     public static final int ATTACK_STATE_READY = 0;
     public static final int ATTACK_STATE_SWINGING = 1;
@@ -127,20 +98,8 @@ public class BattleNode extends Node {
     /// various race conditions (attack swing time, round-off error)
     public DoublePtr fractionToWalkIntoAttackRange = new DoublePtr() {{ v = 0.9; }};
 
-    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
-    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
-
     public BooleanFunc2<BattleNode, BattleNode> targetCriteria = BattleSystem.DEFAULT_TARGET_CRITERIA;
 
-    //public VoidFunc2<BattleSystem, BattleNode> onFindTarget = BattleSystem.DEFAULT_ON_ACQUIRE_TARGET;
-
-    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing = _DONOTHING3;
-    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = ON_ATTACK_CAST;
-    //public VoidFunc2<BattleSystem, BattleNode> onAttackCastFail = ON_ATTACK_CAST_FAIL_DEFAULT;
-    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady = _DONOTHING3;
-    //public VoidFunc2<BattleSystem, BattleNode> onDie = _DONOTHING2;
-
-    //public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> inflictDamage = INFLICT_DAMAGE_DEFAULT;
     public VoidFunc3<BattleSystem, BattleNode, BattleNode> onArmorHit = _DONOTHING3;
 
     public ArrayList<String> events;
@@ -158,6 +117,33 @@ public class BattleNode extends Node {
                 this,
                 this.targetAcquisitionRange.v,
                 this.targetCriteria);
+
+        // Test if node has a target, if it doesn't find a new target
+
+        //            if (node.target.v == null) {
+        //                system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
+        //            }
+        //            else {
+        //                if (node.target.v.hp.v < 0) {
+        //                    system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
+        //                }
+        //            }
+        //system.findAttackablesWithinRange(sharedTargetsPool, node, node.attackRange.v);
+
+
+        //            if (sharedTargetsPool.size() > 0) {
+        //                sharedTargetsPool.sort();
+        //
+        //                int i = 0;
+        //                node.target.v = null;
+        //                while (node.target.v == null && i < sharedTargetsPool.size()) {
+        //                    if (sharedTargetsPool.get(i).v.gamer.v.team != node.gamer.v.team) {
+        //                        node.target.v = sharedTargetsPool.get(i).v;
+        //                    }
+        //
+        //                    i += 1;
+        //                }
+        //            }
     }
 
     public void onTargetAcquired() {

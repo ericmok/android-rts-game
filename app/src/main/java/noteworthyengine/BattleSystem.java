@@ -237,7 +237,6 @@ public class BattleSystem extends noteworthyframework.System {
             // Find closest enemy...may be null
             //findAttackablesWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v, DEFAULT_TARGET_CRITERIA);
             //battleNode.target.v = tempBattleNodePtr.v;
-        //battleNode.onFindTarget.apply(this, battleNode);
         battleNode.onFindTarget(this);
        // }
     }
@@ -362,48 +361,11 @@ public class BattleSystem extends noteworthyframework.System {
         }
     }
 
-
     public static final BooleanFunc2<BattleNode, BattleNode> DEFAULT_TARGET_CRITERIA =
         new BooleanFunc2<BattleNode, BattleNode>() {
         @Override
         public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
             return battleNode.gamer.v != battleNode2.gamer.v && battleNodeShouldAttackOther(battleNode, battleNode2);
-        }
-    };
-
-    public static final VoidFunc2<BattleSystem, BattleNode> DEFAULT_ON_ACQUIRE_TARGET =
-        new VoidFunc2<BattleSystem, BattleNode>() {
-
-        @Override
-        public void apply(BattleSystem system, BattleNode node) {
-            system.findAttackablesWithinRange(node.target, node, node.targetAcquisitionRange.v, DEFAULT_TARGET_CRITERIA);
-
-            // Test if node has a target, if it doesn't find a new target
-
-//            if (node.target.v == null) {
-//                system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
-//            }
-//            else {
-//                if (node.target.v.hp.v < 0) {
-//                    system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
-//                }
-//            }
-            //system.findAttackablesWithinRange(sharedTargetsPool, node, node.attackRange.v);
-
-
-//            if (sharedTargetsPool.size() > 0) {
-//                sharedTargetsPool.sort();
-//
-//                int i = 0;
-//                node.target.v = null;
-//                while (node.target.v == null && i < sharedTargetsPool.size()) {
-//                    if (sharedTargetsPool.get(i).v.gamer.v.team != node.gamer.v.team) {
-//                        node.target.v = sharedTargetsPool.get(i).v;
-//                    }
-//
-//                    i += 1;
-//                }
-//            }
         }
     };
 }
