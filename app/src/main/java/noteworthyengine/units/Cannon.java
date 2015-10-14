@@ -45,7 +45,7 @@ public class Cannon extends Unit {
             public void apply(RenderSystem system) {
                 renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     TemporarySprite2dDef tempSprite = system.beginNewTempSprite(); //system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                     tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                     tempSprite.position.x = battleNode.coords.pos.x;

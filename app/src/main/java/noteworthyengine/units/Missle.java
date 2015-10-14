@@ -86,7 +86,7 @@ public class Missle extends Mine {
                             0);
                 }
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
 
                     tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);

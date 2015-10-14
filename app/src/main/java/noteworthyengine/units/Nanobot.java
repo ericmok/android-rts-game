@@ -83,7 +83,7 @@ public class Nanobot extends Unit {
 
                 }
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     //TemporarySprite2dDef temporarySprite2dDef = renderSystem.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                     TemporarySprite2dDef temporarySprite2dDef = renderSystem.beginNewTempSprite();
 

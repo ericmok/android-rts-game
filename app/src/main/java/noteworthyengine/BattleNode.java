@@ -189,6 +189,10 @@ public class BattleNode extends Node {
         Log.v("BattleNode reset", "SHOULD BE OVERRIDDEN");
     }
 
+    public boolean isAlive() {
+        return this.hp.v > 0;
+    }
+
     public boolean hasLivingTarget() {
         return target.v != null && target.v.hp.v > 0;
     }

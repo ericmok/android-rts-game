@@ -46,7 +46,7 @@ public class Mine extends Unit {
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     //TemporarySprite2dDef tempSprite = system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                     //system.drawCompat.tempSpritesMemoryPool.fetchMemory();
 

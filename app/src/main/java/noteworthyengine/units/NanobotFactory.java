@@ -50,7 +50,7 @@ public class NanobotFactory extends Barracks {
             public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode attacker, DoublePtr damage) {
                 battleNode.hp.v -= damage.v;
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
                     nanobotFactory.configure(attacker.gamer.v);
                     nanobotFactory.battleNode.coords.pos.copy(battleNode.coords.pos);

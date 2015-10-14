@@ -27,7 +27,7 @@ public class City extends Unit {
 
             this.hp.v -= damage;
 
-            if (this.hp.v <= 0) {
+            if (!this.isAlive()) {
                 City city = UnitPool.cities.fetchMemory();
                 city.configure(attacker.gamer.v);
                 city.battleNode.coords.pos.copy(battleNode.coords.pos);

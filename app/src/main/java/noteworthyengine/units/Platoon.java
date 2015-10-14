@@ -107,7 +107,7 @@ public class Platoon extends Unit {
             renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
             //renderNode.color.v = Color.argb(10, 255, 255, 255);
 
-            if (battleNode.hp.v <= 0) {
+            if (!battleNode.isAlive()) {
                 TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
 
                 tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);

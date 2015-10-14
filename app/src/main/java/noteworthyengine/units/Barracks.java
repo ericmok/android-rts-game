@@ -85,7 +85,7 @@ public class Barracks extends Unit {
             public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
                 battleNode.hp.v -= damage.v;
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     Barracks barracks = UnitPool.barracks.fetchMemory();
                     barracks.configure(attacker.gamer.v);
                     barracks.battleNode.coords.pos.copy(battleNode.coords.pos);

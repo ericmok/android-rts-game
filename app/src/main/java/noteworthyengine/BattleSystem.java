@@ -216,12 +216,12 @@ public class BattleSystem extends noteworthyframework.System {
     public static boolean battleNodeShouldAttackOther(BattleNode battleNode, BattleNode otherBattleNode) {
         return (battleNode != otherBattleNode) &&
                 //(battleNode.gamer.v != otherBattleNode.gamer.v) &&
-                (otherBattleNode.hp.v > 0) &&
+                (otherBattleNode.isAlive()) &&
                 (otherBattleNode.isAttackable.v == 1);
     }
 
     public boolean cleanUpBattleNode(BattleNode battleNode) {
-        if (battleNode.hp.v <= 0) {
+        if (!battleNode.isAlive()) {
             battleNode.onDie(this);
             this.getBaseEngine().removeUnit(battleNode.unit);
             battleNode.target.v = null;

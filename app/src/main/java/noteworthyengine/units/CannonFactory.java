@@ -48,7 +48,7 @@ public class CannonFactory extends Barracks {
             public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
                 battleNode.hp.v -= damage.v;
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     CannonFactory cannonFactory = UnitPool.cannonFactories.fetchMemory();
                     cannonFactory.configure(attacker.gamer.v);
                     cannonFactory.battleNode.coords.pos.copy(battleNode.coords.pos);

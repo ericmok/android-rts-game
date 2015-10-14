@@ -35,7 +35,7 @@ public class Mech extends Platoon {
                 //renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team) & 0xFF9999FF;
                 renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     //TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
                     //TemporarySprite2dDef tempSprite = system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                     TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
