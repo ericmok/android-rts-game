@@ -305,22 +305,7 @@ public class BattleSystem extends noteworthyframework.System {
                     }
                     else {
                         // We do have a target at cast time
-
                         battleNode.onAttackCast(this, battleNode.target.v);
-
-                        // Moved into attack cast
-                        //battleNode.target[0].inflictDamage.apply(this, battleNode.target[0], battleNode, battleNode.attackDamage.v);
-
-//                        // Check if battleNode killed something
-//                        // We don't nullify the target pointer since it gets fixed in the front of the loop
-//                        if (battleNode.target[0].hp.v <= 0) {
-//                            this.getBaseEngine().removeUnit(battleNode.target[0].unit);
-//
-//                            // The dead unit also has a target...
-//                            battleNode.target[0].target[0] = null;
-//
-//                            battleNode.target[0] = null;
-//                        }
                     }
 
                     battleNode.attackState.v = BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN;
