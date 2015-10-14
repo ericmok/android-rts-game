@@ -127,12 +127,12 @@ public class BattleNode extends Node {
     /// various race conditions (attack swing time, round-off error)
     public DoublePtr fractionToWalkIntoAttackRange = new DoublePtr() {{ v = 0.9; }};
 
-    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
-    public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
+    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired = _DONOTHING3;
+    //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetLost = _DONOTHING3;
 
     public BooleanFunc2<BattleNode, BattleNode> targetCriteria = BattleSystem.DEFAULT_TARGET_CRITERIA;
 
-    public VoidFunc2<BattleSystem, BattleNode> onAcquireTarget = BattleSystem.DEFAULT_ON_ACQUIRE_TARGET;
+    //public VoidFunc2<BattleSystem, BattleNode> onFindTarget = BattleSystem.DEFAULT_ON_ACQUIRE_TARGET;
 
     //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing = _DONOTHING3;
     //public VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast = ON_ATTACK_CAST;
@@ -151,6 +151,19 @@ public class BattleNode extends Node {
     public BattleNode(Unit unit) {
         super(_NAME, unit);
         Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
+    }
+
+    public void onFindTarget(BattleSystem battleSystem) {
+        battleSystem.findAttackablesWithinRange(this.target,
+                this,
+                this.targetAcquisitionRange.v,
+                this.targetCriteria);
+    }
+
+    public void onTargetAcquired() {
+    }
+
+    public void onTargetLost() {
     }
 
     public void onAttackReady(BattleSystem battleSystem, BattleNode target) {

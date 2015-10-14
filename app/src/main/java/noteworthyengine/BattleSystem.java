@@ -237,7 +237,8 @@ public class BattleSystem extends noteworthyframework.System {
             // Find closest enemy...may be null
             //findAttackablesWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v, DEFAULT_TARGET_CRITERIA);
             //battleNode.target.v = tempBattleNodePtr.v;
-        battleNode.onAcquireTarget.apply(this, battleNode);
+        //battleNode.onFindTarget.apply(this, battleNode);
+        battleNode.onFindTarget(this);
        // }
     }
 

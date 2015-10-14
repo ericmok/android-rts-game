@@ -49,7 +49,7 @@ public class Platoon extends Unit {
         fieldNode = FieldNode.createAgentFieldNode(this);
 
         battleNode = new PlatoonBattleNode(this);
-        battleNode.onTargetAcquired = onTargetAcquired;
+        //battleNode.onTargetAcquired = onTargetAcquired;
         //battleNode.onAttackReady = onAttackReady;
         //battleNode.onAttackSwing = onAttackSwing;
         //battleNode.onAttackCast = onAttackCast;
@@ -86,14 +86,14 @@ public class Platoon extends Unit {
         battleNode.gamer.v = gamer;
     }
 
-    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =
-        new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
-                //selectedRenderNode.isActive = true;
-            }
-        };
+//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =
+//        new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//            @Override
+//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+//                //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
+//                //selectedRenderNode.isActive = true;
+//            }
+//        };
 
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
@@ -208,6 +208,13 @@ public class Platoon extends Unit {
             super.onAttackCast(battleSystem, target);
             target.inflictDamage(battleSystem, this, this.attackDamage.v);
             platoon.onAttackSwingAnim = false;
+        }
+
+        @Override
+        public void onTargetAcquired() {
+            super.onTargetAcquired();
+            //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
+            //selectedRenderNode.isActive = true;
         }
     }
 }
