@@ -112,7 +112,7 @@ public class BattleNode extends Node {
         Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
     }
 
-    public void onFindTarget(BattleSystem battleSystem) {
+    public void findNewTarget(BattleSystem battleSystem) {
         battleSystem.findAttackablesWithinRange(this.target,
                 this,
                 this.targetAcquisitionRange.v,

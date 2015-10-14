@@ -250,7 +250,7 @@ public class BattleSystem extends noteworthyframework.System {
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_READY) {
 
-                battleNode.onFindTarget(this);
+                battleNode.findNewTarget(this);
 
                 if (battleNode.hasLivingTarget()) {
                     // If in range, start the swing immediately
