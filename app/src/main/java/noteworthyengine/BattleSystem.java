@@ -7,7 +7,6 @@ import java.util.List;
 import noteworthyframework.*;
 import structure.RewriteOnlyArray;
 import utils.BooleanFunc2;
-import utils.VoidFunc2;
 
 /**
  * Created by eric on 3/6/15.
@@ -221,27 +220,6 @@ public class BattleSystem extends noteworthyframework.System {
                 (otherBattleNode.isAttackable.v == 1);
     }
 
-    public boolean battleNodeHasAliveTarget(BattleNode battleNode) {
-
-        // Check if target is null first, then hp
-        return battleNode.target.v != null && battleNode.target.v.hp.v > 0;
-    }
-
-    private void acquireNewTarget(BattleNode battleNode) {
-        // If it has no target or has dead target, get new target
-        // Also, we can acquire new target during cooldown, but that may take cycles...
-//        if (!battleNodeHasAliveTarget(battleNode) ||
-//                battleNode.attackState.v == BattleNode.ATTACK_STATE_READY ||
-//                battleNode.stickyAttack.v == 0) {
-
-            // Find closest enemy...may be null
-            //findAttackablesWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v, DEFAULT_TARGET_CRITERIA);
-            //battleNode.target.v = tempBattleNodePtr.v;
-        battleNode.onFindTarget(this);
-       // }
-    }
-
-
     public boolean cleanUpBattleNode(BattleNode battleNode) {
         if (battleNode.hp.v <= 0) {
             battleNode.onDie(this);
@@ -266,15 +244,15 @@ public class BattleSystem extends noteworthyframework.System {
             // Zero by default, to be calculated only if there is an enemy
             battleNode.enemyAttractionForce.zero();
 
-            if (battleNodeHasAliveTarget(battleNode)) {
+            if (battleNode.hasLivingTarget()) {
                 moveNodeTowardsEnemy(battleNode, battleNode.target.v);
             }
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_READY) {
 
-                acquireNewTarget(battleNode);
+                battleNode.onFindTarget(this);
 
-                if (battleNodeHasAliveTarget(battleNode)) {
+                if (battleNode.hasLivingTarget()) {
                     // If in range, start the swing immediately
 
                     if (battleNode.coords.pos.distanceTo(battleNode.target.v.coords.pos) <= battleNode.attackRange.v ||
@@ -299,7 +277,7 @@ public class BattleSystem extends noteworthyframework.System {
                         findAttackablesWithinRange(battleNode.target, battleNode, battleNode.attackRange.v, DEFAULT_TARGET_CRITERIA);
                     }
 
-                    if (!battleNodeHasAliveTarget(battleNode)) {
+                    if (!battleNode.hasLivingTarget()) {
                         // Lost the target before the swing finished (death or out of range)
                         battleNode.onAttackCastFail(this);
                     }

@@ -189,6 +189,10 @@ public class BattleNode extends Node {
         Log.v("BattleNode reset", "SHOULD BE OVERRIDDEN");
     }
 
+    public boolean hasLivingTarget() {
+        return target.v != null && target.v.hp.v > 0;
+    }
+
     public static class Ptr implements JsonSerializable {
         public BattleNode v = null;
 
