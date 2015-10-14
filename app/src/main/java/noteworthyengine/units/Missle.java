@@ -13,8 +13,6 @@ import structure.TemporarySprite2dDef;
 import utils.BooleanFunc2;
 import utils.Vector2;
 import utils.VoidFunc;
-import utils.VoidFunc2;
-import utils.VoidFunc3;
 
 /**
  * Created by eric on 3/27/15.
@@ -140,7 +138,7 @@ public class Missle extends Mine {
             this.targetAcquisitionRange.v = 20;
             this.hp.v = 60;
             this.fractionToWalkIntoAttackRange.v = 0.02;
-            this.stickyAttack.v = 0;
+            this.nonCancellableSwing.v = 0;
         }
 
         @Override

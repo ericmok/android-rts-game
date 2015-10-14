@@ -92,7 +92,15 @@ public class BattleNode extends Node {
 
     /// If the attack is sticky, the attack target is obtained at target acquisition time
     /// but not re-evaluated during attack swing
-    public IntegerPtr stickyAttack = new IntegerPtr() {{ v = 1; }};
+    public IntegerPtr nonCancellableSwing = new IntegerPtr() {{
+        v = 1;
+    }};
+
+    /// If true, the node keeps attacking the previous target until it dies
+    /// as opposed to just attacking the next closest target on every attack.
+    public IntegerPtr lockOnAttack = new IntegerPtr() {{
+        v = 0;
+    }};
 
     /// The fudge factor for node to walk within attack range to deal with
     /// various race conditions (attack swing time, round-off error)
@@ -171,6 +179,9 @@ public class BattleNode extends Node {
         //
         //                            battleNode.target[0] = null;
         //                        }
+        if (!target.isAlive()) {
+            this.target.v = null;
+        }
     }
 
     public void onAttackSwing(BattleSystem battleSystem, BattleNode target) {
@@ -187,6 +198,7 @@ public class BattleNode extends Node {
 
     public void reset() {
         Log.v("BattleNode reset", "SHOULD BE OVERRIDDEN");
+        this.target.v = null;
     }
 
     public boolean isAlive() {

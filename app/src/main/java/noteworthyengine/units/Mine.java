@@ -3,7 +3,6 @@ package noteworthyengine.units;
 import art.Animations;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
-import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
@@ -15,7 +14,6 @@ import structure.RewriteOnlyArray;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
-import utils.VoidFunc3;
 
 /**
  * Created by eric on 3/21/15.
@@ -132,7 +130,7 @@ public class Mine extends Unit {
 
         movementNode.maxSpeed.v = 0.1;
 
-        battleNode.stickyAttack.v = 0;
+        battleNode.nonCancellableSwing.v = 0;
         battleNode.fractionToWalkIntoAttackRange.v = 0.3;
         battleNode.targetAcquisitionRange.v = 8;
         battleNode.attackRange.v = 2.5;

@@ -250,7 +250,11 @@ public class BattleSystem extends noteworthyframework.System {
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_READY) {
 
-                battleNode.findNewTarget(this);
+                // Find new target if no current one
+                // Find new target anyway if the attack doesn't stick
+                if (!battleNode.hasLivingTarget() || battleNode.lockOnAttack.v == 0) {
+                    battleNode.findNewTarget(this);
+                }
 
                 if (battleNode.hasLivingTarget()) {
                     // If in range, start the swing immediately
@@ -270,11 +274,9 @@ public class BattleSystem extends noteworthyframework.System {
                 if (battleNode.attackProgress.v >= battleNode.attackSwingTime.v) {
 
                     // At attack cast time, ditch the old target for any new targets that
-                    // walked into the swing
-                    if (battleNode.stickyAttack.v == 0) {
-                        //findAttackablesWithinRange(tempBattleNodePtr, battleNode, battleNode.attackRange.v, DEFAULT_TARGET_CRITERIA);
-                        //battleNode.target.v = tempBattleNodePtr.v;
-                        findAttackablesWithinRange(battleNode.target, battleNode, battleNode.attackRange.v, DEFAULT_TARGET_CRITERIA);
+                    // walked into the swing (Useful for explosion swings)
+                    if (battleNode.nonCancellableSwing.v == 0) {
+                        battleNode.findNewTarget(this);
                     }
 
                     if (!battleNode.hasLivingTarget()) {
