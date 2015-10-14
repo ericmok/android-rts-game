@@ -234,28 +234,8 @@ public class MoveInputModifier extends Unit {
                     arrowFeedbackOrientation.setNormalized();
                     arrowFeedbackOrientation.set();
                 }
-
-                // Following code is removed to handle ACTION_POINTER_UP bug
-//                // TODO ACTION_POINTER_UP events are unreliable when both fingers are moving
-//                if (mocapAction == MotionEvent.ACTION_POINTER_UP) {
-//
-//                    // MotionEvent state sticks when there are no events (UP, MOVE, DOWN)
-//                    // so you may wind up with stale continuous POINTER_UP events
-//                    // event after the 2nd touch as lifted but modifier button is still pressed.
-//                    // In addition, this function body is in a loop, don't want multiple
-//                    // ACTION_POINTER_UP's:
-//                    isMakingNewArrowCommand = false;
-//
-//                    ArrowCommand arrowCommand = new ArrowCommand();
-//                    //arrowCommand.set(game.noteworthyEngine.currentGamer,
-//                    arrowCommand.set(baseEngine.currentGamer,
-//                            arrowFeedbackPosition.x,
-//                            arrowFeedbackPosition.y,
-//                            arrowFeedbackOrientation.x,
-//                            arrowFeedbackOrientation.y);
-//
-//                    baseEngine.addUnit(arrowCommand);
-//                }
+                // ACTION_POINTER_UP's are sometimes swallowed by ACTION_MOVE's
+                // So we track the second touch to make a new command
             }
         }
     }
