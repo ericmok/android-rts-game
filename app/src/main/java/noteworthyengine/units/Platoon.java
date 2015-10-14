@@ -46,8 +46,7 @@ public class Platoon extends Unit {
 
         movementNode = new MovementNode(this);
 
-        fieldNode = new FieldNode(this);
-        fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
+        fieldNode = FieldNode.createAgentFieldNode(this);
 
         battleNode = new PlatoonBattleNode(this);
         battleNode.onTargetAcquired = onTargetAcquired;

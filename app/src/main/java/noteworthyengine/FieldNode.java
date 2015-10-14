@@ -30,6 +30,18 @@ public class FieldNode extends Node {
         Node.instantiatePublicFieldsForUnit(unit, FieldNode.class, this);
     }
 
+    public static FieldNode createAgentFieldNode(Unit unit) {
+        FieldNode fieldNode = new FieldNode(unit);
+        fieldNode._fieldAgentNode = new FieldAgentNode(unit);
+        return fieldNode;
+    }
+
+    public static FieldNode createArrowFieldNode(Unit unit) {
+        FieldNode fieldNode = new FieldNode(unit);
+        fieldNode._fieldArrowNode = new FieldArrowNode(unit);
+        return fieldNode;
+    }
+
 
     public static class FieldArrowNode extends Node {
         public static final String _NAME = "fieldArrowNode";

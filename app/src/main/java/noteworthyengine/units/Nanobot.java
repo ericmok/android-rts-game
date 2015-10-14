@@ -39,8 +39,7 @@ public class Nanobot extends Unit {
 
         gridNode = new GridNode(this, separationNode, battleNode);
 
-        fieldNode = new FieldNode(this);
-        fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
+        fieldNode = FieldNode.createAgentFieldNode(this);
 
         renderNode.onDraw = getOnDrawFunction();
 

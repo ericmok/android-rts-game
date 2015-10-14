@@ -25,9 +25,7 @@ public class Cannon extends Unit {
 
     public MovementNode movementNode = new MovementNode(this);
 
-    public FieldNode fieldNode = new FieldNode(this) {{
-        this._fieldAgentNode = new FieldAgentNode(Cannon.this);
-    }};
+    public FieldNode fieldNode = FieldNode.createAgentFieldNode(this);
 
     public SeparationNode separationNode = new SeparationNode(this);
 
