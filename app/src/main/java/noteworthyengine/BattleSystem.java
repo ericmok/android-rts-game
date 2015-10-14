@@ -255,7 +255,7 @@ public class BattleSystem extends noteworthyframework.System {
                 if (battleNode.hasLivingTarget()) {
                     // If in range, start the swing immediately
 
-                    if (battleNode.coords.pos.distanceTo(battleNode.target.v.coords.pos) <= battleNode.attackRange.v ||
+                    if (battleNode.targetWithinAttackRange() ||
                             battleNode.attackSwingEvenWhenNotInRange.v == 1) {
                         battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
                         battleNode.attackProgress.v = 0;

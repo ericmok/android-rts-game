@@ -193,6 +193,10 @@ public class BattleNode extends Node {
         return target.v != null && target.v.hp.v > 0;
     }
 
+    public boolean targetWithinAttackRange() {
+        return this.coords.pos.distanceTo(this.target.v.coords.pos) <= this.attackRange.v;
+    }
+
     public static class Ptr implements JsonSerializable {
         public BattleNode v = null;
 
