@@ -11,6 +11,7 @@ import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
+import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
@@ -35,11 +36,14 @@ public class Platoon extends Unit {
     public SeparationNode separationNode;
     public FormationNode formationNode;
     public FormationNode.FormationSheep formationSheep;
+    public SelectionNode selectionNode;
 
     public RenderNode renderNode;
 
     public boolean onAttackSwingAnim = false;
     public BattleNode[] target = new BattleNode[1];
+
+    private float time = 0;
 
     public Platoon() {
         this.name = NAME;
@@ -61,6 +65,7 @@ public class Platoon extends Unit {
         formationNode = new FormationNode(this);
 
         gridNode = new GridNode(this, separationNode, battleNode);
+        selectionNode = new SelectionNode(this);
 
         formationSheep = new FormationNode.FormationSheep(this);
 
@@ -71,6 +76,7 @@ public class Platoon extends Unit {
         movementNode.maxSpeed.v = 0.6;
 
         battleNode.reset();
+        selectionNode.reset();
 
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
@@ -98,6 +104,8 @@ public class Platoon extends Unit {
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem system) {
+            time += 1;
+
             // HP Bars:
 //            system.drawLine(system.getCameraId(renderNode.cameraType.v),
 //                    (float)renderNode.coords.pos.x - 0.5f, (float)renderNode.coords.pos.y + 0.7f,
@@ -106,6 +114,21 @@ public class Platoon extends Unit {
 
             renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
             //renderNode.color.v = Color.argb(10, 255, 255, 255);
+
+            if (selectionNode.isSelected.v == 1) {
+                system.defineNewSprite(
+                        Animations.ANIMATION_BUTTONS_ACTIVATED,
+                        1,
+                        (float) renderNode.coords.pos.x,
+                        (float) renderNode.coords.pos.y,
+                        1,
+                        1.5f, 1.5f,
+                        time,
+                        //Color.argb(128, 255, 255, 255),
+                        battleNode.gamer.v.color(),
+                        0
+                );
+            }
 
             if (!battleNode.isAlive()) {
                 TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
