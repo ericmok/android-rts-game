@@ -56,7 +56,7 @@ public class Cannon extends Unit {
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
 
                     if (battleNode.target.v != null) {
-                        double ratio = battleNode.attackProgress.v;
+                        double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v) * 100;
 
                         Sprite2dDef sprite2dDef = system.defineNewSprite(
                                 Animations.ANIMATION_TROOPS_SWING, (int) ratio,
@@ -96,10 +96,10 @@ public class Cannon extends Unit {
         @Override
         public void reset() {
             this.hp.v = 5;
-            this.attackSwingTime.v = 6;
-            this.attackCooldown.v = 20;
+            this.attackSwingTime.v = 4;
+            this.attackCooldown.v = 14;
             this.attackDamage.v = 0;
-            this.attackRange.v = 6;
+            this.attackRange.v = 6.5;
             this.targetAcquisitionRange.v = 18.5;
             this.attackState.v = BattleNode.ATTACK_STATE_READY;
         }
@@ -110,7 +110,7 @@ public class Cannon extends Unit {
             //Missle missle = new Missle(battleNode.gamer.v);
             Missle missle = UnitPool.missles.fetchMemory();
             missle.configure(this.gamer.v, this.coords.pos, target.coords.pos);
-            missle.movementNode.coords.pos.copy(this.coords.pos);
+            missle.battleNode.coords.pos.copy(this.coords.pos);
             battleSystem.getBaseEngine().addUnit(missle);
         }
     }

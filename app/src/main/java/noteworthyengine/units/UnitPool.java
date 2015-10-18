@@ -56,7 +56,7 @@ public class UnitPool {
     public static final MemoryPool<Missle> missles = new MemoryPool<Missle>(Missle.class, NUMBER_UNITS) {
         @Override
         public Missle newInstance(Class cls) {
-            return new Missle(NO_GAMER);
+            return new Missle();
         }
 
         @Override

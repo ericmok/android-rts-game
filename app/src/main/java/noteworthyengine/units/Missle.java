@@ -7,8 +7,14 @@ import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.DestinationMovementNode;
 import noteworthyengine.DestinationMovementSystem;
+import noteworthyengine.GridNode;
+import noteworthyengine.MovementNode;
+import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
+import noteworthyengine.SeparationNode;
 import noteworthyframework.Gamer;
+import noteworthyframework.Unit;
+import structure.RewriteOnlyArray;
 import structure.TemporarySprite2dDef;
 import utils.BooleanFunc2;
 import utils.Vector2;
@@ -17,19 +23,32 @@ import utils.VoidFunc;
 /**
  * Created by eric on 3/27/15.
  */
-public class Missle extends Mine {
+public class Missle extends Unit {
 
     public static final String NAME = "missle";
+
+    public static final int MAX_BATTLE_NODES_AFFECTED = 20;
+
+    public GridNode gridNode;
     public DestinationMovementNode destinationMovementNode = new DestinationMovementNode(this);
+    public SeparationNode separationNode = new SeparationNode(this);
+    public BattleNode battleNode = new MissileBattleNode(this);
+    public RenderNode renderNode = new RenderNode(this);
+
+    public RewriteOnlyArray<BattleNode.Target> battleTargets =
+            new RewriteOnlyArray<BattleNode.Target>(BattleNode.Target.class, MAX_BATTLE_NODES_AFFECTED);
+
 
     private Vector2 firingSource = new Vector2();
     private Vector2 temp = new Vector2();
 
 
-    public Missle(Gamer gamer) {
-        super(gamer);
+    public Missle() {
+        this.name = NAME;
 
-        this.movementNode._enabled = false;
+        gridNode = new GridNode(this, separationNode, battleNode);
+
+        reset();
 
         this.destinationMovementNode.onDestinationReached = new VoidFunc<DestinationMovementSystem>() {
             @Override
@@ -99,11 +118,12 @@ public class Missle extends Mine {
     }
 
     public void reset() {
-        super.reset();
+        this.destinationMovementNode.maxSpeed.v = 0.82;
 
-        this.movementNode.maxSpeed.v = 0.75;
+        battleNode.reset();
 
         this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
+        this.renderNode.isGfxInterpolated.v = 0;
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
     }
@@ -130,15 +150,23 @@ public class Missle extends Mine {
         public MissileBattleNode(Missle missle) {
             super(missle);
             this.missle = missle;
+        }
 
-            this.isAttackable.v = 1;
-            this.attackDamage.v = 25;
+        @Override
+        public void reset() {
+            super.reset();
+
+            this.isAttackable.v = 0;
+            this.attackDamage.v = 50;
             this.attackSwingTime.v = 1.5;
-            this.attackRange.v = 2.5;
+            this.attackRange.v = 2.4;
+            this.attackCooldown.v = 3;
             this.targetAcquisitionRange.v = 20;
             this.hp.v = 60;
             this.fractionToWalkIntoAttackRange.v = 0.02;
             this.nonCancellableSwing.v = 0;
+            this.attackState.v = BattleNode.ATTACK_STATE_READY;
+            this.target.v = null;
         }
 
         @Override
