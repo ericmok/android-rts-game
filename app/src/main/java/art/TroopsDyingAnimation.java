@@ -12,12 +12,12 @@ public class TroopsDyingAnimation extends TemporarySprite2dDef {
         super();
         this.animationName = Animations.ANIMATION_TROOPS_DYING;
         this.animationProgress = 0;
-        this.width = 1f;
-        this.height = 1f;
+        this.width = 0.9f;
+        this.height = 0.9f;
         this.angle = 90f;
         this.color = Color.WHITE;
         this.cameraIndex = 0;
-        this.progress.set(0, 1200, false);
+        this.progress.set(0, 1000, false);
 
         this.position.set(x, y, 0);
     }
