@@ -75,15 +75,15 @@ public class Mech extends Platoon {
     public void reset() {
         super.reset();
 
-        this.renderNode.width.v = 1.3f;
-        this.renderNode.height.v = 1.3f;
-        this.battleNode.hp.v = 90;
-        this.battleNode.maxSpeed.v = 1.1;
+        this.renderNode.width.v = 1.2f;
+        this.renderNode.height.v = 1.2f;
+        this.battleNode.hp.v = 110;
+        this.battleNode.maxSpeed.v = 0.9;
         //this.battleNode.attackRange.v = 5.5;
-        this.battleNode.attackDamage.v = 3;
-        this.battleNode.attackRange.v = 1.5;
+        this.battleNode.attackDamage.v = 5;
+        this.battleNode.attackRange.v = 2;
         this.battleNode.targetAcquisitionRange.v = 17;
-        this.battleNode.attackSwingTime.v = 2;
+        this.battleNode.attackSwingTime.v = 1;
         this.battleNode.attackCooldown.v = 2;
         this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
 
