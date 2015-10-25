@@ -56,7 +56,7 @@ public class MoveInputModifier extends Unit {
         renderNode.width.v = 0.42f;
         renderNode.height.v = 0.42f;
         renderNode.color.v = Color.argb(255, 255, 255, 255);
-        renderNode.renderLayer.v = 1;
+        renderNode.renderLayer.v = RenderNode.RENDER_LAYER_GUI;
         renderNode.animationName.v = Animations.ANIMATION_BUTTONS_MOVE;
         renderNode.animationProgress.v = 0;
 
@@ -68,12 +68,12 @@ public class MoveInputModifier extends Unit {
                     system.defineNewSprite(Animations.ANIMATION_BUTTONS_ACTIVATED, 0,
                             (float) renderNode.coords.pos.x, (float) renderNode.coords.pos.y, 0,
                             (float) 1.07 * renderNode.width.v, (float) 1.07 * renderNode.height.v,
-                            circularAnimation * 1.25f, 0xFE00FFE5, 1);
+                            circularAnimation * 1.25f, 0xFE00FFE5, RenderNode.RENDER_LAYER_GUI);
 
                     system.defineNewSprite(Animations.ANIMATION_BUTTONS_ACTIVATED, 0,
                             (float) renderNode.coords.pos.x, (float) renderNode.coords.pos.y, 0,
                             (float) 1.19 * renderNode.width.v, (float) 1.19 * renderNode.height.v,
-                            circularAnimation, 0xFE00A692, 1);
+                            circularAnimation, 0xFE00A692, RenderNode.RENDER_LAYER_GUI);
 
                     circularAnimation = circularAnimation + 0.3f;
                 }
@@ -85,7 +85,7 @@ public class MoveInputModifier extends Unit {
                             7f, 7f,
                             (float)arrowFeedbackOrientation.getDegrees(),
                             Color.argb(240, 255, 255, 255),
-                            0);
+                            RenderNode.RENDER_LAYER_FOREGROUND);
                 }
             }
         };

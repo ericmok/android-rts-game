@@ -126,7 +126,7 @@ public class Platoon extends Unit {
                         time,
                         //Color.argb(128, 255, 255, 255),
                         battleNode.gamer.v.color(),
-                        0
+                        RenderNode.RENDER_LAYER_FOREGROUND
                 );
             }
 
@@ -155,7 +155,7 @@ public class Platoon extends Unit {
                         (float) Orientation.getDegreesBaseX(rx, ry),
                         //Color.argb(128, 255, 255, 255),
                         battleNode.gamer.v.color(),
-                        0
+                        RenderNode.RENDER_LAYER_FOREGROUND
                         );
             }
 

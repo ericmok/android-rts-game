@@ -62,7 +62,7 @@ public class Nanobot extends Unit {
         renderNode.width.v = 0.78f;
         renderNode.height.v = 0.78f;
         renderNode.isGfxInterpolated.v = 1;
-        renderNode.renderLayer.v = 0;
+        renderNode.renderLayer.v = RenderNode.RENDER_LAYER_FOREGROUND;
     }
 
     public void configure(Gamer gamer) {

@@ -63,7 +63,7 @@ public class Cannon extends Unit {
                                 (float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y - renderNode.height.v, 0,
                                 1f, 1f,
                                 90,
-                                Gamer.colorForTeam(battleNode.gamer.v.team), 0
+                                Gamer.colorForTeam(battleNode.gamer.v.team), RenderNode.RENDER_LAYER_FOREGROUND
                                 );
                     }
                 }

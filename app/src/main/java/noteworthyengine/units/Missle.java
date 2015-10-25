@@ -76,7 +76,7 @@ public class Missle extends Unit {
                         1.4f, 1.4f,
                         90f,
                         Color.argb(50, 255, 255, 255),
-                        0);
+                        RenderNode.RENDER_LAYER_FOREGROUND);
 
                 if (battleNode.target.v != null) {
                     system.defineNewSprite(Animations.ANIMATION_TROOPS_SELECTED, 1,
@@ -84,7 +84,7 @@ public class Missle extends Unit {
                             1.3f, 1.3f,
                             90f,
                             renderNode.color.v,
-                            0);
+                            RenderNode.RENDER_LAYER_FOREGROUND);
                 }
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
@@ -99,7 +99,7 @@ public class Missle extends Unit {
                             (float) 2 * rad,
                             0,
                             renderNode.color.v,
-                            0);
+                            RenderNode.RENDER_LAYER_FOREGROUND);
                 }
 
                 if (!battleNode.isAlive()) {

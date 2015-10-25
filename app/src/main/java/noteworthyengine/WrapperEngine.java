@@ -49,7 +49,7 @@ public class WrapperEngine extends BaseEngine {
         loaderUIEngine.addUnit(loaderUICamera);
 
         BackgroundUnit backgroundUnit = new BackgroundUnit();
-        backgroundUnit.renderNode.renderLayer.v = 0;
+        backgroundUnit.renderNode.renderLayer.v = RenderNode.RENDER_LAYER_FOREGROUND;
         backgroundUnit.renderNode.width.v = 1;
         backgroundUnit.renderNode.height.v = 1;
         loaderUIEngine.addUnit(backgroundUnit);

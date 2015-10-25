@@ -69,7 +69,7 @@ public class Mine extends Unit {
                             2 * rad,
                             0,
                             renderNode.color.v,
-                            0);
+                            RenderNode.RENDER_LAYER_FOREGROUND);
                 }
 //                else {
 //                    renderNode.animationName = Sprite2dDef.ANIMATION_MINE_IDLING;

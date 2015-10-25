@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import art.Animations;
 import noteworthyengine.BattleNode;
+import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyframework.Gamer;
 import structure.Sprite2dDef;
@@ -65,7 +66,7 @@ public class Mech extends Platoon {
                                 (float) Orientation.getDegreesBaseX(battleNode.target.v.coords.pos.x - battleNode.coords.pos.x,
                                         battleNode.target.v.coords.pos.y - battleNode.coords.pos.y),
                                 renderNode.color.v,
-                                0);
+                                RenderNode.RENDER_LAYER_FOREGROUND);
                     }
                 }
             }
