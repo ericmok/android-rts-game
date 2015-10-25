@@ -56,7 +56,7 @@ public class RenderSystem extends noteworthyframework.System {
             }
 
             // If no cameras, then don't render anything...
-            if (!(renderNode.renderLayer.v >= 0 && renderNode.renderLayer.v < cameraSystem.nodes.size())) {
+            if (getCameraIndex(renderNode.renderLayer.v) == -1) {
                 continue;
             }
 
@@ -103,6 +103,9 @@ public class RenderSystem extends noteworthyframework.System {
     }
 
     public int getCameraIndex(int renderLayer) {
+        if (renderLayer < 0 || renderLayer >= cameraSystem.nodes.size()) {
+            return -1;
+        }
         return cameraSystem.nodes.get(renderLayer).index.v;
     }
 
