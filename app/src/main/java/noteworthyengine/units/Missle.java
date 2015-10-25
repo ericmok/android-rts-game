@@ -8,7 +8,6 @@ import noteworthyengine.BattleSystem;
 import noteworthyengine.DestinationMovementNode;
 import noteworthyengine.DestinationMovementSystem;
 import noteworthyengine.GridNode;
-import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
@@ -65,7 +64,7 @@ public class Missle extends Unit {
                 Vector2.subtract(temp, battleNode.coords.pos, firingSource);
                 temp.setNormalized();
 
-                system.drawLine(system.getCameraId(renderNode.cameraType.v),
+                system.drawLine(system.getCameraIndex(renderNode.renderLayer.v),
                         (float) (firingSource.x + 0.5 * (temp.x)),
                         (float) (firingSource.y + 0.5 * (temp.y)),
                         (float) (battleNode.coords.pos.x - 0.5 * (temp.x)),

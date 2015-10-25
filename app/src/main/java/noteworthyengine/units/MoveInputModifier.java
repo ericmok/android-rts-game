@@ -56,7 +56,7 @@ public class MoveInputModifier extends Unit {
         renderNode.width.v = 0.42f;
         renderNode.height.v = 0.42f;
         renderNode.color.v = Color.argb(255, 255, 255, 255);
-        renderNode.cameraType.v = 1;
+        renderNode.renderLayer.v = 1;
         renderNode.animationName.v = Animations.ANIMATION_BUTTONS_MOVE;
         renderNode.animationProgress.v = 0;
 

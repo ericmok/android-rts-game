@@ -2,7 +2,6 @@ package noteworthyengine.units;
 
 import art.Animations;
 import noteworthyengine.BattleNode;
-import noteworthyengine.BattleSystem;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
@@ -13,7 +12,6 @@ import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
-import utils.VoidFunc3;
 
 /**
  * Created by eric on 5/1/15.
@@ -64,7 +62,7 @@ public class Nanobot extends Unit {
         renderNode.width.v = 0.78f;
         renderNode.height.v = 0.78f;
         renderNode.isGfxInterpolated.v = 1;
-        renderNode.cameraType.v = 0;
+        renderNode.renderLayer.v = 0;
     }
 
     public void configure(Gamer gamer) {
