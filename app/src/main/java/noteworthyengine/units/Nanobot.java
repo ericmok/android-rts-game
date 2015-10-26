@@ -40,11 +40,12 @@ public class Nanobot extends Unit {
         fieldNode = FieldNode.createAgentFieldNode(this);
 
         renderNode.onDraw = getOnDrawFunction();
-
-        reset();
     }
 
-    public void reset() {
+    public void configure(Gamer gamer) {
+        battleNode.gamer.v = gamer;
+        renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+
         movementNode.maxSpeed.v = 1.1;
 
         battleNode.hp.v = 24;
@@ -63,11 +64,6 @@ public class Nanobot extends Unit {
         renderNode.height.v = 0.78f;
         renderNode.isGfxInterpolated.v = 1;
         renderNode.renderLayer.v = RenderNode.RENDER_LAYER_FOREGROUND;
-    }
-
-    public void configure(Gamer gamer) {
-        battleNode.gamer.v = gamer;
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team);
     }
 
     public VoidFunc<RenderSystem> getOnDrawFunction() {

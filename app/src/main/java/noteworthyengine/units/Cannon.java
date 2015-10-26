@@ -34,11 +34,8 @@ public class Cannon extends Unit {
 
     public GridNode gridNode = new GridNode(this, separationNode, battleNode);
 
-    public Cannon(final Gamer gamer) {
+    public Cannon() {
         this.name = this.getClass().getSimpleName();
-
-        this.reset();
-        this.configure(gamer);
 
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -72,13 +69,10 @@ public class Cannon extends Unit {
     }
 
     public void configure(Gamer gamer) {
-        this.battleNode.gamer.v = gamer;
-    }
-
-    public void reset() {
         this.movementNode.maxSpeed.v = 0.32;
 
-        battleNode.reset();
+        this.battleNode.gamer.v = gamer;
+        this.battleNode.reset();
 
         this.renderNode.animationName.v = "Animations/Cannons/Idling";
         this.renderNode.width.v = 1.4f;
@@ -107,7 +101,7 @@ public class Cannon extends Unit {
         @Override
         public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
             super.onAttackCast(battleSystem, target);
-            //Missle missle = new Missle(battleNode.gamer.v);
+
             Missle missle = UnitPool.missles.fetchMemory();
             missle.configure(this.gamer.v, this.coords.pos, target.coords.pos);
             missle.battleNode.coords.pos.copy(this.coords.pos);

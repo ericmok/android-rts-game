@@ -14,8 +14,8 @@ import utils.VoidFunc4;
  */
 public class NanobotFactory extends Barracks {
 
-    public NanobotFactory(Gamer gamer) {
-        super(gamer);
+    public NanobotFactory() {
+        super();
 
         factoryNode.spawnFunction = new VoidFunc2<FactorySystem, FactoryNode>() {
             @Override
@@ -38,6 +38,11 @@ public class NanobotFactory extends Barracks {
                 system.getBaseEngine().addUnit(nanobot);
             }
         };
+    }
+
+    @Override
+    public void configure(Gamer gamer) {
+        super.configure(gamer);
 
         factoryNode.buildTime.v = 5;
         factoryNode.buildProgress.v = 0;

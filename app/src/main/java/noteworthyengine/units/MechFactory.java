@@ -17,8 +17,8 @@ public class MechFactory extends Barracks {
 
     public static final String NAME = "cannonFactory";
 
-    public MechFactory(final Gamer gamer) {
-        super(gamer);
+    public MechFactory() {
+        super();
         this.name = NAME;
 
         factoryNode.spawnFunction = SPAWN_FUNCTION;

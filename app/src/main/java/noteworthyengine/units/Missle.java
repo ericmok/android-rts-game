@@ -47,8 +47,6 @@ public class Missle extends Unit {
 
         gridNode = new GridNode(this, separationNode, battleNode);
 
-        reset();
-
         this.destinationMovementNode.onDestinationReached = new VoidFunc<DestinationMovementSystem>() {
             @Override
             public void apply(DestinationMovementSystem element) {
@@ -116,23 +114,19 @@ public class Missle extends Unit {
 
     }
 
-    public void reset() {
+    public void configure(Gamer gamer, Vector2 firingSource, Vector2 destination) {
+        this.firingSource.copy(firingSource);
+        this.destinationMovementNode.destination.copy(destination);
         this.destinationMovementNode.maxSpeed.v = 0.82;
 
-        battleNode.reset();
+        this.battleNode.reset();
+        this.battleNode.gamer.v = gamer;
 
         this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
         this.renderNode.isGfxInterpolated.v = 0;
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
-    }
-
-    public void configure(Gamer gamer, Vector2 firingSource, Vector2 destination) {
-        this.battleNode.gamer.v = gamer;
         this.renderNode.color.v = Gamer.TeamColors.get(gamer.team);
-
-        this.firingSource.copy(firingSource);
-        destinationMovementNode.destination.copy(destination);
     }
 
     public static class MissileBattleNode extends BattleNode {

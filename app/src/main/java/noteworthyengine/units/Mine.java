@@ -35,13 +35,10 @@ public class Mine extends Unit {
     public RewriteOnlyArray<BattleNode.Target> battleTargets =
             new RewriteOnlyArray<BattleNode.Target>(BattleNode.Target.class, MAX_BATTLE_NODES_AFFECTED);
 
-    public Mine(Gamer gamer) {
+    public Mine() {
         this.name = NAME;
 
         gridNode = new GridNode(this, separationNode, battleNode);
-
-        reset();
-        configure(gamer);
 
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -120,21 +117,17 @@ public class Mine extends Unit {
         }
     }
 
-    public void reset() {
-
+    public void configure(Gamer gamer) {
         movementNode.maxSpeed.v = 0.9;
 
+        battleNode.gamer.v = gamer;
         battleNode.reset();
 
+        renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0xaaffffff;
         renderNode.animationName.v = Animations.ANIMATION_MINE_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 0.95f;
         renderNode.height.v = 0.95f;
         renderNode.z.v = 2;
-    }
-
-    public void configure(Gamer gamer) {
-        battleNode.gamer.v = gamer;
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0xaaffffff;
     }
 }

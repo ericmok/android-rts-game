@@ -68,13 +68,12 @@ public class Platoon extends Unit {
         selectionNode = new SelectionNode(this);
 
         formationSheep = new FormationNode.FormationSheep(this);
-
-        reset();
     }
 
-    public void reset() {
+    public void configure(Gamer gamer) {
         movementNode.maxSpeed.v = 0.6;
 
+        battleNode.gamer.v = gamer;
         battleNode.reset();
         selectionNode.reset();
 
@@ -85,11 +84,6 @@ public class Platoon extends Unit {
         onAttackSwingAnim = false;
         battleNode.target.v = null;
         target[0] = null;
-    }
-
-    public void configure(Gamer gamer) {
-        //this.reset();
-        battleNode.gamer.v = gamer;
     }
 
 //    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =

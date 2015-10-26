@@ -18,8 +18,8 @@ public class CannonFactory extends Barracks {
 
     public static final String NAME = "cannonFactory";
 
-    public CannonFactory(final Gamer gamer) {
-        super(gamer);
+    public CannonFactory() {
+        super();
         this.name = NAME;
 
         factoryNode.spawnFunction = SPAWN_FUNCTION;

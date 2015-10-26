@@ -20,15 +20,8 @@ public class Mech extends Platoon {
     public static final String NAME = "Mech";
 
     public Mech() {
-        this(null);
-    }
-
-    public Mech(Gamer gamer) {
         super();
         this.name = NAME;
-
-        this.reset();
-        this.configure(gamer);
 
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -73,11 +66,11 @@ public class Mech extends Platoon {
         };
     }
 
-    public void reset() {
-        super.reset();
-
+    public void configure(final Gamer gamer) {
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
+
+        this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 110;
         this.battleNode.maxSpeed.v = 0.9;
         //this.battleNode.attackRange.v = 5.5;

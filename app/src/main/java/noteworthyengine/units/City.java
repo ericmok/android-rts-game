@@ -37,36 +37,16 @@ public class City extends Unit {
     };
     public RenderNode renderNode = new RenderNode(this);
 
-    public City(final Gamer gamer) {
+    public City() {
         this.name = NAME;
 
-        this.reset();
-        this.configure(gamer);
-
         gridNode = new GridNode(this, null, battleNode);
-
-//        battleNode.inflictDamage = new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-//            @Override
-//            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
-//                battleNode.hp.v -= damage.v;
-//
-//                if (battleNode.hp.v <= 0) {
-//                    City city = UnitPool.cities.fetchMemory();
-//                    city.configure(attacker.gamer.v);
-//                    city.battleNode.coords.pos.copy(battleNode.coords.pos);
-//                    battleSystem.getBaseEngine().addUnit(city);
-//                }
-//            }
-//        };
-    }
-
-    public void reset() {
-        battleNode.hp.v = 110;
-        battleNode.attackDamage.v = 1;
     }
 
     public void configure(Gamer gamer) {
         battleNode.gamer.v = gamer;
+        battleNode.hp.v = 110;
+        battleNode.attackDamage.v = 1;
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
     }
 

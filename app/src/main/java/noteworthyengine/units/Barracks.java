@@ -44,15 +44,10 @@ public class Barracks extends Unit {
 
     public CityWinLoseConditionNode cityWinLoseConditionNode = new CityWinLoseConditionNode(this);
 
-    public Barracks(final Gamer gamer) {
+    public Barracks() {
         this.name = NAME;
 
-        this.reset();
-        this.configure(gamer);
-
         gridNode = new GridNode(this, null, battleNode);
-
-        //battleNode.inflictDamage = this.createOnDieFunction();
 
         factoryNode.spawnFunction = new VoidFunc2<FactorySystem, FactoryNode>() {
             @Override
@@ -65,12 +60,9 @@ public class Barracks extends Unit {
         };
     }
 
-    public void reset() {
+    public void configure(Gamer gamer) {
         battleNode.hp.v = 100;
         battleNode.attackDamage.v = 1;
-    }
-
-    public void configure(Gamer gamer) {
         battleNode.gamer.v = gamer;
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
 
