@@ -13,7 +13,7 @@ public class UnitPool {
       this.team = Gamer.TeamColors.size() - 1;
     }};
 
-    public static final int NUMBER_UNITS = 512;
+    public static final int NUMBER_UNITS = 256;
     public static final int NUMBER_BUILDINGS = 63;
 
     public static final MemoryPool<Mech> mechs = new MemoryPool<Mech>(Mech.class, NUMBER_UNITS);
