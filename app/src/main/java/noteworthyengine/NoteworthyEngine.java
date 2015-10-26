@@ -4,6 +4,7 @@ import noteworthyengine.events.GameEvents;
 import noteworthyengine.units.ArrowCommandInput;
 import noteworthyengine.units.CameraUnit;
 import noteworthyengine.units.MainGameCamera;
+import noteworthyengine.units.MoveInputModifier;
 import noteworthyengine.units.UnitPool;
 import noteworthyframework.*;
 import structure.Game;
@@ -25,19 +26,21 @@ public class NoteworthyEngine extends BaseEngine {
     public FieldCameraSystem fieldCameraSystem;
 
     public GridSystem gridSystem;
-    //public CommandSystem commandSystem;
+    public SelectionSystem selectionSystem;
     public TimelineSystem timelineSystem;
     public SeparationSystem separationSystem;
     public FieldSystem fieldSystem;
     public FormationSystem formationSystem;
     public MovementSystem movementSystem;
+    public DestinationMovementSystem destinationMovementSystem;
     public BattleSystem battleSystem;
     public RenderSystem renderSystem;
     public DecaySystem decaySystem;
 
     public FactorySystem factorySystem;
 
-    public OrthographicCamera mainCamera;
+    public MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
+    public CameraUnit auxGameCamera = new CameraUnit(1);
 
     public NoteworthyEngine(Game game) {
         super();
@@ -48,13 +51,14 @@ public class NoteworthyEngine extends BaseEngine {
         inputSystem = new InputSystem(game, cameraSystem);
 
         gridSystem = new GridSystem();
-        //commandSystem = new CommandSystem(game);
+        selectionSystem = new SelectionSystem(this.game, gridSystem);
         timelineSystem = new TimelineSystem();
         separationSystem = new SeparationSystem(gridSystem);
         fieldSystem = new FieldSystem();
         fieldCameraSystem = new FieldCameraSystem(gridSystem, fieldSystem);
         formationSystem = new FormationSystem(gridSystem);
         movementSystem = new MovementSystem();
+        destinationMovementSystem = new DestinationMovementSystem();
         battleSystem = new BattleSystem(gridSystem);
         renderSystem = new RenderSystem(new DrawCompat(game), cameraSystem);
         decaySystem = new DecaySystem();
@@ -65,7 +69,7 @@ public class NoteworthyEngine extends BaseEngine {
         this.addSystem(cameraSystem);
 
         this.addSystem(gridSystem);
-        //this.addSystem(commandSystem);
+        this.addSystem(selectionSystem);
         this.addSystem(timelineSystem);
         this.addSystem(fieldSystem);
         this.addSystem(fieldCameraSystem);
@@ -73,6 +77,7 @@ public class NoteworthyEngine extends BaseEngine {
         this.addSystem(separationSystem);
         this.addSystem(formationSystem);
         this.addSystem(movementSystem);
+        this.addSystem(destinationMovementSystem);
         this.addSystem(battleSystem);
         this.addSystem(renderSystem);
         this.addSystem(decaySystem);
@@ -85,13 +90,13 @@ public class NoteworthyEngine extends BaseEngine {
     public void initialize() {
         super.initialize();
 
-        MainGameCamera activeGameCamera = new MainGameCamera(0.068f, 0.081f);
-        CameraUnit auxGameCamera = new CameraUnit(1);
         this.addUnit(activeGameCamera);
         this.addUnit(auxGameCamera);
 
-        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game, this);
-        this.addUnit(arrowCommandInput);
+//        ArrowCommandInput arrowCommandInput = new ArrowCommandInput(game, this);
+//        this.addUnit(arrowCommandInput);
+
+        this.addUnit(new MoveInputModifier(game, this));
     }
 
     @Override

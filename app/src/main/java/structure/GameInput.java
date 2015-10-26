@@ -1,6 +1,5 @@
 package structure;
 
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -34,6 +33,9 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
     // Direct Access
     public MotionEvent motionEvent = null;
 
+    /// Number of fingers on screen
+    public int numberTouches = 0;
+
     public int currentMotionEventAction = -1;
 
     public boolean touchDown = false;
@@ -66,8 +68,8 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
         this.aspectRatio = width / height;
     }
 
-    public void getCoordsTranslatedAndNormalized(Vector2 coords, float ex, float ey) {
-        getCoordsTranslatedToCenterOfScreen(coords, ex, ey);
+    public void getCoordsCenteredAndNormalized(Vector2 coords, float ex, float ey) {
+        getCoordsCentered(coords, ex, ey);
         getCoordsNormalizedToScreen(coords, (float)coords.x, (float)coords.y);
     }
 
@@ -75,7 +77,7 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
      * MotionEvent origin is located in the top-left (4th quadrant).
      * The router translates origin to the center of the screen.
      */
-    public void getCoordsTranslatedToCenterOfScreen(Vector2 coords, float ex, float ey) {
+    public void getCoordsCentered(Vector2 coords, float ex, float ey) {
 
         // Translate origin to center of the screen
         float mx = ex - (screenWidth / 2);
@@ -150,47 +152,66 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
         motionEvent = event;
 
         // TODO: This may be called duplicate
-       // getCoordsTranslatedAndNormalized(touchPosition, event.getX(), event.getY());
+       // getCoordsCenteredAndNormalized(touchPosition, event.getX(), event.getY());
 
-        this.currentMotionEventAction = event.getAction();
+        this.currentMotionEventAction = event.getActionMasked();
 
-        if (currentMotionEventAction == MotionEvent.ACTION_DOWN) {
-            touchDown = true;
-            //lastTouchDown.copy(touchPosition);
-            //Log.v("GAMEINPUT", "down");
-        }
+        switch (currentMotionEventAction) {
+            case MotionEvent.ACTION_DOWN:
+                // set lastTouchDown?
+                numberTouches += 1;
+                touchDown = true;
 
-        if (currentMotionEventAction == MotionEvent.ACTION_MOVE) {
-            touchDown = true;
-            //Log.v("GAMEINPUT", "move");
-        }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                touchDown = true;
 
-        // Unclear if other actions will trigger flag to false
-        if (currentMotionEventAction == MotionEvent.ACTION_UP) {
-            touchDown = false;
-            //lastTouchUp.copy(touchPosition);
-            //Log.v("GAMEINPUT", "up");
+                break;
+            case MotionEvent.ACTION_UP:
+                // set lastTouchUp?
+                numberTouches -= 1;
+                touchDown = false;
+
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                numberTouches += 1;
+
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                numberTouches -= 1;
+
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                numberTouches = 0;
+                touchDown = false;
+
+                break;
+            default:
+                numberTouches = 0;
+                touchDown = false;
+
+                break;
         }
     }
 
     @Override
     public boolean onDown(MotionEvent e) {
         //return gameLoop.gestureOnDown(e);
-        getCoordsTranslatedAndNormalized(touchPosition, e.getX(), e.getY());
+        getCoordsCenteredAndNormalized(touchPosition, e.getX(), e.getY());
         return true;
     }
 
     @Override
     public void onShowPress(MotionEvent e) {
         //gameLoop.gestureOnShowPress(e);
-        getCoordsTranslatedAndNormalized(touchPosition, e.getX(), e.getY());
+        getCoordsCenteredAndNormalized(touchPosition, e.getX(), e.getY());
         setCurrentGesture(GESTURE_ON_SHOW_PRESS);
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         //return gameLoop.gestureOnSingleTapUp(e);
-        getCoordsTranslatedAndNormalized(touchPosition, e.getX(), e.getY());
+        getCoordsCenteredAndNormalized(touchPosition, e.getX(), e.getY());
         setCurrentGesture(GESTURE_ON_SINGLE_TAP_UP);
         return true;
     }
@@ -198,8 +219,8 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         //return gameLoop.gestureOnScroll(e1, e2, distanceX, distanceY);
-        getCoordsTranslatedAndNormalized(touchPosition, e1.getX(), e1.getY());
-        getCoordsTranslatedAndNormalized(touchPosition2, e2.getX(), e2.getY());
+        getCoordsCenteredAndNormalized(touchPosition, e1.getX(), e1.getY());
+        getCoordsCenteredAndNormalized(touchPosition2, e2.getX(), e2.getY());
 
         // Since we did not invert the Y with normalization
         getCoordsNormalizedToScreen(touchScrollDeltas, distanceX, distanceY);
@@ -210,15 +231,15 @@ public class GameInput extends ScaleGestureDetector.SimpleOnScaleGestureListener
     @Override
     public void onLongPress(MotionEvent e) {
         //gameLoop.gestureOnLongPress(e);
-        getCoordsTranslatedAndNormalized(touchPosition, e.getX(), e.getY());
+        getCoordsCenteredAndNormalized(touchPosition, e.getX(), e.getY());
         setCurrentGesture(GESTURE_ON_LONG_PRESS);
     }
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         //return gameLoop.gestureOnFling(e1, e2, velocityX, velocityY);
-        getCoordsTranslatedAndNormalized(touchPosition, e1.getX(), e1.getY());
-        getCoordsTranslatedAndNormalized(touchPosition2, e2.getX(), e2.getY());
+        getCoordsCenteredAndNormalized(touchPosition, e1.getX(), e1.getY());
+        getCoordsCenteredAndNormalized(touchPosition2, e2.getX(), e2.getY());
         setCurrentGesture(GESTURE_ON_FLING);
         return true;
     }

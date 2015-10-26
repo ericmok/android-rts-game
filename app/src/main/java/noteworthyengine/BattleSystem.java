@@ -7,7 +7,6 @@ import java.util.List;
 import noteworthyframework.*;
 import structure.RewriteOnlyArray;
 import utils.BooleanFunc2;
-import utils.VoidFunc2;
 
 /**
  * Created by eric on 3/6/15.
@@ -32,7 +31,7 @@ public class BattleSystem extends noteworthyframework.System {
 
     @Override
     public void addNode(Node node) {
-        if (node.getClass() == BattleNode.class) {
+        if (node instanceof BattleNode) {
             BattleNode battleNode = (BattleNode) node;
             battleNodes.queueToAdd(battleNode);
 
@@ -48,7 +47,7 @@ public class BattleSystem extends noteworthyframework.System {
 
     @Override
     public void removeNode(Node node) {
-        if (node.getClass() == BattleNode.class) {
+        if (node instanceof BattleNode) {
             BattleNode battleNode = (BattleNode)node;
             battleNodes.queueToRemove(battleNode);
 
@@ -217,34 +216,13 @@ public class BattleSystem extends noteworthyframework.System {
     public static boolean battleNodeShouldAttackOther(BattleNode battleNode, BattleNode otherBattleNode) {
         return (battleNode != otherBattleNode) &&
                 //(battleNode.gamer.v != otherBattleNode.gamer.v) &&
-                (otherBattleNode.hp.v > 0) &&
+                (otherBattleNode.isAlive()) &&
                 (otherBattleNode.isAttackable.v == 1);
     }
 
-    public boolean battleNodeHasAliveTarget(BattleNode battleNode) {
-
-        // Check if target is null first, then hp
-        return battleNode.target.v != null && battleNode.target.v.hp.v > 0;
-    }
-
-    private void acquireNewTarget(BattleNode battleNode) {
-        // If it has no target or has dead target, get new target
-        // Also, we can acquire new target during cooldown, but that may take cycles...
-//        if (!battleNodeHasAliveTarget(battleNode) ||
-//                battleNode.attackState.v == BattleNode.ATTACK_STATE_READY ||
-//                battleNode.stickyAttack.v == 0) {
-
-            // Find closest enemy...may be null
-            //findAttackablesWithinRange(tempBattleNodePtr, battleNode, battleNode.targetAcquisitionRange.v, DEFAULT_TARGET_CRITERIA);
-            //battleNode.target.v = tempBattleNodePtr.v;
-        battleNode.onAcquireTarget.apply(this, battleNode);
-       // }
-    }
-
-
     public boolean cleanUpBattleNode(BattleNode battleNode) {
-        if (battleNode.hp.v <= 0) {
-            battleNode.onDie.apply(this, battleNode);
+        if (!battleNode.isAlive()) {
+            battleNode.onDie(this);
             this.getBaseEngine().removeUnit(battleNode.unit);
             battleNode.target.v = null;
             return  true;
@@ -266,23 +244,27 @@ public class BattleSystem extends noteworthyframework.System {
             // Zero by default, to be calculated only if there is an enemy
             battleNode.enemyAttractionForce.zero();
 
-            if (battleNodeHasAliveTarget(battleNode)) {
+            if (battleNode.hasLivingTarget()) {
                 moveNodeTowardsEnemy(battleNode, battleNode.target.v);
             }
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_READY) {
 
-                acquireNewTarget(battleNode);
+                // Find new target if no current one
+                // Find new target anyway if the attack doesn't stick
+                if (!battleNode.hasLivingTarget() || battleNode.lockOnAttack.v == 0) {
+                    battleNode.findNewTarget(this);
+                }
 
-                if (battleNodeHasAliveTarget(battleNode)) {
+                if (battleNode.hasLivingTarget()) {
                     // If in range, start the swing immediately
 
-                    if (battleNode.coords.pos.distanceTo(battleNode.target.v.coords.pos) <= battleNode.attackRange.v ||
+                    if (battleNode.targetWithinAttackRange() ||
                             battleNode.attackSwingEvenWhenNotInRange.v == 1) {
                         battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
                         battleNode.attackProgress.v = 0;
 
-                        battleNode.onAttackSwing.apply(this, battleNode, battleNode.target.v);
+                        battleNode.onAttackSwing(this, battleNode.target.v);
                     }
                 }
             }
@@ -292,35 +274,18 @@ public class BattleSystem extends noteworthyframework.System {
                 if (battleNode.attackProgress.v >= battleNode.attackSwingTime.v) {
 
                     // At attack cast time, ditch the old target for any new targets that
-                    // walked into the swing
-                    if (battleNode.stickyAttack.v == 0) {
-                        //findAttackablesWithinRange(tempBattleNodePtr, battleNode, battleNode.attackRange.v, DEFAULT_TARGET_CRITERIA);
-                        //battleNode.target.v = tempBattleNodePtr.v;
-                        findAttackablesWithinRange(battleNode.target, battleNode, battleNode.attackRange.v, DEFAULT_TARGET_CRITERIA);
+                    // walked into the swing (Useful for explosion swings)
+                    if (battleNode.nonCancellableSwing.v == 0) {
+                        battleNode.findNewTarget(this);
                     }
 
-                    if (!battleNodeHasAliveTarget(battleNode)) {
+                    if (!battleNode.hasLivingTarget()) {
                         // Lost the target before the swing finished (death or out of range)
-                        battleNode.onAttackCastFail.apply(this, battleNode);
+                        battleNode.onAttackCastFail(this);
                     }
                     else {
                         // We do have a target at cast time
-
-                        battleNode.onAttackCast.apply(this, battleNode, battleNode.target.v);
-
-                        // Moved into attack cast
-                        //battleNode.target[0].inflictDamage.apply(this, battleNode.target[0], battleNode, battleNode.attackDamage.v);
-
-//                        // Check if battleNode killed something
-//                        // We don't nullify the target pointer since it gets fixed in the front of the loop
-//                        if (battleNode.target[0].hp.v <= 0) {
-//                            this.getBaseEngine().removeUnit(battleNode.target[0].unit);
-//
-//                            // The dead unit also has a target...
-//                            battleNode.target[0].target[0] = null;
-//
-//                            battleNode.target[0] = null;
-//                        }
+                        battleNode.onAttackCast(this, battleNode.target.v);
                     }
 
                     battleNode.attackState.v = BattleNode.ATTACK_STATE_WAITING_FOR_COOLDOWN;
@@ -341,7 +306,7 @@ public class BattleSystem extends noteworthyframework.System {
                     battleNode.attackProgress.v = 0;
 
                     // TODO: Simplify this callback
-                    battleNode.onAttackReady.apply(this, battleNode, battleNode.target.v);
+                    battleNode.onAttackReady(this, battleNode.target.v);
                 }
                 else {
                     battleNode.attackProgress.v += dt;
@@ -361,48 +326,11 @@ public class BattleSystem extends noteworthyframework.System {
         }
     }
 
-
     public static final BooleanFunc2<BattleNode, BattleNode> DEFAULT_TARGET_CRITERIA =
         new BooleanFunc2<BattleNode, BattleNode>() {
         @Override
         public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
             return battleNode.gamer.v != battleNode2.gamer.v && battleNodeShouldAttackOther(battleNode, battleNode2);
-        }
-    };
-
-    public static final VoidFunc2<BattleSystem, BattleNode> DEFAULT_ON_ACQUIRE_TARGET =
-        new VoidFunc2<BattleSystem, BattleNode>() {
-
-        @Override
-        public void apply(BattleSystem system, BattleNode node) {
-            system.findAttackablesWithinRange(node.target, node, node.targetAcquisitionRange.v, DEFAULT_TARGET_CRITERIA);
-
-            // Test if node has a target, if it doesn't find a new target
-
-//            if (node.target.v == null) {
-//                system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
-//            }
-//            else {
-//                if (node.target.v.hp.v < 0) {
-//                    system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
-//                }
-//            }
-            //system.findAttackablesWithinRange(sharedTargetsPool, node, node.attackRange.v);
-
-
-//            if (sharedTargetsPool.size() > 0) {
-//                sharedTargetsPool.sort();
-//
-//                int i = 0;
-//                node.target.v = null;
-//                while (node.target.v == null && i < sharedTargetsPool.size()) {
-//                    if (sharedTargetsPool.get(i).v.gamer.v.team != node.gamer.v.team) {
-//                        node.target.v = sharedTargetsPool.get(i).v;
-//                    }
-//
-//                    i += 1;
-//                }
-//            }
         }
     };
 }

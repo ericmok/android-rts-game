@@ -48,6 +48,8 @@ public class SimpleSpriteBatch {
 		GLES20.glEnable(GLES20.GL_BLEND);
 
 		simpleQuadShader.setVertexAttributePointers(reusableQuad.vertexBuffer, reusableQuad.textureBuffer);
+
+		simpleQuadShader.useProgram();
 	}
 	
 	/** 

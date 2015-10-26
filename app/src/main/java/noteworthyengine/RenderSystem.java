@@ -1,6 +1,7 @@
 package noteworthyengine;
 
 import noteworthyframework.*;
+import structure.Line2dDef;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 
@@ -55,10 +56,12 @@ public class RenderSystem extends noteworthyframework.System {
             }
 
             // If no cameras, then don't render anything...
-            if (!(renderNode.cameraType.v >= 0 && renderNode.cameraType.v < cameraSystem.nodes.size())) {
+            if (getCameraIndex(renderNode.renderLayer.v) == -1) {
                 continue;
             }
 
+            // This appears before the drawing so that the function has a chance
+            // to operate on the renderNode before it is processed.
             renderNode.onDraw.apply(this);
 
 //            DrawList2DItem drawList2DItem = spriteAllocater.takeNextWritable();
@@ -91,8 +94,7 @@ public class RenderSystem extends noteworthyframework.System {
             sprite2dDefTemp.width = renderNode.width.v;
             sprite2dDefTemp.height = renderNode.height.v;
 
-            //sprite2dDefTemp.cameraIndex = renderNode.cameraType.v;
-            sprite2dDefTemp.cameraIndex = cameraSystem.nodes.get(renderNode.cameraType.v).index.v;
+            sprite2dDefTemp.cameraIndex = cameraSystem.nodes.get(renderNode.renderLayer.v).index.v;
 
             drawCompat.drawCopySprite(sprite2dDefTemp);
         }
@@ -100,14 +102,17 @@ public class RenderSystem extends noteworthyframework.System {
         drawCompat.endDraw();
     }
 
-    public int getCameraId(int name) {
-        return cameraSystem.nodes.get(name).index.v;
+    public int getCameraIndex(int renderLayer) {
+        if (renderLayer < 0 || renderLayer >= cameraSystem.nodes.size()) {
+            return -1;
+        }
+        return cameraSystem.nodes.get(renderLayer).index.v;
     }
 
-    public Sprite2dDef defineNewSprite(Sprite2dDef toCopy, int cameraName) {
+    public Sprite2dDef defineNewSprite(Sprite2dDef toCopy, int renderLayer) {
         Sprite2dDef toFill = drawCompat.spriteAllocator.takeNextWritable();
         toFill.copy(toCopy);
-        toFill.cameraIndex = getCameraId(cameraName);
+        toFill.cameraIndex = getCameraIndex(renderLayer);
         return toFill;
     }
 
@@ -115,10 +120,10 @@ public class RenderSystem extends noteworthyframework.System {
                                        float x, float y, float z,
                                        float width, float height,
                                        float angle,
-                                       int color, int cameraNodeIndex) {
+                                       int color, int renderLayer) {
         Sprite2dDef toFill = drawCompat.spriteAllocator.takeNextWritable();
         toFill.set(animationName, animationProgress, x, y, z, width, height, angle, color,
-                getCameraId(cameraNodeIndex));
+                getCameraIndex(renderLayer));
         return toFill;
     }
 
@@ -127,15 +132,24 @@ public class RenderSystem extends noteworthyframework.System {
         return temporarySprite2dDef;
     }
 
-    public void endNewTempSprite(TemporarySprite2dDef temporarySprite2dDef, int cameraName) {
-        temporarySprite2dDef.cameraIndex = getCameraId(cameraName);
+    public void endNewTempSprite(TemporarySprite2dDef temporarySprite2dDef, int renderLayer) {
+        temporarySprite2dDef.cameraIndex = getCameraIndex(renderLayer);
         drawCompat.drawTemporarySprite(temporarySprite2dDef);
+    }
+
+    public void drawLine(int cameraIndex, float x1, float y1, float x2, float y2, int width, int color) {
+        Line2dDef line2dDef = drawCompat.declareLine2dDef();
+        line2dDef.src.set(x1, y1);
+        line2dDef.dest.set(x2, y2);
+        line2dDef.cameraIndex = cameraIndex;
+        line2dDef.color = color;
+        line2dDef.width = width;
     }
 
 //    public TemporarySprite2dDef defineNewTempSprite(Sprite2dDef toCopy, int cameraName) {
 //        TemporarySprite2dDef temporarySprite2dDef = drawCompat.tempSpritesMemoryPool.fetchMemory();
 //        temporarySprite2dDef.copy(toCopy);
-//        temporarySprite2dDef.cameraIndex = getCameraId(cameraName);
+//        temporarySprite2dDef.cameraIndex = getCameraIndex(cameraName);
 //        drawCompat.drawTemporarySprite(temporarySprite2dDef);
 //        return temporarySprite2dDef;
 //    }
@@ -143,7 +157,7 @@ public class RenderSystem extends noteworthyframework.System {
 //    public TemporarySprite2dDef defineNewTempSprite(TemporarySprite2dDef toCopy, int cameraName) {
 //        TemporarySprite2dDef temporarySprite2dDef = drawCompat.tempSpritesMemoryPool.fetchMemory();
 //        temporarySprite2dDef.copy(toCopy);
-//        temporarySprite2dDef.cameraIndex = getCameraId(cameraName);
+//        temporarySprite2dDef.cameraIndex = getCameraIndex(cameraName);
 //        drawCompat.drawTemporarySprite(temporarySprite2dDef);
 //        return temporarySprite2dDef;
 //    }
@@ -154,7 +168,7 @@ public class RenderSystem extends noteworthyframework.System {
 //                                                    float angle,
 //                                                    int color, int cameraNodeIndex)  {
 //        TemporarySprite2dDef temporarySprite2dDef = drawCompat.tempSpritesMemoryPool.fetchMemory();
-//        temporarySprite2dDef.set(animationName, animationProgress, x, y, z, width, height, angle, color, getCameraId(cameraNodeIndex));
+//        temporarySprite2dDef.set(animationName, animationProgress, x, y, z, width, height, angle, color, getCameraIndex(cameraNodeIndex));
 //        drawCompat.drawTemporarySprite(temporarySprite2dDef);
 //        return temporarySprite2dDef;
 //    }

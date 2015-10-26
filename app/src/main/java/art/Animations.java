@@ -34,6 +34,7 @@ public class Animations {
 
     public static final String ANIMATION_PROJECTILE_BASIC = "Animations/Projectiles/Basic";
     public static final String ANIMATION_PROJECTILE_EXPLOSION = "Animations/Projectiles/Explosion";
+    public static final ProjectileExplosionAnimation ANIMATION_PROJECTILE_EXPLOSION_DEF = new ProjectileExplosionAnimation();
 
     public static final String ANIMATION_ENEMY_TROOPS_IDLING = "Animations/EnemyTroops/Idling";
     public static final String ANIMATION_ENEMY_TROOPS_MOVING = "Animations/EnemyTroops/Moving";
@@ -46,6 +47,8 @@ public class Animations {
     public static final String ANIMATION_RETICLE_TAP = "Animations/Reticle/Tap";
 
     public static final String ANIMATION_WAYPOINTS_MOVE = "Animations/Waypoints/Move";
+
+    public static final String ANIMATION_BUTTONS_ACTIVATED = "Animations/Buttons/Activated";
 
     public static final String ANIMATION_BUTTONS_PLAY = "Animations/Buttons/Play";
 

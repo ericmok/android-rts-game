@@ -10,10 +10,12 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
+import utils.Orientation;
 import utils.Vector3;
 
 public class GameRenderer implements GLSurfaceView.Renderer  {
@@ -39,18 +41,12 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 	private long previousTick = 0;
 	private long tickDifference = 0;
 
+	private int screenWidth = -1;
+	private int screenHeight = -1;
     private float aspectRatio = INTIAL_ASPECT_RATIO_VALUE;
 
 	private int currentWidth = 1;
 	private int currentHeight = 1;
-
-//    private float leftBounds = -INTIAL_ASPECT_RATIO_VALUE;
-//    private float rightBounds = INTIAL_ASPECT_RATIO_VALUE;
-//    private float bottomBounds = -1;
-//    private float topBounds = 1;
-//    private float near = 1;
-//    private float far = 1000;
-//    private float scale = 1.0f;
 
 	/**
 	 * All new cameras start at index 2, since we start off we 2 cameras initially
@@ -135,33 +131,23 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
         aspectRatio = (float) width / height;
 
+		screenWidth = width;
+		screenHeight = height;
         game.gameInput.setScreenDimensions(width, height);
 
+		// For each camera, set up projection matrix. The idea:
+		// Matrix.orthoM(projectionMatrix, 0, leftBounds, rightBounds, bottomBounds, topBounds, near, far);
 
-        //Matrix.orthoM(projectionMatrix, 0, leftBounds, rightBounds, bottomBounds, topBounds, near, far);
-
-        for (int i = cameras.size() - 1; i >= 0; i--) {
-            cameras.get(i).configure(width, height);
-        }
-
-		// Set up cameraMatrix
-		//Matrix.setIdentityM(cameraMatrix, 0);
-		//Matrix.translateM(cameraMatrix, 0, 0.0f, 0.0f, -2.0f);
-
-        // TODO: Do this calculation in the shader!
-        //Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
+		for (int i = cameras.size() - 1; i >= 0; i--) {
+			cameras.get(i).configure(width, height);
+		}
 	}
 
-//    public float getAspectRatio() {
-//        return aspectRatio;
-//    }
-//    public float getLeftBounds() { return leftBounds; }
-//    public float rightBounds() { return rightBounds; }
-//    public float getBottomBounds() { return bottomBounds; }
-//    public float getTopBounds() { return topBounds; }
-//    public float getNear() { return near; }
-//    public float getFar() { return far; }
-//    public float getScale() { return scale; }
+	/** This gets set when onSurfaceChanged event is called. Initially equals -1 */
+	public int getScreenWidth() { return screenWidth; }
+
+	/** This gets set when onSurfaceChanged event is called. Initially equals -1 */
+	public int getScreenHeight() { return screenHeight; }
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -298,6 +284,31 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		}
 	}
 
+	private void drawLines() {
+		DoubleBufferredRewriteOnlyArray<Line2dDef> linesToDraw = game.graphics.drawLists.linesToDraw;
+		RewriteOnlyArray<Line2dDef> linesToDrawBuffer = linesToDraw.swapBuffer();
+
+		// TODO: Map host memory to GPU memory ONCE for faster batch drawing
+		// (Need to overhaul camera system)
+
+		linesToDrawBuffer.resetIterator();
+
+		LineBatch lineBatch = game.graphics.getLineBatch();
+		//lineBatch.beginDrawing(game.graphics.getTextureLoader().getTextureAnimation("Animations/Blank/White").textureFrames.get(0).texture.glHandle);
+		lineBatch.beginDrawing();
+
+		while (linesToDrawBuffer.canIterateNext()) {
+			Line2dDef line = linesToDrawBuffer.getNextIteratorItem();
+			lineBatch.draw(cameras.get(line.cameraIndex).getViewProjectionMatrix(),
+					(float) line.src.x, (float) line.src.y, 0,
+					(float) line.dest.x, (float) line.dest.y, 0,
+					line.width, line.color);
+		}
+
+		lineBatch.endDrawing();
+
+	}
+
 	@SuppressLint("NewApi")
 	@Override
 	public void onDrawFrame(GL10 gl) {
@@ -310,7 +321,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 		previousTick = startTick; // Leapfrog previous tick
 
 		synchronized(drawingMutex) {
-            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 			SimpleSpriteBatch simpleSpriteBatch = game.graphics.getSimpleSpriteBatch();
 			simpleSpriteBatch.beginDrawing();
@@ -320,6 +331,8 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 			drawText(simpleSpriteBatch);
 
 			simpleSpriteBatch.endDrawing();
+
+			drawLines();
 		}
 	}
 

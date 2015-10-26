@@ -1,0 +1,9 @@
+A record of insights, failures, and emotions.
+
+
+10/14/2015 (On Balance - ericmok)
+Starcraft 2's and Warcraft 3's balance system is very different. I suspect Starcraft 2's attribute focused damage calculations hurt the game design and create the problem of units that exist solely for the purpose of countering specific units rather than classes of weaknesses. If the attributes are not carefully chosen, then classifications of weaknesses become very muddled...
+
+
+10/13/2015 (On the Riddance of Function Pointers - ericmok)
+I found the mass of function pointers in the BattleNode to be very cumbersome to use. In the end, it is much more intuitive to use inheritance to override functionality instead. Moving shared functionality to a static helper class can compensate for the removed lack of flexibility that may come with working with function pointers. But to be honest, if you wanted to alter a specific function in real time, you winded up overriding the entire thing anyway.

@@ -2,7 +2,6 @@ package noteworthyengine.units;
 
 import art.Animations;
 import noteworthyengine.BattleNode;
-import noteworthyengine.BattleSystem;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
@@ -13,7 +12,6 @@ import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
-import utils.VoidFunc3;
 
 /**
  * Created by eric on 5/1/15.
@@ -39,15 +37,15 @@ public class Nanobot extends Unit {
 
         gridNode = new GridNode(this, separationNode, battleNode);
 
-        fieldNode = new FieldNode(this);
-        fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
+        fieldNode = FieldNode.createAgentFieldNode(this);
 
         renderNode.onDraw = getOnDrawFunction();
-
-        reset();
     }
 
-    public void reset() {
+    public void configure(Gamer gamer) {
+        battleNode.gamer.v = gamer;
+        renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+
         movementNode.maxSpeed.v = 1.1;
 
         battleNode.hp.v = 24;
@@ -65,12 +63,7 @@ public class Nanobot extends Unit {
         renderNode.width.v = 0.78f;
         renderNode.height.v = 0.78f;
         renderNode.isGfxInterpolated.v = 1;
-        renderNode.cameraType.v = 0;
-    }
-
-    public void configure(Gamer gamer) {
-        battleNode.gamer.v = gamer;
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+        renderNode.renderLayer.v = RenderNode.RENDER_LAYER_FOREGROUND;
     }
 
     public VoidFunc<RenderSystem> getOnDrawFunction() {
@@ -84,7 +77,7 @@ public class Nanobot extends Unit {
 
                 }
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     //TemporarySprite2dDef temporarySprite2dDef = renderSystem.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                     TemporarySprite2dDef temporarySprite2dDef = renderSystem.beginNewTempSprite();
 

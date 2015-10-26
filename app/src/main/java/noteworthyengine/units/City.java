@@ -20,39 +20,33 @@ public class City extends Unit {
     public double spawnAccumulator = 0;
 
     public GridNode gridNode;
-    public BattleNode battleNode = new BattleNode(this);
+    public BattleNode battleNode = new BattleNode(this) {
+        @Override
+        public void inflictDamage(BattleSystem battleSystem, BattleNode attacker, double damage) {
+            super.inflictDamage(battleSystem, attacker, damage);
+
+            this.hp.v -= damage;
+
+            if (!this.isAlive()) {
+                City city = UnitPool.cities.fetchMemory();
+                city.configure(attacker.gamer.v);
+                city.battleNode.coords.pos.copy(battleNode.coords.pos);
+                battleSystem.getBaseEngine().addUnit(city);
+            }
+        }
+    };
     public RenderNode renderNode = new RenderNode(this);
 
-    public City(final Gamer gamer) {
+    public City() {
         this.name = NAME;
 
-        this.reset();
-        this.configure(gamer);
-
         gridNode = new GridNode(this, null, battleNode);
-
-        battleNode.inflictDamage = new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
-                battleNode.hp.v -= damage.v;
-
-                if (battleNode.hp.v <= 0) {
-                    City city = UnitPool.cities.fetchMemory();
-                    city.configure(attacker.gamer.v);
-                    city.battleNode.coords.pos.copy(battleNode.coords.pos);
-                    battleSystem.getBaseEngine().addUnit(city);
-                }
-            }
-        };
-    }
-
-    public void reset() {
-        battleNode.hp.v = 110;
-        battleNode.attackDamage.v = 1;
     }
 
     public void configure(Gamer gamer) {
         battleNode.gamer.v = gamer;
+        battleNode.hp.v = 110;
+        battleNode.attackDamage.v = 1;
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
     }
 

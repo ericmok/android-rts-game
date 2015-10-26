@@ -11,6 +11,7 @@ import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
+import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
@@ -35,25 +36,27 @@ public class Platoon extends Unit {
     public SeparationNode separationNode;
     public FormationNode formationNode;
     public FormationNode.FormationSheep formationSheep;
+    public SelectionNode selectionNode;
 
     public RenderNode renderNode;
 
     public boolean onAttackSwingAnim = false;
     public BattleNode[] target = new BattleNode[1];
 
+    private float time = 0;
+
     public Platoon() {
         this.name = NAME;
 
         movementNode = new MovementNode(this);
 
-        fieldNode = new FieldNode(this);
-        fieldNode._fieldAgentNode = new FieldNode.FieldAgentNode(this);
+        fieldNode = FieldNode.createAgentFieldNode(this);
 
-        battleNode = new BattleNode(this);
-        battleNode.onTargetAcquired = onTargetAcquired;
-        battleNode.onAttackReady = onAttackReady;
-        battleNode.onAttackSwing = onAttackSwing;
-        battleNode.onAttackCast = onAttackCast;
+        battleNode = new PlatoonBattleNode(this);
+        //battleNode.onTargetAcquired = onTargetAcquired;
+        //battleNode.onAttackReady = onAttackReady;
+        //battleNode.onAttackSwing = onAttackSwing;
+        //battleNode.onAttackCast = onAttackCast;
 
         renderNode = new RenderNode(this);
         renderNode.onDraw = this.onDraw;
@@ -62,19 +65,17 @@ public class Platoon extends Unit {
         formationNode = new FormationNode(this);
 
         gridNode = new GridNode(this, separationNode, battleNode);
+        selectionNode = new SelectionNode(this);
 
         formationSheep = new FormationNode.FormationSheep(this);
-
-        reset();
     }
 
-    public void reset() {
-        movementNode.maxSpeed.v = 0.7;
-        battleNode.hp.v = 50;
-        battleNode.attackRange.v = 4.5;
-        battleNode.attackDamage.v = 2;
-        battleNode.targetAcquisitionRange.v = 16.5;
-        battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+    public void configure(Gamer gamer) {
+        movementNode.maxSpeed.v = 0.6;
+
+        battleNode.gamer.v = gamer;
+        battleNode.reset();
+        selectionNode.reset();
 
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
@@ -85,65 +86,52 @@ public class Platoon extends Unit {
         target[0] = null;
     }
 
-    public void configure(Gamer gamer) {
-        battleNode.gamer.v = gamer;
-    }
-
-    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =
-        new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
-                //selectedRenderNode.isActive = true;
-            }
-        };
-
-    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackReady =
-            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-                @Override
-                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                    onAttackSwingAnim = false;
-                }
-            };
-
-    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackSwing =
-            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-                @Override
-                public void apply(BattleSystem system, BattleNode node, BattleNode otherNode) {
-                    onAttackSwingAnim = true;
-                    target[0] = otherNode;
-                }
-            };
-
-    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onAttackCast =
-            new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-                @Override
-                public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                    //BattleNode.INFLICT_DAMAGE_DEFAULT.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
-                    battleNode2.inflictDamage.apply(battleSystem, battleNode2, battleNode, battleNode.attackDamage);
-                    onAttackSwingAnim = false;
-                }
-            };
+//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =
+//        new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
+//            @Override
+//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
+//                //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
+//                //selectedRenderNode.isActive = true;
+//            }
+//        };
 
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem system) {
+            time += 1;
+
+            // HP Bars:
+//            system.drawLine(system.getCameraIndex(renderNode.renderLayer.v),
+//                    (float)renderNode.coords.pos.x - 0.5f, (float)renderNode.coords.pos.y + 0.7f,
+//                    (float)renderNode.coords.pos.x + 0.5f * (float)(battleNode.hp.v / 50), (float)renderNode.coords.pos.y + 0.7f, 2,
+//                    (battleNode.hp.v > 30) ? Color.GREEN : (battleNode.hp.v > 15) ? Color.YELLOW : Color.RED);
+
             renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
             //renderNode.color.v = Color.argb(10, 255, 255, 255);
 
-            if (battleNode.hp.v <= 0) {
-                //TemporarySprite2dDef tempSprite = system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
+            if (selectionNode.isSelected.v == 1) {
+                system.defineNewSprite(
+                        Animations.ANIMATION_BUTTONS_ACTIVATED,
+                        1,
+                        (float) renderNode.coords.pos.x,
+                        (float) renderNode.coords.pos.y,
+                        1,
+                        1.5f, 1.5f,
+                        time,
+                        //Color.argb(128, 255, 255, 255),
+                        battleNode.gamer.v.color(),
+                        RenderNode.RENDER_LAYER_FOREGROUND
+                );
+            }
+
+            if (!battleNode.isAlive()) {
                 TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
 
-                //system.drawCompat.tempSpritesMemoryPool.fetchMemory();
                 tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                 tempSprite.position.x = battleNode.coords.pos.x;
                 tempSprite.position.y = battleNode.coords.pos.y;
 
                 system.endNewTempSprite(tempSprite, 0);
-
-                //system.drawCompat.drawTemporarySprite(tempSprite);
-                //system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
             }
 
             if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
@@ -154,32 +142,20 @@ public class Platoon extends Unit {
                 Sprite2dDef tempSprite = system.defineNewSprite(
                         Animations.ANIMATION_TROOPS_PROJECTILE,
                         0,
-                        (float)((0.45 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.15) * rx  + battleNode.coords.pos.x),
-                        (float)((0.45 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.15) * ry  + battleNode.coords.pos.y),
+                        (float)((0.60 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.2) * rx  + battleNode.coords.pos.x),
+                        (float)((0.60 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.2) * ry  + battleNode.coords.pos.y),
                         1,
-                        0.39f, 0.39f,
+                        0.4f, 0.4f,
                         (float) Orientation.getDegreesBaseX(rx, ry),
-                        Color.argb(120, 255, 255, 255),
-                        0
+                        //Color.argb(128, 255, 255, 255),
+                        battleNode.gamer.v.color(),
+                        RenderNode.RENDER_LAYER_FOREGROUND
                         );
-                //system.drawCompat.spriteAllocator.takeNextWritable();
-
-//                tempSprite.position.x = (0.45 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.15) * rx  + battleNode.coords.pos.x;
-//                tempSprite.position.y = (0.45 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.15) * ry  + battleNode.coords.pos.y;
-//                tempSprite.position.z = 1;
-//                tempSprite.width = 0.39f;
-//                tempSprite.height = 0.39f;
-//                tempSprite.angle = (float) Orientation.getDegreesBaseX(rx, ry);
-//                tempSprite.isGfxInterpolated = false;
-//                tempSprite.animationName = Animations.ANIMATION_TROOPS_PROJECTILE;
-//                tempSprite.animationProgress = 0;
-//                tempSprite.color = Color.argb(120, 255, 255, 255);
             }
 
             if (onAttackSwingAnim) {
-                //TemporarySprite2dDef tempSprite = system.defineNewTempSprite(Animations.ANIMATION_SMOKE_GUNPOWDER_DEF, 0);
                 TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
-                //system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+
                 tempSprite.copy(Animations.ANIMATION_SMOKE_GUNPOWDER_DEF);
                 tempSprite.position.x = (battleNode.coords.pos.x + target[0].coords.pos.x) / 2;
                 tempSprite.position.y = (battleNode.coords.pos.y + target[0].coords.pos.y) / 2;
@@ -187,8 +163,6 @@ public class Platoon extends Unit {
                 tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
 
                 system.endNewTempSprite(tempSprite, 0);
-                //system.drawCompat.drawTemporarySprite(tempSprite);
-                //system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
 
                 onAttackSwingAnim = false;
             }
@@ -213,4 +187,51 @@ public class Platoon extends Unit {
             }
         }
     };
+
+    public static class PlatoonBattleNode extends BattleNode {
+        private Platoon platoon;
+
+        public PlatoonBattleNode(Platoon platoon) {
+            super(platoon);
+            this.platoon = platoon;
+
+            this.reset();
+        }
+
+        @Override
+        public void reset() {
+            this.hp.v = 50;
+            this.attackRange.v = 4;
+            this.attackDamage.v = 4;
+            this.targetAcquisitionRange.v = 16.5;
+            this.attackState.v = BattleNode.ATTACK_STATE_READY;
+        }
+
+        @Override
+        public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackReady(battleSystem, target);
+            platoon.onAttackSwingAnim = false;
+        }
+
+        @Override
+        public void onAttackSwing(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackSwing(battleSystem, target);
+            platoon.onAttackSwingAnim = true;
+            platoon.target[0] = target;
+        }
+
+        @Override
+        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackCast(battleSystem, target);
+            target.inflictDamage(battleSystem, this, this.attackDamage.v);
+            platoon.onAttackSwingAnim = false;
+        }
+
+        @Override
+        public void onTargetAcquired() {
+            super.onTargetAcquired();
+            //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
+            //selectedRenderNode.isActive = true;
+        }
+    }
 }

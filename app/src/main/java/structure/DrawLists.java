@@ -14,6 +14,8 @@ public class DrawLists {
 	/** Draw List for sprites  */
 	public DoubleBufferredRewriteOnlyArray<Sprite2dDef> regularSprites;
 
+	public DoubleBufferredRewriteOnlyArray<Line2dDef> linesToDraw;
+
 	/**
 	 * Animations that are managed by graphics loops. Will automatically clean up when progress is finished.<br/>
 	 * <strong>This is a synchronized List.</strong><br/>
@@ -31,6 +33,8 @@ public class DrawLists {
 	public DrawLists() {
 
 		regularSprites = new DoubleBufferredRewriteOnlyArray<Sprite2dDef>(Sprite2dDef.class, MAX_SPRITES);
+
+		linesToDraw = new DoubleBufferredRewriteOnlyArray<>(Line2dDef.class, MAX_SPRITES);
 
 		temporarySprites = Collections.synchronizedList(new ArrayList<TemporarySprite2dDef>(Game.MAX_UNITS));
 

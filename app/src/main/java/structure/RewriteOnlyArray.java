@@ -51,6 +51,14 @@ public class RewriteOnlyArray<E> {
 		}
 	}
 
+	/**
+	 * Return internal data store
+	 * @return
+	 */
+	public E[] data() {
+		return data;
+	}
+
     /**
      * Gets the element at the index, but if the index is out of range, it will return null instead
      * @param index

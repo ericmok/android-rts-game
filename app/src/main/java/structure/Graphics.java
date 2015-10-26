@@ -13,6 +13,8 @@ public class Graphics {
 	//private SimpleShader simpleShader;
     private SimpleQuadShader simpleQuadShader;
 	private SimpleSpriteBatch simpleSpriteBatch;
+	private LineShader lineShader;
+	private LineBatch lineBatch;
 	private TextureLoader textureLoader;
 	private boolean isLoaded = false;
 
@@ -51,8 +53,10 @@ public class Graphics {
 		this.context = context;
 		//simpleShader = new SimpleShader(context.getResources());
         simpleQuadShader = new SimpleQuadShader(context.getResources());
+		lineShader = new LineShader(context.getResources());
 
 		simpleSpriteBatch = new SimpleSpriteBatch(simpleQuadShader);
+		lineBatch = new LineBatch(lineShader);
 		textureLoader = new TextureLoader(context);
 
         cameraMatrix = new float[16];
@@ -73,6 +77,8 @@ public class Graphics {
 		try {
 			simpleQuadShader.initializeResources();
 			simpleSpriteBatch.load();
+			lineShader.initializeResources();
+			lineBatch.load();
 
 			textureLoader.loadAssetsInRoot("Animations");
 			textureLoader.loadLetterTextures();
@@ -103,54 +109,15 @@ public class Graphics {
 	//public SimpleShader getSimpleShader() { return simpleShader; }
 	public TextureLoader getTextureLoader() { return textureLoader; }
 	public boolean isLoaded() { return isLoaded; }
-	
-	/**
-	 * On path to deprecation
-	 */
-	public void beginDrawSprite() {
-		if (!this.isLoaded) {
-			return;
-		}
-		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		GLES20.glEnable(GLES20.GL_BLEND);
-	}
-	
-	/**
-	 * On path to deprecation
-	 * @param mvpMatrix
-	 * @param sprite
-	 */
-	public void drawSprite(float[] mvpMatrix, Sprite sprite) {
-		if (!this.isLoaded) {
-			return;
-		}
- 
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sprite.glTexture);
-//		simpleShader.draw(mvpMatrix,
-//						sprite.quad.vertexBuffer,
-//						sprite.quad.colorBuffer,
-//						sprite.glTexture, sprite.quad.textureBuffer,
-//						GLES20.GL_TRIANGLE_STRIP, 4);
-		
-	}
-	
-	/**
-	 * On path to deprecation
-	 */
-	public void endDrawSprite() {
-		if (!this.isLoaded) {
-			return;
-		}
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-		GLES20.glDisable(GLES20.GL_BLEND);
-	}
-	
+
 	/**
 	 * Access drawing 2d api
 	 * @return
 	 */
 	public SimpleSpriteBatch getSimpleSpriteBatch() { return this.simpleSpriteBatch; }
 
+	public LineBatch getLineBatch() { return this.lineBatch; }
+	
     /**
      * Remember to flush changes
      */

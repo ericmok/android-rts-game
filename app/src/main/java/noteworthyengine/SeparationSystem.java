@@ -62,7 +62,7 @@ public class SeparationSystem extends noteworthyframework.System {
 
                 double distance = (node.coords.pos.distanceTo(otherNode.coords.pos) + 1);
 
-                if (distance > 2) continue;
+                if (distance > 2.1) continue;
 
                 distance = distance * distance * distance;
 

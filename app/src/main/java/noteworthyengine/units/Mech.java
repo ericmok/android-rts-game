@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import art.Animations;
 import noteworthyengine.BattleNode;
+import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyframework.Gamer;
 import structure.Sprite2dDef;
@@ -19,15 +20,8 @@ public class Mech extends Platoon {
     public static final String NAME = "Mech";
 
     public Mech() {
-        this(null);
-    }
-
-    public Mech(Gamer gamer) {
         super();
         this.name = NAME;
-
-        this.reset();
-        this.configure(gamer);
 
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -35,7 +29,7 @@ public class Mech extends Platoon {
                 //renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team) & 0xFF9999FF;
                 renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     //TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
                     //TemporarySprite2dDef tempSprite = system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                     TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
@@ -65,25 +59,25 @@ public class Mech extends Platoon {
                                 (float) Orientation.getDegreesBaseX(battleNode.target.v.coords.pos.x - battleNode.coords.pos.x,
                                         battleNode.target.v.coords.pos.y - battleNode.coords.pos.y),
                                 renderNode.color.v,
-                                0);
+                                RenderNode.RENDER_LAYER_FOREGROUND);
                     }
                 }
             }
         };
     }
 
-    public void reset() {
-        super.reset();
+    public void configure(final Gamer gamer) {
+        this.renderNode.width.v = 1.2f;
+        this.renderNode.height.v = 1.2f;
 
-        this.renderNode.width.v = 1.3f;
-        this.renderNode.height.v = 1.3f;
-        this.battleNode.hp.v = 90;
-        this.battleNode.maxSpeed.v = 1.1;
+        this.battleNode.gamer.v = gamer;
+        this.battleNode.hp.v = 110;
+        this.battleNode.maxSpeed.v = 0.9;
         //this.battleNode.attackRange.v = 5.5;
-        this.battleNode.attackDamage.v = 3;
-        this.battleNode.attackRange.v = 1.5;
+        this.battleNode.attackDamage.v = 5;
+        this.battleNode.attackRange.v = 2;
         this.battleNode.targetAcquisitionRange.v = 17;
-        this.battleNode.attackSwingTime.v = 2;
+        this.battleNode.attackSwingTime.v = 1;
         this.battleNode.attackCooldown.v = 2;
         this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
 

@@ -43,6 +43,10 @@ public class MovementSystem extends noteworthyframework.System {
 
             MovementNode movementNode = movementNodes.items.get(i);
 
+            if (!movementNode._enabled) {
+                continue;
+            }
+
             Vector2 position = movementNode.coords.pos;
             Vector2 velocity = movementNode.velocity;
             Vector2 fieldForce = movementNode.fieldForce;

@@ -65,7 +65,7 @@ public class PlatoonLeader extends Unit {
                     //Sprite2dDef sprite = system.drawCompat.spriteAllocator.takeNextWritable();
                     //sprite.set(Animations.ANIMATION_RETICLE_TAP, 0, (float)formationLeader.sheeps.get(i).coords.pos.x, (float) formationLeader.sheeps.get(i).coords.pos.y, 0,
                     Sprite2dDef sprite = system.defineNewSprite(Animations.ANIMATION_RETICLE_TAP, 0, (float)formationLeader.sheeps.get(i).coords.pos.x, (float) formationLeader.sheeps.get(i).coords.pos.y, 0,
-                            1.2f, 1.2f, 0f, Color.argb(50, 255, 255, 255), 0);
+                            1.2f, 1.2f, 0f, Color.argb(50, 255, 255, 255), RenderNode.RENDER_LAYER_FOREGROUND);
                 }
             }
         };

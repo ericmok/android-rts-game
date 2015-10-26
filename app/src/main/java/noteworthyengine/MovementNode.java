@@ -15,6 +15,8 @@ public class MovementNode extends Node implements JsonSerializable {
     public static final String _NAME = "movementNode";
     public String _name = _NAME;
 
+    public boolean _enabled = true;
+
     public Coords coords;
     public Vector2 gfxOldPosition;
 

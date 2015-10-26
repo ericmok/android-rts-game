@@ -31,6 +31,13 @@ public class Orientation extends Vector2 {
 		this.setDegrees(degree);
 	}
 
+	/**
+	 * Let's you invalidates the cache after arbitrary operations on this vector.
+	 */
+	public void set() {
+		cacheDirty = true;
+	}
+
     @Override
     public Vector2 set(double d, double e) {
         this.setDirection(d, e);

@@ -26,20 +26,28 @@ public class Barracks extends Unit {
 
     public FactoryNode factoryNode = new FactoryNode(this);
 
-    public BattleNode battleNode = new BattleNode(this);
+    public BattleNode battleNode = new BattleNode(this) {
+        @Override
+        public void inflictDamage(BattleSystem battleSystem, BattleNode target, double damage) {
+            super.inflictDamage(battleSystem, target, damage);
+            battleNode.hp.v -= damage;
+
+            if (battleNode.hp.v <= 0) {
+                Barracks barracks = UnitPool.barracks.fetchMemory();
+                barracks.configure(target.gamer.v);
+                barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
+                battleSystem.getBaseEngine().addUnit(barracks);
+            }
+        }
+    };
     public RenderNode renderNode = new RenderNode(this);
 
     public CityWinLoseConditionNode cityWinLoseConditionNode = new CityWinLoseConditionNode(this);
 
-    public Barracks(final Gamer gamer) {
+    public Barracks() {
         this.name = NAME;
 
-        this.reset();
-        this.configure(gamer);
-
         gridNode = new GridNode(this, null, battleNode);
-
-        battleNode.inflictDamage = this.createOnDieFunction();
 
         factoryNode.spawnFunction = new VoidFunc2<FactorySystem, FactoryNode>() {
             @Override
@@ -52,12 +60,9 @@ public class Barracks extends Unit {
         };
     }
 
-    public void reset() {
+    public void configure(Gamer gamer) {
         battleNode.hp.v = 100;
         battleNode.attackDamage.v = 1;
-    }
-
-    public void configure(Gamer gamer) {
         battleNode.gamer.v = gamer;
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
 
@@ -72,7 +77,7 @@ public class Barracks extends Unit {
             public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
                 battleNode.hp.v -= damage.v;
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     Barracks barracks = UnitPool.barracks.fetchMemory();
                     barracks.configure(attacker.gamer.v);
                     barracks.battleNode.coords.pos.copy(battleNode.coords.pos);

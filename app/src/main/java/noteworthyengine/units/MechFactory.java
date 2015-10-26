@@ -17,8 +17,8 @@ public class MechFactory extends Barracks {
 
     public static final String NAME = "cannonFactory";
 
-    public MechFactory(final Gamer gamer) {
-        super(gamer);
+    public MechFactory() {
+        super();
         this.name = NAME;
 
         factoryNode.spawnFunction = SPAWN_FUNCTION;
@@ -47,7 +47,7 @@ public class MechFactory extends Barracks {
             public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
                 battleNode.hp.v -= damage.v;
 
-                if (battleNode.hp.v <= 0) {
+                if (!battleNode.isAlive()) {
                     MechFactory mechFactory = UnitPool.mechFactories.fetchMemory();
                     mechFactory.configure(attacker.gamer.v);
                     mechFactory.battleNode.coords.pos.copy(battleNode.coords.pos);

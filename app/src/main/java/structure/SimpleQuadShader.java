@@ -63,17 +63,14 @@ public class SimpleQuadShader {
     public static final int VERTEX_SHADER_RESOURCE = R.raw.simple_quad_vertex_shader;
     public static final int FRAGMENT_SHADER_RESOURCE = R.raw.simple_quad_fragment_shader;
 
-    /**
-     * Stores the locations of the shader variables
-     */
-    private HashMap<String, Integer> locations;
-
     private Resources resources;
 
-    private String vertexShaderSource;
-    private String fragmentShaderSource;
-    private int vertexShaderHandle;
-    private int fragmentShaderHandle;
+//    private String vertexShaderSource;
+//    private String fragmentShaderSource;
+//    private int vertexShaderHandle;
+//    private int fragmentShaderHandle;
+
+    private Shader shader;
 
     private int cacheGlTexture = -1;
 
@@ -82,127 +79,46 @@ public class SimpleQuadShader {
 
     public SimpleQuadShader(Resources resources) {
         this.resources = resources;
+    }
 
-        locations = new HashMap<String, Integer>();
+    public String getRawResourceString(int resource) throws Exception {
+        String ret;
+        InputStream inputStream = resources.openRawResource(resource);
+
+        try {
+            byte[] b = new byte[inputStream.available()];
+            inputStream.read(b);
+            ret = new String(b);
+            return ret;
+        }
+        catch (Exception e) {
+            throw new Exception("Cannot read resource!");
+        }
     }
 
     public void initializeResources() throws Exception {
-
-        InputStream inputStream = resources.openRawResource(VERTEX_SHADER_RESOURCE);
+        String vertexShaderSource;
+        String fragmentShaderSource;
 
         try {
-            byte[] b = new byte[inputStream.available()];
-            inputStream.read(b);
-            vertexShaderSource = new String(b);
+            vertexShaderSource = getRawResourceString(VERTEX_SHADER_RESOURCE);
         }
         catch (Exception e) {
-            Log.d("INIT", "Cannot read vshader resource!");
-            throw new Exception("Cannot read vshader resource!");
+            Log.d("SimpleQuadShader", "Failed to read vertex shader resource");
+            throw new Exception("Cannot read vertex shader resource!");
         }
 
         try {
-            inputStream = resources.openRawResource(FRAGMENT_SHADER_RESOURCE);
-            byte[] b = new byte[inputStream.available()];
-            inputStream.read(b);
-            fragmentShaderSource = new String(b);
+            fragmentShaderSource = getRawResourceString(FRAGMENT_SHADER_RESOURCE);
         }
         catch (Exception e) {
-            Log.d("INIT", "Cannot read fshader resource!");
-            throw new Exception("Cannot read vshader resource!");
+            Log.d("SimpleQuadShader", "Failed to read fragment shader resource");
+            throw new Exception("Cannot read fragment shader resource!");
         }
 
-
-        // Load in the vertex shader.
-        vertexShaderHandle = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
-
-        if (vertexShaderHandle != 0)
-        {
-            // Pass in the shader source.
-            GLES20.glShaderSource(vertexShaderHandle, vertexShaderSource);
-
-            // Compile the shader.
-            GLES20.glCompileShader(vertexShaderHandle);
-
-            // Get the compilation status.
-            final int[] compileStatus = new int[1];
-            GLES20.glGetShaderiv(vertexShaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
-
-            // If the compilation failed, delete the shader.
-            if (compileStatus[0] == 0)
-            {
-                GLES20.glDeleteShader(vertexShaderHandle);
-                vertexShaderHandle = 0;
-                throw new RuntimeException("Error compiling vertex shader.");
-            }
-        }
-
-        if (vertexShaderHandle == 0)
-        {
-            throw new Exception("Error creating vertex shader.");
-        }
-
-        // Load in the fragment shader shader.
-        fragmentShaderHandle = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
-
-        if (fragmentShaderHandle != 0)
-        {
-            // Pass in the shader source.
-            GLES20.glShaderSource(fragmentShaderHandle, fragmentShaderSource);
-
-            // Compile the shader.
-            GLES20.glCompileShader(fragmentShaderHandle);
-
-            // Get the compilation status.
-            final int[] compileStatus = new int[1];
-            GLES20.glGetShaderiv(fragmentShaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
-
-            // If the compilation failed, delete the shader.
-            if (compileStatus[0] == 0)
-            {
-                GLES20.glDeleteShader(fragmentShaderHandle);
-                fragmentShaderHandle = 0;
-                throw new RuntimeException("Error compiling fragment shader.");
-            }
-        }
-
-        if (fragmentShaderHandle == 0)
-        {
-            throw new RuntimeException("Error creating fragment shader.");
-        }
-
-        // Create a program object and store the handle to it.
-        this.programHandle = GLES20.glCreateProgram();
-
-        if (programHandle != 0)
-        {
-            // Bind the vertex shader to the program.
-            GLES20.glAttachShader(programHandle, vertexShaderHandle);
-
-            // Bind the fragment shader to the program.
-            GLES20.glAttachShader(programHandle, fragmentShaderHandle);
-
-            // Link the two shaders together into a program.
-            GLES20.glLinkProgram(programHandle);
-
-            // Get the link status.
-            final int[] linkStatus = new int[1];
-            GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
-
-            // If the link failed, delete the program.
-            if (linkStatus[0] == 0)
-            {
-                GLES20.glDeleteProgram(programHandle);
-                programHandle = 0;
-            }
-        }
-
-        if (programHandle == 0)
-        {
-            throw new RuntimeException("Error creating program.");
-        }
-
-        // Tell OpenGL to use this program when rendering.
-        GLES20.glUseProgram(programHandle);
+        this.shader = new Shader(vertexShaderSource, fragmentShaderSource);
+        this.programHandle = shader.compile();
+        shader.useProgram();
 
         // Set program handles. These will later be used to pass in values to the program.
         //shaderUniformMvpMatrixLocation = GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MVPMATRIX);
@@ -221,23 +137,11 @@ public class SimpleQuadShader {
         //shaderAttributeColorLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_COLOR);
         shaderAttributeTextureLocation = GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_TEXTURE);
 
-        //locations.put(SHADER_UNIFORM_MVPMATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MVPMATRIX) );
-        locations.put(SHADER_UNIFORM_TEXTURE, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_TEXTURE) );
-        locations.put(SHADER_UNIFORM_PROJECTION_MATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_PROJECTION_MATRIX) );
-        locations.put(SHADER_UNIFORM_MODEL_MATRIX, GLES20.glGetUniformLocation(programHandle, SHADER_UNIFORM_MODEL_MATRIX) );
-        //locations.put(SHADER_UNIFORM_SCALING, shaderUniformScaling);
-        //locations.put(SHADER_UNIFORM_ANGLE, shaderUniformAngle);
-        //locations.put(SHADER_UNIFORM_TRANSLATION, shaderUniformTranslation);
-
-        locations.put(SHADER_ATTRIBUTE_POSITION, GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_POSITION) );
-        locations.put(SHADER_UNIFORM_FLAT_COLOR, GLES20.glGetAttribLocation(programHandle, SHADER_UNIFORM_FLAT_COLOR) );
-        locations.put(SHADER_ATTRIBUTE_TEXTURE, GLES20.glGetAttribLocation(programHandle, SHADER_ATTRIBUTE_TEXTURE) );
-
         isInitialized = true;
     }
 
     public void useProgram() {
-        GLES20.glUseProgram(programHandle);
+        shader.useProgram();
     }
 
     public void setVertexAttributePointers(VertexBuffer positionBuffer, VertexBuffer textureBuffer) {
@@ -333,29 +237,24 @@ public class SimpleQuadShader {
      */
     public void draw(float[] projectionMatrix, float[] modelMatrix, FloatBuffer positionBuffer, FloatBuffer colorBuffer, int textureHandle, FloatBuffer textureBuffer, int mode, int count) {
         // Pass in mvpMatrix
-        //GLES20.glUniformMatrix4fv(locations.get(SHADER_UNIFORM_MVPMATRIX), 1, false, mvpMatrix, 0);
         //GLES20.glUniformMatrix4fv(shaderUniformMvpMatrixLocation, 1, false, mvpMatrix, 0);
         GLES20.glUniformMatrix4fv(shaderUniformProjectionMatrix, 1, false, projectionMatrix, 0);
         GLES20.glUniformMatrix4fv(shaderUniformModelMatrix, 1, false, modelMatrix, 0);
 
         // Pass in the position information
         positionBuffer.position(0);
-        //GLES20.glVertexAttribPointer(locations.get(SHADER_ATTRIBUTE_POSITION),
         GLES20.glVertexAttribPointer(shaderAttributePositionLocation,
                 NUMBER_POSITION_ELEMENTS,
                 GLES20.GL_FLOAT, false,
                 0, positionBuffer);
-        //GLES20.glEnableVertexAttribArray(locations.get(SHADER_ATTRIBUTE_POSITION));
         GLES20.glEnableVertexAttribArray(shaderAttributePositionLocation);
 
         // Pass in the color information
         colorBuffer.position(0);
-        //GLES20.glVertexAttribPointer(locations.get(SHADER_ATTRIBUTE_COLOR),
         GLES20.glVertexAttribPointer(shaderAttributeColorLocation,
                 NUMBER_COLOR_ELEMENTS,
                 GLES20.GL_FLOAT, false,
                 0, colorBuffer);
-        //GLES20.glEnableVertexAttribArray(locations.get(SHADER_ATTRIBUTE_COLOR));
         GLES20.glEnableVertexAttribArray(shaderAttributeColorLocation);
 
 
@@ -364,17 +263,16 @@ public class SimpleQuadShader {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle);
 
         // Tell texture uniform sampler to use texture in shader
-        //GLES20.glUniform1i(locations.get(SHADER_UNIFORM_TEXTURE), 0);
         GLES20.glUniform1i(shaderUniformTextureLocation, 0);
 
         // Set Texture coords
         textureBuffer.position(0);
-        //GLES20.glVertexAttribPointer(locations.get(SHADER_ATTRIBUTE_TEXTURE),
+
         GLES20.glVertexAttribPointer(shaderAttributeTextureLocation,
                 NUMBER_TEXTURE_ELEMENTS,
                 GLES20.GL_FLOAT, false,
                 0, textureBuffer);
-        //GLES20.glEnableVertexAttribArray(locations.get(SHADER_ATTRIBUTE_TEXTURE));
+
         GLES20.glEnableVertexAttribArray(shaderAttributeTextureLocation);
 
         GLES20.glDrawArrays(mode, 0, count);

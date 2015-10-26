@@ -5,8 +5,14 @@ import android.graphics.Color;
 import art.Animations;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
+import noteworthyengine.FieldNode;
+import noteworthyengine.GridNode;
+import noteworthyengine.MovementNode;
+import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
+import noteworthyengine.SeparationNode;
 import noteworthyframework.Gamer;
+import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
@@ -15,55 +21,46 @@ import utils.VoidFunc3;
 /**
  * Created by eric on 3/23/15.
  */
-public class Cannon extends Platoon {
+public class Cannon extends Unit {
 
-    public Cannon(final Gamer gamer) {
+    public MovementNode movementNode = new MovementNode(this);
+
+    public FieldNode fieldNode = FieldNode.createAgentFieldNode(this);
+
+    public SeparationNode separationNode = new SeparationNode(this);
+
+    public BattleNode battleNode = new CannonBattleNode(this);
+    public RenderNode renderNode = new RenderNode(this);
+
+    public GridNode gridNode = new GridNode(this, separationNode, battleNode);
+
+    public Cannon() {
         this.name = this.getClass().getSimpleName();
-
-        this.reset();
-        this.configure(gamer);
-
-        this.battleNode.onAttackCast = new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-                //Missle missle = new Missle(battleNode.gamer.v);
-                Missle missle = UnitPool.missles.fetchMemory();
-                missle.configure(battleNode.gamer.v);
-                missle.movementNode.coords.pos.copy(movementNode.coords.pos);
-                battleSystem.getBaseEngine().addUnit(missle);
-            }
-        };
 
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
                 renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
 
-                if (battleNode.hp.v <= 0) {
-                    //system.drawCompat.tempSpritesMemoryPool.fetchMemory();
+                if (!battleNode.isAlive()) {
                     TemporarySprite2dDef tempSprite = system.beginNewTempSprite(); //system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);
                     tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
                     tempSprite.position.x = battleNode.coords.pos.x;
                     tempSprite.position.y = battleNode.coords.pos.y;
                     system.endNewTempSprite(tempSprite, 0);
-
-                    //system.drawCompat.drawTemporarySprite(tempSprite);
-                    //system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
                 }
 
                 if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
 
                     if (battleNode.target.v != null) {
-                        double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
+                        double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v) * 100;
 
-                        //Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
-                        //sprite2dDef.set(
                         Sprite2dDef sprite2dDef = system.defineNewSprite(
-                                Animations.ANIMATION_TROOPS_SWING, (int)ratio * 100,
+                                Animations.ANIMATION_TROOPS_SWING, (int) ratio,
                                 (float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y - renderNode.height.v, 0,
                                 1f, 1f,
                                 90,
-                                Gamer.colorForTeam(battleNode.gamer.v.team), 0
+                                Gamer.colorForTeam(battleNode.gamer.v.team), RenderNode.RENDER_LAYER_FOREGROUND
                                 );
                     }
                 }
@@ -72,24 +69,43 @@ public class Cannon extends Platoon {
     }
 
     public void configure(Gamer gamer) {
-        this.battleNode.gamer.v = gamer;
-    }
-
-    public void reset() {
-        super.reset();
-
         this.movementNode.maxSpeed.v = 0.32;
 
-        this.battleNode.hp.v = 5;
-        this.battleNode.attackSwingTime.v = 6;
-        this.battleNode.attackCooldown.v = 20;
-        this.battleNode.attackDamage.v = 0;
-        this.battleNode.attackRange.v = 7;
-        this.battleNode.targetAcquisitionRange.v = 18.5;
-        this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+        this.battleNode.gamer.v = gamer;
+        this.battleNode.reset();
 
         this.renderNode.animationName.v = "Animations/Cannons/Idling";
         this.renderNode.width.v = 1.4f;
         this.renderNode.height.v = 1.4f;
+    }
+
+    public static class CannonBattleNode extends BattleNode {
+        private Cannon cannon;
+
+        public CannonBattleNode(Cannon cannon) {
+            super(cannon);
+            this.cannon = cannon;
+        }
+
+        @Override
+        public void reset() {
+            this.hp.v = 5;
+            this.attackSwingTime.v = 4;
+            this.attackCooldown.v = 14;
+            this.attackDamage.v = 0;
+            this.attackRange.v = 6.5;
+            this.targetAcquisitionRange.v = 18.5;
+            this.attackState.v = BattleNode.ATTACK_STATE_READY;
+        }
+
+        @Override
+        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackCast(battleSystem, target);
+
+            Missle missle = UnitPool.missles.fetchMemory();
+            missle.configure(this.gamer.v, this.coords.pos, target.coords.pos);
+            missle.battleNode.coords.pos.copy(this.coords.pos);
+            battleSystem.getBaseEngine().addUnit(missle);
+        }
     }
 }

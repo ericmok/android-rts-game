@@ -1,0 +1,12 @@
+uniform mat4 u_ProjectionMatrix;
+uniform vec4 u_FlatColor;
+
+attribute vec4 a_Position;
+
+varying vec4 v_Position;
+
+void main()
+{
+	v_Position = a_Position;
+	gl_Position = u_ProjectionMatrix * a_Position;
+}

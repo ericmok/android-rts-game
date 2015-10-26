@@ -17,8 +17,8 @@ import utils.VoidFunc;
  */
 public class RenderNode extends Node {
 
-    public static final int MAIN_CAMERA = 0;
-    public static final int AUX_CAMERA = 1;
+    public static final int RENDER_LAYER_FOREGROUND = 0;
+    public static final int RENDER_LAYER_GUI = 1;
 
     public static final VoidFunc<RenderSystem> _DO_NOTHING = new VoidFunc<RenderSystem>() {
         @Override
@@ -45,7 +45,9 @@ public class RenderNode extends Node {
     public IntegerPtr animationProgress;
     public IntegerPtr team;
 
-    public IntegerPtr cameraType = new IntegerPtr() {{ v = MAIN_CAMERA; }};
+    public IntegerPtr renderLayer = new IntegerPtr() {{
+        v = RENDER_LAYER_FOREGROUND;
+    }};
 
     public VoidFunc<RenderSystem> onDraw = _DO_NOTHING;
 
@@ -64,7 +66,7 @@ public class RenderNode extends Node {
                     double angle,
                     int color,
                     String animationName, int animationProgress,
-                    int cameraType) {
+                    int renderLayer) {
         this.isGfxInterpolated.v = 0;
         this.coords.pos.set(x, y);
         this.z.v = z;
@@ -74,7 +76,7 @@ public class RenderNode extends Node {
         this.color.v = color;
         this.animationName.v = animationName;
         this.animationProgress.v = animationProgress;
-        this.cameraType.v = cameraType;
+        this.renderLayer.v = renderLayer;
     }
 
     public void setInterpolated(double oldX, double oldY) {
