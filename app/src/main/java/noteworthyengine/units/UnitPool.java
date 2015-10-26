@@ -26,6 +26,8 @@ public class UnitPool {
 
     public static final MemoryPool<Mine> mines = new MemoryPool<Mine>(Mine.class, NUMBER_UNITS);
 
+    public static final MemoryPool<Zug> zugs = new MemoryPool<Zug>(Zug.class, NUMBER_UNITS);
+
     public static final MemoryPool<City> cities = new MemoryPool<City>(City.class, NUMBER_BUILDINGS);
 
     public static final MemoryPool<MechFactory> mechFactories = new MemoryPool<MechFactory>(MechFactory.class, NUMBER_BUILDINGS);
@@ -37,7 +39,6 @@ public class UnitPool {
     public static final MemoryPool<Nanobot> nanobots = new MemoryPool<Nanobot>(Nanobot.class, NUMBER_UNITS);
 
     public static final MemoryPool<NanobotFactory> nanobotFactories = new MemoryPool<NanobotFactory>(NanobotFactory.class, NUMBER_BUILDINGS);
-
 
     public static void load() {
         // Does nothing. Just load class static fields via class loader.
@@ -55,6 +56,12 @@ public class UnitPool {
         }
         else if (unit.getClass() == Mech.class) {
             UnitPool.mechs.recycleMemory((Mech)unit);
+        }
+        else if (unit.getClass() == Mine.class) {
+            UnitPool.mines.recycleMemory((Mine) unit);
+        }
+        else if (unit.getClass() == Zug.class) {
+            UnitPool.zugs.recycleMemory((Zug) unit);
         }
         else if (unit.getClass() == City.class) {
             UnitPool.cities.recycleMemory((City)unit);
