@@ -74,34 +74,38 @@ public class Graphics {
 	 * For example, if we lose the surface and get it back again.
 	 */
 	public void load() {
-		try {
-			simpleQuadShader.initializeResources();
-			simpleSpriteBatch.load();
-			lineShader.initializeResources();
-			lineBatch.load();
+        if (!isLoaded) {
+            try {
+                simpleQuadShader.initializeResources();
+                simpleSpriteBatch.load();
+                lineShader.initializeResources();
+                lineBatch.load();
 
-			textureLoader.loadAssetsInRoot("Animations");
-			textureLoader.loadLetterTextures();
+                textureLoader.loadAssetsInRoot("Animations");
+                textureLoader.loadLetterTextures();
 
 //			textureLoader.loadUnitStates(TROOPS_ASSETS, true);
 //			textureLoader.loadTexture(UNIT1_TEXTURE, R.drawable.sprite1, true);
 
-			isLoaded = true;
-			Runtime rc = Runtime.getRuntime();
-			rc.gc();
-		} catch (Exception e) {
-			Log.e("Graphics", "Failed to initialize!");
-			e.printStackTrace();
-		}
-	}
+                isLoaded = true;
+                Runtime rc = Runtime.getRuntime();
+                rc.gc();
+            } catch (Exception e) {
+                Log.e("Graphics", "Failed to initialize!");
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * If the application loses graphics for some reason, ie. os switch to different app,
      * then call invalidate so that graphics will be loadable again.
+     *
+     * Possible deprecation due to GLSurfaceView's setPreserveEGLContextOnPause
      */
 	public void invalidate() {
-		this.isLoaded = false;
-		Runtime rc = Runtime.getRuntime();
+        //this.isLoaded = false;
+        Runtime rc = Runtime.getRuntime();
 		rc.gc();
 	}
 	
