@@ -28,7 +28,7 @@ public class ZugNest extends Barracks {
     public void configure(Gamer gamer) {
         super.configure(gamer);
 
-        factoryNode.buildTime.v = 15;
+        factoryNode.buildTime.v = 10;
     }
 
     public VoidFunc2<FactorySystem, FactoryNode> SPAWN_FUNCTION = new VoidFunc2<FactorySystem, FactoryNode>() {
