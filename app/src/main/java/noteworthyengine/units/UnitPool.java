@@ -40,6 +40,8 @@ public class UnitPool {
 
     public static final MemoryPool<NanobotFactory> nanobotFactories = new MemoryPool<NanobotFactory>(NanobotFactory.class, NUMBER_BUILDINGS);
 
+    public static final MemoryPool<ZugNest> zugNests = new MemoryPool<ZugNest>(ZugNest.class, NUMBER_BUILDINGS);
+
     public static void load() {
         // Does nothing. Just load class static fields via class loader.
     }
