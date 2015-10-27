@@ -168,7 +168,7 @@ public class BattleNode extends Node {
     }
 
     public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-        target.inflictDamage(battleSystem, target, target.attackDamage.v);
+        target.inflictDamage(battleSystem, this, this.attackDamage.v);
         //                        // Check if battleNode killed something
         //                        // We don't nullify the target pointer since it gets fixed in the front of the loop
         //                        if (battleNode.target[0].hp.v <= 0) {
