@@ -59,6 +59,8 @@ public class BattleNode extends Node {
     public DoublePtr hp = new DoublePtr() {{ v = 1; }};
     public DoublePtr armor;
 
+    public BattleNode.Ptr lastAttacker = new BattleNode.Ptr() {{ v = null; }};
+
     public IntegerPtr isAttackable = new IntegerPtr() {{ v = 1; }};
 
     /// The attack will initiate even when not in range
@@ -165,6 +167,7 @@ public class BattleNode extends Node {
 
     public void inflictDamage(BattleSystem battleSystem, BattleNode attacker, double damage) {
         this.hp.v -= damage;
+        this.lastAttacker.v = attacker;
     }
 
     public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
@@ -199,6 +202,7 @@ public class BattleNode extends Node {
     public void reset() {
         Log.v("BattleNode reset", "SHOULD BE OVERRIDDEN");
         this.target.v = null;
+        this.lastAttacker.v = null;
     }
 
     public boolean isAlive() {
