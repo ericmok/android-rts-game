@@ -171,7 +171,6 @@ public class Missle extends Unit {
 
         @Override
         public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            super.onAttackCast(battleSystem, target);
             battleSystem.findAttackablesWithinRange(missle.battleTargets, missle.battleNode, missle.battleNode.attackRange.v, allTargetsEvenSelf);
 
             for (int j = missle.battleTargets.size() - 1; j >= 0; j--) {
