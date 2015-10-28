@@ -71,11 +71,11 @@ public class Platoon extends Unit {
     }
 
     public void configure(Gamer gamer) {
-        movementNode.maxSpeed.v = 0.6;
-
-        battleNode.gamer.v = gamer;
         battleNode.reset();
         selectionNode.reset();
+
+        movementNode.maxSpeed.v = 0.6;
+        battleNode.gamer.v = gamer;
 
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
@@ -134,7 +134,7 @@ public class Platoon extends Unit {
                 system.endNewTempSprite(tempSprite, 0);
             }
 
-            if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+            if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING && battleNode.hasLivingTarget()) {
 
                 double rx = (target[0].coords.pos.x - battleNode.coords.pos.x);
                 double ry =(target[0].coords.pos.y - battleNode.coords.pos.y);
