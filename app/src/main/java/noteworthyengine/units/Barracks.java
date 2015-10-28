@@ -53,6 +53,7 @@ public class Barracks extends Unit {
     }
 
     public void configure(Gamer gamer) {
+        battleNode.reset();
         battleNode.hp.v = 100;
         battleNode.attackDamage.v = 1;
         battleNode.gamer.v = gamer;

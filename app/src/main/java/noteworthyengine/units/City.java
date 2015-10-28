@@ -40,6 +40,7 @@ public class City extends Unit {
     }
 
     public void configure(Gamer gamer) {
+        battleNode.reset();
         battleNode.gamer.v = gamer;
         battleNode.hp.v = 110;
         battleNode.attackDamage.v = 1;

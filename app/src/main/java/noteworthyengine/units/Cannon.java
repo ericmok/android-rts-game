@@ -71,8 +71,8 @@ public class Cannon extends Unit {
     public void configure(Gamer gamer) {
         this.movementNode.maxSpeed.v = 0.32;
 
-        this.battleNode.gamer.v = gamer;
         this.battleNode.reset();
+        this.battleNode.gamer.v = gamer;
 
         this.renderNode.animationName.v = "Animations/Cannons/Idling";
         this.renderNode.width.v = 1.4f;
@@ -89,13 +89,14 @@ public class Cannon extends Unit {
 
         @Override
         public void reset() {
+            super.reset();
+
             this.hp.v = 5;
             this.attackSwingTime.v = 4;
             this.attackCooldown.v = 14;
             this.attackDamage.v = 0;
             this.attackRange.v = 6.5;
             this.targetAcquisitionRange.v = 18.5;
-            this.attackState.v = BattleNode.ATTACK_STATE_READY;
         }
 
         @Override

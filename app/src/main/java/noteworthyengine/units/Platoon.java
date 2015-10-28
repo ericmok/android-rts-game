@@ -200,11 +200,11 @@ public class Platoon extends Unit {
 
         @Override
         public void reset() {
+            super.reset();
             this.hp.v = 50;
             this.attackRange.v = 4;
             this.attackDamage.v = 4;
             this.targetAcquisitionRange.v = 16.5;
-            this.attackState.v = BattleNode.ATTACK_STATE_READY;
         }
 
         @Override

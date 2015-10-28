@@ -158,7 +158,6 @@ public class Missle extends Unit {
             this.hp.v = 60;
             this.fractionToWalkIntoAttackRange.v = 0.02;
             this.nonCancellableSwing.v = 0;
-            this.attackState.v = BattleNode.ATTACK_STATE_READY;
             this.target.v = null;
         }
 

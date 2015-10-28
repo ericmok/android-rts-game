@@ -70,6 +70,7 @@ public class Mech extends Platoon {
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
 
+        this.battleNode.reset();
         this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 110;
         this.battleNode.maxSpeed.v = 0.9;
@@ -79,7 +80,6 @@ public class Mech extends Platoon {
         this.battleNode.targetAcquisitionRange.v = 17;
         this.battleNode.attackSwingTime.v = 1;
         this.battleNode.attackCooldown.v = 2;
-        this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
 
         this.battleNode.target.v = null;
 

@@ -100,7 +100,6 @@ public class Mine extends Unit {
             this.startingHp.v = 400;
             this.hp.v = 400;
             this.isAttackable.v = 1;
-            this.attackState.v = BattleNode.ATTACK_STATE_READY;
             this.target.v = null;
 
         }
@@ -119,8 +118,8 @@ public class Mine extends Unit {
     public void configure(Gamer gamer) {
         movementNode.maxSpeed.v = 0.9;
 
-        battleNode.gamer.v = gamer;
         battleNode.reset();
+        battleNode.gamer.v = gamer;
 
         renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0xaaffffff;
         renderNode.animationName.v = Animations.ANIMATION_MINE_IDLING;
