@@ -89,10 +89,12 @@ public class Zug extends Unit {
     }
 
     public void configure(final Gamer gamer) {
+        this.battleNode.reset();
+        this.movementNode.maxSpeed.v = 1.1;
+
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
 
-        this.battleNode.reset();
         this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 80;
         this.battleNode.maxSpeed.v = 0.95;
