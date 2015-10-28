@@ -200,9 +200,12 @@ public class BattleNode extends Node {
     }
 
     public void reset() {
-        Log.v("BattleNode reset", "SHOULD BE OVERRIDDEN");
+        this.velocity.zero();
+        this.enemyAttractionForce.zero();
         this.target.v = null;
         this.lastAttacker.v = null;
+        this.attackState.v = ATTACK_STATE_READY;
+        this.attackProgress.v = 0;
     }
 
     public boolean isAlive() {
