@@ -37,6 +37,7 @@ public class Animations {
     public static final ProjectileExplosionAnimation ANIMATION_PROJECTILE_EXPLOSION_DEF = new ProjectileExplosionAnimation();
 
     public static final String ANIMATION_ZUG_IDLING = "Animations/Zug/Idling";
+    public static final String ANIMATION_PUFFER_ZUG_IDLING = "Animations/PufferZug/Idling";
 
     public static final String ANIMATION_ENEMY_TROOPS_IDLING = "Animations/EnemyTroops/Idling";
     public static final String ANIMATION_ENEMY_TROOPS_MOVING = "Animations/EnemyTroops/Moving";
