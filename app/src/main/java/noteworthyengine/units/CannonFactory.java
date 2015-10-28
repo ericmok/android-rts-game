@@ -32,6 +32,14 @@ public class CannonFactory extends Barracks {
         factoryNode.buildTime.v = 60;
     }
 
+    @Override
+    public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
+        CannonFactory cannonFactory = UnitPool.cannonFactories.fetchMemory();
+        cannonFactory.configure(attacker.gamer.v);
+        cannonFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
+        battleSystem.getBaseEngine().addUnit(cannonFactory);
+    }
+
     public VoidFunc2<FactorySystem, FactoryNode> SPAWN_FUNCTION = new VoidFunc2<FactorySystem, FactoryNode>() {
         @Override
         public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
@@ -41,20 +49,4 @@ public class CannonFactory extends Barracks {
             factorySystem.getBaseEngine().addUnit(cannon);
         }
     };
-
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> createOnDieFunction() {
-        return new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
-                battleNode.hp.v -= damage.v;
-
-                if (!battleNode.isAlive()) {
-                    CannonFactory cannonFactory = UnitPool.cannonFactories.fetchMemory();
-                    cannonFactory.configure(attacker.gamer.v);
-                    cannonFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
-                    battleSystem.getBaseEngine().addUnit(cannonFactory);
-                }
-            }
-        };
-    }
 }

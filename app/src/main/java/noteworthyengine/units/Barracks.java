@@ -27,18 +27,11 @@ public class Barracks extends Unit {
     public FactoryNode factoryNode = new FactoryNode(this);
 
     public BattleNode battleNode = new BattleNode(this) {
-        @Override
-        public void inflictDamage(BattleSystem battleSystem, BattleNode attacker, double damage) {
-            super.inflictDamage(battleSystem, attacker, damage);
-
-            if (!this.isAlive()) {
-                Barracks barracks = UnitPool.barracks.fetchMemory();
-                barracks.configure(attacker.gamer.v);
-                barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
-                battleSystem.getBaseEngine().addUnit(barracks);
-            }
+        public void onDie(BattleSystem battleSystem) {
+            Barracks.this.spawnForEnemy(battleSystem, this.lastAttacker.v);
         }
     };
+
     public RenderNode renderNode = new RenderNode(this);
 
     public CityWinLoseConditionNode cityWinLoseConditionNode = new CityWinLoseConditionNode(this);
@@ -70,19 +63,10 @@ public class Barracks extends Unit {
         factoryNode.buildProgress.v = 0;
     }
 
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> createOnDieFunction() {
-        return new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
-                battleNode.hp.v -= damage.v;
-
-                if (!battleNode.isAlive()) {
-                    Barracks barracks = UnitPool.barracks.fetchMemory();
-                    barracks.configure(attacker.gamer.v);
-                    barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
-                    battleSystem.getBaseEngine().addUnit(barracks);
-                }
-            }
-        };
+    public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
+        Barracks barracks = UnitPool.barracks.fetchMemory();
+        barracks.configure(attacker.gamer.v);
+        barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
+        battleSystem.getBaseEngine().addUnit(barracks);
     }
 }

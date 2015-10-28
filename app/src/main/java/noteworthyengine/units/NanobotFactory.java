@@ -49,19 +49,10 @@ public class NanobotFactory extends Barracks {
     }
 
     @Override
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> createOnDieFunction() {
-        return new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode attacker, DoublePtr damage) {
-                battleNode.hp.v -= damage.v;
-
-                if (!battleNode.isAlive()) {
-                    NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
-                    nanobotFactory.configure(attacker.gamer.v);
-                    nanobotFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
-                    battleSystem.getBaseEngine().addUnit(nanobotFactory);
-                }
-            }
-        };
+    public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
+        NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
+        nanobotFactory.configure(attacker.gamer.v);
+        nanobotFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
+        battleSystem.getBaseEngine().addUnit(nanobotFactory);
     }
 }

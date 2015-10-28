@@ -31,6 +31,14 @@ public class MechFactory extends Barracks {
         factoryNode.buildTime.v = 35;
     }
 
+    @Override
+    public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
+        MechFactory mechFactory = UnitPool.mechFactories.fetchMemory();
+        mechFactory.configure(attacker.gamer.v);
+        mechFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
+        battleSystem.getBaseEngine().addUnit(mechFactory);
+    }
+
     public VoidFunc2<FactorySystem, FactoryNode> SPAWN_FUNCTION = new VoidFunc2<FactorySystem, FactoryNode>() {
         @Override
         public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
@@ -40,20 +48,4 @@ public class MechFactory extends Barracks {
             factorySystem.getBaseEngine().addUnit(mech);
         }
     };
-
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> createOnDieFunction() {
-        return new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
-                battleNode.hp.v -= damage.v;
-
-                if (!battleNode.isAlive()) {
-                    MechFactory mechFactory = UnitPool.mechFactories.fetchMemory();
-                    mechFactory.configure(attacker.gamer.v);
-                    mechFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
-                    battleSystem.getBaseEngine().addUnit(mechFactory);
-                }
-            }
-        };
-    }
 }

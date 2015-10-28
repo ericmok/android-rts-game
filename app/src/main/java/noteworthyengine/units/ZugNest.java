@@ -41,19 +41,27 @@ public class ZugNest extends Barracks {
         }
     };
 
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> createOnDieFunction() {
-        return new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
-                battleNode.hp.v -= damage.v;
-
-                if (!battleNode.isAlive()) {
-                    ZugNest zugNest = UnitPool.zugNests.fetchMemory();
-                    zugNest.configure(attacker.gamer.v);
-                    zugNest.battleNode.coords.pos.copy(battleNode.coords.pos);
-                    battleSystem.getBaseEngine().addUnit(zugNest);
-                }
-            }
-        };
+    @Override
+    public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
+        ZugNest zugNest = UnitPool.zugNests.fetchMemory();
+        zugNest.configure(attacker.gamer.v);
+        zugNest.battleNode.coords.pos.copy(battleNode.coords.pos);
+        battleSystem.getBaseEngine().addUnit(zugNest);
     }
+
+//    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> createOnDieFunction() {
+//        return new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
+//            @Override
+//            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
+//                battleNode.hp.v -= damage.v;
+//
+//                if (!battleNode.isAlive()) {
+//                    ZugNest zugNest = UnitPool.zugNests.fetchMemory();
+//                    zugNest.configure(attacker.gamer.v);
+//                    zugNest.battleNode.coords.pos.copy(battleNode.coords.pos);
+//                    battleSystem.getBaseEngine().addUnit(zugNest);
+//                }
+//            }
+//        };
+//    }
 }

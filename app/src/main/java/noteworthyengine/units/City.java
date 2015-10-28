@@ -22,19 +22,15 @@ public class City extends Unit {
     public GridNode gridNode;
     public BattleNode battleNode = new BattleNode(this) {
         @Override
-        public void inflictDamage(BattleSystem battleSystem, BattleNode attacker, double damage) {
-            super.inflictDamage(battleSystem, attacker, damage);
-
-            this.hp.v -= damage;
-
-            if (!this.isAlive()) {
-                City city = UnitPool.cities.fetchMemory();
-                city.configure(attacker.gamer.v);
-                city.battleNode.coords.pos.copy(battleNode.coords.pos);
-                battleSystem.getBaseEngine().addUnit(city);
-            }
+        public void onDie(BattleSystem battleSystem) {
+            super.onDie(battleSystem);
+            City city = UnitPool.cities.fetchMemory();
+            city.configure(this.lastAttacker.v.gamer.v);
+            city.battleNode.coords.pos.copy(battleNode.coords.pos);
+            battleSystem.getBaseEngine().addUnit(city);
         }
     };
+
     public RenderNode renderNode = new RenderNode(this);
 
     public City() {
