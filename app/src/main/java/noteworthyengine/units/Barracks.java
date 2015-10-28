@@ -28,13 +28,12 @@ public class Barracks extends Unit {
 
     public BattleNode battleNode = new BattleNode(this) {
         @Override
-        public void inflictDamage(BattleSystem battleSystem, BattleNode target, double damage) {
-            super.inflictDamage(battleSystem, target, damage);
-            battleNode.hp.v -= damage;
+        public void inflictDamage(BattleSystem battleSystem, BattleNode attacker, double damage) {
+            super.inflictDamage(battleSystem, attacker, damage);
 
-            if (battleNode.hp.v <= 0) {
+            if (!this.isAlive()) {
                 Barracks barracks = UnitPool.barracks.fetchMemory();
-                barracks.configure(target.gamer.v);
+                barracks.configure(attacker.gamer.v);
                 barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
                 battleSystem.getBaseEngine().addUnit(barracks);
             }
