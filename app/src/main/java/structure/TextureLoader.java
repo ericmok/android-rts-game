@@ -352,22 +352,27 @@ public class TextureLoader {
 	 * @param text
 	 * @return
 	 */
-	public Bitmap generateTextBitmap(StringBuilder text) {		
+	public Bitmap generateTextBitmap(StringBuilder text) {
 		Paint paint = new Paint();
 		paint.setTextSize(144);
 		paint.setAntiAlias(true);
-		paint.setColor(Color.rgb(240, 240, 240));
-		paint.setAlpha(170);
+		paint.setColor(Color.rgb(255, 255, 255));
+		paint.setAlpha(255);
 		//center version
-		//paint.setTextAlign(Paint.Align.CENTER);
-		paint.setTextAlign(Paint.Align.LEFT);
-		 
-		int width = (int) (paint.measureText((CharSequence)text, 0 , text.length()) + 0.5f);
+		paint.setTextAlign(Paint.Align.CENTER);
+		//paint.setTextAlign(Paint.Align.LEFT);
+
+        // Some of the constants here are eye-balled
+		int width = (int) (paint.measureText(text, 0 , text.length()) + 0.5f);
 		float baseline = (int) (-paint.ascent() + 0.5f);
-		int height = (int) (baseline + paint.descent() + 0.5f );
-		
+		int height = (int) (paint.descent() + (-paint.ascent()) + 10);
+
 		Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(image);
+
+        // Hacky...
+        canvas.scale(0.6f, 0.5f);
+        canvas.translate(width / 2, height / 2);
 		//canvas.drawText((CharSequence)text, 0, text.length(), width/2, baseline, paint);
 		
 		// At height 0, the text is drawn with the baseline on the top border
@@ -376,7 +381,7 @@ public class TextureLoader {
 		
 		// explicit version
 		//canvas.drawText((CharSequence)text, 0, text.length(), 0, height - paint.descent(), paint);
-		canvas.drawText((CharSequence)text, 0, text.length(), 0, baseline, paint);
+        canvas.drawText((CharSequence) text, 0, text.length(), 0, baseline, paint);
 
 		return image;
 	}

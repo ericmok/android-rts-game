@@ -279,12 +279,13 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 								(float) textDrawItem.textDirection.getDegrees() + 90,
 								//textDrawItem.angle,
 								//textDrawItem.height * texture.widthRatio, textDrawItem.height,
-								textDrawItem.height, textDrawItem.height,
+								(float) (textDrawItem.height + (texture.widthRatio) * textDrawItem.textDirection.x),
+								(float) (textDrawItem.height + (texture.widthRatio) * textDrawItem.textDirection.y),
 								textDrawItem.color)
 						.draw2d();
 
 				//accumulator += texture.widthRatio * 0.1f;
-				accumulator += 1;
+				accumulator += texture.widthRatio * textDrawItem.height;
 			}
 		}
 	}
