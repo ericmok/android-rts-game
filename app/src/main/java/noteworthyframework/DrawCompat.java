@@ -1,5 +1,7 @@
 package noteworthyframework;
 
+import android.graphics.Color;
+
 import java.util.List;
 
 import noteworthyengine.RenderSystem;
@@ -20,7 +22,8 @@ public class DrawCompat {
 
     public RewriteOnlyArray<Sprite2dDef> spriteAllocator;
     public List<TemporarySprite2dDef> tempSprites;
-    public DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItem;
+    public DoubleBufferredRewriteOnlyArray<TextDrawItem> textDrawItems;
+    public RewriteOnlyArray<TextDrawItem> textDrawItemAllocator;
     public MemoryPool<TemporarySprite2dDef> tempSpritesMemoryPool;
 
     public DoubleBufferredRewriteOnlyArray<Line2dDef> linesToDrawDoubleBuffer;
@@ -32,7 +35,7 @@ public class DrawCompat {
     public DrawCompat(Game game) {
         this.game = game;
         tempSprites = game.graphics.drawLists.temporarySprites;
-        textDrawItem = game.graphics.drawLists.textDrawItems;
+        textDrawItems = game.graphics.drawLists.textDrawItems;
         tempSpritesMemoryPool = game.gamePool.temporaryDrawItems;
 
         linesToDrawDoubleBuffer = game.graphics.drawLists.linesToDraw;
@@ -48,6 +51,9 @@ public class DrawCompat {
 
         linesAllocator = linesToDrawDoubleBuffer.lockWritableBuffer();
         linesAllocator.resetWriteIndex();
+
+        textDrawItemAllocator = textDrawItems.lockWritableBuffer();
+        textDrawItemAllocator.resetWriteIndex();
     }
 
     public void endDraw() {
@@ -56,6 +62,9 @@ public class DrawCompat {
 
         linesToDrawDoubleBuffer.unlockWritableBuffer();
         linesToDrawDoubleBuffer.finalizeUpdate();
+
+        textDrawItems.unlockWritableBuffer();
+        textDrawItems.finalizeUpdate();
     }
 
     public void drawCopySprite(Sprite2dDef sprite2dDef) {
