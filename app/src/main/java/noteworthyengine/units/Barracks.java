@@ -1,5 +1,7 @@
 package noteworthyengine.units;
 
+import android.graphics.Color;
+
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.CityWinLoseConditionNode;
@@ -7,9 +9,11 @@ import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
 import noteworthyengine.GridNode;
 import noteworthyengine.RenderNode;
+import noteworthyengine.RenderSystem;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
+import structure.TextDrawItem;
 import utils.DoublePtr;
 import utils.VoidFunc;
 import utils.VoidFunc2;
@@ -41,6 +45,28 @@ public class Barracks extends Unit {
 
         gridNode = new GridNode(this, null, battleNode);
 
+        renderNode.onDraw = new VoidFunc<RenderSystem>() {
+            @Override
+            public void apply(RenderSystem system) {
+                TextDrawItem textDrawItem = system.fetchTextDrawItem();
+                textDrawItem.position.set(renderNode.coords.pos.x, renderNode.coords.pos.y - 1, 0);
+                textDrawItem.height = 0.9f;
+                textDrawItem.cameraIndex = system.getCameraIndex(RenderNode.RENDER_LAYER_FOREGROUND);
+                textDrawItem.color = renderNode.color.v;
+                textDrawItem.textDirection.set(1, 0);
+                textDrawItem.stringBuilder.setLength(0);
+                textDrawItem.stringBuilder.append((int) (factoryNode.buildTime.v - factoryNode.buildProgress.v));
+
+                // HP Bars:
+                system.drawLine(system.getCameraIndex(renderNode.renderLayer.v),
+                    (float)renderNode.coords.pos.x - 0.5f, (float)renderNode.coords.pos.y + 0.8f,
+                    (float)renderNode.coords.pos.x + 0.5f * (float)(battleNode.hp.v / battleNode.startingHp.v), (float)renderNode.coords.pos.y + 0.8f,
+                    4,
+                    renderNode.color.v);
+
+            }
+        };
+
         factoryNode.spawnFunction = new VoidFunc2<FactorySystem, FactoryNode>() {
             @Override
             public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
@@ -54,6 +80,7 @@ public class Barracks extends Unit {
 
     public void configure(Gamer gamer) {
         battleNode.reset();
+        battleNode.startingHp.v = 100;
         battleNode.hp.v = 100;
         battleNode.attackDamage.v = 1;
         battleNode.gamer.v = gamer;
