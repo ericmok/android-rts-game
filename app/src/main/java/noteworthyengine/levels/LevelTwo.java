@@ -10,6 +10,7 @@ import noteworthyengine.units.Barracks;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.CannonFactory;
 import noteworthyengine.units.DefeatUnit;
+import noteworthyengine.units.FactoryCounterGUI;
 import noteworthyengine.units.Mech;
 import noteworthyengine.units.MechFactory;
 import noteworthyengine.units.Mine;
@@ -148,6 +149,10 @@ public class LevelTwo implements EngineDataLoader {
         spawnBase0(baseEngine, gamer0, new Vector2(0, -9));
         //spawnBase1(baseEngine, gamer0, new Vector2(0, -9));
         spawnBase1(baseEngine, gamer1, new Vector2(0, 9));
+
+        FactoryCounterGUI factoryCounterGUI = new FactoryCounterGUI();
+        factoryCounterGUI.configure(gamer0);
+        baseEngine.addUnit(factoryCounterGUI);
 
         baseEngine.addEventListener(new BaseEngine.EventListener() {
             @Override

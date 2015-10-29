@@ -6,6 +6,7 @@ import noteworthyengine.CityWinLoseConditionSystem;
 import noteworthyengine.events.GameEvents;
 import noteworthyengine.units.Barracks;
 import noteworthyengine.units.DefeatUnit;
+import noteworthyengine.units.FactoryCounterGUI;
 import noteworthyengine.units.Platoon;
 import noteworthyengine.units.UnitPool;
 import noteworthyengine.units.WinUnit;
@@ -122,6 +123,10 @@ public class ZugLevel implements EngineDataLoader {
 
         spawnBase0(baseEngine, gamer0, new Vector2(0, -9));
         spawnBase1(baseEngine, gamer1, new Vector2(0, 9));
+
+        FactoryCounterGUI factoryCounterGUI = new FactoryCounterGUI();
+        factoryCounterGUI.configure(gamer0);
+        baseEngine.addUnit(factoryCounterGUI);
 
         baseEngine.addEventListener(new BaseEngine.EventListener() {
             @Override

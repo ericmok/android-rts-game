@@ -10,6 +10,7 @@ import noteworthyengine.units.Barracks;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.CannonFactory;
 import noteworthyengine.units.DefeatUnit;
+import noteworthyengine.units.FactoryCounterGUI;
 import noteworthyengine.units.Mech;
 import noteworthyengine.units.MechFactory;
 import noteworthyengine.units.Mine;
@@ -208,6 +209,10 @@ public class LevelOne implements EngineDataLoader {
 //        }
 
         baseEngine.currentGamer = gamer0;
+
+        FactoryCounterGUI factoryCounterGUI = new FactoryCounterGUI();
+        factoryCounterGUI.configure(gamer0);
+        baseEngine.addUnit(factoryCounterGUI);
 
         baseEngine.addEventListener(new BaseEngine.EventListener() {
             @Override
