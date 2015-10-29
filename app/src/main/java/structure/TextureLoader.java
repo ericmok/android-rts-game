@@ -323,7 +323,7 @@ public class TextureLoader {
 	 */
 	public void loadLetterTextures() {
 		StringBuilder sb = new StringBuilder(1);
-		String alphabet = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/=[]{}\"\'<>!@#$%^&*()?,.";
+		String alphabet = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/=[]{}\"\'<>!@#$%^&*()?,.:";
 		
 		for (int i = 0; i < alphabet.length(); i++) {
 			// reset builder
