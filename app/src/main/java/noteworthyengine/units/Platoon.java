@@ -53,11 +53,6 @@ public class Platoon extends Unit {
         fieldNode = FieldNode.createAgentFieldNode(this);
 
         battleNode = new PlatoonBattleNode(this);
-        //battleNode.onTargetAcquired = onTargetAcquired;
-        //battleNode.onAttackReady = onAttackReady;
-        //battleNode.onAttackSwing = onAttackSwing;
-        //battleNode.onAttackCast = onAttackCast;
-
         renderNode = new RenderNode(this);
         renderNode.onDraw = this.onDraw;
 
@@ -85,15 +80,6 @@ public class Platoon extends Unit {
         battleNode.target.v = null;
         target[0] = null;
     }
-
-//    public final VoidFunc3<BattleSystem, BattleNode, BattleNode> onTargetAcquired =
-//        new VoidFunc3<BattleSystem, BattleNode, BattleNode>() {
-//            @Override
-//            public void apply(BattleSystem battleSystem, BattleNode battleNode, BattleNode battleNode2) {
-//                //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
-//                //selectedRenderNode.isActive = true;
-//            }
-//        };
 
     public final VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
