@@ -263,7 +263,7 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 		while (textDrawItems.canIterateNext()) {
 			TextDrawItem textDrawItem = textDrawItems.getNextIteratorItem();
-			float accumulator = 0;
+			double accumulator = 0;
 
 			for (int i = 0; i < textDrawItem.stringBuilder.length(); i++) {
 				Character characterToDraw = textDrawItem.stringBuilder.charAt(i);
@@ -276,16 +276,18 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 								(float) (accumulator * textDrawItem.textDirection.x + textDrawItem.position.x),
 								(float) (accumulator * textDrawItem.textDirection.y + textDrawItem.position.y),
 								0,
-								(float) textDrawItem.textDirection.getDegrees() + 90,
+								(float) textDrawItem.textDirection.getDegrees(),
 								//textDrawItem.angle,
-								//textDrawItem.height * texture.widthRatio, textDrawItem.height,
-								(float) (textDrawItem.height + (texture.widthRatio * textDrawItem.height) * textDrawItem.textDirection.x),
-								(float) (textDrawItem.height + (texture.widthRatio * textDrawItem.height) * textDrawItem.textDirection.y),
+								textDrawItem.height * texture.widthRatio, textDrawItem.height,
+								//textDrawItem.height, textDrawItem.height,
+								//(float) (textDrawItem.height + (texture.widthRatio * textDrawItem.height) * textDrawItem.textDirection.x),
+								//(float) (textDrawItem.height + (texture.widthRatio * textDrawItem.height) * textDrawItem.textDirection.y),
 								textDrawItem.color)
 						.draw2d();
 
 				//accumulator += texture.widthRatio * 0.1f;
 				accumulator += texture.widthRatio * textDrawItem.height;
+				//accumulator += textDrawItem.height;
 			}
 		}
 	}
