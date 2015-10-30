@@ -97,8 +97,8 @@ public class Mine extends Unit {
             this.attackDamage.v = 50;
             this.attackSwingTime.v = 1.5;
             this.attackCooldown.v = 3;
-            this.startingHp.v = 400;
-            this.hp.v = 400;
+            this.startingHp.v = 200;
+            this.hp.v = 200;
             this.isAttackable.v = 1;
             this.target.v = null;
 
