@@ -18,6 +18,7 @@ import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.Orientation;
+import utils.Vector2;
 import utils.VoidFunc;
 import utils.VoidFunc2;
 import utils.VoidFunc3;
@@ -98,13 +99,43 @@ public class Platoon extends Unit {
             if (selectionNode.isSelected.v == 1) {
                 system.defineNewSprite(
                         Animations.ANIMATION_BUTTONS_ACTIVATED,
+                        //Animations.ANIMATION_TROOPS_TARGETED,
                         1,
                         (float) renderNode.coords.pos.x,
                         (float) renderNode.coords.pos.y,
                         1,
-                        1.5f, 1.5f,
+                        (float) Math.max(1, (0.2 * Math.sin(time / 5)) + 1.1f),
+                        (float) Math.max(1, (0.2 * Math.sin(time / 5)) + 1.1f),
                         time,
                         //Color.argb(128, 255, 255, 255),
+                        battleNode.gamer.v.color(),
+                        RenderNode.RENDER_LAYER_FOREGROUND
+                );
+                system.defineNewSprite(
+                        Animations.ANIMATION_BUTTONS_ACTIVATED,
+                        //Animations.ANIMATION_TROOPS_TARGETED,
+                        1,
+                        (float) renderNode.coords.pos.x,
+                        (float) renderNode.coords.pos.y,
+                        1,
+                        (float) Math.max(1, (0.22 * Math.sin(time / 5)) + 1.2f),
+                        (float) Math.max(1, (0.22 * Math.sin(time / 5)) + 1.2f),
+                        time,
+                        //Color.argb(128, 255, 255, 255),
+                        battleNode.gamer.v.color(),
+                        RenderNode.RENDER_LAYER_FOREGROUND
+                );
+            }
+            if (movementNode.hasDestination.v == 1) {
+                system.defineNewSprite(
+                        Animations.ANIMATION_TROOPS_TARGETED,
+                        1,
+                        (float) movementNode.destination.x,
+                        (float) movementNode.destination.y,
+                        0,
+                        Math.max(1, (float) (0.3 * Math.sin(time / 15)) + 0.9f),
+                        Math.max(1, (float) (0.3 * Math.sin(time / 15)) + 0.9f),
+                        time * 2,
                         battleNode.gamer.v.color(),
                         RenderNode.RENDER_LAYER_FOREGROUND
                 );

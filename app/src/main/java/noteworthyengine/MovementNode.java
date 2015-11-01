@@ -4,6 +4,7 @@ import noteworthyframework.Coords;
 import utils.DoublePtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.IntegerPtr;
 import utils.JsonSerializable;
 import utils.Vector2;
 
@@ -23,12 +24,15 @@ public class MovementNode extends Node implements JsonSerializable {
     public Vector2 velocity;
     public Vector2 acceleration;
 
+    public Vector2 destination;
     public Vector2 fieldForce;
     public Vector2 formationForce;
     public Vector2 separationForce;
     public Vector2 enemyAttractionForce;
 
     public BattleNode.Ptr target;
+
+    public IntegerPtr hasDestination = new IntegerPtr() {{ v = 0; }};
 
     public DoublePtr turnFactor = new DoublePtr() {{ v = 0.4; }};
 

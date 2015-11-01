@@ -10,6 +10,7 @@ import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
+import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
 import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
@@ -28,11 +29,14 @@ public class Cannon extends Unit {
     public FieldNode fieldNode = FieldNode.createAgentFieldNode(this);
 
     public SeparationNode separationNode = new SeparationNode(this);
+    public SelectionNode selectionNode = new SelectionNode(this);
 
     public BattleNode battleNode = new CannonBattleNode(this);
     public RenderNode renderNode = new RenderNode(this);
 
     public GridNode gridNode = new GridNode(this, separationNode, battleNode);
+
+    private float time = 0;
 
     public Cannon() {
         this.name = this.getClass().getSimpleName();
@@ -40,7 +44,24 @@ public class Cannon extends Unit {
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
+                time += 1;
+
                 renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
+
+                if (selectionNode.isSelected.v == 1) {
+                    system.defineNewSprite(
+                            Animations.ANIMATION_BUTTONS_ACTIVATED,
+                            1,
+                            (float) renderNode.coords.pos.x,
+                            (float) renderNode.coords.pos.y,
+                            1,
+                            1.7f, 1.7f,
+                            time,
+                            //Color.argb(128, 255, 255, 255),
+                            battleNode.gamer.v.color(),
+                            RenderNode.RENDER_LAYER_FOREGROUND
+                    );
+                }
 
                 if (!battleNode.isAlive()) {
                     TemporarySprite2dDef tempSprite = system.beginNewTempSprite(); //system.defineNewTempSprite(Animations.ANIMATION_TROOPS_DYING_DEF, 0);

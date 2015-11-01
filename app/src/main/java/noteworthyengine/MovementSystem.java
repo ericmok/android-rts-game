@@ -74,6 +74,20 @@ public class MovementSystem extends noteworthyframework.System {
 
             temp2.copy(desiredVelocity);
 
+            // Demo for destination force:
+            if (movementNode.hasDestination.v == 1) {
+                Vector2.subtract(temp3, movementNode.destination, movementNode.coords.pos);
+
+                if (temp3.magnitude() > 2) {
+                    temp3.setNormalized();
+                    temp3.scale(0.8);
+                    desiredVelocity.translate(temp3);
+                    movementNode.coords.rot.addVector(temp3.x, temp3.y, 2 * movementNode.turnFactor.v);
+                } else {
+                    movementNode.hasDestination.v = 0;
+                }
+            }
+
             desiredVelocity.translate(formationForce.x, formationForce.y);
             desiredVelocity.translate(separationForce.x, separationForce.y);
 
@@ -98,8 +112,8 @@ public class MovementSystem extends noteworthyframework.System {
                 movementNode.coords.rot.addVector(temp3.x, temp3.y, movementNode.turnFactor.v);
             }
             else if (velocity.magnitude() != 0) {
-                movementNode.coords.rot.addVector(velocity.x, velocity.y, movementNode.turnFactor.v);
-                //movementNode.coords.rot.setDirection(velocity);
+                //movementNode.coords.rot.addVector(velocity.x, velocity.y, movementNode.turnFactor.v);
+                movementNode.coords.rot.setDirection(velocity);
                 //movementNode.coords.rot.setDirection(temp2);
             }
         }
