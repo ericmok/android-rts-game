@@ -67,6 +67,7 @@ public class Platoon extends Unit {
     }
 
     public void configure(Gamer gamer) {
+        movementNode.reset();
         battleNode.reset();
         selectionNode.reset();
 

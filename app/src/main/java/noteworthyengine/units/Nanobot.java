@@ -43,7 +43,9 @@ public class Nanobot extends Unit {
     }
 
     public void configure(Gamer gamer) {
+        movementNode.reset();
         battleNode.reset();
+
         battleNode.gamer.v = gamer;
         renderNode.color.v = Gamer.TeamColors.get(gamer.team);
 

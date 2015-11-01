@@ -90,9 +90,11 @@ public class Cannon extends Unit {
     }
 
     public void configure(Gamer gamer) {
+        this.movementNode.reset();
+        this.battleNode.reset();
+
         this.movementNode.maxSpeed.v = 0.32;
 
-        this.battleNode.reset();
         this.battleNode.gamer.v = gamer;
 
         this.renderNode.animationName.v = "Animations/Cannons/Idling";

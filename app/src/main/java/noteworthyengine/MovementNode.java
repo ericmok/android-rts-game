@@ -50,6 +50,13 @@ public class MovementNode extends Node implements JsonSerializable {
         Node.instantiatePublicFieldsForUnit(unit, MovementNode.class, this);
     }
 
+    public void reset() {
+        this._enabled = true;
+        this.velocity.zero();
+        this.acceleration.zero();
+        this.hasDestination.v = 0;
+    }
+
     public String json() {
 
         return "";

@@ -67,10 +67,12 @@ public class Mech extends Platoon {
     }
 
     public void configure(final Gamer gamer) {
+        this.movementNode.reset();
+        this.battleNode.reset();
+
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
 
-        this.battleNode.reset();
         this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 110;
         this.battleNode.maxSpeed.v = 0.9;

@@ -113,9 +113,11 @@ public class PufferZug extends Unit {
     }
 
     public void configure(Gamer gamer) {
+        movementNode.reset();
+        battleNode.reset();
+
         movementNode.maxSpeed.v = 0.9;
 
-        battleNode.reset();
         battleNode.gamer.v = gamer;
 
         renderNode.color.v = Gamer.TeamColors.get(gamer.team);
