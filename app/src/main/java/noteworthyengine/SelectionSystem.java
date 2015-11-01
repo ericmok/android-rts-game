@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 
 import java.util.List;
 
+import noteworthyengine.units.SelectionTap;
 import noteworthyframework.*;
 import structure.Game;
 import utils.Vector2;
@@ -88,6 +89,10 @@ public class SelectionSystem extends noteworthyframework.System {
                     }
                 }
 
+            SelectionTap selectionTap = new SelectionTap();
+            selectionTap.configure();
+            selectionTap.renderNode.coords.set(temp.x, temp.y);
+            this.getBaseEngine().addUnit(selectionTap);
         }
 
 
@@ -112,6 +117,7 @@ public class SelectionSystem extends noteworthyframework.System {
                     movementNode.hasDestination.v = 1;
                 }
             }
+
             hasSelection = false;
         }
 
