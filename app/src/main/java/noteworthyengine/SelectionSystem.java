@@ -14,6 +14,8 @@ import utils.Vector2;
  */
 public class SelectionSystem extends noteworthyframework.System {
 
+    public static final float TOUCH_RADIUS = 3;
+
     public QueueMutationList<SelectionNode> selectionNodes = new QueueMutationList<>(127);
 
     private Game game;
@@ -63,7 +65,7 @@ public class SelectionSystem extends noteworthyframework.System {
 
                 int x = gridSystem.grid.getBucketX(temp.x);
                 int y = gridSystem.grid.getBucketY(temp.y);
-                List<GridNode> gridNodes = gridSystem.grid.getSurroundingNodes(x, y, 4);
+                List<GridNode> gridNodes = gridSystem.grid.getSurroundingNodes(x, y, TOUCH_RADIUS);
 
                 hasSelection = false;
 
@@ -71,7 +73,7 @@ public class SelectionSystem extends noteworthyframework.System {
                     SelectionNode selectionNode = selectionNodes.get(i);
                     selectionNode.isSelected.v = 0;
 //
-//                if (selectionNode.coords.pos.distanceTo(temp) < 4) {
+//                if (selectionNode.coords.pos.distanceTo(temp) < TOUCH_RADIUS) {
 //                    selectionNode.isSelected.v = 1;
 //                }
                 }
@@ -79,7 +81,7 @@ public class SelectionSystem extends noteworthyframework.System {
                 for (int i = 0; i < gridNodes.size(); i++) {
                     GridNode gridNode = gridNodes.get(i);
 
-                    if (gridNode.coords.pos.distanceTo(temp) < 4) {
+                    if (gridNode.coords.pos.distanceTo(temp) < TOUCH_RADIUS) {
 
                         SelectionNode selectionNode = (SelectionNode) gridNode.unit.node("selectionNode");
                         if (selectionNode != null && selectionNode.gamer.v == getBaseEngine().currentGamer) {
@@ -92,6 +94,8 @@ public class SelectionSystem extends noteworthyframework.System {
             SelectionTap selectionTap = new SelectionTap();
             selectionTap.configure();
             selectionTap.renderNode.coords.set(temp.x, temp.y);
+            selectionTap.renderNode.width.v = TOUCH_RADIUS + 2;
+            selectionTap.renderNode.height.v = TOUCH_RADIUS + 2;
             this.getBaseEngine().addUnit(selectionTap);
         }
 
