@@ -34,7 +34,7 @@ public class ArrowCommand extends Unit {
         fieldNode._fieldArrowNode = new FieldNode.FieldArrowNode(this);
 
         decayNode = new DecayNode(this);
-        decayNode.timeToLive.v = 10;
+        decayNode.timeToLive.v = 3;
 
         renderNode = new RenderNode(this);
         renderNode.animationName.v = ANIMATION_FIELD_ARROW_EXISTING;
