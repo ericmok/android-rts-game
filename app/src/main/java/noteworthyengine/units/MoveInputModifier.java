@@ -4,8 +4,6 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import java.sql.PreparedStatement;
-
 import art.Animations;
 import noteworthyengine.CameraNode;
 import noteworthyengine.FieldCameraNode;
@@ -29,7 +27,7 @@ public class MoveInputModifier extends Unit {
     public static final String NAME = "moveInputModifier";
 
     public RenderNode renderNode = new RenderNode(this);
-    public InputHandler inputHandler = new InputHandler(this);
+    public InputNode inputNode = new OneTouchHandler(this);
 
     final private Game game;
     private BaseEngine baseEngine;
@@ -49,7 +47,7 @@ public class MoveInputModifier extends Unit {
         this.game = game;
         this.baseEngine = baseEngine;
 
-        inputHandler.cameraIndex.v = 1;
+        inputNode.cameraIndex.v = 1;
 
         renderNode.isGfxInterpolated.v = 0;
         renderNode.coords.pos.x = -1.2f;
@@ -93,11 +91,11 @@ public class MoveInputModifier extends Unit {
         };
     }
 
-    public class InputHandler extends InputNode {
+    public class TwoTouchHandler extends InputNode {
         int buttonPointerID = -1;
         int secondPointerID = -1;
 
-        public InputHandler(Unit unit) {
+        public TwoTouchHandler(Unit unit) {
             super(unit);
         }
 
@@ -285,6 +283,96 @@ public class MoveInputModifier extends Unit {
                         state = PRISTINE;
                     }
                     break;
+            }
+            mocap.recycle();
+        }
+    }
+
+    public class OneTouchHandler extends InputNode {
+
+        public OneTouchHandler(Unit unit) {
+            super(unit);
+        }
+
+        public void onDown(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onShowPress(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onSingleTapUp(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {}
+
+        public void onScroll(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2, Vector2 touchScrollDeltas) {
+
+        }
+
+        public void onLongPress(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition) {}
+        public void onFling(InputSystem inputSystem, CameraNode cameraNode, Vector2 touchPosition, Vector2 touchPosition2) {}
+        public void onScale(InputSystem inputSystem, CameraNode cameraNode, float touchScale) {}
+
+        public final int PRISTINE = 0;
+        public final int POINTER_PRESSED = 2;
+        public int state = PRISTINE;
+
+        public void update(InputSystem inputSystem, CameraNode cameraNode, int currentGesture, int currentAction) {
+            renderNode.width.v = 0.42f;
+            renderNode.height.v = 0.42f;
+            renderNode.color.v = 0xff999999;
+
+            // MotionEvent may asynchronously change during this function call, so cache this
+            // This will be recycled at the end of the method
+            MotionEvent mocap = MotionEvent.obtain(game.gameInput.motionEvent);
+
+            // TODO: Downcasting may be expensive...So probably want to guard this with a condition
+            NoteworthyEngine noteworthyEngine = (NoteworthyEngine)inputSystem.getBaseEngine();
+            FieldCameraNode fieldCameraNode = noteworthyEngine.activeGameCamera.fieldCameraNode;
+
+            switch(state) {
+                case PRISTINE:
+                    if (mocap.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                        Log.v("MoveInputModifier", "SECOND_POINTER_FOUND");
+                        game.gameInput.getCoordsCenteredAndNormalized(arrowFeedbackPosition, mocap.getX(0), mocap.getY(0));
+
+                        arrowFeedbackPosition.scale(1 / fieldCameraNode.scale.v, 1 / fieldCameraNode.scale.v);
+                        arrowFeedbackPosition.translate(fieldCameraNode.coords.pos.x, fieldCameraNode.coords.pos.y);
+                        state = POINTER_PRESSED;
+
+                    }
+                    break;
+                case POINTER_PRESSED:
+                    // Track move and up
+                    //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_USING_CACHED_SECOND_POINTER_ID");
+                    isMakingNewArrowCommand = true;
+
+                    int mocapAction = mocap.getActionMasked();
+
+                    //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_MOVE");
+
+                    game.gameInput.getCoordsCenteredAndNormalized(temp2, mocap.getX(0), mocap.getY(0));
+                    temp2.scale(1 / fieldCameraNode.scale.v, 1 / fieldCameraNode.scale.v);
+                    temp2.translate(fieldCameraNode.coords.pos.x, fieldCameraNode.coords.pos.y);
+
+                    Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
+                    arrowFeedbackOrientation.setNormalized();
+                    arrowFeedbackOrientation.set();
+
+                    if (mocapAction == MotionEvent.ACTION_UP ||
+                            mocapAction == MotionEvent.ACTION_POINTER_UP) {
+                        //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_UP");
+
+                        // Actually not needed, SECOND_POINTER_PRESSED is effectively guarded
+                        // by the POINTER_DOWN condition
+                        // secondPointerID = -1;
+
+                        ArrowCommand arrowCommand = new ArrowCommand();
+                        //arrowCommand.set(game.noteworthyEngine.currentGamer,
+                        arrowCommand.set(baseEngine.currentGamer,
+                                arrowFeedbackPosition.x,
+                                arrowFeedbackPosition.y,
+                                arrowFeedbackOrientation.x,
+                                arrowFeedbackOrientation.y);
+
+                        baseEngine.addUnit(arrowCommand);
+                        isMakingNewArrowCommand = false;
+                        state = PRISTINE;
+                    }
+                break;
             }
             mocap.recycle();
         }
