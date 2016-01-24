@@ -39,8 +39,6 @@ public class MoveInputModifier extends Unit {
 
     private float circularAnimation = 0;
     private boolean buttonIsActivated = false;
-    int buttonPointerID = -1;
-    int secondPointerID = -1;
 
     private Vector2 arrowFeedbackPosition = new Vector2();
     private Orientation arrowFeedbackOrientation = new Orientation();
@@ -96,6 +94,8 @@ public class MoveInputModifier extends Unit {
     }
 
     public class InputHandler extends InputNode {
+        int buttonPointerID = -1;
+        int secondPointerID = -1;
 
         public InputHandler(Unit unit) {
             super(unit);
@@ -190,9 +190,10 @@ public class MoveInputModifier extends Unit {
             renderNode.color.v = 0xff999999;
 
             // MotionEvent may asynchronously change during this function call, so cache this
+            // This will be recycled at the end of the method
             MotionEvent mocap = MotionEvent.obtain(game.gameInput.motionEvent);
 
-            // Downcasting may be expensive
+            // TODO: Downcasting may be expensive...So probably want to guard this with a condition
             NoteworthyEngine noteworthyEngine = (NoteworthyEngine)inputSystem.getBaseEngine();
             FieldCameraNode fieldCameraNode = noteworthyEngine.activeGameCamera.fieldCameraNode;
 
@@ -200,12 +201,12 @@ public class MoveInputModifier extends Unit {
                 case PRISTINE:
                     //Log.v("MoveInputModifier", "PRISINE");
                     if (trackIfModifierHeld(game.gameInput, mocap, cameraNode, renderNode)) {
-                        Log.v("MoveInputModifier", "1234");
+                        //Log.v("MoveInputModifier", "MODIFIER_HELD");
                         state = MODIFIER_PRESSED;
                     }
                     break;
                 case MODIFIER_PRESSED:
-                    Log.v("MoveInputModifier", "MODIFIER_PRESSED");
+                    //Log.v("MoveInputModifier", "MODIFIER_PRESSED");
                     if (!trackIfModifierHeld(game.gameInput, mocap, cameraNode, renderNode)) {
                         state = PRISTINE;
                     }
@@ -230,7 +231,7 @@ public class MoveInputModifier extends Unit {
                     }
                     break;
                 case SECOND_POINTER_PRESSED:
-                    Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED");
+                    //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED");
                     if (!trackIfModifierHeld(game.gameInput, mocap, cameraNode, renderNode)) {
                         state = PRISTINE;
                         return;
@@ -241,33 +242,28 @@ public class MoveInputModifier extends Unit {
                     if (pointerIndex != -1) {
 
                         // Track move and up
-                        Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_USING_CACHED_SECOND_POINTER_ID");
+                        //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_USING_CACHED_SECOND_POINTER_ID");
                         isMakingNewArrowCommand = true;
 
                         int mocapAction = mocap.getActionMasked();
 
-                        //if (mocapAction == MotionEvent.ACTION_MOVE) {
-                        Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_MOVE");
+                        //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_MOVE");
 
-                            game.gameInput.getCoordsCenteredAndNormalized(temp2, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
-                            temp2.scale(1 / fieldCameraNode.scale.v, 1 / fieldCameraNode.scale.v);
-                            temp2.translate(fieldCameraNode.coords.pos.x, fieldCameraNode.coords.pos.y);
+                        game.gameInput.getCoordsCenteredAndNormalized(temp2, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
+                        temp2.scale(1 / fieldCameraNode.scale.v, 1 / fieldCameraNode.scale.v);
+                        temp2.translate(fieldCameraNode.coords.pos.x, fieldCameraNode.coords.pos.y);
 
-                            Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
-                            arrowFeedbackOrientation.setNormalized();
-                            arrowFeedbackOrientation.set();
-                        //}
+                        Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
+                        arrowFeedbackOrientation.setNormalized();
+                        arrowFeedbackOrientation.set();
 
                         if (mocapAction == MotionEvent.ACTION_UP ||
                             mocapAction == MotionEvent.ACTION_POINTER_UP) {
-                            Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_UP");
+                            //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_UP");
 
-                            // Case: no second pointer found but isMakingNewArrowCommand has been set
-                            // (First condition rewritten for more comprehensibility)
-
-                            // If the second pointer disappeared, then interpret this as a POINTER_UP
-                            // and make new arrowCommand
-                            //secondPointerID = -1;
+                            // Actually not needed, SECOND_POINTER_PRESSED is effectively guarded
+                            // by the POINTER_DOWN condition
+                            // secondPointerID = -1;
 
                             ArrowCommand arrowCommand = new ArrowCommand();
                             //arrowCommand.set(game.noteworthyEngine.currentGamer,
@@ -282,133 +278,15 @@ public class MoveInputModifier extends Unit {
                             state = PRISTINE;
                         }
                     } else {
+                        // When pointerIndex == -1
+                        // Second pointer was somehow lost:
+                        // perhaps because an ACTION_UP or ACTION_CANCEL was issued
                         isMakingNewArrowCommand = false;
                         state = PRISTINE;
                     }
                     break;
             }
-
-//
-//            if (game.gameInput.touchDown) {
-//
-//                //Log.v("MoveInputModfier", "A");
-//
-//                // If button is down, check for scroll gesture
-//                if (trackIfModifierHeld(game.gameInput, mocap, cameraNode, renderNode)) {
-//
-//                    //Log.v("MoveInputModfier", "B");
-//
-//                    // Downcasting may be expensive
-//                    NoteworthyEngine noteworthyEngine = (NoteworthyEngine)inputSystem.getBaseEngine();
-//
-//                    int testSecondPointer = findPointerIdNotEqualTo(mocap, buttonPointerID);
-//
-//                    // If second pointer is found, set it
-//                    if (setSecondPointerIfNotAlreadyTracked(mocap, testSecondPointer)) {
-//
-//                        Log.v("MoveInputModfier", "C");
-//
-//                        // Found then handle POINTER_DOWN, MOVE, POINTER_UP
-//                        trackSecondPointerDown(noteworthyEngine.activeGameCamera.fieldCameraNode, mocap, testSecondPointer);
-//                    }
-//                }
-//
-//            } else {
-//                // Don't track the button finger anymore
-//                buttonPointerID = -1;
-//
-//                // Fall through when no ACTION_POINTER_UP action, and only get ACTION_UP
-//                isMakingNewArrowCommand = false;
-//                //Log.v("MoveInputModfier", "F");
-//            }
-
             mocap.recycle();
-        }
-
-        public void trackSecondPointerMoveAndPointerUp(FieldCameraNode camera, MotionEvent mocap, int pointerIndex) {
-            int mocapAction = mocap.getActionMasked();
-
-            // Only when there is an ACTION_POINTER_DOWN do we consider the further mechanics
-            if (isMakingNewArrowCommand) {
-                Log.v("MoveInputModifier", "I");
-                if (mocapAction == MotionEvent.ACTION_MOVE) {
-                    Log.v("MoveInputModifier", "J");
-                    game.gameInput.getCoordsCenteredAndNormalized(temp2, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
-                    temp2.scale(1 / camera.scale.v, 1 / camera.scale.v);
-                    temp2.translate(camera.coords.pos.x, camera.coords.pos.y);
-
-                    Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
-                    arrowFeedbackOrientation.setNormalized();
-                    arrowFeedbackOrientation.set();
-                }
-
-                if (mocapAction == MotionEvent.ACTION_UP) {
-
-                    Log.v("MoveInputModfier", "D");
-                    // Case: no second pointer found but isMakingNewArrowCommand has been set
-                    // (First condition rewritten for more comprehensibility)
-
-                    // If the second pointer disappeared, then interpret this as a POINTER_UP
-                    // and make new arrowCommand
-                    secondPointerID = -1;
-
-                    // MotionEvent state sticks when there are no events (UP, MOVE, DOWN)
-                    // so you may wind up with stale continuous POINTER_UP events
-                    // event after the 2nd touch as lifted but modifier button is still pressed.
-                    // In addition, this function body is in a loop, don't want multiple
-                    // ACTION_POINTER_UP's:
-                    isMakingNewArrowCommand = false;
-
-                    ArrowCommand arrowCommand = new ArrowCommand();
-                    //arrowCommand.set(game.noteworthyEngine.currentGamer,
-                    arrowCommand.set(baseEngine.currentGamer,
-                            arrowFeedbackPosition.x,
-                            arrowFeedbackPosition.y,
-                            arrowFeedbackOrientation.x,
-                            arrowFeedbackOrientation.y);
-
-                    baseEngine.addUnit(arrowCommand);
-                }
-                // ACTION_POINTER_UP's are sometimes swallowed by ACTION_MOVE's
-                // So we track the second touch to make a new command
-
-    //            if (isMakingNewArrowCommand) {
-    //                // Prevent consecutive ACTION_POINTER_UP's / ACTION_UP's
-    //                //
-    //                // Also Edge Case: Button finger moves off bounds and lifts before 2nd finger
-    //                // Without this: the isMakingNewArrowCommand sprite gets displayed
-    //                // even when button is not activated
-    //                // trackSecondPointerDown will not be able to capture ACTION_POINTER_UP events
-    //                if (mocap.getPointerCount() < 2 ||
-    //                        mocap.getActionMasked() == MotionEvent.ACTION_POINTER_UP ||
-    //                        mocap.getActionMasked() == MotionEvent.ACTION_UP ||
-    //                        mocap.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-    //                    secondPointerID = -1;
-    //                    isMakingNewArrowCommand = false;
-    //                    //Log.v("MoveInputModfier", "E");
-    //                }
-    //            }
-            }
-        }
-
-        public void trackSecondPointerDown(FieldCameraNode camera, MotionEvent mocap, int pointerIndex) {
-
-            int mocapAction = mocap.getActionMasked();
-
-            Log.v("MoveInputModifier", "G");
-
-            if (mocapAction == MotionEvent.ACTION_POINTER_DOWN) {
-                Log.v("MoveInputModifier", "H");
-                isMakingNewArrowCommand = true;
-
-                game.gameInput.getCoordsCenteredAndNormalized(arrowFeedbackPosition, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
-                arrowFeedbackPosition.scale(1 / camera.scale.v, 1 / camera.scale.v);
-                arrowFeedbackPosition.translate(camera.coords.pos.x, camera.coords.pos.y);
-            }
-
-            if (isMakingNewArrowCommand) {
-                trackSecondPointerMoveAndPointerUp(camera, mocap, pointerIndex);
-            }
         }
     }
 }
