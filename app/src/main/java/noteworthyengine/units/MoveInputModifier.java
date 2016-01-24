@@ -232,58 +232,60 @@ public class MoveInputModifier extends Unit {
                     //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED");
                     if (!trackIfModifierHeld(game.gameInput, mocap, cameraNode, renderNode)) {
                         state = PRISTINE;
-                        return;
                     }
+                    else {
+                        int pointerIndex = mocap.findPointerIndex(secondPointerID);
 
-                    int pointerIndex = mocap.findPointerIndex(secondPointerID);
+                        if (pointerIndex != -1) {
 
-                    if (pointerIndex != -1) {
+                            // Track move and up
+                            //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_USING_CACHED_SECOND_POINTER_ID");
+                            isMakingNewArrowCommand = true;
 
-                        // Track move and up
-                        //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_USING_CACHED_SECOND_POINTER_ID");
-                        isMakingNewArrowCommand = true;
+                            int mocapAction = mocap.getActionMasked();
 
-                        int mocapAction = mocap.getActionMasked();
+                            //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_MOVE");
 
-                        //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_MOVE");
+                            game.gameInput.getCoordsCenteredAndNormalized(temp2, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
+                            temp2.scale(1 / fieldCameraNode.scale.v, 1 / fieldCameraNode.scale.v);
+                            temp2.translate(fieldCameraNode.coords.pos.x, fieldCameraNode.coords.pos.y);
 
-                        game.gameInput.getCoordsCenteredAndNormalized(temp2, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
-                        temp2.scale(1 / fieldCameraNode.scale.v, 1 / fieldCameraNode.scale.v);
-                        temp2.translate(fieldCameraNode.coords.pos.x, fieldCameraNode.coords.pos.y);
+                            Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
+                            arrowFeedbackOrientation.setNormalized();
+                            arrowFeedbackOrientation.set();
 
-                        Vector2.subtract(arrowFeedbackOrientation, temp2, arrowFeedbackPosition);
-                        arrowFeedbackOrientation.setNormalized();
-                        arrowFeedbackOrientation.set();
+                            if (mocapAction == MotionEvent.ACTION_UP ||
+                                    mocapAction == MotionEvent.ACTION_POINTER_UP) {
+                                //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_UP");
 
-                        if (mocapAction == MotionEvent.ACTION_UP ||
-                            mocapAction == MotionEvent.ACTION_POINTER_UP) {
-                            //Log.v("MoveInputModifier", "SECOND_POINTER_PRESSED_UP");
+                                // Actually not needed, SECOND_POINTER_PRESSED is effectively guarded
+                                // by the POINTER_DOWN condition
+                                // secondPointerID = -1;
 
-                            // Actually not needed, SECOND_POINTER_PRESSED is effectively guarded
-                            // by the POINTER_DOWN condition
-                            // secondPointerID = -1;
+                                ArrowCommand arrowCommand = new ArrowCommand();
+                                //arrowCommand.set(game.noteworthyEngine.currentGamer,
+                                arrowCommand.set(baseEngine.currentGamer,
+                                        arrowFeedbackPosition.x,
+                                        arrowFeedbackPosition.y,
+                                        arrowFeedbackOrientation.x,
+                                        arrowFeedbackOrientation.y);
 
-                            ArrowCommand arrowCommand = new ArrowCommand();
-                            //arrowCommand.set(game.noteworthyEngine.currentGamer,
-                            arrowCommand.set(baseEngine.currentGamer,
-                                    arrowFeedbackPosition.x,
-                                    arrowFeedbackPosition.y,
-                                    arrowFeedbackOrientation.x,
-                                    arrowFeedbackOrientation.y);
-
-                            baseEngine.addUnit(arrowCommand);
+                                baseEngine.addUnit(arrowCommand);
+                                isMakingNewArrowCommand = false;
+                                state = PRISTINE;
+                            }
+                        } else {
+                            // When pointerIndex == -1
+                            // Second pointer was somehow lost:
+                            // perhaps because an ACTION_UP or ACTION_CANCEL was issued
                             isMakingNewArrowCommand = false;
                             state = PRISTINE;
                         }
-                    } else {
-                        // When pointerIndex == -1
-                        // Second pointer was somehow lost:
-                        // perhaps because an ACTION_UP or ACTION_CANCEL was issued
-                        isMakingNewArrowCommand = false;
-                        state = PRISTINE;
                     }
                     break;
             }
+
+            // This must be reached
             mocap.recycle();
         }
     }
