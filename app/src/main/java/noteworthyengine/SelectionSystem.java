@@ -89,7 +89,7 @@ public class SelectionSystem extends noteworthyframework.System {
             if (gridNode.coords.pos.distanceTo(temp) < TOUCH_RADIUS) {
 
                 SelectionNode selectionNode = (SelectionNode)gridNode.unit.node("selectionNode");
-                if (selectionNode != null) {
+                if (selectionNode != null && selectionNode.gamer.v == getBaseEngine().currentGamer) {
                     tempSelectionNodes.add(selectionNode);
                 }
 //                SelectionNode selectionNode = (SelectionNode) gridNode.unit.node("selectionNode");
