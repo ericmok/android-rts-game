@@ -218,7 +218,7 @@ public class MoveInputModifier extends Unit {
                         }
 
                         if (testSecondPointer != -1) {
-                            Log.v("MoveInputModifier", "SECOND_POINTER_FOUND");
+                            //Log.v("MoveInputModifier", "SECOND_POINTER_FOUND");
                             int pointerIndex = mocap.findPointerIndex(secondPointerID);
                             game.gameInput.getCoordsCenteredAndNormalized(arrowFeedbackPosition, mocap.getX(pointerIndex), mocap.getY(pointerIndex));
 
@@ -328,7 +328,7 @@ public class MoveInputModifier extends Unit {
             switch(state) {
                 case PRISTINE:
                     if (mocap.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                        Log.v("MoveInputModifier", "SECOND_POINTER_FOUND");
+                        //Log.v("MoveInputModifier", "SECOND_POINTER_FOUND");
                         game.gameInput.getCoordsCenteredAndNormalized(arrowFeedbackPosition, mocap.getX(0), mocap.getY(0));
 
                         arrowFeedbackPosition.scale(1 / fieldCameraNode.scale.v, 1 / fieldCameraNode.scale.v);
