@@ -25,11 +25,6 @@ public class SelectionSystem extends noteworthyframework.System {
     private GridSystem gridSystem;
     private Vector2 temp = new Vector2();
 
-    // Single player selection...
-    private boolean hasSelection = false;
-
-    //private boolean awaitActionUpForTap = false;
-
     private enum State {
         AWAITING_TAP,
         AWAITING_TAP_UP,
@@ -38,9 +33,13 @@ public class SelectionSystem extends noteworthyframework.System {
         AWAITING_TARGET_FOR_COMMAND // For abilities that require a location (like firing a missile at location)
     }
 
-    private List<SelectionNode> tempSelectionNodes = new ArrayList<>(MAX_SELECTION_SIZE);
-    private List<SelectionNode> cacheSelectionNodes = new ArrayList<>(MAX_SELECTION_SIZE);
     private State inputState = State.AWAITING_TAP;
+
+    /// Pre-allocated temporary list
+    private List<SelectionNode> tempSelectionNodes = new ArrayList<>(MAX_SELECTION_SIZE);
+
+    /// Selections that are cached until a new selection is made
+    private List<SelectionNode> cacheSelectionNodes = new ArrayList<>(MAX_SELECTION_SIZE);
 
     public SelectionSystem(Game game, GridSystem gridSystem) {
         this.game = game;
@@ -133,34 +132,50 @@ public class SelectionSystem extends noteworthyframework.System {
         return foundSelection;
     }
 
+    private void moveSelectedUnits(MotionEvent mocap) {
+        for (int i = 0; i < cacheSelectionNodes.size(); i++) {
+            SelectionNode selectionNode = cacheSelectionNodes.get(i);
+
+            if (selectionNode.isSelected.v == 1) {
+                //selectionNode.isSelected.v = 0;
+                MovementNode movementNode = (MovementNode) selectionNode.unit.node(MovementNode._NAME);
+
+                game.gameInput.getCoordsCenteredAndNormalized(temp, mocap.getX(), mocap.getY());
+                NoteworthyEngine noteworthyEngine = (NoteworthyEngine) this.getBaseEngine();
+                double scale = noteworthyEngine.activeGameCamera.cameraNode.scale.v;
+                temp.scale(1 / scale);
+                temp.translate(noteworthyEngine.activeGameCamera.cameraNode.coords.pos.x, noteworthyEngine.activeGameCamera.cameraNode.coords.pos.y);
+
+                movementNode.destination.set(temp.x, temp.y);
+                movementNode.hasDestination.v = 1;
+            }
+        }
+    }
+
     @Override
     public void step(double ct, double dt) {
         MotionEvent mocap = MotionEvent.obtain(game.gameInput.motionEvent);
 
         if (inputState == State.AWAITING_TAP &&
                 mocap.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            inputState = State.AWAITING_TAP_UP;
-            mocap.recycle();
-            return;
-        }
 
-        if (inputState == State.AWAITING_TAP_UP &&
+            inputState = State.AWAITING_TAP_UP;
+
+        }
+        else if (inputState == State.AWAITING_TAP_UP &&
                 mocap.getActionMasked() == MotionEvent.ACTION_UP) {
 
             // To be processed further only if there was a selection
             inputState = State.AWAITING_TAP;
 
-            hasSelection = false;
             if (makeSelection(mocap)) {
                 inputState = State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND;
             }
 
-            mocap.recycle();
-            return;
-        }
+        } else if (inputState == State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND &&
+                mocap.getActionMasked() == MotionEvent.ACTION_DOWN) {
 
-        if (inputState == State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND && mocap.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            //inputState = State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND_AWAITING_UP;
+
             List<SelectionNode> testSelectionNodes = findNodesNearTap(mocap, TOUCH_RADIUS);
             if (testSelectionNodes.size() == 0) {
                 inputState = State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND_AWAITING_UP;
@@ -168,39 +183,18 @@ public class SelectionSystem extends noteworthyframework.System {
             else {
                 makeSelection(mocap);
             }
-            mocap.recycle();
-            return;
-        }
 
-        // Now wait for pointer up
-        if (mocap.getActionMasked() == MotionEvent.ACTION_UP &&
+        } else if (mocap.getActionMasked() == MotionEvent.ACTION_UP &&
             inputState == State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND_AWAITING_UP) {
 
-            for (int i = 0; i < cacheSelectionNodes.size(); i++) {
-                SelectionNode selectionNode = cacheSelectionNodes.get(i);
-
-                if (selectionNode.isSelected.v == 1) {
-                    //selectionNode.isSelected.v = 0;
-                    MovementNode movementNode = (MovementNode) selectionNode.unit.node(MovementNode._NAME);
-
-                    game.gameInput.getCoordsCenteredAndNormalized(temp, mocap.getX(), mocap.getY());
-                    NoteworthyEngine noteworthyEngine = (NoteworthyEngine) this.getBaseEngine();
-                    double scale = noteworthyEngine.activeGameCamera.cameraNode.scale.v;
-                    temp.scale(1 / scale);
-                    temp.translate(noteworthyEngine.activeGameCamera.cameraNode.coords.pos.x, noteworthyEngine.activeGameCamera.cameraNode.coords.pos.y);
-
-                    movementNode.destination.set(temp.x, temp.y);
-                    movementNode.hasDestination.v = 1;
-                }
-            }
             inputState = State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND;
+            moveSelectedUnits(mocap);
 
-            mocap.recycle();
-            return;
         }
 
         mocap.recycle();
     }
+
 
     @Override
     public void flushQueues() {
