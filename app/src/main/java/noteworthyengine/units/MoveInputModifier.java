@@ -84,7 +84,7 @@ public class MoveInputModifier extends Unit {
                             (float) arrowFeedbackPosition.x, (float) arrowFeedbackPosition.y, 0,
                             7f, 7f,
                             (float)arrowFeedbackOrientation.getDegrees(),
-                            Color.argb(240, 255, 255, 255),
+                            Color.argb(70, 255, 255, 255),
                             RenderNode.RENDER_LAYER_FOREGROUND);
                 }
             }
