@@ -49,7 +49,7 @@ public class FieldNode extends Node {
 
         public Coords coords;
         public DoublePtr fieldArrowInfluenceRadius = new DoublePtr() {{
-            v = 3.5;
+            v = 6.5;
         }};
         public DoublePtr rampDistance = new DoublePtr() {{ v = 10; }};
 

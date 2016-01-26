@@ -173,16 +173,17 @@ public class FieldSystem extends noteworthyframework.System {
                     double distance = control._fieldArrowNode.coords.pos.distanceTo(troopCoords.pos) + 0.000001;
 
                     // TODO: Add other conditions
-                    if (distance > control._fieldArrowNode.fieldArrowInfluenceRadius.v) {
-                        continue;
-                    }
+//                    if (distance > control._fieldArrowNode.fieldArrowInfluenceRadius.v) {
+//                        continue;
+//                    }
 
                     double rampDistance = control._fieldArrowNode.rampDistance.v;
 
                     distance = Math.min(distance, rampDistance);
 
-                    double ramp = Math.min( (rampDistance - distance + 0.00001) / rampDistance, 1 );
-                    ramp = ramp * ramp * troopFieldNode._fieldAgentNode.maxSpeed.v;
+                    // Linear ramp with arbitrary scaling factor
+                    double ramp = Math.min( 2 * (rampDistance - distance + 0.00001) / rampDistance, 2 );
+                    ramp = ramp * troopFieldNode._fieldAgentNode.maxSpeed.v;
                     ramp = Math.min(ramp, troopFieldNode._fieldAgentNode.maxSpeed.v);
 
                     temp.copy(control._fieldArrowNode.coords.rot);
