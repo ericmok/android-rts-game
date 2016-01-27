@@ -116,10 +116,10 @@ public class Cannon extends Unit {
 
             this.hp.v = 5;
             this.attackSwingTime.v = 4;
-            this.attackCooldown.v = 14;
+            this.attackCooldown.v = 7;
             this.attackDamage.v = 0;
             this.attackRange.v = 6.5;
-            this.targetAcquisitionRange.v = 18.5;
+            this.targetAcquisitionRange.v = this.attackRange.v + 3;
         }
 
         @Override

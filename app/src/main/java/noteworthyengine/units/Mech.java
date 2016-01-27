@@ -79,7 +79,7 @@ public class Mech extends Platoon {
         //this.battleNode.attackRange.v = 5.5;
         this.battleNode.attackDamage.v = 5;
         this.battleNode.attackRange.v = 2;
-        this.battleNode.targetAcquisitionRange.v = 17;
+        this.battleNode.targetAcquisitionRange.v = this.battleNode.attackRange.v + 3;
         this.battleNode.attackSwingTime.v = 1;
         this.battleNode.attackCooldown.v = 2;
 

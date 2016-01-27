@@ -222,7 +222,7 @@ public class Platoon extends Unit {
             this.hp.v = 50;
             this.attackRange.v = 4;
             this.attackDamage.v = 4;
-            this.targetAcquisitionRange.v = 16.5;
+            this.targetAcquisitionRange.v = this.attackRange.v + 3;
         }
 
         @Override
