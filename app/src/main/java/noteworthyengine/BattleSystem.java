@@ -230,6 +230,95 @@ public class BattleSystem extends noteworthyframework.System {
         return false;
     }
 
+    public void updateBattleNode(BattleNode battleNode, double ct, double dt) {
+
+        // So we may or may not have a target (All the enemy may be dead)
+        // We step the battle phases anyways
+
+        if (battleNode.battleState.v == BattleNode.BATTLE_STATE_IDLE) {
+
+            battleNode.findNewTarget(this);
+
+            if (battleNode.hasLivingTarget()) {
+                battleNode.battleState.v = BattleNode.BATTLE_STATE_TRYING_TO_MEET_CONDITION_TO_CAST_ON_TARGET;
+            }
+        }
+
+        // Zero by default, to be calculated only if there is an enemy
+        battleNode.enemyAttractionForce.zero();
+
+        //if (battleNode.hasLivingTarget()) {
+        if (battleNode.battleState.v == BattleNode.BATTLE_STATE_TRYING_TO_MEET_CONDITION_TO_CAST_ON_TARGET) {
+
+            if (battleNode.fieldForce.magnitude() > battleNode.maxSpeed.v / 2) {
+                battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
+                return;
+            }
+
+            if (!battleNode.hasLivingTarget()) {
+                battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
+            }
+            else {
+                if (!battleNode.targetWithinAttackRange()) {
+                    // TODO: Make it customizable on how to achieve attack range condition
+                    moveNodeTowardsEnemy(battleNode, battleNode.target.v);
+
+                    // Non sticky Case
+                    //battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
+                }
+                if (battleNode.targetWithinAttackRange() || battleNode.attackSwingEvenWhenNotInRange.v == 1) {
+                    battleNode.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
+                    battleNode.battleProgress.v = 0;
+                    battleNode.onAttackSwing(this, battleNode.target.v);
+                }
+            }
+        }
+
+        if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
+
+            if (battleNode.battleProgress.v >= battleNode.attackSwingTime.v) {
+
+                // At attack cast time, ditch the old target for any new targets that
+                // walked into the swing (Useful for explosion swings)
+                if (battleNode.nonCancellableSwing.v == 0) {
+                    battleNode.findNewTarget(this);
+                }
+
+                if (!battleNode.hasLivingTarget()) {
+                    // Lost the target before the swing finished (death or out of range)
+                    battleNode.onAttackCastFail(this);
+                }
+                else {
+                    // We do have a target at cast time
+                    battleNode.onAttackCast(this, battleNode.target.v);
+                }
+
+                battleNode.battleState.v = BattleNode.BATTLE_STATE_WAITING_FOR_COOLDOWN;
+                battleNode.battleProgress.v = 0;
+            }
+            else {
+                battleNode.battleProgress.v += dt;
+            }
+        }
+
+        // Invariant to whether or not there is a target
+        if (battleNode.battleState.v == BattleNode.BATTLE_STATE_WAITING_FOR_COOLDOWN) {
+
+            //acquireNewTarget(battleNode); // Unless we want unit to be idle when in cooldown
+
+            if (battleNode.battleProgress.v >= battleNode.attackCooldown.v) {
+                battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
+                battleNode.battleProgress.v = 0;
+
+                // TODO: Simplify this callback
+                battleNode.onAttackReady(this, battleNode.target.v);
+            }
+            else {
+                battleNode.battleProgress.v += dt;
+            }
+        }
+    }
+
     public void step(double ct, double dt) {
         for (int i = battleNodes.size() - 1; i >= 0; i--) {
             BattleNode battleNode = battleNodes.get(i);
@@ -238,80 +327,7 @@ public class BattleSystem extends noteworthyframework.System {
                 continue;
             }
 
-            // So we may or may not have a target (All the enemy may be dead)
-            // We step the battle phases anyways
-
-            // Zero by default, to be calculated only if there is an enemy
-            battleNode.enemyAttractionForce.zero();
-
-            if (battleNode.hasLivingTarget()) {
-                moveNodeTowardsEnemy(battleNode, battleNode.target.v);
-            }
-
-            if (battleNode.battleState.v == BattleNode.BATTLE_STATE_IDLE) {
-
-                // Find new target if no current one
-                // Find new target anyway if the attack doesn't stick
-                if (!battleNode.hasLivingTarget() || battleNode.lockOnAttack.v == 0) {
-                    battleNode.findNewTarget(this);
-                }
-
-                if (battleNode.hasLivingTarget()) {
-                    // If in range, start the swing immediately
-
-                    if (battleNode.targetWithinAttackRange() ||
-                            battleNode.attackSwingEvenWhenNotInRange.v == 1) {
-                        battleNode.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
-                        battleNode.battleProgress.v = 0;
-
-                        battleNode.onAttackSwing(this, battleNode.target.v);
-                    }
-                }
-            }
-
-            if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
-
-                if (battleNode.battleProgress.v >= battleNode.attackSwingTime.v) {
-
-                    // At attack cast time, ditch the old target for any new targets that
-                    // walked into the swing (Useful for explosion swings)
-                    if (battleNode.nonCancellableSwing.v == 0) {
-                        battleNode.findNewTarget(this);
-                    }
-
-                    if (!battleNode.hasLivingTarget()) {
-                        // Lost the target before the swing finished (death or out of range)
-                        battleNode.onAttackCastFail(this);
-                    }
-                    else {
-                        // We do have a target at cast time
-                        battleNode.onAttackCast(this, battleNode.target.v);
-                    }
-
-                    battleNode.battleState.v = BattleNode.BATTLE_STATE_WAITING_FOR_COOLDOWN;
-                    battleNode.battleProgress.v = 0;
-                }
-                else {
-                    battleNode.battleProgress.v += dt;
-                }
-            }
-
-            // Invariant to whether or not there is a target
-            if (battleNode.battleState.v == BattleNode.BATTLE_STATE_WAITING_FOR_COOLDOWN) {
-
-                //acquireNewTarget(battleNode); // Unless we want unit to be idle when in cooldown
-
-                if (battleNode.battleProgress.v >= battleNode.attackCooldown.v) {
-                    battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
-                    battleNode.battleProgress.v = 0;
-
-                    // TODO: Simplify this callback
-                    battleNode.onAttackReady(this, battleNode.target.v);
-                }
-                else {
-                    battleNode.battleProgress.v += dt;
-                }
-            }
+            updateBattleNode(battleNode, ct, dt);
         }
     }
 

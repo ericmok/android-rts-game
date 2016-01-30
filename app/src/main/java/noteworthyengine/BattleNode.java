@@ -48,6 +48,8 @@ public class BattleNode extends Node {
     public Vector2 velocity;
     public DoublePtr maxSpeed;
 
+    /// Used to determine whether to not the unit should move towards target
+    public Vector2 fieldForce;
     public Vector2 enemyAttractionForce;
 
     public DoublePtr startingHp = new DoublePtr() {{ v = 1; }};
