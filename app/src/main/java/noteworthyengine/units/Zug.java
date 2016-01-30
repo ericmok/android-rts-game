@@ -67,10 +67,10 @@ public class Zug extends Unit {
                     system.endNewTempSprite(tempSprite, 0);
                 }
 
-                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+                if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
 
                     if (battleNode.target.v != null) {
-                        double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
+                        double ratio = (battleNode.battleProgress.v / battleNode.attackSwingTime.v);
 
                         Sprite2dDef sprite2dDef = system.defineNewSprite(
                                 "Animations/Troops/Sword", 0,
@@ -106,7 +106,7 @@ public class Zug extends Unit {
         this.battleNode.targetAcquisitionRange.v = 17;
         this.battleNode.attackSwingTime.v = 1;
         this.battleNode.attackCooldown.v = 2;
-        this.battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+        this.battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
 
         this.renderNode.animationName.v = Animations.ANIMATION_ZUG_IDLING;
     }

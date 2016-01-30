@@ -50,8 +50,8 @@ public class Missle extends Unit {
         this.destinationMovementNode.onDestinationReached = new VoidFunc<DestinationMovementSystem>() {
             @Override
             public void apply(DestinationMovementSystem element) {
-                battleNode.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
-                battleNode.attackProgress.v = 0;
+                battleNode.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
+                battleNode.battleProgress.v = 0;
                 battleNode.hp.v = 0;
             }
         };
@@ -85,8 +85,8 @@ public class Missle extends Unit {
                             RenderNode.RENDER_LAYER_FOREGROUND);
                 }
 
-                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
-                    float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
+                if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
+                    float ratio = (float)(battleNode.battleProgress.v / battleNode.attackSwingTime.v);
                     float rad = (float)(battleNode.attackRange.v * ratio);
 
                     system.defineNewSprite(Animations.ANIMATION_MINE_EXPLODING, (int) (ratio * 100),
@@ -164,8 +164,8 @@ public class Missle extends Unit {
         @Override
         public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
             super.onAttackReady(battleSystem, target);
-            this.attackState.v = BattleNode.ATTACK_STATE_SWINGING;
-            this.attackProgress.v = 0;
+            this.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
+            this.battleProgress.v = 0;
         }
 
         @Override

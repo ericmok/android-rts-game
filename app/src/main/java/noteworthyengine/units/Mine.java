@@ -1,7 +1,5 @@
 package noteworthyengine.units;
 
-import android.graphics.Color;
-
 import art.Animations;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
@@ -53,8 +51,8 @@ public class Mine extends Unit {
                     system.endNewTempSprite(tempSprite, 0);
                 }
 
-                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
-                    float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
+                if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
+                    float ratio = (float)(battleNode.battleProgress.v / battleNode.attackSwingTime.v);
                     float rad = (float)(battleNode.attackRange.v * ratio);
 
                     Sprite2dDef sprite2dDef = system.defineNewSprite(Animations.ANIMATION_MINE_EXPLODING,

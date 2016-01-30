@@ -18,10 +18,7 @@ import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.Orientation;
-import utils.Vector2;
 import utils.VoidFunc;
-import utils.VoidFunc2;
-import utils.VoidFunc3;
 
 /**
  * Created by eric on 3/7/15.
@@ -152,7 +149,7 @@ public class Platoon extends Unit {
                 system.endNewTempSprite(tempSprite, 0);
             }
 
-            if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING && battleNode.hasLivingTarget()) {
+            if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING && battleNode.hasLivingTarget()) {
 
                 double rx = (target[0].coords.pos.x - battleNode.coords.pos.x);
                 double ry =(target[0].coords.pos.y - battleNode.coords.pos.y);
@@ -160,8 +157,8 @@ public class Platoon extends Unit {
                 Sprite2dDef tempSprite = system.defineNewSprite(
                         Animations.ANIMATION_TROOPS_PROJECTILE,
                         0,
-                        (float)((0.60 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.2) * rx  + battleNode.coords.pos.x),
-                        (float)((0.60 * (battleNode.attackProgress.v / battleNode.attackSwingTime.v) + 0.2) * ry  + battleNode.coords.pos.y),
+                        (float)((0.60 * (battleNode.battleProgress.v / battleNode.attackSwingTime.v) + 0.2) * rx  + battleNode.coords.pos.x),
+                        (float)((0.60 * (battleNode.battleProgress.v / battleNode.attackSwingTime.v) + 0.2) * ry  + battleNode.coords.pos.y),
                         1,
                         0.4f, 0.4f,
                         (float) Orientation.getDegreesBaseX(rx, ry),

@@ -1,7 +1,5 @@
 package noteworthyengine.units;
 
-import android.graphics.Color;
-
 import art.Animations;
 import noteworthyengine.BattleNode;
 import noteworthyengine.RenderNode;
@@ -43,10 +41,10 @@ public class Mech extends Platoon {
                     //system.drawCompat.tempSpritesMemoryPool.recycleMemory(tempSprite);
                 }
 
-                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+                if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
 
                     if (battleNode.target.v != null) {
-                        double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v);
+                        double ratio = (battleNode.battleProgress.v / battleNode.attackSwingTime.v);
 
                         //Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                         //sprite2dDef.set("Animations/Troops/Sword", 0,

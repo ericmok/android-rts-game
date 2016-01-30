@@ -1,7 +1,5 @@
 package noteworthyengine.units;
 
-import android.graphics.Color;
-
 import art.Animations;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
@@ -17,7 +15,6 @@ import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
-import utils.VoidFunc3;
 
 /**
  * Created by eric on 3/23/15.
@@ -71,10 +68,10 @@ public class Cannon extends Unit {
                     system.endNewTempSprite(tempSprite, 0);
                 }
 
-                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
+                if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
 
                     if (battleNode.target.v != null) {
-                        double ratio = (battleNode.attackProgress.v / battleNode.attackSwingTime.v) * 100;
+                        double ratio = (battleNode.battleProgress.v / battleNode.attackSwingTime.v) * 100;
 
                         Sprite2dDef sprite2dDef = system.defineNewSprite(
                                 Animations.ANIMATION_TROOPS_SWING, (int) ratio,

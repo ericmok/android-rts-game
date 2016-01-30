@@ -58,7 +58,7 @@ public class Nanobot extends Unit {
         battleNode.attackCooldown.v = 1;
         battleNode.attackRange.v = 1.0;
 
-        battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+        battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
         battleNode.target.v = null;
 
         renderNode.animationName.v = "Animations/Nanobots/Idling";
@@ -74,7 +74,7 @@ public class Nanobot extends Unit {
             @Override
             public void apply(RenderSystem renderSystem) {
 
-                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING && battleNode.target.v != null) {
+                if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING && battleNode.target.v != null) {
 
                     // Attack animation here...
 

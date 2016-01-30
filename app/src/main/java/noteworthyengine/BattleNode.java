@@ -1,13 +1,10 @@
 package noteworthyengine;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 import noteworthyframework.Coords;
 import structure.RewriteOnlyArray;
 import utils.BooleanFunc2;
-import utils.BooleanFunc3;
 import utils.DoublePtr;
 import noteworthyframework.Gamer;
 import noteworthyframework.GamerPtr;
@@ -16,10 +13,7 @@ import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.JsonSerializable;
 import utils.Vector2;
-import utils.VoidFunc;
-import utils.VoidFunc2;
 import utils.VoidFunc3;
-import utils.VoidFunc4;
 
 /**
  * Created by eric on 3/6/15.
@@ -38,9 +32,10 @@ public class BattleNode extends Node {
                 public void apply(BattleSystem system, BattleNode element, BattleNode element2) { }
             };
 
-    public static final int ATTACK_STATE_READY = 0;
-    public static final int ATTACK_STATE_SWINGING = 1;
-    public static final int ATTACK_STATE_WAITING_FOR_COOLDOWN = 2;
+    public static final int BATTLE_STATE_IDLE = 1;
+    public static final int BATTLE_STATE_TRYING_TO_MEET_CONDITION_TO_CAST_ON_TARGET = 2;
+    public static final int BATTLE_STATE_SWINGING = 3;
+    public static final int BATTLE_STATE_WAITING_FOR_COOLDOWN = 4;
 
     public static final Gamer _NO_GAMER = new Gamer("none");
 
@@ -76,8 +71,8 @@ public class BattleNode extends Node {
     public DoublePtr attackSwingTime = new DoublePtr() {{ v = 1; }};
     public DoublePtr attackCooldown = new DoublePtr() {{ v = 1; }};
 
-    public IntegerPtr attackState = new IntegerPtr() {{ v = ATTACK_STATE_WAITING_FOR_COOLDOWN; }};
-    public DoublePtr attackProgress = new DoublePtr() {{ v = 0; }};
+    public IntegerPtr battleState = new IntegerPtr() {{ v = BATTLE_STATE_IDLE; }};
+    public DoublePtr battleProgress = new DoublePtr() {{ v = 0; }};
 
     public boolean _hasTarget = false;
     public DoublePtr tieBreaker = new DoublePtr() {{ v = Math.random(); }};
@@ -191,8 +186,8 @@ public class BattleNode extends Node {
     }
 
     public void onAttackCastFail(BattleSystem battleSystem) {
-        this.attackState.v = ATTACK_STATE_READY;
-        this.attackProgress.v = 0;
+        this.battleState.v = BATTLE_STATE_IDLE;
+        this.battleProgress.v = 0;
     }
 
     public void onDie(BattleSystem battleSystem) {
@@ -204,8 +199,8 @@ public class BattleNode extends Node {
         this.enemyAttractionForce.zero();
         this.target.v = null;
         this.lastAttacker.v = null;
-        this.attackState.v = ATTACK_STATE_READY;
-        this.attackProgress.v = 0;
+        this.battleState.v = BATTLE_STATE_IDLE;
+        this.battleProgress.v = 0;
     }
 
     public boolean isAlive() {
