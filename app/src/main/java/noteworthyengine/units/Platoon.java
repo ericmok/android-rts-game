@@ -102,25 +102,11 @@ public class Platoon extends Unit {
                         (float) renderNode.coords.pos.x,
                         (float) renderNode.coords.pos.y,
                         1,
-                        (float) Math.max(1, (0.2 * Math.sin(time / 5)) + 1.1f),
-                        (float) Math.max(1, (0.2 * Math.sin(time / 5)) + 1.1f),
+                        (float) Math.max(1.2, (0.22 * Math.sin(time / 5)) + 1.22f),
+                        (float) Math.max(1.2, (0.22 * Math.sin(time / 5)) + 1.22f),
                         time,
-                        //Color.argb(128, 255, 255, 255),
-                        battleNode.gamer.v.color(),
-                        RenderNode.RENDER_LAYER_FOREGROUND
-                );
-                system.defineNewSprite(
-                        Animations.ANIMATION_BUTTONS_ACTIVATED,
-                        //Animations.ANIMATION_TROOPS_TARGETED,
-                        1,
-                        (float) renderNode.coords.pos.x,
-                        (float) renderNode.coords.pos.y,
-                        1,
-                        (float) Math.max(1, (0.22 * Math.sin(time / 5)) + 1.2f),
-                        (float) Math.max(1, (0.22 * Math.sin(time / 5)) + 1.2f),
-                        time,
-                        //Color.argb(128, 255, 255, 255),
-                        battleNode.gamer.v.color(),
+                        Color.argb(200, 255, 255, 255),
+                        //battleNode.gamer.v.color(),
                         RenderNode.RENDER_LAYER_FOREGROUND
                 );
             }
@@ -157,13 +143,13 @@ public class Platoon extends Unit {
                 Sprite2dDef tempSprite = system.defineNewSprite(
                         Animations.ANIMATION_TROOPS_PROJECTILE,
                         0,
-                        (float)((0.60 * (battleNode.battleProgress.v / battleNode.attackSwingTime.v) + 0.2) * rx  + battleNode.coords.pos.x),
-                        (float)((0.60 * (battleNode.battleProgress.v / battleNode.attackSwingTime.v) + 0.2) * ry  + battleNode.coords.pos.y),
+                        (float)((0.80 * (battleNode.battleProgress.v / battleNode.attackSwingTime.v) + 0.1) * rx  + battleNode.coords.pos.x),
+                        (float)((0.80 * (battleNode.battleProgress.v / battleNode.attackSwingTime.v) + 0.1) * ry  + battleNode.coords.pos.y),
                         1,
                         0.4f, 0.4f,
                         (float) Orientation.getDegreesBaseX(rx, ry),
-                        //Color.argb(128, 255, 255, 255),
-                        battleNode.gamer.v.color(),
+                        Color.argb(240, 255, 255, 255),
+                        //battleNode.gamer.v.color(),
                         RenderNode.RENDER_LAYER_FOREGROUND
                         );
             }
