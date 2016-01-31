@@ -92,14 +92,12 @@ public class Zug extends Unit {
         this.movementNode.reset();
         this.battleNode.reset();
 
-        this.movementNode.maxSpeed.v = 1.1;
-
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
 
         this.battleNode.gamer.v = gamer;
         this.battleNode.hp.v = 24;
-        this.battleNode.maxSpeed.v = 0.95;
+        this.battleNode.maxSpeed.v = 1.1;
         this.battleNode.attackDamage.v = 25;
         this.battleNode.attackRange.v = 1;
         this.battleNode.fractionToWalkIntoAttackRange.v = 0.4;
