@@ -37,6 +37,13 @@ public class ZugNest extends Barracks {
             Zug zug = UnitPool.zugs.fetchMemory();
             zug.configure(factoryNode.gamer.v);
             zug.battleNode.coords.pos.copy(battleNode.coords.pos);
+            zug.battleNode.coords.pos.translate(-0.1, 0);
+            factorySystem.getBaseEngine().addUnit(zug);
+
+            zug = UnitPool.zugs.fetchMemory();
+            zug.configure(factoryNode.gamer.v);
+            zug.battleNode.coords.pos.copy(battleNode.coords.pos);
+            zug.battleNode.coords.pos.translate(0.1, 0);
             factorySystem.getBaseEngine().addUnit(zug);
         }
     };
