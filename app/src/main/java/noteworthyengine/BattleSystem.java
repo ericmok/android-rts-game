@@ -249,10 +249,11 @@ public class BattleSystem extends noteworthyframework.System {
         //if (battleNode.hasLivingTarget()) {
         if (battleNode.battleState.v == BattleNode.BATTLE_STATE_TRYING_TO_MEET_CONDITION_TO_CAST_ON_TARGET) {
 
-            if (battleNode.fieldForce.magnitude() > battleNode.maxSpeed.v / 2) {
-                battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
-                return;
-            }
+            // Prematrue idling prevents units from shooting and moving at same time
+            //if (battleNode.fieldForce.magnitude() > battleNode.maxSpeed.v / 2) {
+            //    battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
+            //    return;
+            //}
 
             if (!battleNode.hasLivingTarget()) {
                 battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
@@ -262,6 +263,9 @@ public class BattleSystem extends noteworthyframework.System {
                     // TODO: Make it customizable on how to achieve attack range condition
                     moveNodeTowardsEnemy(battleNode, battleNode.target.v);
 
+                    if (battleNode.fieldForce.magnitude() > battleNode.maxSpeed.v / 2) {
+                        battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
+                    }
                     // Non sticky Case
                     //battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
                 }
