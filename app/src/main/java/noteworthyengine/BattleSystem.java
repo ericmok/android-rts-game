@@ -225,7 +225,7 @@ public class BattleSystem extends noteworthyframework.System {
             battleNode.onDie(this);
             this.getBaseEngine().removeUnit(battleNode.unit);
             battleNode.target.v = null;
-            return  true;
+            return true;
         }
         return false;
     }
@@ -236,7 +236,6 @@ public class BattleSystem extends noteworthyframework.System {
         // We step the battle phases anyways
 
         if (battleNode.battleState.v == BattleNode.BATTLE_STATE_IDLE) {
-
             battleNode.findNewTarget(this);
 
             if (battleNode.hasLivingTarget()) {
@@ -297,7 +296,14 @@ public class BattleSystem extends noteworthyframework.System {
                 battleNode.battleProgress.v = 0;
             }
             else {
-                battleNode.battleProgress.v += dt;
+                if (!battleNode.hasLivingTarget() && battleNode.nonCancellableSwing.v == 0) {
+                    battleNode.target.v = null;
+                    battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
+                    battleNode.battleProgress.v = 0;
+                }
+                else {
+                    battleNode.battleProgress.v += dt;
+                }
             }
         }
 
@@ -322,12 +328,19 @@ public class BattleSystem extends noteworthyframework.System {
     public void step(double ct, double dt) {
         for (int i = battleNodes.size() - 1; i >= 0; i--) {
             BattleNode battleNode = battleNodes.get(i);
-
-            if (cleanUpBattleNode(battleNode)) {
-                continue;
-            }
-
             updateBattleNode(battleNode, ct, dt);
+        }
+
+        for (int i = battleNodes.size() - 1; i >= 0; i--) {
+            BattleNode battleNode = battleNodes.get(i);
+
+            cleanUpBattleNode(battleNode);
+
+            // This addresses a bug where a target dies midswing in one frame
+            // Then in the next frame a new unit is spawned that borrows the same BattleNode
+            if (!battleNode.hasLivingTarget()) {
+                battleNode.target.v = null;
+            }
         }
     }
 
