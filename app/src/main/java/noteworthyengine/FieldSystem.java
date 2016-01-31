@@ -1,5 +1,7 @@
 package noteworthyengine;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -10,6 +12,8 @@ import utils.Vector2;
  * Created by eric on 3/6/15.
  */
 public class FieldSystem extends noteworthyframework.System {
+
+    public static final double FORCE_WEIGHTING = 2;
 
     public Hashtable<Gamer, QueueMutationList<FieldNode>> agentsByGamer =
             new Hashtable<Gamer, QueueMutationList<FieldNode>>(4);
@@ -170,7 +174,7 @@ public class FieldSystem extends noteworthyframework.System {
 
                     //double sqDistance = control._fieldArrowNode.coords.pos.squaredDistanceTo(troopCoords.pos) + 0.00001;
                     //double speed = 1 / sqDistance;
-                    double distance = control._fieldArrowNode.coords.pos.distanceTo(troopCoords.pos) + 0.000001;
+                    double distanceBetweenArrowAndAgent = control._fieldArrowNode.coords.pos.distanceTo(troopCoords.pos) + 0.000001;
 
                     // TODO: Add other conditions
 //                    if (distance > control._fieldArrowNode.fieldArrowInfluenceRadius.v) {
@@ -179,12 +183,12 @@ public class FieldSystem extends noteworthyframework.System {
 
                     double rampDistance = control._fieldArrowNode.rampDistance.v;
 
-                    distance = Math.min(distance, rampDistance);
+                    distanceBetweenArrowAndAgent = Math.min(distanceBetweenArrowAndAgent, rampDistance);
 
                     // Linear ramp with arbitrary scaling factor
-                    double ramp = Math.min( 2 * (rampDistance - distance + 0.00001) / rampDistance, 2 );
-                    ramp = ramp * troopFieldNode._fieldAgentNode.maxSpeed.v;
-                    ramp = Math.min(ramp, troopFieldNode._fieldAgentNode.maxSpeed.v);
+                    double ramp = Math.min( 2 * (rampDistance - distanceBetweenArrowAndAgent + 0.00001) / rampDistance, 2 );
+                    ramp = ramp * ramp * troopFieldNode._fieldAgentNode.maxSpeed.v;
+                    ramp = FORCE_WEIGHTING * Math.min(ramp, troopFieldNode._fieldAgentNode.maxSpeed.v);
 
                     temp.copy(control._fieldArrowNode.coords.rot);
                     //temp.setNormalized();

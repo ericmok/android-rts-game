@@ -47,11 +47,13 @@ public class FieldNode extends Node {
         public static final String _NAME = "fieldArrowNode";
         public String _name = _NAME;
 
+        public static final double BLEED = 1.8;
+
         public Coords coords;
         public DoublePtr fieldArrowInfluenceRadius = new DoublePtr() {{
             v = 6.5;
         }};
-        public DoublePtr rampDistance = new DoublePtr() {{ v = 10; }};
+        public DoublePtr rampDistance = new DoublePtr() {{ v = fieldArrowInfluenceRadius.v * BLEED; }};
 
         public FieldArrowNode(Unit unit) {
             super(_NAME, unit);
