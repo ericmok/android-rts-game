@@ -120,6 +120,7 @@ public class BaseEngine {
     }
 
     public void initialize() {
+        this.clear();
         for (int i = 0; i < this.systems.size(); i++) {
             System system = this.systems.get(i);
             system.initialize();
