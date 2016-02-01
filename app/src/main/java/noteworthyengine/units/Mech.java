@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
 import art.Animations;
+import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
@@ -25,7 +26,7 @@ public class Mech extends Platoon {
             @Override
             public void apply(RenderSystem system) {
                 //renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team) & 0xFF9999FF;
-                renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
+                renderNode.color.v = Constants.colorForTeam(battleNode.gamer.v.team);
 
                 if (!battleNode.isAlive()) {
                     //TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();

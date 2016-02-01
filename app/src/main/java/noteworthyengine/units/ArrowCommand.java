@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import android.graphics.Color;
 
+import art.Constants;
 import noteworthyengine.DecayNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.RenderNode;
@@ -50,7 +51,7 @@ public class ArrowCommand extends Unit {
         this.fieldNode._fieldArrowNode.coords.pos.set(x, y);
         this.fieldNode._fieldArrowNode.coords.rot.setDirection(rx, ry);
 
-        int color = Gamer.TeamColors.get(gamer.team);
+        int color = Constants.colorForTeam(gamer.team);
 
         this.renderNode.color.v = Color.argb(RENDER_ALPHA,
                 Color.red(color),

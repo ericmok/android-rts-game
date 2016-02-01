@@ -3,6 +3,7 @@ package noteworthyengine.units;
 import android.graphics.Color;
 
 import art.Animations;
+import art.Constants;
 import noteworthyengine.FactoryCounterNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
@@ -45,6 +46,6 @@ public class FactoryCounterGUI extends Unit {
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 0.1f;
         renderNode.height.v = 0.1f;
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+        renderNode.color.v = Constants.colorForTeam(gamer.team);
     }
 }

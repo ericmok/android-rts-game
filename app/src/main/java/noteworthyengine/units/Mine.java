@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
 import art.Animations;
+import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.GridNode;
@@ -121,7 +122,7 @@ public class Mine extends Unit {
 
         battleNode.gamer.v = gamer;
 
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0xaaffffff;
+        renderNode.color.v = Constants.colorForTeam(gamer.team) & 0xaaffffff;
         renderNode.animationName.v = Animations.ANIMATION_MINE_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 0.95f;

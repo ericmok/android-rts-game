@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
 import art.Animations;
+import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.FieldNode;
@@ -43,7 +44,7 @@ public class Cannon extends Unit {
             public void apply(RenderSystem system) {
                 time += 1;
 
-                renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team);
+                renderNode.color.v = Constants.colorForTeam(battleNode.gamer.v.team);
 
                 if (selectionNode.isSelected.v == 1) {
                     system.defineNewSprite(
@@ -55,7 +56,7 @@ public class Cannon extends Unit {
                             1.7f, 1.7f,
                             time,
                             //Color.argb(128, 255, 255, 255),
-                            battleNode.gamer.v.color(),
+                            Constants.colorForTeam(battleNode.gamer.v.team),
                             RenderNode.RENDER_LAYER_FOREGROUND
                     );
                 }
@@ -78,7 +79,7 @@ public class Cannon extends Unit {
                                 (float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y - renderNode.height.v, 0,
                                 1f, 1f,
                                 90,
-                                Gamer.colorForTeam(battleNode.gamer.v.team), RenderNode.RENDER_LAYER_FOREGROUND
+                                Constants.colorForTeam(battleNode.gamer.v.team), RenderNode.RENDER_LAYER_FOREGROUND
                                 );
                     }
                 }

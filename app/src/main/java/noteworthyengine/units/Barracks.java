@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import android.graphics.Color;
 
+import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.CityWinLoseConditionNode;
@@ -84,7 +85,7 @@ public class Barracks extends Unit {
         battleNode.hp.v = 100;
         battleNode.attackDamage.v = 1;
         battleNode.gamer.v = gamer;
-        renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
+        renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Constants.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
 
         factoryNode.configure(gamer);
         factoryNode.buildTime.v = 25;

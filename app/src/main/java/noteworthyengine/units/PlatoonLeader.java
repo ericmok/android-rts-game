@@ -3,6 +3,7 @@ package noteworthyengine.units;
 import android.graphics.Color;
 
 import art.Animations;
+import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.FieldSystem;
@@ -52,7 +53,7 @@ public class PlatoonLeader extends Unit {
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
-                renderNode.color.v = Gamer.colorForTeam(battleNode.gamer.v.team);
+                renderNode.color.v = Constants.colorForTeam(battleNode.gamer.v.team);
 //
 //                for (int i = 0; i < formationLeader.freeIndices.size(); i++) {
 //                    formationLeader.calculateSheepPosition(temp, formationLeader.freeIndices.get(i));

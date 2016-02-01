@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
 import art.Animations;
+import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
@@ -47,7 +48,7 @@ public class Nanobot extends Unit {
         battleNode.reset();
 
         battleNode.gamer.v = gamer;
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+        renderNode.color.v = Constants.colorForTeam(gamer.team);
 
         movementNode.maxSpeed.v = 1.1;
 

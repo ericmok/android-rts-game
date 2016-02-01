@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
 import art.Animations;
+import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.FieldNode;
@@ -119,7 +120,7 @@ public class PufferZug extends Unit {
 
         battleNode.gamer.v = gamer;
 
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+        renderNode.color.v = Constants.colorForTeam(gamer.team);
         renderNode.animationName.v = Animations.ANIMATION_PUFFER_ZUG_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 0.95f;

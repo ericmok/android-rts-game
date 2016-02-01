@@ -3,6 +3,7 @@ package noteworthyengine.units;
 import android.graphics.Color;
 
 import art.Animations;
+import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.DestinationMovementNode;
@@ -126,7 +127,7 @@ public class Missle extends Unit {
         this.renderNode.isGfxInterpolated.v = 0;
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
-        this.renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+        this.renderNode.color.v = Constants.colorForTeam(gamer.team);
     }
 
     public static class MissileBattleNode extends BattleNode {
