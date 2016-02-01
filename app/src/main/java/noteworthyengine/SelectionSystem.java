@@ -178,7 +178,8 @@ public class SelectionSystem extends noteworthyframework.System {
 
             List<SelectionNode> testSelectionNodes = findNodesNearTap(mocap, TOUCH_RADIUS);
             if (testSelectionNodes.size() == 0) {
-                inputState = State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND_AWAITING_UP;
+                // Disabled for now
+                //inputState = State.HAS_SELECTION_AWAITING_TAP_FOR_COMMAND_AWAITING_UP;
             }
             else {
                 makeSelection(mocap);
