@@ -264,7 +264,7 @@ public class MoveInputModifier extends Unit {
 
                                 ArrowCommand arrowCommand = new ArrowCommand();
                                 //arrowCommand.set(game.noteworthyEngine.currentGamer,
-                                arrowCommand.set(baseEngine.currentGamer,
+                                arrowCommand.set(((NoteworthyEngine)baseEngine).playerSystem.getCurrentPlayer(), // TODO: Get player more elegantly
                                         arrowFeedbackPosition.x,
                                         arrowFeedbackPosition.y,
                                         arrowFeedbackOrientation.x,
@@ -364,7 +364,7 @@ public class MoveInputModifier extends Unit {
 
                         ArrowCommand arrowCommand = new ArrowCommand();
                         //arrowCommand.set(game.noteworthyEngine.currentGamer,
-                        arrowCommand.set(baseEngine.currentGamer,
+                        arrowCommand.set(((NoteworthyEngine)baseEngine).playerSystem.getCurrentPlayer(), // TODO: Get player more elegantly
                                 arrowFeedbackPosition.x,
                                 arrowFeedbackPosition.y,
                                 arrowFeedbackOrientation.x,

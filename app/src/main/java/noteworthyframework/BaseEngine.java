@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class BaseEngine {
 
-    public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
+    //public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
 
     public QueueMutationList<Unit> units = new QueueMutationList<Unit>(127);
 
@@ -33,7 +33,7 @@ public class BaseEngine {
 
     public int frameNumber = 0;
 
-    public Gamer currentGamer;
+    //public Gamer currentGamer;
 
     //private EngineDataLoader engineDataLoader;
 
@@ -41,12 +41,12 @@ public class BaseEngine {
         //this.engineDataLoader = engineDataLoader;
     }
 
-    public void addGamer(Gamer gamer) {
-        gamers.add(gamer);
-    }
-    public void removeGamer(Gamer gamer) {
-        gamers.remove(gamer);
-    }
+//    public void addGamer(Gamer gamer) {
+//        gamers.add(gamer);
+//    }
+//    public void removeGamer(Gamer gamer) {
+//        gamers.remove(gamer);
+//    }
 
     public void addNode(Node node) {
         for (int i = 0; i < systems.size(); i++) {
@@ -90,7 +90,7 @@ public class BaseEngine {
         }
 
         // TODO: gc trigger
-        gamers.clear();
+        //gamers.clear();
 
         // TODO: each system : system.clear()
 

@@ -3,7 +3,9 @@ package noteworthyengine.levels;
 import org.json.JSONException;
 
 import noteworthyengine.CityWinLoseConditionSystem;
+import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.events.GameEvents;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.units.Barracks;
 import noteworthyengine.units.DefeatUnit;
 import noteworthyengine.units.FactoryCounterGUI;
@@ -14,7 +16,6 @@ import noteworthyengine.units.Zug;
 import noteworthyengine.units.ZugNest;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.EngineDataLoader;
-import noteworthyframework.Gamer;
 import structure.Game;
 import utils.Orientation;
 import utils.Vector2;
@@ -22,7 +23,7 @@ import utils.Vector2;
 /**
  * Created by eric on 10/26/15.
  */
-public class ZugLevel implements EngineDataLoader {
+public class ZugLevel {
 
     private Game game;
 
@@ -30,7 +31,7 @@ public class ZugLevel implements EngineDataLoader {
         this.game = game;
     }
 
-    public void spawnBase0(BaseEngine baseEngine, Gamer gamer, Vector2 location) {
+    public void spawnBase0(BaseEngine baseEngine, PlayerUnit playerUnit, Vector2 location) {
 
         Vector2 rot = new Vector2();
         rot.copy(location);
@@ -42,13 +43,13 @@ public class ZugLevel implements EngineDataLoader {
         Orientation.getPerpendicular(perp, rot);
 
         Barracks barracks = UnitPool.barracks.fetchMemory(); //new City(gamer);
-        barracks.configure(gamer);
+        barracks.configure(playerUnit);
         barracks.battleNode.coords.pos.copy(location);
         barracks.battleNode.coords.pos.translate(-1, 0);
         baseEngine.addUnit(barracks);
 
         barracks = UnitPool.barracks.fetchMemory(); //new City(gamer);
-        barracks.configure(gamer);
+        barracks.configure(playerUnit);
         barracks.battleNode.coords.pos.copy(location);
         barracks.battleNode.coords.pos.translate(1, 0);
         baseEngine.addUnit(barracks);
@@ -56,7 +57,7 @@ public class ZugLevel implements EngineDataLoader {
         for (int h = 0; h <= 2; h++) {
             for (int i = -6; i <= 6; i++) {
                 Platoon platoon = UnitPool.platoons.fetchMemory(); //new Platoon();
-                platoon.configure(gamer);
+                platoon.configure(playerUnit);
                 platoon.battleNode.coords.pos.copy(location);
                 platoon.battleNode.coords.pos.translate((i) * perp.x + h * rot.x, (i) * perp.y + h * rot.y);
                 baseEngine.addUnit(platoon);
@@ -64,7 +65,7 @@ public class ZugLevel implements EngineDataLoader {
         }
     }
 
-    public void spawnBase1(BaseEngine baseEngine, Gamer gamer, Vector2 location) {
+    public void spawnBase1(BaseEngine baseEngine, PlayerUnit playerUnit, Vector2 location) {
 
         Vector2 rot = new Vector2();
         rot.copy(location);
@@ -76,26 +77,26 @@ public class ZugLevel implements EngineDataLoader {
         Orientation.getPerpendicular(perp, rot);
 
         ZugNest zugNest = UnitPool.zugNests.fetchMemory();
-        zugNest.configure(gamer);
+        zugNest.configure(playerUnit);
         zugNest.battleNode.coords.pos.copy(location);
         zugNest.battleNode.coords.pos.translate(perp.x, perp.y);
         baseEngine.addUnit(zugNest);
 
         zugNest = UnitPool.zugNests.fetchMemory();
-        zugNest.configure(gamer);
+        zugNest.configure(playerUnit);
         zugNest.battleNode.coords.pos.copy(location);
         zugNest.battleNode.coords.pos.translate(-perp.x, -perp.y);
         baseEngine.addUnit(zugNest);
 
         for (int i = -14; i < 14; i++) {
             Zug zug = new Zug(); // new Cannon(gamer);;
-            zug.configure(gamer);
+            zug.configure(playerUnit);
             zug.battleNode.coords.pos.copy(location);
             zug.battleNode.coords.pos.translate((i) * perp.x + 2.5 * rot.x, ((i)) * perp.y + 2.5 * rot.y);
             baseEngine.addUnit(zug);
 
             zug = new Zug(); // new Cannon(gamer);;
-            zug.configure(gamer);
+            zug.configure(playerUnit);
             zug.battleNode.coords.pos.copy(location);
             zug.battleNode.coords.pos.translate(i * perp.x + 4 * rot.x, i * perp.y + 4 * rot.y);
             baseEngine.addUnit(zug);
@@ -103,45 +104,41 @@ public class ZugLevel implements EngineDataLoader {
 
     }
 
-    @Override
-    public boolean loadFromJson(final BaseEngine baseEngine, String json) throws JSONException {
+    public boolean loadFromJson(final NoteworthyEngine noteworthyEngine, String json) throws JSONException {
 
-        baseEngine.addSystem(new CityWinLoseConditionSystem(game));
+        noteworthyEngine.addSystem(new CityWinLoseConditionSystem(game, noteworthyEngine.playerSystem));
 
-        baseEngine.gameTime = 0;
+        noteworthyEngine.gameTime = 0;
 
-        Gamer gamer0 = new Gamer("taco");
-        gamer0.team = 0;
+        PlayerUnit gamer0 = new PlayerUnit("conniech", 0);
 
-        Gamer gamer1 = new Gamer("avilo");
-        gamer1.team = 1;
+        PlayerUnit gamer1 = new PlayerUnit("avilo", 1);
 
-        baseEngine.gamers.add(gamer0);
-        baseEngine.gamers.add(gamer1);
+        noteworthyEngine.playerSystem.setCurrentPlayer(gamer0);
+        noteworthyEngine.addUnit(gamer0);
+        noteworthyEngine.addUnit(gamer1);
 
-        baseEngine.currentGamer = gamer0;
-
-        spawnBase0(baseEngine, gamer0, new Vector2(0, -9));
-        spawnBase1(baseEngine, gamer1, new Vector2(0, 9));
+        spawnBase0(noteworthyEngine, gamer0, new Vector2(0, -9));
+        spawnBase1(noteworthyEngine, gamer1, new Vector2(0, 9));
 
         FactoryCounterGUI factoryCounterGUI = new FactoryCounterGUI();
         factoryCounterGUI.configure(gamer0);
-        baseEngine.addUnit(factoryCounterGUI);
+        noteworthyEngine.addUnit(factoryCounterGUI);
 
-        baseEngine.addEventListener(new BaseEngine.EventListener() {
+        noteworthyEngine.addEventListener(new BaseEngine.EventListener() {
             @Override
             public void onEvent(int event) {
                 if (event == GameEvents.WIN) {
                     WinUnit winUnit = new WinUnit();
-                    baseEngine.addUnit(winUnit);
+                    noteworthyEngine.addUnit(winUnit);
                 } else if (event == GameEvents.LOSE) {
                     DefeatUnit defeatUnit = new DefeatUnit();
-                    baseEngine.addUnit(defeatUnit);
+                    noteworthyEngine.addUnit(defeatUnit);
                 }
             }
         });
 
-        baseEngine.flushQueues();
+        noteworthyEngine.flushQueues();
 
         return true;
     }

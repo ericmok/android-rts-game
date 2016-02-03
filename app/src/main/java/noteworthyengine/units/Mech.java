@@ -5,7 +5,7 @@ import art.Constants;
 import noteworthyengine.BattleNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.Orientation;
@@ -26,7 +26,7 @@ public class Mech extends Platoon {
             @Override
             public void apply(RenderSystem system) {
                 //renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team) & 0xFF9999FF;
-                renderNode.color.v = Constants.colorForTeam(battleNode.gamer.v.team);
+                renderNode.color.v = Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team);
 
                 if (!battleNode.isAlive()) {
                     //TemporarySprite2dDef tempSprite = system.drawCompat.tempSpritesMemoryPool.fetchMemory();
@@ -65,14 +65,14 @@ public class Mech extends Platoon {
         };
     }
 
-    public void configure(final Gamer gamer) {
+    public void configure(final PlayerUnit playerUnit) {
         this.movementNode.reset();
         this.battleNode.reset();
 
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
 
-        this.battleNode.gamer.v = gamer;
+        this.battleNode.playerUnitPtr.v = playerUnit;
         this.battleNode.hp.v = 110;
         this.battleNode.maxSpeed.v = 0.9;
         //this.battleNode.attackRange.v = 5.5;

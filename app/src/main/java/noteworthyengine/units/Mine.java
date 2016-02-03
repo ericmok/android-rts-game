@@ -9,7 +9,7 @@ import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
 import structure.Sprite2dDef;
@@ -114,15 +114,15 @@ public class Mine extends Unit {
         }
     }
 
-    public void configure(Gamer gamer) {
+    public void configure(PlayerUnit playerUnit) {
         movementNode.reset();
         battleNode.reset();
 
         movementNode.maxSpeed.v = 0.9;
 
-        battleNode.gamer.v = gamer;
+        battleNode.playerUnitPtr.v = playerUnit;
 
-        renderNode.color.v = Constants.colorForTeam(gamer.team) & 0xaaffffff;
+        renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team) & 0xaaffffff;
         renderNode.animationName.v = Animations.ANIMATION_MINE_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 0.95f;

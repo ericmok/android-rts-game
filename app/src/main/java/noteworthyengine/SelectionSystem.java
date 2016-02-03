@@ -6,6 +6,8 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import noteworthyengine.players.PlayerSystem;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.units.SelectionTap;
 import noteworthyframework.*;
 import structure.Game;
@@ -22,6 +24,7 @@ public class SelectionSystem extends noteworthyframework.System {
     public QueueMutationList<SelectionNode> selectionNodes = new QueueMutationList<>(127);
 
     private Game game;
+    private PlayerSystem playerSystem;
     private GridSystem gridSystem;
     private Vector2 temp = new Vector2();
 
@@ -41,9 +44,10 @@ public class SelectionSystem extends noteworthyframework.System {
     /// Selections that are cached until a new selection is made
     private List<SelectionNode> cacheSelectionNodes = new ArrayList<>(MAX_SELECTION_SIZE);
 
-    public SelectionSystem(Game game, GridSystem gridSystem) {
+    public SelectionSystem(Game game, GridSystem gridSystem, PlayerSystem playerSystem) {
         this.game = game;
         this.gridSystem = gridSystem;
+        this.playerSystem = playerSystem;
     }
 
     @Override
@@ -89,7 +93,7 @@ public class SelectionSystem extends noteworthyframework.System {
             if (gridNode.coords.pos.distanceTo(temp) < TOUCH_RADIUS) {
 
                 SelectionNode selectionNode = (SelectionNode)gridNode.unit.node("selectionNode");
-                if (selectionNode != null && selectionNode.gamer.v == getBaseEngine().currentGamer) {
+                if (selectionNode != null && selectionNode.playerUnitPtr.v == playerSystem.getCurrentPlayer()) {
                     tempSelectionNodes.add(selectionNode);
                 }
 //                SelectionNode selectionNode = (SelectionNode) gridNode.unit.node("selectionNode");

@@ -1,7 +1,7 @@
 package noteworthyengine.units;
 
 import art.Constants;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import utils.MemoryPool;
 
@@ -10,8 +10,9 @@ import utils.MemoryPool;
  */
 public class UnitPool {
 
-    public static final Gamer NO_GAMER = new Gamer("No gamer!") {{
-      this.team = Constants.TeamColors.size() - 1;
+    public static final PlayerUnit NO_GAMER = new PlayerUnit() {{
+      this.playerNode.playerData.playerTag = "No Team";
+      this.playerNode.playerData.team = Constants.TeamColors.size() - 1;
     }};
 
     public static final int NUMBER_UNITS = 256;

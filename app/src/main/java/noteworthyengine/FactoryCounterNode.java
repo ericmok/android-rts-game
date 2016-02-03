@@ -1,6 +1,6 @@
 package noteworthyengine;
 
-import noteworthyframework.GamerPtr;
+import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.IntegerPtr;
@@ -10,7 +10,8 @@ import utils.IntegerPtr;
  */
 public class FactoryCounterNode extends Node {
 
-    public GamerPtr gamer = new GamerPtr() {{ v = null; }};
+    //public GamerPtr gamer = new GamerPtr() {{ v = null; }};
+    public PlayerUnitPtr playerUnitPtr = new PlayerUnitPtr();
     public IntegerPtr numberFactories = new IntegerPtr() {{ v = 0; }};
 
     public FactoryCounterNode(Unit unit) {

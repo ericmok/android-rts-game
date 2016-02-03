@@ -10,7 +10,7 @@ import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
 import structure.TemporarySprite2dDef;
@@ -112,15 +112,15 @@ public class PufferZug extends Unit {
         }
     }
 
-    public void configure(Gamer gamer) {
+    public void configure(PlayerUnit playerUnit) {
         movementNode.reset();
         battleNode.reset();
 
         movementNode.maxSpeed.v = 0.9;
 
-        battleNode.gamer.v = gamer;
+        battleNode.playerUnitPtr.v = playerUnit;
 
-        renderNode.color.v = Constants.colorForTeam(gamer.team);
+        renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
         renderNode.animationName.v = Animations.ANIMATION_PUFFER_ZUG_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 0.95f;

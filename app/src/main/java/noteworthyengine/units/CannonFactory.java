@@ -4,7 +4,7 @@ import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import utils.DoublePtr;
 import utils.VoidFunc;
@@ -26,8 +26,8 @@ public class CannonFactory extends Barracks {
     }
 
     @Override
-    public void configure(Gamer gamer) {
-        super.configure(gamer);
+    public void configure(PlayerUnit playerUnit) {
+        super.configure(playerUnit);
 
         factoryNode.buildTime.v = 60;
     }
@@ -35,7 +35,7 @@ public class CannonFactory extends Barracks {
     @Override
     public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
         CannonFactory cannonFactory = UnitPool.cannonFactories.fetchMemory();
-        cannonFactory.configure(attacker.gamer.v);
+        cannonFactory.configure(attacker.playerUnitPtr.v);
         cannonFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
         battleSystem.getBaseEngine().addUnit(cannonFactory);
     }
@@ -44,7 +44,7 @@ public class CannonFactory extends Barracks {
         @Override
         public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
             Cannon cannon = UnitPool.cannons.fetchMemory();
-            cannon.configure(factoryNode.gamer.v);
+            cannon.configure(factoryNode.playerUnitPtr.v);
             cannon.battleNode.coords.pos.copy(battleNode.coords.pos);
             factorySystem.getBaseEngine().addUnit(cannon);
         }

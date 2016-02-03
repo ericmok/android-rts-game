@@ -1,5 +1,7 @@
 package noteworthyengine;
 
+import noteworthyengine.players.PlayerSystem;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.*;
 import utils.Vector2;
 
@@ -9,21 +11,23 @@ import utils.Vector2;
 public class FieldCameraSystem extends noteworthyframework.System {
 
     QueueMutationList<FieldCameraNode> fieldCameraNodes = new QueueMutationList<FieldCameraNode>(2);
+    private PlayerSystem playerSystem;
 
     public GridSystem gridSystem;
     public FieldSystem fieldSystem;
 
     public Vector2 vector = new Vector2();
 
-    public FieldCameraSystem(GridSystem gridSystem, FieldSystem fieldSystem) {
+    public FieldCameraSystem(GridSystem gridSystem, FieldSystem fieldSystem, PlayerSystem playerSystem) {
         this.gridSystem = gridSystem;
         this.fieldSystem = fieldSystem;
+        this.playerSystem = playerSystem;
     }
 
     @Override
     public void addNode(Node node) {
         if (node instanceof FieldCameraNode) {
-            fieldCameraNodes.queueToAdd((FieldCameraNode)node);
+            fieldCameraNodes.queueToAdd((FieldCameraNode) node);
         }
     }
 
@@ -36,12 +40,12 @@ public class FieldCameraSystem extends noteworthyframework.System {
 
     @Override
     public void step(double ct, double dt) {
-        QueueMutationList<FieldNode> fieldNodes = fieldSystem.arrowsByGamer.get(this.getBaseEngine().currentGamer);
+        QueueMutationList<FieldNode> fieldNodes = fieldSystem.arrowsByGamer.get(playerSystem.getCurrentPlayer());
 
         // Since this is a hashmap.get, the result could be null
         if (fieldNodes == null) return;
 
-        QueueMutationList<FieldNode> agents = fieldSystem.agentsByGamer.get(this.getBaseEngine().currentGamer);
+        QueueMutationList<FieldNode> agents = fieldSystem.agentsByGamer.get(playerSystem.getCurrentPlayer());
 
         vector.zero();
 

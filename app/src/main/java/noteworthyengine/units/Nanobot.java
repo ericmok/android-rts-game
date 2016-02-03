@@ -9,7 +9,7 @@ import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
@@ -43,12 +43,12 @@ public class Nanobot extends Unit {
         renderNode.onDraw = getOnDrawFunction();
     }
 
-    public void configure(Gamer gamer) {
+    public void configure(PlayerUnit playerUnit) {
         movementNode.reset();
         battleNode.reset();
 
-        battleNode.gamer.v = gamer;
-        renderNode.color.v = Constants.colorForTeam(gamer.team);
+        battleNode.playerUnitPtr.v = playerUnit;
+        renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
 
         movementNode.maxSpeed.v = 1.1;
 

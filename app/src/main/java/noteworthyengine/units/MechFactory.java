@@ -4,7 +4,7 @@ import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import utils.DoublePtr;
 import utils.VoidFunc;
 import utils.VoidFunc2;
@@ -25,8 +25,8 @@ public class MechFactory extends Barracks {
     }
 
     @Override
-    public void configure(Gamer gamer) {
-        super.configure(gamer);
+    public void configure(PlayerUnit playerUnit) {
+        super.configure(playerUnit);
 
         factoryNode.buildTime.v = 35;
     }
@@ -34,7 +34,7 @@ public class MechFactory extends Barracks {
     @Override
     public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
         MechFactory mechFactory = UnitPool.mechFactories.fetchMemory();
-        mechFactory.configure(attacker.gamer.v);
+        mechFactory.configure(attacker.playerUnitPtr.v);
         mechFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
         battleSystem.getBaseEngine().addUnit(mechFactory);
     }
@@ -43,7 +43,7 @@ public class MechFactory extends Barracks {
         @Override
         public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
             Mech mech = UnitPool.mechs.fetchMemory();
-            mech.configure(factoryNode.gamer.v);
+            mech.configure(factoryNode.playerUnitPtr.v);
             mech.battleNode.coords.pos.copy(battleNode.coords.pos);
             factorySystem.getBaseEngine().addUnit(mech);
         }

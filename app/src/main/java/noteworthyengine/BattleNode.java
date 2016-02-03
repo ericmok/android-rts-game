@@ -2,12 +2,13 @@ package noteworthyengine;
 
 import java.util.ArrayList;
 
+import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Coords;
 import structure.RewriteOnlyArray;
 import utils.BooleanFunc2;
 import utils.DoublePtr;
-import noteworthyframework.Gamer;
-import noteworthyframework.GamerPtr;
+//import noteworthyframework.Gamer;
+//import noteworthyframework.GamerPtr;
 import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
@@ -37,9 +38,10 @@ public class BattleNode extends Node {
     public static final int BATTLE_STATE_SWINGING = 3;
     public static final int BATTLE_STATE_WAITING_FOR_COOLDOWN = 4;
 
-    public static final Gamer _NO_GAMER = new Gamer("none");
+    //public static final Gamer _NO_GAMER = new Gamer("none");
 
-    public GamerPtr gamer;
+    //public GamerPtr gamer;
+    public PlayerUnitPtr playerUnitPtr;
 
     public Coords coords;
     public IntegerPtr gridX;

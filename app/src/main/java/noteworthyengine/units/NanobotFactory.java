@@ -4,7 +4,7 @@ import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import utils.DoublePtr;
 import utils.VoidFunc2;
 import utils.VoidFunc4;
@@ -21,19 +21,19 @@ public class NanobotFactory extends Barracks {
             @Override
             public void apply(FactorySystem system, FactoryNode node) {
                 Nanobot nanobot = UnitPool.nanobots.fetchMemory();
-                nanobot.configure(node.gamer.v);
+                nanobot.configure(node.playerUnitPtr.v);
                 nanobot.battleNode.coords.pos.copy(node.coords.pos);
                 nanobot.battleNode.coords.pos.translate(0.8, 0);
                 system.getBaseEngine().addUnit(nanobot);
 
                 nanobot = UnitPool.nanobots.fetchMemory();
-                nanobot.configure(node.gamer.v);
+                nanobot.configure(node.playerUnitPtr.v);
                 nanobot.battleNode.coords.pos.copy(node.coords.pos);
                 nanobot.battleNode.coords.pos.translate(-0.8, 0);
                 system.getBaseEngine().addUnit(nanobot);
 
                 nanobot = UnitPool.nanobots.fetchMemory();
-                nanobot.configure(node.gamer.v);
+                nanobot.configure(node.playerUnitPtr.v);
                 nanobot.battleNode.coords.pos.copy(node.coords.pos);
                 system.getBaseEngine().addUnit(nanobot);
             }
@@ -41,8 +41,8 @@ public class NanobotFactory extends Barracks {
     }
 
     @Override
-    public void configure(Gamer gamer) {
-        super.configure(gamer);
+    public void configure(PlayerUnit playerUnit) {
+        super.configure(playerUnit);
 
         factoryNode.buildTime.v = 5;
         factoryNode.buildProgress.v = 0;
@@ -51,7 +51,7 @@ public class NanobotFactory extends Barracks {
     @Override
     public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
         NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
-        nanobotFactory.configure(attacker.gamer.v);
+        nanobotFactory.configure(attacker.playerUnitPtr.v);
         nanobotFactory.battleNode.coords.pos.copy(battleNode.coords.pos);
         battleSystem.getBaseEngine().addUnit(nanobotFactory);
     }

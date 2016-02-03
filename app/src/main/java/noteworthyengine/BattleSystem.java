@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.*;
 import structure.RewriteOnlyArray;
 import utils.BooleanFunc2;
@@ -15,10 +16,10 @@ public class BattleSystem extends noteworthyframework.System {
 
     public QueueMutationList<BattleNode> battleNodes = new QueueMutationList<BattleNode>(127);
 
-    public Hashtable<Gamer, QueueMutationList<BattleNode>> battleNodesByGamer =
-            new Hashtable<Gamer, QueueMutationList<BattleNode>>(8);
+    public Hashtable<PlayerUnit, QueueMutationList<BattleNode>> battleNodesByGamer =
+            new Hashtable<PlayerUnit, QueueMutationList<BattleNode>>(8);
 
-    public ArrayList<Gamer> gamers = new ArrayList<Gamer>(8);
+    public ArrayList<PlayerUnit> players = new ArrayList<PlayerUnit>(8);
 
     public BattleNode.Ptr tempBattleNodePtr = new BattleNode.Ptr();
 
@@ -35,11 +36,11 @@ public class BattleSystem extends noteworthyframework.System {
             BattleNode battleNode = (BattleNode) node;
             battleNodes.queueToAdd(battleNode);
 
-            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer.v);
+            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.playerUnitPtr.v);
             if (gamerUnits == null) {
                 gamerUnits = new QueueMutationList<BattleNode>(127);
-                battleNodesByGamer.put(battleNode.gamer.v, gamerUnits);
-                gamers.add(battleNode.gamer.v);
+                battleNodesByGamer.put(battleNode.playerUnitPtr.v, gamerUnits);
+                players.add(battleNode.playerUnitPtr.v);
             }
             gamerUnits.queueToAdd(battleNode);
         }
@@ -51,7 +52,7 @@ public class BattleSystem extends noteworthyframework.System {
             BattleNode battleNode = (BattleNode)node;
             battleNodes.queueToRemove(battleNode);
 
-            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.gamer.v);
+            QueueMutationList gamerUnits = battleNodesByGamer.get(battleNode.playerUnitPtr.v);
             if (gamerUnits != null) {
                 gamerUnits.queueToRemove(battleNode);
             }
@@ -352,9 +353,9 @@ public class BattleSystem extends noteworthyframework.System {
     public void flushQueues() {
         battleNodes.flushQueues();
 
-        for (int i = 0; i < gamers.size(); i++) {
-            Gamer gamer = gamers.get(i);
-            QueueMutationList list = battleNodesByGamer.get(gamer);
+        for (int i = 0; i < players.size(); i++) {
+            PlayerUnit player = players.get(i);
+            QueueMutationList list = battleNodesByGamer.get(player);
             list.flushQueues();
         }
     }
@@ -363,7 +364,7 @@ public class BattleSystem extends noteworthyframework.System {
         new BooleanFunc2<BattleNode, BattleNode>() {
         @Override
         public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
-            return battleNode.gamer.v != battleNode2.gamer.v && battleNodeShouldAttackOther(battleNode, battleNode2);
+            return battleNode.playerUnitPtr.v != battleNode2.playerUnitPtr.v && battleNodeShouldAttackOther(battleNode, battleNode2);
         }
     };
 }

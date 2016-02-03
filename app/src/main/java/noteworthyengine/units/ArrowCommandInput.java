@@ -8,6 +8,8 @@ import noteworthyengine.CameraNode;
 import noteworthyengine.InputNode;
 import noteworthyengine.InputSystem;
 import noteworthyengine.RenderNode;
+import noteworthyengine.players.PlayerNode;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.Unit;
 import structure.Game;
@@ -20,6 +22,9 @@ import utils.Vector2;
 public class ArrowCommandInput extends Unit {
     public static final String NAME = "arrowCommandInput";
 
+    public PlayerUnit playerUnit;
+
+    public PlayerNode playerNode = new PlayerNode(this);
     public ArrowCommandInputNode inputNode = new ArrowCommandInputNode(this);
     public RenderNode renderNode = new RenderNode(this);
 
@@ -28,10 +33,11 @@ public class ArrowCommandInput extends Unit {
 
     private Vector2 temp = new Vector2();
 
-    public ArrowCommandInput(Game game, BaseEngine baseEngine) {
+    public ArrowCommandInput(Game game, BaseEngine baseEngine, PlayerUnit playerUnit) {
         this.name = NAME;
         this.game = game;
         this.baseEngine = baseEngine;
+        this.playerUnit = playerUnit;
 
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 6;
@@ -86,7 +92,7 @@ public class ArrowCommandInput extends Unit {
             if (currentAction == MotionEvent.ACTION_UP) {
                 ArrowCommand arrowCommand = new ArrowCommand();
                 //arrowCommand.set(game.noteworthyEngine.currentGamer,
-                arrowCommand.set(baseEngine.currentGamer,
+                arrowCommand.set(playerUnit,
                         renderNode.coords.pos.x,
                         renderNode.coords.pos.y,
                         renderNode.coords.rot.x,

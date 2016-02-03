@@ -4,7 +4,7 @@ import noteworthyengine.BattleNode;
 import noteworthyengine.BattleSystem;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import utils.DoublePtr;
 import utils.VoidFunc2;
@@ -25,8 +25,8 @@ public class ZugNest extends Barracks {
     }
 
     @Override
-    public void configure(Gamer gamer) {
-        super.configure(gamer);
+    public void configure(PlayerUnit playerUnit) {
+        super.configure(playerUnit);
 
         factoryNode.buildTime.v = 10;
     }
@@ -35,13 +35,13 @@ public class ZugNest extends Barracks {
         @Override
         public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
             Zug zug = UnitPool.zugs.fetchMemory();
-            zug.configure(factoryNode.gamer.v);
+            zug.configure(factoryNode.playerUnitPtr.v);
             zug.battleNode.coords.pos.copy(battleNode.coords.pos);
             zug.battleNode.coords.pos.translate(-0.1, 0);
             factorySystem.getBaseEngine().addUnit(zug);
 
             zug = UnitPool.zugs.fetchMemory();
-            zug.configure(factoryNode.gamer.v);
+            zug.configure(factoryNode.playerUnitPtr.v);
             zug.battleNode.coords.pos.copy(battleNode.coords.pos);
             zug.battleNode.coords.pos.translate(0.1, 0);
             factorySystem.getBaseEngine().addUnit(zug);
@@ -51,7 +51,7 @@ public class ZugNest extends Barracks {
     @Override
     public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
         ZugNest zugNest = UnitPool.zugNests.fetchMemory();
-        zugNest.configure(attacker.gamer.v);
+        zugNest.configure(attacker.playerUnitPtr.v);
         zugNest.battleNode.coords.pos.copy(battleNode.coords.pos);
         battleSystem.getBaseEngine().addUnit(zugNest);
     }

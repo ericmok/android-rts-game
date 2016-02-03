@@ -14,7 +14,8 @@ import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
+//import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
@@ -64,13 +65,13 @@ public class Platoon extends Unit {
         formationSheep = new FormationNode.FormationSheep(this);
     }
 
-    public void configure(Gamer gamer) {
+    public void configure(PlayerUnit playerUnit) {
         movementNode.reset();
         battleNode.reset();
         selectionNode.reset();
 
         movementNode.maxSpeed.v = 0.6;
-        battleNode.gamer.v = gamer;
+        battleNode.playerUnitPtr.v = playerUnit;
 
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
@@ -92,7 +93,7 @@ public class Platoon extends Unit {
 //                    (float)renderNode.coords.pos.x + 0.5f * (float)(battleNode.hp.v / 50), (float)renderNode.coords.pos.y + 0.7f, 2,
 //                    (battleNode.hp.v > 30) ? Color.GREEN : (battleNode.hp.v > 15) ? Color.YELLOW : Color.RED);
 
-            renderNode.color.v = Constants.colorForTeam(battleNode.gamer.v.team);
+            renderNode.color.v = Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team);
             //renderNode.color.v = Color.argb(10, 255, 255, 255);
 
             if (selectionNode.isSelected.v == 1) {
@@ -121,7 +122,7 @@ public class Platoon extends Unit {
                         Math.max(1, (float) (0.3 * Math.sin(time / 15)) + 0.9f),
                         Math.max(1, (float) (0.3 * Math.sin(time / 15)) + 0.9f),
                         time * 2,
-                        Constants.colorForTeam(battleNode.gamer.v.team),
+                        Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team),
                         RenderNode.RENDER_LAYER_FOREGROUND
                 );
             }

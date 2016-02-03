@@ -1,10 +1,12 @@
 package noteworthyengine;
 
+import noteworthyengine.players.PlayerUnit;
+import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyengine.units.Platoon;
 import noteworthyengine.units.UnitPool;
 import noteworthyframework.Coords;
-import noteworthyframework.Gamer;
-import noteworthyframework.GamerPtr;
+//import noteworthyframework.Gamer;
+//import noteworthyframework.GamerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.DoublePtr;
@@ -25,7 +27,8 @@ public class FactoryNode extends Node {
     };
 
     public Coords coords;
-    public GamerPtr gamer;
+    //public GamerPtr gamer;
+    public PlayerUnitPtr playerUnitPtr;
     public DoublePtr buildTime =  new DoublePtr() {{ v = 20; }};
     public DoublePtr buildProgress = new DoublePtr() {{ v = 0; }};
 
@@ -36,7 +39,7 @@ public class FactoryNode extends Node {
         Node.instantiatePublicFieldsForUnit(unit, FactoryNode.class, this);
     }
 
-    public void configure(Gamer gamer) {
-        this.gamer.v = gamer;
+    public void configure(PlayerUnit playerUnit) {
+        this.playerUnitPtr.v = playerUnit;
     }
 }

@@ -7,7 +7,7 @@ import art.Constants;
 import noteworthyengine.FactoryCounterNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.TextDrawItem;
 import utils.VoidFunc;
@@ -39,13 +39,13 @@ public class FactoryCounterGUI extends Unit {
         };
     }
 
-    public void configure(Gamer gamer) {
-        factoryCounterNode.gamer.v = gamer;
+    public void configure(PlayerUnit playerUnit) {
+        factoryCounterNode.playerUnitPtr.v = playerUnit;
 
         renderNode.animationName.v = Animations.ANIMATION_RETICLE_TAP;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 0.1f;
         renderNode.height.v = 0.1f;
-        renderNode.color.v = Constants.colorForTeam(gamer.team);
+        renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
     }
 }

@@ -2,6 +2,7 @@ package noteworthyengine;
 
 import java.util.List;
 
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.*;
 import utils.QueueMutationHashedList;
 import utils.Vector2;
@@ -17,8 +18,8 @@ public class FormationSystem extends noteworthyframework.System {
     public QueueMutationList<FormationNode.FormationLeader> formationLeaders = new QueueMutationList<>(127);
     public QueueMutationList<FormationNode.FormationSheep> formationSheeps = new QueueMutationList<>(127);
 
-    public QueueMutationHashedList<Gamer, FormationNode> nodesByGamer =
-            new QueueMutationHashedList<Gamer, FormationNode>(3, 127);
+    public QueueMutationHashedList<PlayerUnit, FormationNode> nodesByGamer =
+            new QueueMutationHashedList<PlayerUnit, FormationNode>(3, 127);
 
     private Vector2 temp = new Vector2();
     private Vector2 temp2 = new Vector2();
@@ -35,7 +36,7 @@ public class FormationSystem extends noteworthyframework.System {
         if (node.getClass() == FormationNode.class) {
             FormationNode formationNode = (FormationNode)node;
             nodes.queueToAdd(formationNode);
-            nodesByGamer.queueToAdd(formationNode.gamer.v, formationNode);
+            nodesByGamer.queueToAdd(formationNode.playerUnitPtr.v, formationNode);
         }
         if (node.getClass() == FormationNode.FormationLeader.class) {
             formationLeaders.queueToAdd((FormationNode.FormationLeader)node);
@@ -50,7 +51,7 @@ public class FormationSystem extends noteworthyframework.System {
         if (node.getClass() == FormationNode.class) {
             FormationNode formationNode = (FormationNode)node;
             nodes.queueToRemove(formationNode);
-            nodesByGamer.queueToRemove(formationNode.gamer.v, formationNode);
+            nodesByGamer.queueToRemove(formationNode.playerUnitPtr.v, formationNode);
         }
         if (node.getClass() == FormationNode.FormationLeader.class) {
             formationLeaders.queueToRemove((FormationNode.FormationLeader) node);
@@ -82,7 +83,7 @@ public class FormationSystem extends noteworthyframework.System {
                     continue;
                 }
 
-                if (sheep.gamer.v != leader.gamer.v) {
+                if (sheep.playerUnitPtr.v != leader.playerUnitPtr.v) {
                     continue;
                 }
 

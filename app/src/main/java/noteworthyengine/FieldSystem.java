@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.*;
 import utils.Vector2;
 
@@ -15,14 +16,14 @@ public class FieldSystem extends noteworthyframework.System {
 
     public static final double FORCE_WEIGHTING = 2;
 
-    public Hashtable<Gamer, QueueMutationList<FieldNode>> agentsByGamer =
-            new Hashtable<Gamer, QueueMutationList<FieldNode>>(4);
+    public Hashtable<PlayerUnit, QueueMutationList<FieldNode>> agentsByGamer =
+            new Hashtable<PlayerUnit, QueueMutationList<FieldNode>>(4);
             //new QueueMutationList<FieldNode>(127);
-    public Hashtable<Gamer, QueueMutationList<FieldNode>> arrowsByGamer =
-            new Hashtable<Gamer, QueueMutationList<FieldNode>>(4);
+    public Hashtable<PlayerUnit, QueueMutationList<FieldNode>> arrowsByGamer =
+            new Hashtable<PlayerUnit, QueueMutationList<FieldNode>>(4);
             //new QueueMutationList<FieldNode>(127);
 
-    public ArrayList<Gamer> gamers = new ArrayList<Gamer>(4);
+    public ArrayList<PlayerUnit> playerUnits = new ArrayList<PlayerUnit>(4);
 
     private Vector2 temp = new Vector2();
 
@@ -49,12 +50,12 @@ public class FieldSystem extends noteworthyframework.System {
 
             if (fieldNode._fieldAgentNode != null) {
 
-                QueueMutationList<FieldNode> fieldAgentNodes = agentsByGamer.get(fieldNode.gamer.v);
+                QueueMutationList<FieldNode> fieldAgentNodes = agentsByGamer.get(fieldNode.playerUnitPtr.v);
                 if (fieldAgentNodes == null) {
                     fieldAgentNodes = new QueueMutationList<FieldNode>(127);
-                    agentsByGamer.put(fieldNode.gamer.v, fieldAgentNodes);
-                    if (!gamers.contains(fieldNode.gamer.v)) {
-                        gamers.add(fieldNode.gamer.v);
+                    agentsByGamer.put(fieldNode.playerUnitPtr.v, fieldAgentNodes);
+                    if (!playerUnits.contains(fieldNode.playerUnitPtr.v)) {
+                        playerUnits.add(fieldNode.playerUnitPtr.v);
                     }
                 }
                 fieldAgentNodes.queueToAdd(fieldNode);
@@ -63,12 +64,12 @@ public class FieldSystem extends noteworthyframework.System {
             }
             if (fieldNode._fieldArrowNode != null) {
 
-                QueueMutationList<FieldNode> fieldArrowNodes = arrowsByGamer.get(fieldNode.gamer.v);
+                QueueMutationList<FieldNode> fieldArrowNodes = arrowsByGamer.get(fieldNode.playerUnitPtr.v);
                 if (fieldArrowNodes == null) {
                     fieldArrowNodes = new QueueMutationList<FieldNode>(127);
-                    arrowsByGamer.put(fieldNode.gamer.v, fieldArrowNodes);
-                    if (!gamers.contains(fieldNode.gamer.v)) {
-                        gamers.add(fieldNode.gamer.v);
+                    arrowsByGamer.put(fieldNode.playerUnitPtr.v, fieldArrowNodes);
+                    if (!playerUnits.contains(fieldNode.playerUnitPtr.v)) {
+                        playerUnits.add(fieldNode.playerUnitPtr.v);
                     }
                 }
                 fieldArrowNodes.queueToAdd(fieldNode);
@@ -101,16 +102,16 @@ public class FieldSystem extends noteworthyframework.System {
             FieldNode fieldNode = (FieldNode) node;
 
             if (fieldNode._fieldAgentNode != null) {
-                QueueMutationList<FieldNode> list = agentsByGamer.get(fieldNode.gamer.v);
+                QueueMutationList<FieldNode> list = agentsByGamer.get(fieldNode.playerUnitPtr.v);
                 if (list != null) {
                     list.queueToRemove(fieldNode);
                 }
                 //troops.queueToRemove(fieldNode);
             }
             if (fieldNode._fieldArrowNode != null) {
-                QueueMutationList<FieldNode> list = arrowsByGamer.get(fieldNode.gamer.v);
+                QueueMutationList<FieldNode> list = arrowsByGamer.get(fieldNode.playerUnitPtr.v);
                 if (list != null) {
-                    arrowsByGamer.get(fieldNode.gamer.v).queueToRemove(fieldNode);
+                    arrowsByGamer.get(fieldNode.playerUnitPtr.v).queueToRemove(fieldNode);
                 }
                 //arrowsByGamer.queueToRemove(fieldNode);
             }
@@ -127,12 +128,12 @@ public class FieldSystem extends noteworthyframework.System {
     public void flushQueues() {
         //troops.flushQueues();
         //arrowsByGamer.flushQueues();
-        for (int i = 0; i < gamers.size(); i++) {
-            QueueMutationList<FieldNode> list = agentsByGamer.get(gamers.get(i));
+        for (int i = 0; i < playerUnits.size(); i++) {
+            QueueMutationList<FieldNode> list = agentsByGamer.get(playerUnits.get(i));
             if (list != null) {
                 list.flushQueues();
             }
-            list = arrowsByGamer.get(gamers.get(i));
+            list = arrowsByGamer.get(playerUnits.get(i));
             if (list != null) {
                 list.flushQueues();
             }
@@ -142,12 +143,12 @@ public class FieldSystem extends noteworthyframework.System {
     @Override
     public void step(double ct, double dt) {
 
-        for (int gamerIndex = 0; gamerIndex < gamers.size(); gamerIndex += 1) {
+        for (int gamerIndex = 0; gamerIndex < playerUnits.size(); gamerIndex += 1) {
 
-            Gamer gamer = gamers.get(gamerIndex);
+            PlayerUnit player = playerUnits.get(gamerIndex);
 
-            QueueMutationList<FieldNode> agents = agentsByGamer.get(gamer);
-            QueueMutationList<FieldNode> arrows = arrowsByGamer.get(gamer);
+            QueueMutationList<FieldNode> agents = agentsByGamer.get(player);
+            QueueMutationList<FieldNode> arrows = arrowsByGamer.get(player);
 
             if (agents == null) continue;
 

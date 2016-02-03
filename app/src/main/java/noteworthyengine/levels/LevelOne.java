@@ -5,7 +5,9 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import noteworthyengine.CityWinLoseConditionSystem;
+import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.events.GameEvents;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.units.Barracks;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.CannonFactory;
@@ -20,7 +22,6 @@ import noteworthyengine.units.UnitPool;
 import noteworthyengine.units.WinUnit;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.EngineDataLoader;
-import noteworthyframework.Gamer;
 import structure.Game;
 import utils.Orientation;
 import utils.Vector2;
@@ -28,7 +29,7 @@ import utils.Vector2;
 /**
  * Created by eric on 4/27/15.
  */
-public class LevelOne implements EngineDataLoader {
+public class LevelOne {
 
     private Game game;
 
@@ -36,7 +37,7 @@ public class LevelOne implements EngineDataLoader {
         this.game = game;
     }
 
-    public void spawnBase(BaseEngine baseEngine, Gamer gamer, Vector2 location) {
+    public void spawnBase(BaseEngine baseEngine, PlayerUnit gamer, Vector2 location) {
 
         Vector2 rot = new Vector2();
         rot.copy(location);
@@ -123,29 +124,21 @@ public class LevelOne implements EngineDataLoader {
 
     }
 
-    @Override
-    public boolean loadFromJson(final BaseEngine baseEngine, String json) throws JSONException {
+    public boolean loadFromJson(final NoteworthyEngine baseEngine, String json) throws JSONException {
 
-        baseEngine.addSystem(new CityWinLoseConditionSystem(game));
+        baseEngine.addSystem(new CityWinLoseConditionSystem(game, baseEngine.playerSystem));
 
         baseEngine.gameTime = 0;
 
-        Gamer gamer0 = new Gamer("taco");
-        gamer0.team = 0;
+        PlayerUnit gamer0 = new PlayerUnit("taco", 0);
+        PlayerUnit gamer1 = new PlayerUnit("avilo", 1);
+        PlayerUnit gamer2 = new PlayerUnit("grubby", 2);
+        PlayerUnit gamer3 = new PlayerUnit("connie", 3);
 
-        Gamer gamer1 = new Gamer("avilo");
-        gamer1.team = 1;
-
-        Gamer gamer2 = new Gamer("dragon");
-        gamer2.team = 2;
-
-        Gamer gamer3 = new Gamer("connie");
-        gamer3.team = 3;
-
-        baseEngine.addGamer(gamer0);
-        baseEngine.addGamer(gamer1);
-        baseEngine.addGamer(gamer2);
-        baseEngine.addGamer(gamer3);
+        baseEngine.addUnit(gamer0);
+        baseEngine.addUnit(gamer1);
+        baseEngine.addUnit(gamer2);
+        baseEngine.addUnit(gamer3);
 
         Vector2 spawnLocation0 = new Vector2(0, -12 + Math.random() * 2 - 1);
         Vector2 spawnLocation1 = new Vector2(0, 12 + Math.random() * 2 - 1);
@@ -158,15 +151,18 @@ public class LevelOne implements EngineDataLoader {
         spawnLocations.add(spawnLocation2);
         spawnLocations.add(spawnLocation3);
 
-        for (int i = 0; i < baseEngine.gamers.size(); i++) {
-            spawnBase(baseEngine, baseEngine.gamers.get(i), spawnLocations.get(i));
-        }
+//        for (int i = 0; i < baseEngine.playerSystem.players.size(); i++) {
+//            spawnBase(baseEngine, (PlayerUnit)baseEngine.playerSystem.players.get(i).unit, spawnLocations.get(i));
+//        }
+
+        spawnBase(baseEngine, gamer0, spawnLocations.get(0));
+        spawnBase(baseEngine, gamer1, spawnLocations.get(1));
+        spawnBase(baseEngine, gamer2, spawnLocations.get(2));
+        spawnBase(baseEngine, gamer3, spawnLocations.get(3));
 
 
-        Gamer gamer4 = new Gamer("neutral");
-        gamer4.team = 4;
-
-        baseEngine.addGamer(gamer4);
+        PlayerUnit gamer4 = new PlayerUnit("neutral", 4);
+        baseEngine.addUnit(gamer4);
 
         ArrayList<Vector2> neutralSpawnLocations = new ArrayList<Vector2>(8);
 //        neutralSpawnLocations.add(new Vector2(-4.4, -4.4));
@@ -208,7 +204,7 @@ public class LevelOne implements EngineDataLoader {
 //            baseEngine.addUnit(nanobotFactory);
 //        }
 
-        baseEngine.currentGamer = gamer0;
+        baseEngine.playerSystem.setCurrentPlayer(gamer0);
 
         FactoryCounterGUI factoryCounterGUI = new FactoryCounterGUI();
         factoryCounterGUI.configure(gamer0);

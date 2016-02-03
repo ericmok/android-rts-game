@@ -1,9 +1,9 @@
 package noteworthyengine;
 
+import noteworthyengine.players.PlayerUnit;
+import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Coords;
-import utils.DoublePtr;
-import noteworthyframework.Gamer;
-import noteworthyframework.GamerPtr;
+import utils.DoublePtr;;
 import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
@@ -19,7 +19,7 @@ public class TimelineNode extends Node {
 
     public Coords coords;
     public DoublePtr frameTime;
-    public GamerPtr gamerPtr;
+    public PlayerUnitPtr playerUnitPtr;
     public IntegerPtr type;
 
     public TimelineNode(Unit unit) {
@@ -27,11 +27,11 @@ public class TimelineNode extends Node {
         Node.instantiatePublicFieldsForUnit(unit, TimelineNode.class, this);
     }
 
-    public void set(double ct, double x, double y, double rx, double ry, Gamer gamer) {
+    public void set(double ct, double x, double y, double rx, double ry, PlayerUnit playerUnit) {
         this.frameTime.v = ct;
         this.coords.pos.set(x, y);
         this.coords.rot.setDirection(rx, ry);
-        this.gamerPtr.v = gamer;
+        this.playerUnitPtr.v = playerUnit;
         this.type.v = ADD_NODE;
     }
 }

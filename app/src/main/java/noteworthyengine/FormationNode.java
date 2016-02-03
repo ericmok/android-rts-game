@@ -2,8 +2,8 @@ package noteworthyengine;
 
 import java.util.ArrayList;
 
+import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Coords;
-import noteworthyframework.GamerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.DoublePtr;
@@ -19,7 +19,7 @@ public class FormationNode extends Node {
 
     public static final String NAME = "formationNode";
 
-    public GamerPtr gamer;
+    public PlayerUnitPtr playerUnitPtr;
 
     public Coords coords;
     public Vector2 formationForce;
@@ -52,7 +52,7 @@ public class FormationNode extends Node {
 
         public static Vector2 temp = new Vector2();
 
-        public GamerPtr gamer;
+        public PlayerUnitPtr playerUnitPtr;
         public Coords coords;
         public IntegerPtr gridX;
         public IntegerPtr gridY;
@@ -111,7 +111,7 @@ public class FormationNode extends Node {
     public static class FormationSheep extends Node {
         public static final String NAME = "formationSheep";
 
-        public GamerPtr gamer;
+        public PlayerUnitPtr playerUnitPtr;
         public Coords coords;
         public IntegerPtr gridX;
         public IntegerPtr gridY;

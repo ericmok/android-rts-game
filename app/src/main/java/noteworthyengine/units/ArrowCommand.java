@@ -7,7 +7,7 @@ import noteworthyengine.DecayNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import utils.VoidFunc;
@@ -46,12 +46,12 @@ public class ArrowCommand extends Unit {
         renderNode.onDraw = onDraw;
     }
 
-    public void set(Gamer gamer, double x, double y, double rx, double ry) {
-        this.fieldNode.gamer.v = gamer;
+    public void set(PlayerUnit playerUnit, double x, double y, double rx, double ry) {
+        this.fieldNode.playerUnitPtr.v = playerUnit;
         this.fieldNode._fieldArrowNode.coords.pos.set(x, y);
         this.fieldNode._fieldArrowNode.coords.rot.setDirection(rx, ry);
 
-        int color = Constants.colorForTeam(gamer.team);
+        int color = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
 
         this.renderNode.color.v = Color.argb(RENDER_ALPHA,
                 Color.red(color),

@@ -11,7 +11,7 @@ import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
@@ -57,7 +57,7 @@ public class Zug extends Unit {
             @Override
             public void apply(RenderSystem system) {
                 //renderNode.color.v = Gamer.TeamColors.get(battleNode.gamer.v.team) & 0xFF9999FF;
-                renderNode.color.v = Constants.colorForTeam(battleNode.gamer.v.team);
+                renderNode.color.v = Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team);
 
                 if (!battleNode.isAlive()) {
                     TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
@@ -89,14 +89,14 @@ public class Zug extends Unit {
         };
     }
 
-    public void configure(final Gamer gamer) {
+    public void configure(final PlayerUnit playerUnit) {
         this.movementNode.reset();
         this.battleNode.reset();
 
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
 
-        this.battleNode.gamer.v = gamer;
+        this.battleNode.playerUnitPtr.v = playerUnit;
         this.battleNode.hp.v = 24;
         this.battleNode.maxSpeed.v = 1.1;
         this.battleNode.attackDamage.v = 25;

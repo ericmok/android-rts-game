@@ -11,7 +11,7 @@ import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
@@ -44,7 +44,7 @@ public class Cannon extends Unit {
             public void apply(RenderSystem system) {
                 time += 1;
 
-                renderNode.color.v = Constants.colorForTeam(battleNode.gamer.v.team);
+                renderNode.color.v = Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team);
 
                 if (selectionNode.isSelected.v == 1) {
                     system.defineNewSprite(
@@ -56,7 +56,7 @@ public class Cannon extends Unit {
                             1.7f, 1.7f,
                             time,
                             //Color.argb(128, 255, 255, 255),
-                            Constants.colorForTeam(battleNode.gamer.v.team),
+                            Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team),
                             RenderNode.RENDER_LAYER_FOREGROUND
                     );
                 }
@@ -79,7 +79,7 @@ public class Cannon extends Unit {
                                 (float)battleNode.coords.pos.x, (float)battleNode.coords.pos.y - renderNode.height.v, 0,
                                 1f, 1f,
                                 90,
-                                Constants.colorForTeam(battleNode.gamer.v.team), RenderNode.RENDER_LAYER_FOREGROUND
+                                Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team), RenderNode.RENDER_LAYER_FOREGROUND
                                 );
                     }
                 }
@@ -87,13 +87,13 @@ public class Cannon extends Unit {
         };
     }
 
-    public void configure(Gamer gamer) {
+    public void configure(PlayerUnit playerUnit) {
         this.movementNode.reset();
         this.battleNode.reset();
 
         this.movementNode.maxSpeed.v = 0.32;
 
-        this.battleNode.gamer.v = gamer;
+        this.battleNode.playerUnitPtr.v = playerUnit;
 
         this.renderNode.animationName.v = "Animations/Cannons/Idling";
         this.renderNode.width.v = 1.4f;
@@ -125,7 +125,7 @@ public class Cannon extends Unit {
             super.onAttackCast(battleSystem, target);
 
             Missle missle = UnitPool.missles.fetchMemory();
-            missle.configure(this.gamer.v, this.coords.pos, target.coords.pos);
+            missle.configure(this.playerUnitPtr.v, this.coords.pos, target.coords.pos);
             missle.battleNode.coords.pos.copy(this.coords.pos);
             battleSystem.getBaseEngine().addUnit(missle);
         }

@@ -12,7 +12,7 @@ import noteworthyengine.GridNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
 import structure.TemporarySprite2dDef;
@@ -115,19 +115,19 @@ public class Missle extends Unit {
 
     }
 
-    public void configure(Gamer gamer, Vector2 firingSource, Vector2 destination) {
+    public void configure(PlayerUnit playerUnit, Vector2 firingSource, Vector2 destination) {
         this.firingSource.copy(firingSource);
         this.destinationMovementNode.destination.copy(destination);
         this.destinationMovementNode.maxSpeed.v = 0.82;
 
         this.battleNode.reset();
-        this.battleNode.gamer.v = gamer;
+        this.battleNode.playerUnitPtr.v = playerUnit;
 
         this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
         this.renderNode.isGfxInterpolated.v = 0;
         this.renderNode.width.v = 1.2f;
         this.renderNode.height.v = 1.2f;
-        this.renderNode.color.v = Constants.colorForTeam(gamer.team);
+        this.renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
     }
 
     public static class MissileBattleNode extends BattleNode {

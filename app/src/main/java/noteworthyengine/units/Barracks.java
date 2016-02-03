@@ -11,8 +11,9 @@ import noteworthyengine.FactorySystem;
 import noteworthyengine.GridNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
+import noteworthyengine.players.PlayerUnit;
+import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.BaseEngine;
-import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.TextDrawItem;
 import utils.DoublePtr;
@@ -72,29 +73,29 @@ public class Barracks extends Unit {
             @Override
             public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
                 Platoon platoon = UnitPool.platoons.fetchMemory();
-                platoon.configure(factoryNode.gamer.v);
+                platoon.configure(factoryNode.playerUnitPtr.v);
                 platoon.battleNode.coords.pos.copy(battleNode.coords.pos);
                 factorySystem.getBaseEngine().addUnit(platoon);
             }
         };
     }
 
-    public void configure(Gamer gamer) {
+    public void configure(PlayerUnit playerUnit) {
         battleNode.reset();
         battleNode.startingHp.v = 100;
         battleNode.hp.v = 100;
         battleNode.attackDamage.v = 1;
-        battleNode.gamer.v = gamer;
-        renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Constants.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
+        battleNode.playerUnitPtr.v = playerUnit;
+        renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Constants.colorForTeam(playerUnit.playerNode.playerData.team), "Animations/Buildings/City", 0, 0);
 
-        factoryNode.configure(gamer);
+        factoryNode.configure(playerUnit);
         factoryNode.buildTime.v = 25;
         factoryNode.buildProgress.v = 0;
     }
 
     public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
         Barracks barracks = UnitPool.barracks.fetchMemory();
-        barracks.configure(attacker.gamer.v);
+        barracks.configure(attacker.playerUnitPtr.v);
         barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
         battleSystem.getBaseEngine().addUnit(barracks);
     }

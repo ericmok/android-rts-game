@@ -1,6 +1,8 @@
 package noteworthyengine;
 
 import noteworthyengine.events.GameEvents;
+import noteworthyengine.players.PlayerSystem;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.units.ArrowCommandInput;
 import noteworthyengine.units.CameraUnit;
 import noteworthyengine.units.MainGameCamera;
@@ -25,6 +27,7 @@ public class NoteworthyEngine extends BaseEngine {
     public CameraSystem cameraSystem;
     public FieldCameraSystem fieldCameraSystem;
 
+    public PlayerSystem playerSystem;
     public GridSystem gridSystem;
     public SelectionSystem selectionSystem;
     public TimelineSystem timelineSystem;
@@ -49,13 +52,14 @@ public class NoteworthyEngine extends BaseEngine {
 
         cameraSystem = new CameraSystem(game);
         inputSystem = new InputSystem(game, cameraSystem);
+        playerSystem = new PlayerSystem(game);
 
         gridSystem = new GridSystem();
-        selectionSystem = new SelectionSystem(this.game, gridSystem);
+        selectionSystem = new SelectionSystem(this.game, gridSystem, playerSystem);
         timelineSystem = new TimelineSystem();
         separationSystem = new SeparationSystem(gridSystem);
         fieldSystem = new FieldSystem();
-        fieldCameraSystem = new FieldCameraSystem(gridSystem, fieldSystem);
+        fieldCameraSystem = new FieldCameraSystem(gridSystem, fieldSystem, playerSystem);
         formationSystem = new FormationSystem(gridSystem);
         movementSystem = new MovementSystem();
         destinationMovementSystem = new DestinationMovementSystem();
