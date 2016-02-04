@@ -224,8 +224,11 @@ public class BattleSystem extends noteworthyframework.System {
     public boolean cleanUpBattleNode(BattleNode battleNode) {
         if (!battleNode.isAlive()) {
             battleNode.onDie(this);
-            this.getBaseEngine().removeUnit(battleNode.unit);
+
+            // TODO: Do a reset
             battleNode.target.v = null;
+            this.getBaseEngine().removeUnit(battleNode.unit);
+
             return true;
         }
         return false;
