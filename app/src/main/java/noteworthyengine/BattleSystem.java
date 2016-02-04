@@ -367,7 +367,7 @@ public class BattleSystem extends noteworthyframework.System {
         new BooleanFunc2<BattleNode, BattleNode>() {
         @Override
         public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
-            return battleNode.playerUnitPtr.v != battleNode2.playerUnitPtr.v && battleNodeShouldAttackOther(battleNode, battleNode2);
+            return battleNode.playerUnitPtr.v != battleNode2.playerUnitPtr.v;
         }
     };
 }
