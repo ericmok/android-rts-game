@@ -221,7 +221,7 @@ public class BattleSystem extends noteworthyframework.System {
                 (otherBattleNode.isAttackable.v == 1);
     }
 
-    public boolean cleanUpBattleNode(BattleNode battleNode) {
+    public boolean removeAndCleanDeadBattleNode(BattleNode battleNode) {
         if (!battleNode.isAlive()) {
             battleNode.onDie(this);
 
@@ -342,7 +342,7 @@ public class BattleSystem extends noteworthyframework.System {
         for (int i = battleNodes.size() - 1; i >= 0; i--) {
             BattleNode battleNode = battleNodes.get(i);
 
-            cleanUpBattleNode(battleNode);
+            removeAndCleanDeadBattleNode(battleNode);
 
             // This addresses a bug where a target dies midswing in one frame
             // Then in the next frame a new unit is spawned that borrows the same BattleNode
