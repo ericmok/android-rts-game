@@ -2,7 +2,7 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
-import noteworthyengine.BattleNode;
+import noteworthyengine.battle.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;

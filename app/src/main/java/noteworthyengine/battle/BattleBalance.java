@@ -1,4 +1,4 @@
-package noteworthyengine;
+package noteworthyengine.battle;
 
 /**
  * Created by eric on 10/10/15.

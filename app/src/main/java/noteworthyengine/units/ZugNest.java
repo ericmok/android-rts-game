@@ -1,14 +1,11 @@
 package noteworthyengine.units;
 
-import noteworthyengine.BattleNode;
-import noteworthyengine.BattleSystem;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
 import noteworthyengine.players.PlayerUnit;
-import noteworthyframework.Unit;
-import utils.DoublePtr;
 import utils.VoidFunc2;
-import utils.VoidFunc4;
 
 /**
  * Created by eric on 10/26/15.

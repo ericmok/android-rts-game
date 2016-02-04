@@ -2,8 +2,8 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
-import noteworthyengine.BattleNode;
-import noteworthyengine.BattleSystem;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;

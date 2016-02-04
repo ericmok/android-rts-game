@@ -1,10 +1,8 @@
 package noteworthyengine.units;
 
-import android.graphics.Color;
-
 import art.Constants;
-import noteworthyengine.BattleNode;
-import noteworthyengine.BattleSystem;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.CityWinLoseConditionNode;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
@@ -12,14 +10,10 @@ import noteworthyengine.GridNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.players.PlayerUnit;
-import noteworthyengine.players.PlayerUnitPtr;
-import noteworthyframework.BaseEngine;
 import noteworthyframework.Unit;
 import structure.TextDrawItem;
-import utils.DoublePtr;
 import utils.VoidFunc;
 import utils.VoidFunc2;
-import utils.VoidFunc4;
 
 /**
  * Created by eric on 4/30/15.

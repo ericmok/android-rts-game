@@ -4,8 +4,8 @@ import android.graphics.Color;
 
 import art.Animations;
 import art.Constants;
-import noteworthyengine.BattleNode;
-import noteworthyengine.BattleSystem;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.DestinationMovementNode;
 import noteworthyengine.DestinationMovementSystem;
 import noteworthyengine.GridNode;

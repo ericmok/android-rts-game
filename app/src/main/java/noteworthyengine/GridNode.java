@@ -1,5 +1,6 @@
 package noteworthyengine;
 
+import noteworthyengine.battle.BattleNode;
 import noteworthyframework.Coords;
 import utils.IntegerPtr;
 import noteworthyframework.Node;

@@ -1,4 +1,4 @@
-package noteworthyengine;
+package noteworthyengine.battle;
 
 import java.util.ArrayList;
 

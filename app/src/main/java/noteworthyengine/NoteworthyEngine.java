@@ -1,16 +1,13 @@
 package noteworthyengine;
 
-import noteworthyengine.events.GameEvents;
+import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.players.PlayerSystem;
-import noteworthyengine.players.PlayerUnit;
-import noteworthyengine.units.ArrowCommandInput;
 import noteworthyengine.units.CameraUnit;
 import noteworthyengine.units.MainGameCamera;
 import noteworthyengine.units.MoveInputModifier;
 import noteworthyengine.units.UnitPool;
 import noteworthyframework.*;
 import structure.Game;
-import structure.OrthographicCamera;
 
 /**
  * Created by eric on 3/6/15.

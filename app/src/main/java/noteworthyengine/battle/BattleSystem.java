@@ -1,9 +1,12 @@
-package noteworthyengine;
+package noteworthyengine.battle;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import noteworthyengine.Grid;
+import noteworthyengine.GridNode;
+import noteworthyengine.GridSystem;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.*;
 import structure.RewriteOnlyArray;
