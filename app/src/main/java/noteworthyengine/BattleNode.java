@@ -126,33 +126,6 @@ public class BattleNode extends Node {
                 this,
                 this.targetAcquisitionRange.v,
                 this.targetCriteria);
-
-        // Test if node has a target, if it doesn't find a new target
-
-        //            if (node.target.v == null) {
-        //                system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
-        //            }
-        //            else {
-        //                if (node.target.v.hp.v < 0) {
-        //                    system.findAttackablesWithinRange(node.target, node, node.attackRange.v, node.targetCriteria);
-        //                }
-        //            }
-        //system.findAttackablesWithinRange(sharedTargetsPool, node, node.attackRange.v);
-
-
-        //            if (sharedTargetsPool.size() > 0) {
-        //                sharedTargetsPool.sort();
-        //
-        //                int i = 0;
-        //                node.target.v = null;
-        //                while (node.target.v == null && i < sharedTargetsPool.size()) {
-        //                    if (sharedTargetsPool.get(i).v.gamer.v.team != node.gamer.v.team) {
-        //                        node.target.v = sharedTargetsPool.get(i).v;
-        //                    }
-        //
-        //                    i += 1;
-        //                }
-        //            }
     }
 
     public void onTargetAcquired() {
