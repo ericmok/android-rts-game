@@ -5,6 +5,7 @@ import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.GridNode;
 import noteworthyengine.RenderNode;
+import noteworthyengine.battle.ChangeOwnershipOnDeathBattleEffect;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.Unit;
@@ -12,23 +13,16 @@ import noteworthyframework.Unit;
 /**
  * Created by eric on 3/29/15.
  */
-public class City extends Unit {
+public class City extends Unit implements ChangeOwnershipOnDeathBattleEffect.SpawnForEnemyable {
 
     public static final String NAME = "city";
 
     public double spawnAccumulator = 0;
 
     public GridNode gridNode;
-    public BattleNode battleNode = new BattleNode(this) {
-        @Override
-        public void onDie(BattleSystem battleSystem) {
-            super.onDie(battleSystem);
-            City city = UnitPool.cities.fetchMemory();
-            city.configure(this.lastAttacker.v.playerUnitPtr.v);
-            city.battleNode.coords.pos.copy(battleNode.coords.pos);
-            battleSystem.getBaseEngine().addUnit(city);
-        }
-    };
+    public BattleNode battleNode = new BattleNode(this) {{
+        this.battleEffects.add(new ChangeOwnershipOnDeathBattleEffect(this, City.this));
+    }};
 
     public RenderNode renderNode = new RenderNode(this);
 
@@ -44,6 +38,14 @@ public class City extends Unit {
         battleNode.hp.v = 110;
         battleNode.attackDamage.v = 1;
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Constants.colorForTeam(playerUnit.playerNode.playerData.team), "Animations/Buildings/City", 0, 0);
+    }
+
+    @Override
+    public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
+        City city = UnitPool.cities.fetchMemory();
+        city.configure(attacker.playerUnitPtr.v);
+        city.battleNode.coords.pos.copy(battleNode.coords.pos);
+        battleSystem.getBaseEngine().addUnit(city);
     }
 
     @Override

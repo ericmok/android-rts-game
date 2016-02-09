@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.battle.BasicAttackEffect;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.FieldNode;
@@ -52,7 +53,9 @@ public class Platoon extends Unit {
 
         fieldNode = FieldNode.createAgentFieldNode(this);
 
-        battleNode = new PlatoonBattleNode(this);
+        battleNode = new BattleNode(this);
+        battleNode.battleEffects.add(new PlatoonBattleEffect(this));
+
         renderNode = new RenderNode(this);
         renderNode.onDraw = this.onDraw;
 
@@ -70,8 +73,13 @@ public class Platoon extends Unit {
         battleNode.reset();
         selectionNode.reset();
 
-        movementNode.maxSpeed.v = 0.6;
+        movementNode.maxSpeed.v = 0.7;
         battleNode.playerUnitPtr.v = playerUnit;
+
+        battleNode.hp.v = 50;
+        battleNode.attackRange.v = 4;
+        battleNode.attackDamage.v = 8;
+        battleNode.targetAcquisitionRange.v = battleNode.attackRange.v + 3;
 
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
@@ -191,28 +199,31 @@ public class Platoon extends Unit {
         }
     };
 
-    public static class PlatoonBattleNode extends BattleNode {
-        private Platoon platoon;
+    public static class PlatoonBattleEffect extends BasicAttackEffect {
 
-        public PlatoonBattleNode(Platoon platoon) {
-            super(platoon);
+        Platoon platoon;
+
+        public PlatoonBattleEffect(Platoon platoon) {
+            super(platoon.battleNode);
             this.platoon = platoon;
-
-            this.reset();
         }
 
         @Override
-        public void reset() {
-            super.reset();
-            this.hp.v = 50;
-            this.attackRange.v = 4;
-            this.attackDamage.v = 4;
-            this.targetAcquisitionRange.v = this.attackRange.v + 3;
+        public void onTargetAcquired(BattleSystem battleSystem) {
+            super.onTargetAcquired(battleSystem);
+            //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
+            //selectedRenderNode.isActive = true;
         }
 
         @Override
         public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
             super.onAttackReady(battleSystem, target);
+            platoon.onAttackSwingAnim = false;
+        }
+
+        @Override
+        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackCast(battleSystem, target);
             platoon.onAttackSwingAnim = false;
         }
 
@@ -224,17 +235,30 @@ public class Platoon extends Unit {
         }
 
         @Override
-        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            super.onAttackCast(battleSystem, target);
-            target.inflictDamage(battleSystem, this, this.attackDamage.v);
-            platoon.onAttackSwingAnim = false;
-        }
-
-        @Override
-        public void onTargetAcquired() {
-            super.onTargetAcquired();
-            //renderNode.animationName = Sprite2dDef.ANIMATION_TROOPS_TARGETED;
-            //selectedRenderNode.isActive = true;
+        public void onDie(BattleSystem battleSystem) {
+            super.onDie(battleSystem);
         }
     }
+
+//    public static class PlatoonBattleNode extends BattleNode {
+//        private Platoon platoon;
+//
+//        public PlatoonBattleNode(Platoon platoon) {
+//            super(platoon);
+//            this.platoon = platoon;
+//
+//            this.battleEffects.add(new PlatoonBattleEffect(platoon));
+//
+//            this.reset();
+//        }
+//
+//        @Override
+//        public void reset() {
+//            super.reset();
+//            this.hp.v = 50;
+//            this.attackRange.v = 4;
+//            this.attackDamage.v = 4;
+//            this.targetAcquisitionRange.v = this.attackRange.v + 3;
+//        }
+//    }
 }

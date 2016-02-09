@@ -105,7 +105,7 @@ public class PufferZug extends Unit {
 
             for (int j = pufferZug.battleTargets.size() - 1; j >= 0; j--) {
                 BattleNode toInflict = pufferZug.battleTargets.get(j).v;
-                toInflict.inflictDamage(battleSystem, this, this.attackDamage.v);
+                toInflict.onAttacked(battleSystem, this, this.attackDamage.v);
             }
 
             this.hp.v = 0;

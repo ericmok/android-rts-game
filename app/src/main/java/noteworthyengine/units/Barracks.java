@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
 import art.Constants;
+import noteworthyengine.battle.BattleEffect;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.CityWinLoseConditionNode;
@@ -9,6 +10,9 @@ import noteworthyengine.FactorySystem;
 import noteworthyengine.GridNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
+import noteworthyengine.battle.BattleTriggerHandler;
+import noteworthyengine.battle.ChangeOwnershipOnDeathBattleEffect;
+import noteworthyengine.battle.EmptyBattleEffect;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.TextDrawItem;
@@ -18,7 +22,7 @@ import utils.VoidFunc2;
 /**
  * Created by eric on 4/30/15.
  */
-public class Barracks extends Unit {
+public class Barracks extends Unit implements ChangeOwnershipOnDeathBattleEffect.SpawnForEnemyable{
 
     public static final String NAME = "barracks";
 
@@ -26,11 +30,9 @@ public class Barracks extends Unit {
 
     public FactoryNode factoryNode = new FactoryNode(this);
 
-    public BattleNode battleNode = new BattleNode(this) {
-        public void onDie(BattleSystem battleSystem) {
-            Barracks.this.spawnForEnemy(battleSystem, this.lastAttacker.v);
-        }
-    };
+    public BattleNode battleNode = new BattleNode(this) {{
+        this.battleEffects.add(new ChangeOwnershipOnDeathBattleEffect(this, Barracks.this));
+    }};
 
     public RenderNode renderNode = new RenderNode(this);
 

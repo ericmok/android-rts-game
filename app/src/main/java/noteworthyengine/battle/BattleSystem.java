@@ -243,7 +243,7 @@ public class BattleSystem extends noteworthyframework.System {
         // We step the battle phases anyways
 
         if (battleNode.battleState.v == BattleNode.BATTLE_STATE_IDLE) {
-            battleNode.findNewTarget(this);
+            battleNode.onFindNewTarget(this);
 
             if (battleNode.hasLivingTarget()) {
                 battleNode.battleState.v = BattleNode.BATTLE_STATE_TRYING_TO_MEET_CONDITION_TO_CAST_ON_TARGET;
@@ -291,7 +291,7 @@ public class BattleSystem extends noteworthyframework.System {
                 // At attack cast time, ditch the old target for any new targets that
                 // walked into the swing (Useful for explosion swings)
                 if (battleNode.nonCancellableSwing.v == 0) {
-                    battleNode.findNewTarget(this);
+                    battleNode.onFindNewTarget(this);
                 }
 
                 if (!battleNode.hasLivingTarget()) {
@@ -301,6 +301,12 @@ public class BattleSystem extends noteworthyframework.System {
                 else {
                     // We do have a target at cast time
                     battleNode.onAttackCast(this, battleNode.target.v);
+                    double finalAttack = battleNode.buffAttackDamage(battleNode.attackDamage.v);
+                    double finalArmor = battleNode.buffArmorAmount(battleNode.battleArmor.amount);
+
+                    // TODO: Make this calculation configurable
+                    double finalDamage = Math.max(0, finalAttack - finalArmor);
+                    battleNode.target.v.onAttacked(this, battleNode, finalDamage);
                 }
 
                 battleNode.battleState.v = BattleNode.BATTLE_STATE_WAITING_FOR_COOLDOWN;

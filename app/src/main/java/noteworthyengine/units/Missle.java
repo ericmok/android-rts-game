@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.battle.BattleEffect;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.DestinationMovementNode;
@@ -122,6 +123,7 @@ public class Missle extends Unit {
 
         this.battleNode.reset();
         this.battleNode.playerUnitPtr.v = playerUnit;
+        this.battleNode.nonCancellableSwing.v = 1;
 
         this.renderNode.animationName.v = Animations.ANIMATION_PROJECTILE_BASIC;
         this.renderNode.isGfxInterpolated.v = 0;
@@ -130,9 +132,7 @@ public class Missle extends Unit {
         this.renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
     }
 
-    public static class MissileBattleNode extends BattleNode {
-
-        public Missle missle;
+    public static class MissleBattleBehavior extends BattleEffect {
 
         protected static final BooleanFunc2<BattleNode, BattleNode> allTargetsEvenSelf = new BooleanFunc2<BattleNode, BattleNode>() {
             @Override
@@ -141,9 +141,66 @@ public class Missle extends Unit {
             }
         };
 
+        public Missle missle;
+
+        public MissleBattleBehavior(Missle missle) {
+            this.missle = missle;
+        }
+
+        @Override
+        public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
+            super.onAttackReady(battleSystem, target);
+
+            // Swing immediately without waiting to find a target
+            missle.battleNode.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
+            missle.battleNode.battleProgress.v = 0;
+        }
+
+        @Override
+        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+            battleSystem.findAttackablesWithinRange(missle.battleTargets,
+                    missle.battleNode,
+                    missle.battleNode.attackRange.v,
+                    allTargetsEvenSelf);
+
+            for (int j = missle.battleTargets.size() - 1; j >= 0; j--) {
+                BattleNode toInflict = missle.battleTargets.get(j).v;
+
+                toInflict.onAttacked(battleSystem,
+                        missle.battleNode,
+                        missle.battleNode.attackDamage.v);
+
+            }
+
+            missle.battleNode.hp.v = 0;
+        }
+
+        @Override
+        public void onAttackCastFail(BattleSystem battleSystem) {
+            missle.battleNode.hp.v = 0;
+        }
+
+        @Override
+        public void update(BattleSystem battleSystem, double dt) {
+        }
+
+        @Override
+        public void sendEvent(BattleSystem battleSystem, BattleNode battleNode, Event event) {
+        }
+
+        @Override
+        public void reset() {
+        }
+    }
+
+    public static class MissileBattleNode extends BattleNode {
+
+        public Missle missle;
+
         public MissileBattleNode(Missle missle) {
             super(missle);
             this.missle = missle;
+            this.battleEffects.add(new MissleBattleBehavior(missle));
         }
 
         @Override
@@ -160,31 +217,6 @@ public class Missle extends Unit {
             this.fractionToWalkIntoAttackRange.v = 0.02;
             this.nonCancellableSwing.v = 0;
             this.target.v = null;
-        }
-
-        @Override
-        public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
-            super.onAttackReady(battleSystem, target);
-            this.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
-            this.battleProgress.v = 0;
-        }
-
-        @Override
-        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            battleSystem.findAttackablesWithinRange(missle.battleTargets, missle.battleNode, missle.battleNode.attackRange.v, allTargetsEvenSelf);
-
-            for (int j = missle.battleTargets.size() - 1; j >= 0; j--) {
-                BattleNode toInflict = missle.battleTargets.get(j).v;
-                toInflict.inflictDamage(battleSystem, this, this.attackDamage.v);
-            }
-
-            this.hp.v = 0;
-        }
-
-        @Override
-        public void onAttackCastFail(BattleSystem battleSystem) {
-            super.onAttackCastFail(battleSystem);
-            this.hp.v = 0;
         }
     }
 }

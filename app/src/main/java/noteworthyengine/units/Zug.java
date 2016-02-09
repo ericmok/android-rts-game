@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.battle.BasicAttackEffect;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.FormationNode;
@@ -49,6 +50,7 @@ public class Zug extends Unit {
         separationNode = new SeparationNode(this);
         formationNode = new FormationNode(this);
         battleNode = new BattleNode(this);
+        battleNode.battleEffects.add(new BasicAttackEffect(this.battleNode));
 
         gridNode = new GridNode(this, separationNode, battleNode);
         selectionNode = new SelectionNode(this);

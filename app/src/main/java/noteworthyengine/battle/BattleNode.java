@@ -19,7 +19,7 @@ import utils.VoidFunc3;
 /**
  * Created by eric on 3/6/15.
  */
-public class BattleNode extends Node {
+public class BattleNode extends Node implements BattleTriggerHandler, BattleBuff, Resetable {
 
     public static final String _NAME = "battleNode";
     public static final int MAX_POSSIBLE_TARGETS = 30;
@@ -56,7 +56,7 @@ public class BattleNode extends Node {
 
     public DoublePtr startingHp = new DoublePtr() {{ v = 1; }};
     public DoublePtr hp = new DoublePtr() {{ v = 1; }};
-    public DoublePtr armor;
+
 
     public BattleNode.Ptr lastAttacker = new BattleNode.Ptr() {{ v = null; }};
 
@@ -74,6 +74,8 @@ public class BattleNode extends Node {
     public DoublePtr attackDamage = new DoublePtr() {{ v = 1; }};
     public DoublePtr attackSwingTime = new DoublePtr() {{ v = 1; }};
     public DoublePtr attackCooldown = new DoublePtr() {{ v = 1; }};
+
+    public BattleArmor battleArmor = new BattleArmor();
 
     public IntegerPtr battleState = new IntegerPtr() {{ v = BATTLE_STATE_IDLE; }};
     public DoublePtr battleProgress = new DoublePtr() {{ v = 0; }};
@@ -113,52 +115,108 @@ public class BattleNode extends Node {
 
     public ArrayList<String> events;
 
-    public void revive() {}
-    public void kill() {}
+    public ArrayList<BattleEffect> battleEffects = new ArrayList<>(1);
 
     public BattleNode(Unit unit) {
         super(_NAME, unit);
         Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
     }
 
-    public void findNewTarget(BattleSystem battleSystem) {
-        battleSystem.findAttackablesWithinRange(this.target,
-                this,
-                this.targetAcquisitionRange.v,
-                this.targetCriteria);
+    public void emitEvent(BattleSystem battleSystem, BattleTriggerHandler.Event event) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).sendEvent(battleSystem, this, event);
+        }
     }
 
-    public void onTargetAcquired() {
+    public final void onSpawn(BattleSystem battleSystem) {
+        //onSpawn(battleSystem);
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onSpawn(battleSystem);
+        }
+        emitEvent(battleSystem, Event.SPAWN);
     }
 
-    public void onTargetLost() {
+    public final void onFindNewTarget(BattleSystem battleSystem) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onFindNewTarget(battleSystem);
+        }
+        emitEvent(battleSystem, Event.FIND_NEW_TARGET);
     }
 
-    public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
+    public final void onTargetAcquired(BattleSystem battleSystem) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onTargetAcquired(battleSystem);
+        }
+        emitEvent(battleSystem, Event.TARGET_ACQUIRED);
     }
 
-    public void inflictDamage(BattleSystem battleSystem, BattleNode attacker, double damage) {
-        this.hp.v -= damage;
-        this.lastAttacker.v = attacker;
+    public final void onTargetLost(BattleSystem battleSystem) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onTargetLost(battleSystem);
+        }
+        emitEvent(battleSystem, Event.TARGET_LOST);
     }
 
+    public final void onAttackReady(BattleSystem battleSystem, BattleNode target) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onAttackReady(battleSystem, target);
+        }
+        emitEvent(battleSystem, Event.ATTACK_READY);
+    }
+
+    public final void onAttacked(BattleSystem battleSystem, BattleNode attacker, double damage) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onAttacked(battleSystem, attacker, damage);
+        }
+        emitEvent(battleSystem, Event.ATTACKED);
+    }
+
+    public final void onAttackSwing(BattleSystem battleSystem, BattleNode target) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onAttackSwing(battleSystem, target);
+        }
+        emitEvent(battleSystem, Event.ATTACK_SWING);
+    }
+
+    @Override
     public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-        target.inflictDamage(battleSystem, this, this.attackDamage.v);
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onAttackCast(battleSystem, target);
+        }
+        emitEvent(battleSystem, Event.ATTACK_CAST);
     }
 
-    public void onAttackSwing(BattleSystem battleSystem, BattleNode target) {
+    public final void onAttackCastFail(BattleSystem battleSystem) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onAttackCastFail(battleSystem);
+        }
+        emitEvent(battleSystem, Event.ATTACK_CAST_FAIL);
     }
 
-    public void onAttackCastFail(BattleSystem battleSystem) {
-        this.battleState.v = BATTLE_STATE_IDLE;
-        this.battleProgress.v = 0;
+    public final void onDie(BattleSystem battleSystem) {
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).onDie(battleSystem);
+        }
+        emitEvent(battleSystem, Event.DIE);
     }
 
-    public void onDie(BattleSystem battleSystem) {
+    @Override
+    public double buffArmorAmount(double in) {
+        double value = in;
 
+        for (int i = 0; i < battleEffects.size(); i++) {
+            value = battleEffects.get(i).buffArmorAmount(value);
+        }
+
+        return value;
     }
 
     public void reset() {
+
+        for (int i = 0; i < battleEffects.size(); i++) {
+            battleEffects.get(i).reset();
+        }
+
         this.velocity.zero();
         this.enemyAttractionForce.zero();
         this.target.v = null;
@@ -177,6 +235,69 @@ public class BattleNode extends Node {
 
     public boolean targetWithinAttackRange() {
         return this.coords.pos.distanceTo(this.target.v.coords.pos) <= this.attackRange.v;
+    }
+
+    @Override
+    public final double buffAttackRange(double in) {
+        double value = attackRange.v;
+        for (int i = 0; i < battleEffects.size(); i++) {
+            value = battleEffects.get(i).buffAttackRange(value);
+        }
+        return value;
+    }
+
+    @Override
+    public final double buffAttackDamage(double in) {
+        double value = attackDamage.v;
+        for (int i = 0; i < battleEffects.size(); i++) {
+            value = battleEffects.get(i).buffAttackDamage(value);
+        }
+        return value;
+    }
+
+    @Override
+    public final double buffAttackSwingTime(double in) {
+        double value = attackDamage.v;
+        for (int i = 0; i < battleEffects.size(); i++) {
+            value = battleEffects.get(i).buffAttackSwingTime(value);
+        }
+        return value;
+    }
+
+    @Override
+    public final double buffAttackCooldown(double in) {
+        double value = attackCooldown.v;
+        for (int i = 0; i < battleEffects.size(); i++) {
+            value = battleEffects.get(i).buffAttackCooldown(value);
+        }
+        return value;
+    }
+
+    @Override
+    public final int buffIsAttackable(int in) {
+        int value = isAttackable.v;
+        for (int i = 0; i < battleEffects.size(); i++) {
+            value = battleEffects.get(i).buffIsAttackable(value);
+        }
+        return value;
+    }
+
+    @Override
+    public final double buffHp(double in) {
+        double value = hp.v;
+        for (int i = 0; i < battleEffects.size(); i++) {
+            value = battleEffects.get(i).buffHp(value);
+        }
+        return value;
+    }
+
+    @Override
+    public final double buffMaxSpeed(double in) {
+        double value = maxSpeed.v;
+        for (int i = 0; i < battleEffects.size(); i++) {
+            value = battleEffects.get(i).buffMaxSpeed(value);
+        }
+        return value;
     }
 
     public static class Ptr implements JsonSerializable {

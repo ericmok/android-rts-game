@@ -109,7 +109,7 @@ public class Mine extends Unit {
 
             for (int j = mine.battleTargets.size() - 1; j >= 0; j--) {
                 BattleNode toInflict = mine.battleTargets.get(j).v;
-                toInflict.inflictDamage(battleSystem, this, this.attackDamage.v);
+                toInflict.onAttacked(battleSystem, this, this.attackDamage.v);
             }
         }
     }
