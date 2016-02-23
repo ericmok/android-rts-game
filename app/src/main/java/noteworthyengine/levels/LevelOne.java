@@ -126,106 +126,102 @@ public class LevelOne {
 
     public boolean loadFromJson(final NoteworthyEngine baseEngine, String json) throws JSONException {
 
-        //baseEngine.addSystem(new CityWinLoseConditionSystem(game, baseEngine.playerSystem));
+        baseEngine.addSystem(new CityWinLoseConditionSystem(game, baseEngine.playerSystem));
 
         baseEngine.gameTime = 0;
 
         PlayerUnit gamer0 = new PlayerUnit("taco", 0);
-//        PlayerUnit gamer1 = new PlayerUnit("avilo", 1);
-//        PlayerUnit gamer2 = new PlayerUnit("grubby", 2);
-//        PlayerUnit gamer3 = new PlayerUnit("connie", 3);
+        PlayerUnit gamer1 = new PlayerUnit("avilo", 1);
+        PlayerUnit gamer2 = new PlayerUnit("grubby", 2);
+        PlayerUnit gamer3 = new PlayerUnit("connie", 3);
 
         baseEngine.addUnit(gamer0);
+        baseEngine.addUnit(gamer1);
+        baseEngine.addUnit(gamer2);
+        baseEngine.addUnit(gamer3);
 
-        Platoon platoon = UnitPool.platoons.fetchMemory();
-        platoon.configure(gamer0);
-        baseEngine.addUnit(platoon);
-//        baseEngine.addUnit(gamer1);
-//        baseEngine.addUnit(gamer2);
-//        baseEngine.addUnit(gamer3);
+        Vector2 spawnLocation0 = new Vector2(0, -12 + Math.random() * 2 - 1);
+        Vector2 spawnLocation1 = new Vector2(0, 12 + Math.random() * 2 - 1);
+        Vector2 spawnLocation2 = new Vector2(-12 + Math.random() * 2 - 1, 0);
+        Vector2 spawnLocation3 = new Vector2(12 + Math.random() * 2 - 1, 0);
 
-//        Vector2 spawnLocation0 = new Vector2(0, -12 + Math.random() * 2 - 1);
-//        Vector2 spawnLocation1 = new Vector2(0, 12 + Math.random() * 2 - 1);
-//        Vector2 spawnLocation2 = new Vector2(-12 + Math.random() * 2 - 1, 0);
-//        Vector2 spawnLocation3 = new Vector2(12 + Math.random() * 2 - 1, 0);
-//
-//        ArrayList<Vector2> spawnLocations = new ArrayList<Vector2>(4);
-//        spawnLocations.add(spawnLocation0);
-//        spawnLocations.add(spawnLocation1);
-//        spawnLocations.add(spawnLocation2);
-//        spawnLocations.add(spawnLocation3);
+        ArrayList<Vector2> spawnLocations = new ArrayList<Vector2>(4);
+        spawnLocations.add(spawnLocation0);
+        spawnLocations.add(spawnLocation1);
+        spawnLocations.add(spawnLocation2);
+        spawnLocations.add(spawnLocation3);
 
 //        for (int i = 0; i < baseEngine.playerSystem.players.size(); i++) {
 //            spawnBase(baseEngine, (PlayerUnit)baseEngine.playerSystem.players.get(i).unit, spawnLocations.get(i));
 //        }
 
-//        spawnBase(baseEngine, gamer0, spawnLocations.get(0));
-//        spawnBase(baseEngine, gamer1, spawnLocations.get(1));
-//        spawnBase(baseEngine, gamer2, spawnLocations.get(2));
-//        spawnBase(baseEngine, gamer3, spawnLocations.get(3));
-//
-//
-//        PlayerUnit gamer4 = new PlayerUnit("neutral", 4);
-//        baseEngine.addUnit(gamer4);
-//
-//        ArrayList<Vector2> neutralSpawnLocations = new ArrayList<Vector2>(8);
-////        neutralSpawnLocations.add(new Vector2(-4.4, -4.4));
-////        neutralSpawnLocations.add(new Vector2(4.4, 4.4));
-////        neutralSpawnLocations.add(new Vector2(-4.4, 4.4));
-////        neutralSpawnLocations.add(new Vector2(4.4, -4.4));
-//////        neutralSpawnLocations.add(new Vector2(-10, -10));
-//////        neutralSpawnLocations.add(new Vector2(10, 10));
-//////        neutralSpawnLocations.add(new Vector2(-10, 10));
-//////        neutralSpawnLocations.add(new Vector2(10, -10));
-////        neutralSpawnLocations.add(new Vector2(-11.8, -11.8));
-////        neutralSpawnLocations.add(new Vector2(11.8, 11.8));
-////        neutralSpawnLocations.add(new Vector2(-11.8, 11.8));
-////        neutralSpawnLocations.add(new Vector2(11.8, -11.8));
-////        //neutralSpawnLocations.add(new Vector2(0, 0));
+        spawnBase(baseEngine, gamer0, spawnLocations.get(0));
+        spawnBase(baseEngine, gamer1, spawnLocations.get(1));
+        spawnBase(baseEngine, gamer2, spawnLocations.get(2));
+        spawnBase(baseEngine, gamer3, spawnLocations.get(3));
+
+
+        PlayerUnit gamer4 = new PlayerUnit("neutral", 4);
+        baseEngine.addUnit(gamer4);
+
+        ArrayList<Vector2> neutralSpawnLocations = new ArrayList<Vector2>(8);
+//        neutralSpawnLocations.add(new Vector2(-4.4, -4.4));
+//        neutralSpawnLocations.add(new Vector2(4.4, 4.4));
+//        neutralSpawnLocations.add(new Vector2(-4.4, 4.4));
+//        neutralSpawnLocations.add(new Vector2(4.4, -4.4));
+////        neutralSpawnLocations.add(new Vector2(-10, -10));
+////        neutralSpawnLocations.add(new Vector2(10, 10));
+////        neutralSpawnLocations.add(new Vector2(-10, 10));
+////        neutralSpawnLocations.add(new Vector2(10, -10));
+//        neutralSpawnLocations.add(new Vector2(-11.8, -11.8));
+//        neutralSpawnLocations.add(new Vector2(11.8, 11.8));
+//        neutralSpawnLocations.add(new Vector2(-11.8, 11.8));
+//        neutralSpawnLocations.add(new Vector2(11.8, -11.8));
+//        //neutralSpawnLocations.add(new Vector2(0, 0));
+
+        for (int i = 0; i < neutralSpawnLocations.size(); i++) {
+            Barracks barracks = UnitPool.barracks.fetchMemory();
+            barracks.configure(gamer4);
+            barracks.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
+            baseEngine.addUnit(barracks);
+        }
+
+        NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
+        nanobotFactory.configure(gamer4);
+        nanobotFactory.battleNode.coords.pos.zero();
+        baseEngine.addUnit(nanobotFactory);
+
+//        neutralSpawnLocations = new ArrayList<Vector2>(4);
+//        neutralSpawnLocations.add(new Vector2(-14, -14));
+//        neutralSpawnLocations.add(new Vector2(14, -14));
+//        neutralSpawnLocations.add(new Vector2(-14, 14));
+//        neutralSpawnLocations.add(new Vector2(14, 14));
 //
 //        for (int i = 0; i < neutralSpawnLocations.size(); i++) {
-//            Barracks barracks = UnitPool.barracks.fetchMemory();
-//            barracks.configure(gamer4);
-//            barracks.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
-//            baseEngine.addUnit(barracks);
+//            NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
+//            nanobotFactory.configure(gamer4);
+//            nanobotFactory.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
+//            baseEngine.addUnit(nanobotFactory);
 //        }
-//
-//        NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
-//        nanobotFactory.configure(gamer4);
-//        nanobotFactory.battleNode.coords.pos.zero();
-//        baseEngine.addUnit(nanobotFactory);
-//
-////        neutralSpawnLocations = new ArrayList<Vector2>(4);
-////        neutralSpawnLocations.add(new Vector2(-14, -14));
-////        neutralSpawnLocations.add(new Vector2(14, -14));
-////        neutralSpawnLocations.add(new Vector2(-14, 14));
-////        neutralSpawnLocations.add(new Vector2(14, 14));
-////
-////        for (int i = 0; i < neutralSpawnLocations.size(); i++) {
-////            NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
-////            nanobotFactory.configure(gamer4);
-////            nanobotFactory.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
-////            baseEngine.addUnit(nanobotFactory);
-////        }
-//
-//        baseEngine.playerSystem.setCurrentPlayer(gamer0);
-//
-//        FactoryCounterGUI factoryCounterGUI = new FactoryCounterGUI();
-//        factoryCounterGUI.configure(gamer0);
-//        baseEngine.addUnit(factoryCounterGUI);
-//
-//        baseEngine.addEventListener(new BaseEngine.EventListener() {
-//            @Override
-//            public void onEvent(int event) {
-//                if (event == GameEvents.WIN) {
-//                    WinUnit winUnit = new WinUnit();
-//                    baseEngine.addUnit(winUnit);
-//                } else if (event == GameEvents.LOSE) {
-//                    DefeatUnit defeatUnit = new DefeatUnit();
-//                    baseEngine.addUnit(defeatUnit);
-//                }
-//            }
-//        });
+
+        baseEngine.playerSystem.setCurrentPlayer(gamer0);
+
+        FactoryCounterGUI factoryCounterGUI = new FactoryCounterGUI();
+        factoryCounterGUI.configure(gamer0);
+        baseEngine.addUnit(factoryCounterGUI);
+
+        baseEngine.addEventListener(new BaseEngine.EventListener() {
+            @Override
+            public void onEvent(int event) {
+                if (event == GameEvents.WIN) {
+                    WinUnit winUnit = new WinUnit();
+                    baseEngine.addUnit(winUnit);
+                } else if (event == GameEvents.LOSE) {
+                    DefeatUnit defeatUnit = new DefeatUnit();
+                    baseEngine.addUnit(defeatUnit);
+                }
+            }
+        });
 
         baseEngine.flushQueues();
 
