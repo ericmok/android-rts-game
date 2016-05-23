@@ -45,7 +45,7 @@ public class Mech extends Platoon {
                 if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
 
                     if (battleNode.target.v != null) {
-                        double ratio = (battleNode.battleProgress.v / battleNode.attackSwingTime.v);
+                        double ratio = (battleNode.battleProgress.v / battleNode.battleAttack.swingTime);
 
                         //Sprite2dDef sprite2dDef = system.drawCompat.spriteAllocator.takeNextWritable();
                         //sprite2dDef.set("Animations/Troops/Sword", 0,
@@ -76,11 +76,11 @@ public class Mech extends Platoon {
         this.battleNode.hp.v = 110;
         this.battleNode.maxSpeed.v = 0.9;
         //this.battleNode.attackRange.v = 5.5;
-        this.battleNode.attackDamage.v = 5;
-        this.battleNode.attackRange.v = 2;
-        this.battleNode.targetAcquisitionRange.v = this.battleNode.attackRange.v + 3;
-        this.battleNode.attackSwingTime.v = 1;
-        this.battleNode.attackCooldown.v = 2;
+        this.battleNode.battleAttack.amount = 5;
+        this.battleNode.battleAttack.range = 2;
+        this.battleNode.targetAcquisitionRange.v = this.battleNode.battleAttack.range + 3;
+        this.battleNode.battleAttack.swingTime = 1;
+        this.battleNode.battleAttack.cooldownTime = 2;
 
         this.battleNode.target.v = null;
 

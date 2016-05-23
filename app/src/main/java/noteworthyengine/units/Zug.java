@@ -3,6 +3,7 @@ package noteworthyengine.units;
 import art.Animations;
 import art.Constants;
 import noteworthyengine.battle.BasicAttackEffect;
+import noteworthyengine.battle.BattleBalance;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.FormationNode;
@@ -73,7 +74,7 @@ public class Zug extends Unit {
                 if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
 
                     if (battleNode.target.v != null) {
-                        double ratio = (battleNode.battleProgress.v / battleNode.attackSwingTime.v);
+                        double ratio = (battleNode.battleProgress.v / battleNode.battleAttack.swingTime);
 
                         Sprite2dDef sprite2dDef = system.defineNewSprite(
                                 "Animations/Troops/Sword", 0,
@@ -101,12 +102,13 @@ public class Zug extends Unit {
         this.battleNode.playerUnitPtr.v = playerUnit;
         this.battleNode.hp.v = 24;
         this.battleNode.maxSpeed.v = 1.1;
-        this.battleNode.attackDamage.v = 25;
-        this.battleNode.attackRange.v = 1;
+        this.battleNode.battleAttack.amount = 25;
+        this.battleNode.battleAttack.range = 1;
         this.battleNode.fractionToWalkIntoAttackRange.v = 0.4;
         this.battleNode.targetAcquisitionRange.v = 17;
-        this.battleNode.attackSwingTime.v = 1;
-        this.battleNode.attackCooldown.v = 2;
+        this.battleNode.battleAttack.swingTime = 1;
+        this.battleNode.battleAttack.cooldownTime = 2;
+        this.battleNode.battleArmor.type = BattleBalance.ARMOR_TYPE_NORMAL;
         this.battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
 
         this.renderNode.animationName.v = Animations.ANIMATION_ZUG_IDLING;

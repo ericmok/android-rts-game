@@ -41,8 +41,7 @@ public class BasicAttackEffect extends BattleEffect {
 
     @Override
     public void onAttacked(BattleSystem battleSystem, BattleNode attacker, double damage) {
-        battleNode.hp.v -= damage;
-        battleNode.lastAttacker.v = attacker;
+
     }
 
     @Override

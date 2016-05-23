@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.battle.BattleEffect;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.FieldNode;
@@ -11,6 +12,7 @@ import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
+import noteworthyengine.battle.BattleTriggerHandler;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
@@ -72,7 +74,7 @@ public class Cannon extends Unit {
                 if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
 
                     if (battleNode.target.v != null) {
-                        double ratio = (battleNode.battleProgress.v / battleNode.attackSwingTime.v) * 100;
+                        double ratio = (battleNode.battleProgress.v / battleNode.battleAttack.swingTime) * 100;
 
                         Sprite2dDef sprite2dDef = system.defineNewSprite(
                                 Animations.ANIMATION_TROOPS_SWING, (int) ratio,
@@ -113,11 +115,11 @@ public class Cannon extends Unit {
             super.reset();
 
             this.hp.v = 5;
-            this.attackSwingTime.v = 4;
-            this.attackCooldown.v = 7;
-            this.attackDamage.v = 0;
-            this.attackRange.v = 6.5;
-            this.targetAcquisitionRange.v = this.attackRange.v + 3;
+            this.battleAttack.swingTime = 4;
+            this.battleAttack.cooldownTime = 7;
+            this.battleAttack.amount = 0;
+            this.battleAttack.range = 6.5;
+            this.targetAcquisitionRange.v = this.battleAttack.range + 3;
         }
 
         @Override

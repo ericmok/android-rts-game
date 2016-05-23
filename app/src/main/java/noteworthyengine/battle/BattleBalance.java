@@ -28,7 +28,7 @@ public class BattleBalance {
 
     public static final double[][] CHART = {
 
-            //            NORM     EVAS     MECH     FORT     ENER
+            //           NORM  EVAS  MECH  FORT  ENER
 
             new double[]{0.70, 1.25, 0.35, 1.00, 2.00},  // PHYSICAL
             new double[]{1.00, 0.75, 0.50, 1.00, 0.50},  // KINETIC
@@ -49,4 +49,7 @@ public class BattleBalance {
     public static final int ARMOR_TYPE_FORT = 3;
     public static final int ARMOR_TYPE_ENERGY = 4;
 
+    public static double getDamageMultiplier(int attackType, int armorType) {
+        return CHART[attackType][armorType];
+    }
 }

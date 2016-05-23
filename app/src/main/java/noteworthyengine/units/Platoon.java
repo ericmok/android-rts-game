@@ -5,6 +5,7 @@ import android.graphics.Color;
 import art.Animations;
 import art.Constants;
 import noteworthyengine.battle.BasicAttackEffect;
+import noteworthyengine.battle.BattleBalance;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.FieldNode;
@@ -77,9 +78,11 @@ public class Platoon extends Unit {
         battleNode.playerUnitPtr.v = playerUnit;
 
         battleNode.hp.v = 50;
-        battleNode.attackRange.v = 4;
-        battleNode.attackDamage.v = 8;
-        battleNode.targetAcquisitionRange.v = battleNode.attackRange.v + 3;
+        battleNode.battleAttack.range = 4;
+        battleNode.battleAttack.amount = 8;
+        battleNode.battleAttack.type = BattleBalance.ATTACK_TYPE_KINETIC;
+        battleNode.battleArmor.type = BattleBalance.ARMOR_TYPE_NORMAL;
+        battleNode.targetAcquisitionRange.v = battleNode.battleAttack.range + 3;
 
         float size = 0.95f;
         renderNode.set(0, 0, 0, size, size, 90, Color.WHITE, Animations.ANIMATION_TROOPS_IDLING, 0, 0);
@@ -153,8 +156,8 @@ public class Platoon extends Unit {
                 Sprite2dDef tempSprite = system.defineNewSprite(
                         Animations.ANIMATION_TROOPS_PROJECTILE,
                         0,
-                        (float)((0.80 * (battleNode.battleProgress.v / battleNode.attackSwingTime.v) + 0.1) * rx  + battleNode.coords.pos.x),
-                        (float)((0.80 * (battleNode.battleProgress.v / battleNode.attackSwingTime.v) + 0.1) * ry  + battleNode.coords.pos.y),
+                        (float)((0.80 * (battleNode.battleProgress.v / battleNode.battleAttack.swingTime) + 0.1) * rx  + battleNode.coords.pos.x),
+                        (float)((0.80 * (battleNode.battleProgress.v / battleNode.battleAttack.swingTime) + 0.1) * ry  + battleNode.coords.pos.y),
                         1,
                         0.4f, 0.4f,
                         (float) Orientation.getDegreesBaseX(rx, ry),
@@ -170,7 +173,7 @@ public class Platoon extends Unit {
                 tempSprite.copy(Animations.ANIMATION_SMOKE_GUNPOWDER_DEF);
                 tempSprite.position.x = (battleNode.coords.pos.x + target[0].coords.pos.x) / 2;
                 tempSprite.position.y = (battleNode.coords.pos.y + target[0].coords.pos.y) / 2;
-                tempSprite.progress.duration = (float)battleNode.attackSwingTime.v * 900;
+                tempSprite.progress.duration = (float)battleNode.battleAttack.swingTime * 900;
                 tempSprite.angle = (float)movementNode.coords.rot.getDegrees();
 
                 system.endNewTempSprite(tempSprite, 0);

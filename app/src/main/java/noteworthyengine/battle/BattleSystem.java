@@ -69,7 +69,7 @@ public class BattleSystem extends noteworthyframework.System {
 
         double distance = otherBattleNode.coords.pos.distanceTo(battleNode.coords.pos);
 
-        double numerator = (distance - (battleNode.attackRange.v * battleNode.fractionToWalkIntoAttackRange.v));
+        double numerator = (distance - (battleNode.battleAttack.range * battleNode.fractionToWalkIntoAttackRange.v));
 
         // The unit walks towards the enemy with more force than it walks away from it
         // to maintain ~constant range
@@ -78,7 +78,7 @@ public class BattleSystem extends noteworthyframework.System {
         }
 
         double ramp = battleNode.maxSpeed.v *
-                numerator / (battleNode.attackRange.v);
+                numerator / (battleNode.battleAttack.range);
 
         double mag = Math.min(battleNode.maxSpeed.v, ramp);
 
@@ -286,7 +286,7 @@ public class BattleSystem extends noteworthyframework.System {
 
         if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
 
-            if (battleNode.battleProgress.v >= battleNode.attackSwingTime.v) {
+            if (battleNode.battleProgress.v >= battleNode.battleAttack.swingTime) {
 
                 // At attack cast time, ditch the old target for any new targets that
                 // walked into the swing (Useful for explosion swings)
@@ -301,11 +301,18 @@ public class BattleSystem extends noteworthyframework.System {
                 else {
                     // We do have a target at cast time
                     battleNode.onAttackCast(this, battleNode.target.v);
-                    double finalAttack = battleNode.buffAttackDamage(battleNode.attackDamage.v);
-                    double finalArmor = battleNode.buffArmorAmount(battleNode.battleArmor.amount);
+                    double finalAttack = battleNode.buffAttackDamage(battleNode.battleAttack.amount);
+                    double finalAttackeeArmor = battleNode.target.v.buffArmorAmount(battleNode.target.v.battleArmor.amount);
+
+                    double damageReduction = BattleBalance.getDamageMultiplier(
+                            battleNode.battleAttack.type,
+                            battleNode.target.v.battleArmor.type); // + finalAttackeeArmor * 0.06;
 
                     // TODO: Make this calculation configurable
-                    double finalDamage = Math.max(0, finalAttack - finalArmor);
+                    double finalDamage = Math.max(0, finalAttack * damageReduction);
+
+                    battleNode.target.v.hp.v -= finalDamage;
+                    battleNode.target.v.lastAttacker.v = battleNode;
                     battleNode.target.v.onAttacked(this, battleNode, finalDamage);
                 }
 
@@ -329,7 +336,7 @@ public class BattleSystem extends noteworthyframework.System {
 
             //acquireNewTarget(battleNode); // Unless we want unit to be idle when in cooldown
 
-            if (battleNode.battleProgress.v >= battleNode.attackCooldown.v) {
+            if (battleNode.battleProgress.v >= battleNode.battleAttack.cooldownTime) {
                 battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
                 battleNode.battleProgress.v = 0;
 

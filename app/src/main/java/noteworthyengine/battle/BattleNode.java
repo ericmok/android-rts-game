@@ -7,8 +7,6 @@ import noteworthyframework.Coords;
 import structure.RewriteOnlyArray;
 import utils.BooleanFunc2;
 import utils.DoublePtr;
-//import noteworthyframework.Gamer;
-//import noteworthyframework.GamerPtr;
 import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
@@ -68,12 +66,14 @@ public class BattleNode extends Node implements BattleTriggerHandler, BattleBuff
     /// The attack swing will be canceled if the unit walks outside of range
     //public IntegerPtr attackSwingCanMiss = new IntegerPtr() {{ v = 0; }};
 
-    public DoublePtr attackRange = new DoublePtr() {{ v = 1; }};
-    public DoublePtr targetAcquisitionRange = new DoublePtr() {{ v = 1; }};
+    //public IntegerPtr attackType = new IntegerPtr() {{ v = BattleBalance.ATTACK_TYPE_KINETIC; }};
+    //public DoublePtr attackRange = new DoublePtr() {{ v = 1; }};
+    //public DoublePtr attackDamage = new DoublePtr() {{ v = 1; }};
+    //public DoublePtr attackSwingTime = new DoublePtr() {{ v = 1; }};
+    //public DoublePtr attackCooldown = new DoublePtr() {{ v = 1; }};
+    public BattleAttack battleAttack = new BattleAttack();
 
-    public DoublePtr attackDamage = new DoublePtr() {{ v = 1; }};
-    public DoublePtr attackSwingTime = new DoublePtr() {{ v = 1; }};
-    public DoublePtr attackCooldown = new DoublePtr() {{ v = 1; }};
+    public DoublePtr targetAcquisitionRange = new DoublePtr() {{ v = 1; }};
 
     public BattleArmor battleArmor = new BattleArmor();
 
@@ -234,12 +234,12 @@ public class BattleNode extends Node implements BattleTriggerHandler, BattleBuff
     }
 
     public boolean targetWithinAttackRange() {
-        return this.coords.pos.distanceTo(this.target.v.coords.pos) <= this.attackRange.v;
+        return this.coords.pos.distanceTo(this.target.v.coords.pos) <= this.battleAttack.range;
     }
 
     @Override
     public final double buffAttackRange(double in) {
-        double value = attackRange.v;
+        double value = battleAttack.range;
         for (int i = 0; i < battleEffects.size(); i++) {
             value = battleEffects.get(i).buffAttackRange(value);
         }
@@ -248,7 +248,7 @@ public class BattleNode extends Node implements BattleTriggerHandler, BattleBuff
 
     @Override
     public final double buffAttackDamage(double in) {
-        double value = attackDamage.v;
+        double value = battleAttack.amount;
         for (int i = 0; i < battleEffects.size(); i++) {
             value = battleEffects.get(i).buffAttackDamage(value);
         }
@@ -257,7 +257,7 @@ public class BattleNode extends Node implements BattleTriggerHandler, BattleBuff
 
     @Override
     public final double buffAttackSwingTime(double in) {
-        double value = attackDamage.v;
+        double value = battleAttack.swingTime;
         for (int i = 0; i < battleEffects.size(); i++) {
             value = battleEffects.get(i).buffAttackSwingTime(value);
         }
@@ -266,7 +266,7 @@ public class BattleNode extends Node implements BattleTriggerHandler, BattleBuff
 
     @Override
     public final double buffAttackCooldown(double in) {
-        double value = attackCooldown.v;
+        double value = battleAttack.cooldownTime;
         for (int i = 0; i < battleEffects.size(); i++) {
             value = battleEffects.get(i).buffAttackCooldown(value);
         }

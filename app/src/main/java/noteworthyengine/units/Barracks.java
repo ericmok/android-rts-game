@@ -80,7 +80,7 @@ public class Barracks extends Unit implements ChangeOwnershipOnDeathBattleEffect
         battleNode.reset();
         battleNode.startingHp.v = 100;
         battleNode.hp.v = 100;
-        battleNode.attackDamage.v = 1;
+        battleNode.battleAttack.amount = 1;
         battleNode.playerUnitPtr.v = playerUnit;
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Constants.colorForTeam(playerUnit.playerNode.playerData.team), "Animations/Buildings/City", 0, 0);
 

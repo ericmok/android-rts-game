@@ -55,8 +55,8 @@ public class PufferZug extends Unit {
                 }
 
                 if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
-                    float ratio = (float)(battleNode.battleProgress.v / battleNode.attackSwingTime.v);
-                    float rad = (float)(battleNode.attackRange.v * ratio);
+                    float ratio = (float)(battleNode.battleProgress.v / battleNode.battleAttack.swingTime);
+                    float rad = (float)(battleNode.battleAttack.range * ratio);
 
                     system.defineNewSprite(Animations.ANIMATION_MINE_EXPLODING,
                             (int) (ratio * 100),
@@ -88,10 +88,10 @@ public class PufferZug extends Unit {
             this.lockOnAttack.v = 0;
             this.fractionToWalkIntoAttackRange.v = 0.2;
             this.targetAcquisitionRange.v = 17;
-            this.attackRange.v = 1.9;
-            this.attackDamage.v = 50;
-            this.attackSwingTime.v = 1.5;
-            this.attackCooldown.v = 3;
+            this.battleAttack.range = 1.9;
+            this.battleAttack.amount = 50;
+            this.battleAttack.swingTime = 1.5;
+            this.battleAttack.cooldownTime = 3;
             this.startingHp.v = 50;
             this.hp.v = 50;
             this.isAttackable.v = 1;
@@ -101,11 +101,11 @@ public class PufferZug extends Unit {
 
         @Override
         public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            battleSystem.findAttackablesWithinRange(pufferZug.battleTargets, pufferZug.battleNode, pufferZug.battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
+            battleSystem.findAttackablesWithinRange(pufferZug.battleTargets, pufferZug.battleNode, pufferZug.battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
 
             for (int j = pufferZug.battleTargets.size() - 1; j >= 0; j--) {
                 BattleNode toInflict = pufferZug.battleTargets.get(j).v;
-                toInflict.onAttacked(battleSystem, this, this.attackDamage.v);
+                toInflict.onAttacked(battleSystem, this, this.battleAttack.amount);
             }
 
             this.hp.v = 0;

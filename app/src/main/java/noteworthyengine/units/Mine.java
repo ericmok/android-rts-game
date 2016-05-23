@@ -53,8 +53,8 @@ public class Mine extends Unit {
                 }
 
                 if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
-                    float ratio = (float)(battleNode.battleProgress.v / battleNode.attackSwingTime.v);
-                    float rad = (float)(battleNode.attackRange.v * ratio);
+                    float ratio = (float)(battleNode.battleProgress.v / battleNode.battleAttack.swingTime);
+                    float rad = (float)(battleNode.battleAttack.range * ratio);
 
                     Sprite2dDef sprite2dDef = system.defineNewSprite(Animations.ANIMATION_MINE_EXPLODING,
                             (int) (ratio * 100),
@@ -92,10 +92,10 @@ public class Mine extends Unit {
             this.lockOnAttack.v = 0;
             this.fractionToWalkIntoAttackRange.v = 0.2;
             this.targetAcquisitionRange.v = 8;
-            this.attackRange.v = 1.9;
-            this.attackDamage.v = 50;
-            this.attackSwingTime.v = 1.5;
-            this.attackCooldown.v = 3;
+            this.battleAttack.range = 1.9;
+            this.battleAttack.amount = 50;
+            this.battleAttack.swingTime = 1.5;
+            this.battleAttack.cooldownTime = 3;
             this.startingHp.v = 200;
             this.hp.v = 200;
             this.isAttackable.v = 1;
@@ -105,11 +105,11 @@ public class Mine extends Unit {
 
         @Override
         public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            battleSystem.findAttackablesWithinRange(mine.battleTargets, mine.battleNode, mine.battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
+            battleSystem.findAttackablesWithinRange(mine.battleTargets, mine.battleNode, mine.battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
 
             for (int j = mine.battleTargets.size() - 1; j >= 0; j--) {
                 BattleNode toInflict = mine.battleTargets.get(j).v;
-                toInflict.onAttacked(battleSystem, this, this.attackDamage.v);
+                toInflict.onAttacked(battleSystem, this, this.battleAttack.amount);
             }
         }
     }

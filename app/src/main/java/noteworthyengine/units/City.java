@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
 import art.Constants;
+import noteworthyengine.battle.BattleBalance;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.GridNode;
@@ -36,7 +37,9 @@ public class City extends Unit implements ChangeOwnershipOnDeathBattleEffect.Spa
         battleNode.reset();
         battleNode.playerUnitPtr.v = playerUnit;
         battleNode.hp.v = 110;
-        battleNode.attackDamage.v = 1;
+        battleNode.battleAttack.amount = 1;
+        battleNode.battleAttack.type = BattleBalance.ATTACK_TYPE_ENERGY;
+        battleNode.battleArmor.type = BattleBalance.ARMOR_TYPE_FORT;
         renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Constants.colorForTeam(playerUnit.playerNode.playerData.team), "Animations/Buildings/City", 0, 0);
     }
 

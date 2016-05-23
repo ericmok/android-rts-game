@@ -88,8 +88,8 @@ public class Missle extends Unit {
                 }
 
                 if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
-                    float ratio = (float)(battleNode.battleProgress.v / battleNode.attackSwingTime.v);
-                    float rad = (float)(battleNode.attackRange.v * ratio);
+                    float ratio = (float)(battleNode.battleProgress.v / battleNode.battleAttack.swingTime);
+                    float rad = (float)(battleNode.battleAttack.range * ratio);
 
                     system.defineNewSprite(Animations.ANIMATION_MINE_EXPLODING, (int) (ratio * 100),
                             (float) battleNode.coords.pos.x,
@@ -160,7 +160,7 @@ public class Missle extends Unit {
         public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
             battleSystem.findAttackablesWithinRange(missle.battleTargets,
                     missle.battleNode,
-                    missle.battleNode.attackRange.v,
+                    missle.battleNode.battleAttack.range,
                     allTargetsEvenSelf);
 
             for (int j = missle.battleTargets.size() - 1; j >= 0; j--) {
@@ -168,7 +168,7 @@ public class Missle extends Unit {
 
                 toInflict.onAttacked(battleSystem,
                         missle.battleNode,
-                        missle.battleNode.attackDamage.v);
+                        missle.battleNode.battleAttack.amount);
 
             }
 
@@ -208,10 +208,10 @@ public class Missle extends Unit {
             super.reset();
 
             this.isAttackable.v = 0;
-            this.attackDamage.v = 50;
-            this.attackSwingTime.v = 1.5;
-            this.attackRange.v = 2.4;
-            this.attackCooldown.v = 3;
+            this.battleAttack.amount = 50;
+            this.battleAttack.swingTime = 1.5;
+            this.battleAttack.range = 2.4;
+            this.battleAttack.cooldownTime = 3;
             this.targetAcquisitionRange.v = 20;
             this.hp.v = 60;
             this.fractionToWalkIntoAttackRange.v = 0.02;
