@@ -237,6 +237,33 @@ public class BattleSystem extends noteworthyframework.System {
         return false;
     }
 
+    /**
+     * Inflicts the appropriate amount of damage between 2 nodes.
+     * It will account for BattleAttack and BattleArmor differences and
+     * apply hp changes.
+     *
+     * In addition, onAttacked will get called.
+     *
+     * TODO: May also consider dead node logic here
+     * @param battleNode
+     * @param target
+     */
+    public void calculateAndInflictDamage(BattleNode battleNode, BattleNode target) {
+        double finalAttack = battleNode.buffAttackDamage(battleNode.battleAttack.amount);
+        double finalAttackeeArmor = target.buffArmorAmount(battleNode.target.v.battleArmor.amount);
+
+        double damageReduction = BattleBalance.getDamageMultiplier(
+                battleNode.battleAttack.type,
+                target.battleArmor.type); // + finalAttackeeArmor * 0.06;
+
+        // TODO: Make this calculation configurable
+        double finalDamage = Math.max(0, finalAttack * damageReduction);
+
+        target.hp.v -= finalDamage;
+        target.lastAttacker.v = battleNode;
+        target.onAttacked(this, battleNode, finalDamage);
+    }
+
     public void updateBattleNode(BattleNode battleNode, double ct, double dt) {
 
         // So we may or may not have a target (All the enemy may be dead)
@@ -301,19 +328,6 @@ public class BattleSystem extends noteworthyframework.System {
                 else {
                     // We do have a target at cast time
                     battleNode.onAttackCast(this, battleNode.target.v);
-                    double finalAttack = battleNode.buffAttackDamage(battleNode.battleAttack.amount);
-                    double finalAttackeeArmor = battleNode.target.v.buffArmorAmount(battleNode.target.v.battleArmor.amount);
-
-                    double damageReduction = BattleBalance.getDamageMultiplier(
-                            battleNode.battleAttack.type,
-                            battleNode.target.v.battleArmor.type); // + finalAttackeeArmor * 0.06;
-
-                    // TODO: Make this calculation configurable
-                    double finalDamage = Math.max(0, finalAttack * damageReduction);
-
-                    battleNode.target.v.hp.v -= finalDamage;
-                    battleNode.target.v.lastAttacker.v = battleNode;
-                    battleNode.target.v.onAttacked(this, battleNode, finalDamage);
                 }
 
                 battleNode.battleState.v = BattleNode.BATTLE_STATE_WAITING_FOR_COOLDOWN;

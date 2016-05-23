@@ -46,7 +46,7 @@ public class BasicAttackEffect extends BattleEffect {
 
     @Override
     public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-        //target.onAttacked(battleSystem, battleNode, battleNode.attackDamage.v);
+        battleSystem.calculateAndInflictDamage(battleNode, target);
     }
 
     @Override
