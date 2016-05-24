@@ -4,7 +4,6 @@ import art.Animations;
 import art.Constants;
 import noteworthyengine.battle.BattleEffect;
 import noteworthyengine.battle.BattleNode;
-import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
@@ -12,6 +11,7 @@ import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
+import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.battle.BattleTriggerHandler;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
@@ -40,6 +40,7 @@ public class Cannon extends Unit {
 
     public Cannon() {
         this.name = this.getClass().getSimpleName();
+        this.battleNode.battleEffects.add(new MissileAttackEffect(this.battleNode));
 
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -108,6 +109,7 @@ public class Cannon extends Unit {
         public CannonBattleNode(Cannon cannon) {
             super(cannon);
             this.cannon = cannon;
+            this.battleEffects.add(new MissileAttackEffect(this));
         }
 
         @Override
@@ -121,15 +123,42 @@ public class Cannon extends Unit {
             this.battleAttack.range = 6.5;
             this.targetAcquisitionRange.v = this.battleAttack.range + 3;
         }
+//
+//        @Override
+//        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+//            super.onAttackCast(battleSystem, target);
+//
+//            Missle missle = UnitPool.missles.fetchMemory();
+//            missle.configure(this.playerUnitPtr.v, this.coords.pos, target.coords.pos);
+//            missle.battleNode.coords.pos.copy(this.coords.pos);
+//            battleSystem.getBaseEngine().addUnit(missle);
+//        }
+    }
+
+    public static class MissileAttackEffect extends BattleEffect {
+        private BattleNode battleNode;
+
+        public MissileAttackEffect(BattleNode battleNode) {
+            this.battleNode = battleNode;
+        }
 
         @Override
-        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            super.onAttackCast(battleSystem, target);
+        public void update(BattleSystem battleSystem, double dt) {
 
-            Missle missle = UnitPool.missles.fetchMemory();
-            missle.configure(this.playerUnitPtr.v, this.coords.pos, target.coords.pos);
-            missle.battleNode.coords.pos.copy(this.coords.pos);
-            battleSystem.getBaseEngine().addUnit(missle);
+        }
+
+        @Override
+        public void sendEvent(BattleSystem battleSystem, BattleNode battleNode, Event event) {
+            if (event == Event.FIND_NEW_TARGET) {
+                battleSystem.findAttackablesWithinRange(battleNode.target, battleNode, battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
+            }
+            if (event == Event.ATTACK_CAST) {
+                Missle missle = UnitPool.missles.fetchMemory();
+                missle.configure(battleNode.playerUnitPtr.v, battleNode.coords.pos, battleNode.target.v.coords.pos);
+                missle.battleNode.coords.pos.copy(battleNode.coords.pos);
+                missle.destinationMovementNode.destination.copy(battleNode.target.v.coords.pos);
+                battleSystem.getBaseEngine().addUnit(missle);
+            }
         }
     }
 }

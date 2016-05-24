@@ -3,7 +3,6 @@ package noteworthyengine.units;
 import art.Animations;
 import art.Constants;
 import noteworthyengine.battle.BattleNode;
-import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
@@ -40,6 +39,8 @@ public class PufferZug extends Unit {
 
         gridNode = new GridNode(this, separationNode, battleNode);
         fieldNode = FieldNode.createAgentFieldNode(this);
+        battleNode.battleEffects.add(new SuicidalAOEAttackBattleEffect());
+        //battleNode.battleEffects.add(new PufferZugDieOnAttackBattleEffect());
 
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -89,7 +90,7 @@ public class PufferZug extends Unit {
             this.fractionToWalkIntoAttackRange.v = 0.2;
             this.targetAcquisitionRange.v = 17;
             this.battleAttack.range = 1.9;
-            this.battleAttack.amount = 50;
+            this.battleAttack.amount = 80;
             this.battleAttack.swingTime = 1.5;
             this.battleAttack.cooldownTime = 3;
             this.startingHp.v = 50;
@@ -97,18 +98,6 @@ public class PufferZug extends Unit {
             this.isAttackable.v = 1;
             this.target.v = null;
 
-        }
-
-        @Override
-        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            battleSystem.findAttackablesWithinRange(pufferZug.battleTargets, pufferZug.battleNode, pufferZug.battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
-
-            for (int j = pufferZug.battleTargets.size() - 1; j >= 0; j--) {
-                BattleNode toInflict = pufferZug.battleTargets.get(j).v;
-                toInflict.onAttacked(battleSystem, this, this.battleAttack.amount);
-            }
-
-            this.hp.v = 0;
         }
     }
 

@@ -4,9 +4,7 @@ import android.graphics.Color;
 
 import art.Animations;
 import art.Constants;
-import noteworthyengine.battle.BattleEffect;
 import noteworthyengine.battle.BattleNode;
-import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.DestinationMovementNode;
 import noteworthyengine.DestinationMovementSystem;
 import noteworthyengine.GridNode;
@@ -16,8 +14,6 @@ import noteworthyengine.SeparationNode;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
-import structure.TemporarySprite2dDef;
-import utils.BooleanFunc2;
 import utils.Vector2;
 import utils.VoidFunc;
 
@@ -48,12 +44,13 @@ public class Missle extends Unit {
         this.name = NAME;
 
         gridNode = new GridNode(this, separationNode, battleNode);
+        battleNode.battleEffects.add(new SuicidalAOEAttackBattleEffect());
 
         this.destinationMovementNode.onDestinationReached = new VoidFunc<DestinationMovementSystem>() {
             @Override
             public void apply(DestinationMovementSystem element) {
-                battleNode.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
-                battleNode.battleProgress.v = 0;
+//                battleNode.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
+//                battleNode.battleProgress.v = 0;
                 battleNode.hp.v = 0;
             }
         };
@@ -102,15 +99,15 @@ public class Missle extends Unit {
                             RenderNode.RENDER_LAYER_FOREGROUND);
                 }
 
-                if (!battleNode.isAlive()) {
-                    TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
-
-                    tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
-                    tempSprite.position.x = battleNode.coords.pos.x;
-                    tempSprite.position.y = battleNode.coords.pos.y;
-
-                    system.endNewTempSprite(tempSprite, 0);
-                }
+//                if (!battleNode.isAlive()) {
+//                    TemporarySprite2dDef tempSprite = system.beginNewTempSprite();
+//
+//                    tempSprite.copy(Animations.ANIMATION_TROOPS_DYING_DEF);
+//                    tempSprite.position.x = battleNode.coords.pos.x;
+//                    tempSprite.position.y = battleNode.coords.pos.y;
+//
+//                    system.endNewTempSprite(tempSprite, 0);
+//                }
             }
         };
 
@@ -132,67 +129,6 @@ public class Missle extends Unit {
         this.renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
     }
 
-    public static class MissleBattleBehavior extends BattleEffect {
-
-        protected static final BooleanFunc2<BattleNode, BattleNode> allTargetsEvenSelf = new BooleanFunc2<BattleNode, BattleNode>() {
-            @Override
-            public boolean apply(BattleNode battleNode, BattleNode battleNode2) {
-                return BattleSystem.battleNodeShouldAttackOther(battleNode, battleNode2);
-            }
-        };
-
-        public Missle missle;
-
-        public MissleBattleBehavior(Missle missle) {
-            this.missle = missle;
-        }
-
-        @Override
-        public void onAttackReady(BattleSystem battleSystem, BattleNode target) {
-            super.onAttackReady(battleSystem, target);
-
-            // Swing immediately without waiting to find a target
-            missle.battleNode.battleState.v = BattleNode.BATTLE_STATE_SWINGING;
-            missle.battleNode.battleProgress.v = 0;
-        }
-
-        @Override
-        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            battleSystem.findAttackablesWithinRange(missle.battleTargets,
-                    missle.battleNode,
-                    missle.battleNode.battleAttack.range,
-                    allTargetsEvenSelf);
-
-            for (int j = missle.battleTargets.size() - 1; j >= 0; j--) {
-                BattleNode toInflict = missle.battleTargets.get(j).v;
-
-                toInflict.onAttacked(battleSystem,
-                        missle.battleNode,
-                        missle.battleNode.battleAttack.amount);
-
-            }
-
-            missle.battleNode.hp.v = 0;
-        }
-
-        @Override
-        public void onAttackCastFail(BattleSystem battleSystem) {
-            missle.battleNode.hp.v = 0;
-        }
-
-        @Override
-        public void update(BattleSystem battleSystem, double dt) {
-        }
-
-        @Override
-        public void sendEvent(BattleSystem battleSystem, BattleNode battleNode, Event event) {
-        }
-
-        @Override
-        public void reset() {
-        }
-    }
-
     public static class MissileBattleNode extends BattleNode {
 
         public Missle missle;
@@ -200,7 +136,6 @@ public class Missle extends Unit {
         public MissileBattleNode(Missle missle) {
             super(missle);
             this.missle = missle;
-            this.battleEffects.add(new MissleBattleBehavior(missle));
         }
 
         @Override
