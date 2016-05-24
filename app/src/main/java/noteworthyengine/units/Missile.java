@@ -20,9 +20,9 @@ import utils.VoidFunc;
 /**
  * Created by eric on 3/27/15.
  */
-public class Missle extends Unit {
+public class Missile extends Unit {
 
-    public static final String NAME = "missle";
+    public static final String NAME = "missile";
 
     public static final int MAX_BATTLE_NODES_AFFECTED = 20;
 
@@ -40,7 +40,7 @@ public class Missle extends Unit {
     private Vector2 temp = new Vector2();
 
 
-    public Missle() {
+    public Missile() {
         this.name = NAME;
 
         gridNode = new GridNode(this, separationNode, battleNode);
@@ -131,11 +131,11 @@ public class Missle extends Unit {
 
     public static class MissileBattleNode extends BattleNode {
 
-        public Missle missle;
+        public Missile missile;
 
-        public MissileBattleNode(Missle missle) {
-            super(missle);
-            this.missle = missle;
+        public MissileBattleNode(Missile missile) {
+            super(missile);
+            this.missile = missile;
         }
 
         @Override

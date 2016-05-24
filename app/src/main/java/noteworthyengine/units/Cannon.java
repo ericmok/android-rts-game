@@ -12,7 +12,6 @@ import noteworthyengine.RenderSystem;
 import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
 import noteworthyengine.battle.BattleSystem;
-import noteworthyengine.battle.BattleTriggerHandler;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
@@ -128,10 +127,10 @@ public class Cannon extends Unit {
 //        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
 //            super.onAttackCast(battleSystem, target);
 //
-//            Missle missle = UnitPool.missles.fetchMemory();
-//            missle.configure(this.playerUnitPtr.v, this.coords.pos, target.coords.pos);
-//            missle.battleNode.coords.pos.copy(this.coords.pos);
-//            battleSystem.getBaseEngine().addUnit(missle);
+//            Missile missile = UnitPool.missles.fetchMemory();
+//            missile.configure(this.playerUnitPtr.v, this.coords.pos, target.coords.pos);
+//            missile.battleNode.coords.pos.copy(this.coords.pos);
+//            battleSystem.getBaseEngine().addUnit(missile);
 //        }
     }
 
@@ -153,11 +152,11 @@ public class Cannon extends Unit {
                 battleSystem.findAttackablesWithinRange(battleNode.target, battleNode, battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
             }
             if (event == Event.ATTACK_CAST) {
-                Missle missle = UnitPool.missles.fetchMemory();
-                missle.configure(battleNode.playerUnitPtr.v, battleNode.coords.pos, battleNode.target.v.coords.pos);
-                missle.battleNode.coords.pos.copy(battleNode.coords.pos);
-                missle.destinationMovementNode.destination.copy(battleNode.target.v.coords.pos);
-                battleSystem.getBaseEngine().addUnit(missle);
+                Missile missile = UnitPool.missles.fetchMemory();
+                missile.configure(battleNode.playerUnitPtr.v, battleNode.coords.pos, battleNode.target.v.coords.pos);
+                missile.battleNode.coords.pos.copy(battleNode.coords.pos);
+                missile.destinationMovementNode.destination.copy(battleNode.target.v.coords.pos);
+                battleSystem.getBaseEngine().addUnit(missile);
             }
         }
     }

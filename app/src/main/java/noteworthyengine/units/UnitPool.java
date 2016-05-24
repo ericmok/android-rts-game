@@ -24,7 +24,7 @@ public class UnitPool {
 
     public static final MemoryPool<Cannon> cannons = new MemoryPool<Cannon>(Cannon.class, NUMBER_UNITS);
 
-    public static final MemoryPool<Missle> missles = new MemoryPool<Missle>(Missle.class, NUMBER_UNITS);
+    public static final MemoryPool<Missile> missles = new MemoryPool<Missile>(Missile.class, NUMBER_UNITS);
 
     public static final MemoryPool<Mine> mines = new MemoryPool<Mine>(Mine.class, NUMBER_UNITS);
 
@@ -55,8 +55,8 @@ public class UnitPool {
         else if (unit.getClass() == Cannon.class) {
             UnitPool.cannons.recycleMemory((Cannon)unit);
         }
-        else if (unit.getClass() == Missle.class) {
-            UnitPool.missles.recycleMemory((Missle)unit);
+        else if (unit.getClass() == Missile.class) {
+            UnitPool.missles.recycleMemory((Missile)unit);
         }
         else if (unit.getClass() == Mech.class) {
             UnitPool.mechs.recycleMemory((Mech)unit);
