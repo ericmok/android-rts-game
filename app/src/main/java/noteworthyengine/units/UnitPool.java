@@ -30,6 +30,8 @@ public class UnitPool {
 
     public static final MemoryPool<Zug> zugs = new MemoryPool<Zug>(Zug.class, NUMBER_UNITS);
 
+    public static final MemoryPool<PufferZug> pufferZugs = new MemoryPool<>(PufferZug.class, 100);
+
     public static final MemoryPool<City> cities = new MemoryPool<City>(City.class, NUMBER_BUILDINGS);
 
     public static final MemoryPool<MechFactory> mechFactories = new MemoryPool<MechFactory>(MechFactory.class, NUMBER_BUILDINGS);
@@ -66,6 +68,9 @@ public class UnitPool {
         }
         else if (unit.getClass() == Zug.class) {
             UnitPool.zugs.recycleMemory((Zug) unit);
+        }
+        else if (unit.getClass() == PufferZug.class) {
+            UnitPool.pufferZugs.recycleMemory((PufferZug)unit);
         }
         else if (unit.getClass() == City.class) {
             UnitPool.cities.recycleMemory((City)unit);
