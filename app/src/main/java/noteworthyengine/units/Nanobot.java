@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.battle.BasicAttackEffect;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
@@ -33,6 +34,7 @@ public class Nanobot extends Unit {
         movementNode = new MovementNode(this);
         separationNode = new SeparationNode(this);
         battleNode = new BattleNode(this);
+        battleNode.battleEffects.add(new BasicAttackEffect(battleNode));
 
         renderNode = new RenderNode(this);
 
@@ -55,9 +57,9 @@ public class Nanobot extends Unit {
         battleNode.hp.v = 24;
         battleNode.targetAcquisitionRange.v = 20;
         battleNode.battleAttack.cooldownTime = 1;
-        battleNode.battleAttack.amount = 2;
+        battleNode.battleAttack.amount = 10;
         //battleNode.battleAttack.cooldownTime = 1;
-        battleNode.battleAttack.range = 1.0;
+        battleNode.battleAttack.range = 1.3;
 
         battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
         battleNode.target.v = null;
