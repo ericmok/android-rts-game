@@ -83,12 +83,12 @@ public class SelectionSystem extends noteworthyframework.System {
 
         int x = gridSystem.grid.getBucketX(temp.x);
         int y = gridSystem.grid.getBucketY(temp.y);
-        List<GridNode> gridNodes = gridSystem.grid.getSurroundingNodes(x, y, range);
+        List<Grid.Bucket> gridNodes = gridSystem.grid.getSurroundingNodes(x, y, range);
 
         found = false;
 
         for (int i = 0; i < gridNodes.size(); i++) {
-            GridNode gridNode = gridNodes.get(i);
+            GridNode gridNode = gridNodes.get(i).node;
 
             if (gridNode.coords.pos.distanceTo(temp) < TOUCH_RADIUS) {
 
