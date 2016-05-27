@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utils.BooleanFunc;
-import utils.BooleanFunc2;
 import utils.Vector2;
 
 /**
@@ -12,8 +11,8 @@ import utils.Vector2;
  * Grid for spacial indexing
  */
 public class Grid {
-    private int width = 100;
-    private int height = 100;
+    private int width = 40;
+    private int height = 40;
     private double cellSize = 4;
 
     public static final int EXPECT_NUMBER_POINTS_PER_CELL = 30;
@@ -262,6 +261,26 @@ public class Grid {
         }
 
         return ret;
+    }
+
+    /**
+     * Instead re-indexing all nodes (which requires the entire grid to be cleared),
+     * we can check a node to see if its grid positions are stale
+     * @param nodeToUpdate
+     */
+    public void update(GridNode nodeToUpdate) {
+
+        // If node coords don't match grid coords, we have to update
+        if (getBucketX(nodeToUpdate.coords.pos.x) != nodeToUpdate.gridX.v ||
+                getBucketY(nodeToUpdate.coords.pos.y) != nodeToUpdate.gridY.v) {
+
+            removeIndex(nodeToUpdate);
+            index(nodeToUpdate);
+        }
+    }
+
+    public void removeIndex(GridNode nodeToDelete) {
+        getBucketForCell(nodeToDelete.gridX.v, nodeToDelete.gridY.v).remove(nodeToDelete);
     }
 
     public void clear() {

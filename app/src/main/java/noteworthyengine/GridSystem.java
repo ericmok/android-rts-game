@@ -26,20 +26,28 @@ public class GridSystem extends noteworthyframework.System {
     }
 
     @Override
-    public void step(double ct, double dt) {
-        grid.clear();
+    public void initialize() {
+        super.initialize();
 
+        grid.clear();
+    }
+
+    @Override
+    public void step(double ct, double dt) {
         for (int i = nodes.size() - 1; i >= 0; i--) {
             GridNode gridNode = nodes.get(i);
-            grid.index(gridNode);
-
-            gridNode.gridX.v = grid.getBucketX(gridNode.coords.pos.x);
-            gridNode.gridY.v = grid.getBucketY(gridNode.coords.pos.y);
+            grid.update(gridNode);
         }
     }
 
     @Override
     public void flushQueues() {
+        for (int i = 0; i < nodes.itemsToAdd.size(); i++) {
+            grid.index(nodes.itemsToAdd.get(i));
+        }
+        for (int i = 0; i < nodes.itemsToRemove.size(); i++) {
+            grid.removeIndex(nodes.itemsToRemove.get(i));
+        }
         nodes.flushQueues();
     }
 }
