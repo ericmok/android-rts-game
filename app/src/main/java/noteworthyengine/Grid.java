@@ -3,7 +3,6 @@ package noteworthyengine;
 import java.util.ArrayList;
 import java.util.List;
 
-import structure.RewriteOnlyArray;
 import utils.BooleanFunc;
 import utils.BooleanFunc2;
 import utils.Vector2;
@@ -17,11 +16,11 @@ public class Grid {
     private int height = 100;
     private double cellSize = 4;
 
-    public static final int EXPECT_NUMBER_POINTS_PER_CELL = 5;
+    public static final int EXPECT_NUMBER_POINTS_PER_CELL = 30;
 
-    private RewriteOnlyArray<Bucket>[][] points;
+    private List<GridNode>[][] points;
 
-    private ArrayList<Bucket> ret = new ArrayList<Bucket>(EXPECT_NUMBER_POINTS_PER_CELL);
+    private ArrayList<GridNode> ret = new ArrayList<GridNode>(EXPECT_NUMBER_POINTS_PER_CELL);
 
     private final Vector2 centerOfMass = new Vector2();
     private final Vector2 resultVector = new Vector2();
@@ -32,11 +31,11 @@ public class Grid {
         this.height = height;
         this.cellSize = cellSize;
 
-        points = new RewriteOnlyArray[width][height];
+        points = new ArrayList[width][height];
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                points[i][j] = new RewriteOnlyArray<>(Bucket.class, EXPECT_NUMBER_POINTS_PER_CELL);
+                points[i][j] = new ArrayList<GridNode>(EXPECT_NUMBER_POINTS_PER_CELL);
             }
         }
     }
@@ -59,8 +58,7 @@ public class Grid {
         int cellY = getBucketY(node.coords.pos.y);
         node.gridX.v = cellX;
         node.gridY.v = cellY;
-
-        points[cellX][cellY].takeNextWritable().node = node;
+        points[cellX][cellY].add(node);
     }
 
     /**
@@ -74,15 +72,15 @@ public class Grid {
         return resultVector;
     }
 
-    public RewriteOnlyArray<Bucket> getBucketForCell(int inX, int inY) {
+    public List<GridNode> getBucketForCell(int inX, int inY) {
         return points[inX][inY];
     }
 
-    public RewriteOnlyArray<Bucket> getBucketForNode(GridNode gridNode) {
+    public List<GridNode> getBucketForNode(GridNode gridNode) {
         return points[getBucketX(gridNode.coords.pos.x)][getBucketY(gridNode.coords.pos.y)];
     }
 
-    public ArrayList<Bucket> getSurroundingNodes(int gridX, int gridY, double range) {
+    public List<GridNode> getSurroundingNodes(int gridX, int gridY, double range) {
         ret.clear();
 
         int discreteRange = (int)Math.ceil(range / cellSize);
@@ -95,7 +93,7 @@ public class Grid {
         for (int i = lx; i <= lxMax; i++) {
             for (int j = ly; j <= lyMax; j++) {
 
-                RewriteOnlyArray<Bucket> nodesToRed = points[i][j];
+                List<GridNode> nodesToRed = points[i][j];
                 for (int k = nodesToRed.size() - 1; k >= 0; k--) {
                     ret.add(points[i][j].get(k));
                 }
@@ -105,7 +103,7 @@ public class Grid {
         return ret;
     }
 
-    public List<Bucket> getSurroundingNodes(GridNode gridNode, double range) {
+    public List<GridNode> getSurroundingNodes(GridNode gridNode, double range) {
         ret.clear();
         int lx = this.getBucketX(gridNode.coords.pos.x - range);
         int ly = this.getBucketY(gridNode.coords.pos.y - range);
@@ -115,7 +113,7 @@ public class Grid {
         for (int i = lx; i <= lxMax; i++) {
             for (int j = ly; j <= lyMax; j++) {
 
-                RewriteOnlyArray<Bucket> nodesToRed = points[i][j];
+                List<GridNode> nodesToRed = points[i][j];
                 for (int k = nodesToRed.size() - 1; k >= 0; k--) {
                     ret.add(points[i][j].get(k));
                 }
@@ -125,7 +123,7 @@ public class Grid {
         return ret;
     }
 
-    public List<Bucket> getShell(GridNode gridNode, int cellRange) {
+    public List<GridNode> getShell(GridNode gridNode, int cellRange) {
         return getShell(gridNode.gridX.v, gridNode.gridY.v, cellRange);
     }
 
@@ -151,7 +149,7 @@ public class Grid {
      * @param cellRange
      * @return
      */
-    public List<Bucket> getShell(int gridX, int gridY, int cellRange) {
+    public List<GridNode> getShell(int gridX, int gridY, int cellRange) {
         ret.clear();
 
         // Untested bounds check
@@ -160,7 +158,7 @@ public class Grid {
 
         // Boundary condition, at 0 range, there is no shell
         if (cellRange == 0) {
-            RewriteOnlyArray<Bucket> nodesToRet = points[gridX][gridY];
+            List<GridNode> nodesToRet = points[gridX][gridY];
             for (int k = nodesToRet.size() - 1; k >= 0; k--) {
                 ret.add(nodesToRet.get(k));
             }
@@ -185,7 +183,7 @@ public class Grid {
                     continue;
                 }
                 else {
-                    RewriteOnlyArray<Bucket> nodesToRet = points[i][j];
+                    List<GridNode> nodesToRet = points[i][j];
                     for (int k = nodesToRet.size() - 1; k >= 0; k--) {
                         ret.add(points[i][j].get(k));
                     }
@@ -199,17 +197,17 @@ public class Grid {
 
 
     // TODO: test
-    public List<Bucket> iterativeShellSearch(int gridX, int gridY, int cellRange, BooleanFunc<Bucket> filter) {
+    public List<GridNode> iterativeShellSearch(int gridX, int gridY, int cellRange, BooleanFunc<GridNode> filter) {
         ret.clear();
 
         int queryRange = 0;
 
         while(queryRange <= cellRange) {
 
-            List<Bucket> query = getShell(gridX, gridY, queryRange);
+            List<GridNode> query = getShell(gridX, gridY, queryRange);
             for (int i = query.size() - 1; i >= 0; i--) {
 
-                Bucket nodeToTest = query.get(i);
+                GridNode nodeToTest = query.get(i);
 
                 if (filter.apply(nodeToTest)) {
                     ret.add(nodeToTest);
@@ -235,7 +233,7 @@ public class Grid {
      * @param gridY
      * @return
      */
-    public List<Bucket> findClosestShell(int gridX, int gridY) {
+    public List<GridNode> findClosestShell(int gridX, int gridY) {
         ret.clear();
 
         int queryX = gridX;
@@ -243,7 +241,7 @@ public class Grid {
 
         // Get a shell around the query point, increase range
         int range = 0;
-        List<Bucket> test = getShell(queryX, queryY, range);
+        List<GridNode> test = getShell(queryX, queryY, range);
 
         if (test.size() != 0) {
             return test;
@@ -273,13 +271,8 @@ public class Grid {
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                //points[i][j].clear();
-                points[i][j].resetWriteIndex();
+                points[i][j].clear();
             }
         }
-    }
-
-    public static final class Bucket {
-        public GridNode node;
     }
 }

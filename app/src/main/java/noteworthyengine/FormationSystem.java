@@ -69,13 +69,13 @@ public class FormationSystem extends noteworthyframework.System {
 
         int query = 0;
 
-        List<Grid.Bucket> gridNodeList;
+        List<GridNode> gridNodeList;
 
         while (query < gridSystem.grid.numberCellsForRange(leader.sheepAcquisitionDistance.v)) {
             gridNodeList = gridSystem.grid.getShell(leader.gridX.v, leader.gridY.v, query);
 
             for (int i = gridNodeList.size() - 1; i >= 0; i--) {
-                GridNode gridNode = gridNodeList.get(i).node;
+                GridNode gridNode = gridNodeList.get(i);
 
                 FormationNode.FormationSheep sheep = (FormationNode.FormationSheep)gridNode.unit.node(FormationNode.FormationSheep.NAME);
 

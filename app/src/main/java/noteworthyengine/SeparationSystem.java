@@ -47,7 +47,7 @@ public class SeparationSystem extends noteworthyframework.System {
             SeparationNode node = nodes.get(i);
             node.separationForce.zero();
 
-            List<Grid.Bucket> nearbyNodes = grid.getSurroundingNodes(node.gridX.v, node.gridY.v, 2);
+            List<GridNode> nearbyNodes = grid.getSurroundingNodes(node.gridX.v, node.gridY.v, 2);
 
             for (int j = 0; j < nearbyNodes.size(); j++) {
 
@@ -55,7 +55,7 @@ public class SeparationSystem extends noteworthyframework.System {
                 //if (i == j) continue;
 
                 //SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j).unit.node(SeparationNode.NAME);
-                SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j).node._separationNode;
+                SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j)._separationNode;
 
                 // Not all gridNodes belong to units that have separationNodes
                 if (otherNode == null || node == otherNode) { continue; }

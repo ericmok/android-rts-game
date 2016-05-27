@@ -102,12 +102,12 @@ public class BattleSystem extends noteworthyframework.System {
 
         while (query <= grid.numberCellsForRange(range)) {
 
-            List<Grid.Bucket> gridNodes = grid.getShell(battleNode.gridX.v, battleNode.gridY.v, query);
+            List<GridNode> gridNodes = grid.getShell(battleNode.gridX.v, battleNode.gridY.v, query);
 
             for (int i = gridNodes.size() - 1; i >= 0; i--) {
 
                 //BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
-                BattleNode possibleTarget = (BattleNode) gridNodes.get(i).node._battleNode;
+                BattleNode possibleTarget = (BattleNode) gridNodes.get(i)._battleNode;
 
                 // Not all gridNodes belong to units that have battleNodes...
                 if (possibleTarget == null) {
@@ -168,10 +168,10 @@ public class BattleSystem extends noteworthyframework.System {
 
         while (query <= grid.numberCellsForRange(range)) {
 
-            List<Grid.Bucket> gridNodes = grid.getShell(battleNode.gridX.v, battleNode.gridY.v, query);
+            List<GridNode> gridNodes = grid.getShell(battleNode.gridX.v, battleNode.gridY.v, query);
 
             for (int i = gridNodes.size() - 1; i >= 0; i--) {
-                BattleNode possibleTarget = (BattleNode) gridNodes.get(i).node.unit.node(BattleNode._NAME);
+                BattleNode possibleTarget = (BattleNode) gridNodes.get(i).unit.node(BattleNode._NAME);
 
                 // Not all gridNodes belong to units that have battleNodes...
                 if (possibleTarget == null) {
