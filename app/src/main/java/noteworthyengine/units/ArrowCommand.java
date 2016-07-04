@@ -36,7 +36,6 @@ public class ArrowCommand extends Unit {
         fieldNode._fieldArrowNode = new FieldNode.FieldArrowNode(this);
 
         decayNode = new DecayNode(this);
-        decayNode.timeToLive.v = 7;
 
         renderNode = new RenderNode(this);
         renderNode.animationName.v = ANIMATION_FIELD_ARROW_EXISTING;
@@ -44,9 +43,16 @@ public class ArrowCommand extends Unit {
         renderNode.width.v = (float)fieldNode._fieldArrowNode.fieldArrowInfluenceRadius.v;
         renderNode.height.v = (float)fieldNode._fieldArrowNode.fieldArrowInfluenceRadius.v;
         renderNode.onDraw = onDraw;
+
+        reset();
+    }
+
+    public void reset() {
+        decayNode.timeToLive.v = 7;
     }
 
     public void set(PlayerUnit playerUnit, double x, double y, double rx, double ry) {
+        reset();
         this.fieldNode.playerUnitPtr.v = playerUnit;
         this.fieldNode._fieldArrowNode.coords.pos.set(x, y);
         this.fieldNode._fieldArrowNode.coords.rot.setDirection(rx, ry);
