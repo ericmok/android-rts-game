@@ -11,8 +11,8 @@ import utils.Vector2;
  * Grid for spacial indexing
  */
 public class Grid {
-    private int width = 40;
-    private int height = 40;
+    private int width = -1;
+    private int height = -1;
     private double cellSize = 4;
 
     public static final int EXPECT_NUMBER_POINTS_PER_CELL = 30;
