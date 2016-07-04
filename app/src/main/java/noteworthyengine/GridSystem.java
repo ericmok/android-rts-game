@@ -9,7 +9,7 @@ public class GridSystem extends noteworthyframework.System {
 
     public QueueMutationList<GridNode> nodes = new QueueMutationList<GridNode>(127);
 
-    public Grid grid = new Grid(100, 100, 4);
+    public Grid grid = new Grid(50, 50, 4);
 
     @Override
     public void addNode(Node node) {
