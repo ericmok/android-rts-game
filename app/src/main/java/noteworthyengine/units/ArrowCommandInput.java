@@ -90,7 +90,7 @@ public class ArrowCommandInput extends Unit {
                 renderNode.color.v = Color.argb(255, 255, 255, 255);
             }
             if (currentAction == MotionEvent.ACTION_UP) {
-                ArrowCommand arrowCommand = new ArrowCommand();
+                ArrowCommand arrowCommand = UnitPool.arrowCommands.fetchMemory();
                 //arrowCommand.set(game.noteworthyEngine.currentGamer,
                 arrowCommand.set(playerUnit,
                         renderNode.coords.pos.x,

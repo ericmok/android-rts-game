@@ -46,6 +46,8 @@ public class UnitPool {
 
     public static final MemoryPool<ZugNest> zugNests = new MemoryPool<ZugNest>(ZugNest.class, NUMBER_BUILDINGS);
 
+    public static final MemoryPool<ArrowCommand> arrowCommands = new MemoryPool<>(ArrowCommand.class, 11);
+
     public static void load() {
         // Does nothing. Just load class static fields via class loader.
     }
@@ -89,6 +91,9 @@ public class UnitPool {
         }
         else if (unit.getClass() == NanobotFactory.class) {
             UnitPool.nanobotFactories.recycleMemory((NanobotFactory)unit);
+        }
+        else if (unit.getClass() == ArrowCommand.class) {
+            UnitPool.arrowCommands.recycleMemory((ArrowCommand)unit);
         }
     }
 
