@@ -99,7 +99,7 @@ public class QuadTreeSystem extends System {
 
         public void add(T item) {
             if (root == null) {
-                QTreeNode.create(0, 0, width);
+                root = QTreeNode.create(0, 0, width);
             }
 
             root.add(item);
