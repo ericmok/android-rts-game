@@ -62,10 +62,16 @@ public class QuadTreeSystem extends System {
         public Vector2 getPosition() {
             return coords.pos;
         }
+
+        @Override
+        public QuadTreeNode getData() {
+            return this;
+        }
     }
 
     public static interface Positionable {
         public Vector2 getPosition();
+        public Object getData();
     }
 
     /**
@@ -110,7 +116,9 @@ public class QuadTreeSystem extends System {
         }
 
         public void clear() {
-            root.recycle();
+            if (root != null) {
+                root.recycle();
+            }
             root = null;
         }
 
