@@ -77,12 +77,17 @@ public class QuadTreeSystem extends System {
      */
     public static class QTree<T extends Positionable> {
         private static MemoryPool<QTreeNode> QTreeNodeMemoryPool;
+        private static ArrayList RESULTS;
 
-        private QTreeNode root = null;
+        public QTreeNode root = null;
         private double width = 0;
 
         public QTree(int maxCapacity, double width) {
             QTreeNodeMemoryPool = new MemoryPool<>(QTreeNode.class, maxCapacity);
+
+            // TODO: Select a better capacity value
+            RESULTS = new ArrayList<>(maxCapacity / 4);
+
             this.width = width;
         }
 
@@ -92,6 +97,16 @@ public class QuadTreeSystem extends System {
             }
 
             root.add(item);
+        }
+
+        public ArrayList queryRange(double x, double y, double width) {
+            RESULTS.clear();
+
+            if (root != null) {
+                return root.queryRange(x, y, width, RESULTS);
+            }
+
+            return RESULTS;
         }
 
         public void clear() {
@@ -188,10 +203,7 @@ public class QuadTreeSystem extends System {
                     southEast = QTreeNode.create(this.squareBoundary.x * 3 / 4, this.squareBoundary.y / 4, this.squareBoundary.width / 2);
                 }
             }
-
-            public ArrayList queryRange(double x, double y, double range) {
-                ArrayList<T> results = new ArrayList<>(NUMBER_POINTS);
-                results.clear();
+            public ArrayList queryRange(double x, double y, double range, ArrayList results) {
 
                 if (!this.squareBoundary.intersectsAABB(x, y, range)) {
                     return results;
@@ -202,10 +214,10 @@ public class QuadTreeSystem extends System {
                 }
 
                 if (northWest != null) {
-                    results.addAll(northWest.queryRange(x, y, range));
-                    results.addAll(northEast.queryRange(x, y, range));
-                    results.addAll(southWest.queryRange(x, y, range));
-                    results.addAll(southEast.queryRange(x, y, range));
+                    northWest.queryRange(x, y, range, results);
+                    northEast.queryRange(x, y, range, results);
+                    southWest.queryRange(x, y, range, results);
+                    southEast.queryRange(x, y, range, results);
                 }
 
                 return results;
