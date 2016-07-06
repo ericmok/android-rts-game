@@ -77,7 +77,7 @@ public class QuadTreeSystem extends System {
      */
     public static class QTree<T extends Positionable> {
         private static MemoryPool<QTreeNode> QTreeNodeMemoryPool;
-        private static ArrayList RESULTS;
+        private ArrayList<T> RESULTS;
 
         public QTreeNode root = null;
         private double width = 0;
