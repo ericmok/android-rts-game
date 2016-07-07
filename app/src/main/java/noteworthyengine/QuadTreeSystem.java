@@ -52,6 +52,7 @@ public class QuadTreeSystem extends System {
 
     public static class QuadTreeNode extends Node implements Positionable {
         public Coords coords;
+        public QTree.QTreeNode _qtTreeNode;
 
         public QuadTreeNode(Unit unit) {
             super(QuadTreeNode.class.getSimpleName(), unit);
@@ -67,11 +68,23 @@ public class QuadTreeSystem extends System {
         public QuadTreeNode getData() {
             return this;
         }
+
+        @Override
+        public void setQTreeNode(QTree.QTreeNode qTreeNode) {
+            _qtTreeNode = qTreeNode;
+        }
+
+        @Override
+        public QTree.QTreeNode getQTreeNode() {
+            return _qtTreeNode;
+        }
     }
 
     public static interface Positionable {
         public Vector2 getPosition();
         public Object getData();
+        public void setQTreeNode(QTree.QTreeNode qTreeNode);
+        public QTree.QTreeNode getQTreeNode();
     }
 
     /**
@@ -155,6 +168,9 @@ public class QuadTreeSystem extends System {
                 northEast = null;
                 southWest = null;
                 southEast = null;
+                for (int i = 0; i < items.size(); i++) {
+                    items.get(i).setQTreeNode(null);
+                }
                 QTreeNodeMemoryPool.recycleMemory(this);
             }
 
@@ -181,6 +197,7 @@ public class QuadTreeSystem extends System {
 
                 if (items.size() < NUMBER_CHILDREN) {
                     items.add(item);
+                    item.setQTreeNode(this);
                     return true;
                 }
                 else {
@@ -232,9 +249,9 @@ public class QuadTreeSystem extends System {
             }
 
             public static class SquareBoundary {
-                double x = 0;
-                double y = 0;
-                double width = 1;
+                public double x = 0;
+                public double y = 0;
+                public double width = 1;
 
                 public boolean containsPoint(double inX, double inY) {
                     return inX >= x - width/2 && inX <= x + width/2 &&
