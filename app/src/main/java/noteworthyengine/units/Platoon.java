@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.battle.BasicAttackEffect;
 import noteworthyengine.battle.BattleBalance;
 import noteworthyengine.battle.BattleNode;
@@ -30,7 +31,8 @@ import utils.VoidFunc;
 public class Platoon extends Unit {
     public static final String NAME = "Troopy";
 
-    public GridNode gridNode;
+    //public GridNode gridNode;
+    public QuadTreeSystem.QuadTreeNode quadTreeNode;
     public MovementNode movementNode;
 
     public FieldNode fieldNode;
@@ -51,6 +53,7 @@ public class Platoon extends Unit {
         this.name = NAME;
 
         movementNode = new MovementNode(this);
+        quadTreeNode = new QuadTreeSystem.QuadTreeNode(this);
 
         fieldNode = FieldNode.createAgentFieldNode(this);
 
@@ -63,7 +66,7 @@ public class Platoon extends Unit {
         separationNode = new SeparationNode(this);
         formationNode = new FormationNode(this);
 
-        gridNode = new GridNode(this, separationNode, battleNode);
+        //gridNode = new GridNode(this, separationNode, battleNode);
         selectionNode = new SelectionNode(this);
 
         formationSheep = new FormationNode.FormationSheep(this);
@@ -103,6 +106,7 @@ public class Platoon extends Unit {
 //                    (float)renderNode.coords.pos.x - 0.5f, (float)renderNode.coords.pos.y + 0.7f,
 //                    (float)renderNode.coords.pos.x + 0.5f * (float)(battleNode.hp.v / 50), (float)renderNode.coords.pos.y + 0.7f, 2,
 //                    (battleNode.hp.v > 30) ? Color.GREEN : (battleNode.hp.v > 15) ? Color.YELLOW : Color.RED);
+
 
             renderNode.color.v = Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team);
             //renderNode.color.v = Color.argb(10, 255, 255, 255);

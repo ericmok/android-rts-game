@@ -2,6 +2,7 @@ package noteworthyengine;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import noteworthyframework.*;
@@ -15,12 +16,13 @@ public class SeparationSystem extends noteworthyframework.System {
     public QueueMutationList<SeparationNode> nodes = new QueueMutationList<SeparationNode>(127);
 
     // External system dependency
-    private GridSystem gridSystem;
+    //private GridSystem gridSystem;
+    private QuadTreeSystem quadTreeSystem;
 
     private Vector2 temp = new Vector2();
 
-    public SeparationSystem(GridSystem gridSystem) {
-        this.gridSystem = gridSystem;
+    public SeparationSystem(QuadTreeSystem quadTreeSystem) {
+        this.quadTreeSystem = quadTreeSystem;
     }
 
     @Override
@@ -41,13 +43,15 @@ public class SeparationSystem extends noteworthyframework.System {
     public void step(double ct, double dt) {
 
         NoteworthyEngine noteworthyEngine = (NoteworthyEngine)this.getBaseEngine();
-        Grid grid = noteworthyEngine.gridSystem.grid;
+        //Grid grid = noteworthyEngine.gridSystem.grid;
 
         for (int i = 0; i < nodes.size(); i++) {
             SeparationNode node = nodes.get(i);
             node.separationForce.zero();
 
-            List<GridNode> nearbyNodes = grid.getSurroundingNodes(node.gridX.v, node.gridY.v, 2);
+            //List<GridNode> nearbyNodes = grid.getSurroundingNodes(node.gridX.v, node.gridY.v, 2);
+            double radius = 2;
+            ArrayList<QuadTreeSystem.QuadTreeNode> nearbyNodes = quadTreeSystem.qTree.queryRange(node.coords.pos.x, node.coords.pos.y, radius);
 
             for (int j = 0; j < nearbyNodes.size(); j++) {
 
@@ -55,18 +59,19 @@ public class SeparationSystem extends noteworthyframework.System {
                 //if (i == j) continue;
 
                 //SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j).unit.node(SeparationNode.NAME);
-                SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j)._separationNode;
+                //SeparationNode otherNode = (SeparationNode)nearbyNodes.get(j)._separationNode;
+                Vector2 otherNodePosition = nearbyNodes.get(j).getPosition();
 
                 // Not all gridNodes belong to units that have separationNodes
-                if (otherNode == null || node == otherNode) { continue; }
+                //if (otherNode == null || node == otherNode) { continue; }
 
-                double distance = (node.coords.pos.distanceTo(otherNode.coords.pos) + 1);
+                double distance = (node.coords.pos.distanceTo(otherNodePosition) + 1);
 
                 if (distance > 2.1) continue;
 
                 distance = distance * distance * distance;
 
-                Vector2.subtract(temp, node.coords.pos, otherNode.coords.pos);
+                Vector2.subtract(temp, node.coords.pos, otherNodePosition);
                 temp.scale(1 / distance, 1 / distance);
 
                 node.separationForce.translate(temp.x , temp.y);

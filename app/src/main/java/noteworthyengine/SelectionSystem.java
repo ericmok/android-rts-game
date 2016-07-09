@@ -25,7 +25,7 @@ public class SelectionSystem extends noteworthyframework.System {
 
     private Game game;
     private PlayerSystem playerSystem;
-    private GridSystem gridSystem;
+    private QuadTreeSystem quadTreeSystem;
     private Vector2 temp = new Vector2();
 
     private enum State {
@@ -44,9 +44,9 @@ public class SelectionSystem extends noteworthyframework.System {
     /// Selections that are cached until a new selection is made
     private List<SelectionNode> cacheSelectionNodes = new ArrayList<>(MAX_SELECTION_SIZE);
 
-    public SelectionSystem(Game game, GridSystem gridSystem, PlayerSystem playerSystem) {
+    public SelectionSystem(Game game, QuadTreeSystem quadTreeSystem, PlayerSystem playerSystem) {
         this.game = game;
-        this.gridSystem = gridSystem;
+        this.quadTreeSystem = quadTreeSystem;
         this.playerSystem = playerSystem;
     }
 
@@ -81,18 +81,20 @@ public class SelectionSystem extends noteworthyframework.System {
         temp.scale(1 / scale);
         temp.translate(noteworthyEngine.activeGameCamera.cameraNode.coords.pos.x, noteworthyEngine.activeGameCamera.cameraNode.coords.pos.y);
 
-        int x = gridSystem.grid.getBucketX(temp.x);
-        int y = gridSystem.grid.getBucketY(temp.y);
-        List<GridNode> gridNodes = gridSystem.grid.getSurroundingNodes(x, y, range);
+//        int x = gridSystem.grid.getBucketX(temp.x);
+//        int y = gridSystem.grid.getBucketY(temp.y);
+//        List<GridNode> gridNodes = gridSystem.grid.getSurroundingNodes(x, y, range);
 
+
+        ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes = quadTreeSystem.qTree.queryRange(temp.x, temp.y, range);
         found = false;
 
-        for (int i = 0; i < gridNodes.size(); i++) {
-            GridNode gridNode = gridNodes.get(i);
+        for (int i = 0; i < quadTreeNodes.size(); i++) {
+            QuadTreeSystem.QuadTreeNode quadTreeNode = quadTreeNodes.get(i);
 
-            if (gridNode.coords.pos.distanceTo(temp) < TOUCH_RADIUS) {
+            if (quadTreeNode.coords.pos.distanceTo(temp) < TOUCH_RADIUS) {
 
-                SelectionNode selectionNode = (SelectionNode)gridNode.unit.node("selectionNode");
+                SelectionNode selectionNode = (SelectionNode)quadTreeNode.unit.node("selectionNode");
                 if (selectionNode != null && selectionNode.playerUnitPtr.v == playerSystem.getCurrentPlayer()) {
                     tempSelectionNodes.add(selectionNode);
                 }

@@ -48,63 +48,15 @@ public class LevelOne {
         Vector2 perp = new Vector2();
         Orientation.getPerpendicular(perp, rot);
 
-//        City city = UnitPool.cities.fetchMemory(); //new City(gamer);
-//        city.configure(gamer);
-//        city.battleNode.coords.pos.copy(location);
-//        baseEngine.addUnit(city);
-
-        CannonFactory cannonFactory = UnitPool.cannonFactories.fetchMemory(); //UnitPool.cities.fetchMemory(); //new City(gamer);
-        cannonFactory.configure(gamer);
-        cannonFactory.battleNode.coords.pos.copy(location);
-        cannonFactory.battleNode.coords.pos.translate(0, -1);
-        baseEngine.addUnit(cannonFactory);
-
         Barracks barracks = UnitPool.barracks.fetchMemory(); //new City(gamer);
         barracks.configure(gamer);
         barracks.battleNode.coords.pos.copy(location);
         barracks.battleNode.coords.pos.translate(1, 1);
         baseEngine.addUnit(barracks);
 
-        MechFactory mechFactory = UnitPool.mechFactories.fetchMemory(); //UnitPool.cities.fetchMemory(); //new City(gamer);
-        mechFactory.configure(gamer);
-        mechFactory.battleNode.coords.pos.copy(location);
-        mechFactory.battleNode.coords.pos.translate(-1, 1);
-        baseEngine.addUnit(mechFactory);
-
-//        Mine mine = UnitPool.mines.fetchMemory(); //new Mine(gamer);
-//        mine.configure(gamer);
-//        mine.battleNode.coords.pos.copy(location);
-//        mine.battleNode.coords.pos.translate(-2, -2);
-//        baseEngine.addUnit(mine);
-//
-//        mine = UnitPool.mines.fetchMemory();
-//        mine.configure(gamer);
-//        mine.battleNode.coords.pos.copy(location);
-//        mine.battleNode.coords.pos.translate(-2, 2);
-//        baseEngine.addUnit(mine);
-//
-//        mine = UnitPool.mines.fetchMemory();
-//        mine.configure(gamer);
-//        mine.battleNode.coords.pos.copy(location);
-//        mine.battleNode.coords.pos.translate(2, 2);
-//        baseEngine.addUnit(mine);
-//
-//        mine = UnitPool.mines.fetchMemory();
-//        mine.configure(gamer);
-//        mine.battleNode.coords.pos.copy(location);
-//        mine.battleNode.coords.pos.translate(2, -2);
-//        baseEngine.addUnit(mine);
-//
-//        for (int i = -3; i <= 3; i++) {
-//            Mech mech = UnitPool.mechs.fetchMemory(); //new Mech(gamer);
-//            mech.configure(gamer);
-//            mech.battleNode.coords.pos.copy(location);
-//            mech.battleNode.coords.pos.translate(i * perp.x, i * perp.y);
-//            baseEngine.addUnit(mech);
-//        }
 
         for (int h = 0; h <= 1; h++) {
-            for (int i = -5; i <= 5; i++) {
+            for (int i = -3; i <= 3; i++) {
                 Platoon platoon = UnitPool.platoons.fetchMemory(); //new Platoon();
                 platoon.configure(gamer);
                 platoon.battleNode.coords.pos.copy(location);
@@ -113,14 +65,6 @@ public class LevelOne {
                 baseEngine.addUnit(platoon);
             }
         }
-//
-//        for (int i = 0; i < 2; i++) {
-//            Cannon cannon = UnitPool.cannons.fetchMemory(); // new Cannon(gamer);
-//            cannon.configure(gamer);
-//            cannon.battleNode.coords.pos.copy(location);
-//            cannon.battleNode.coords.pos.translate((i) * perp.x + 2 * rot.x, ((i)) * perp.y + 2 * rot.y);
-//            baseEngine.addUnit(cannon);
-//        }
 
     }
 
@@ -165,44 +109,6 @@ public class LevelOne {
         baseEngine.addUnit(gamer4);
 
         ArrayList<Vector2> neutralSpawnLocations = new ArrayList<Vector2>(8);
-//        neutralSpawnLocations.add(new Vector2(-4.4, -4.4));
-//        neutralSpawnLocations.add(new Vector2(4.4, 4.4));
-//        neutralSpawnLocations.add(new Vector2(-4.4, 4.4));
-//        neutralSpawnLocations.add(new Vector2(4.4, -4.4));
-////        neutralSpawnLocations.add(new Vector2(-10, -10));
-////        neutralSpawnLocations.add(new Vector2(10, 10));
-////        neutralSpawnLocations.add(new Vector2(-10, 10));
-////        neutralSpawnLocations.add(new Vector2(10, -10));
-//        neutralSpawnLocations.add(new Vector2(-11.8, -11.8));
-//        neutralSpawnLocations.add(new Vector2(11.8, 11.8));
-//        neutralSpawnLocations.add(new Vector2(-11.8, 11.8));
-//        neutralSpawnLocations.add(new Vector2(11.8, -11.8));
-//        //neutralSpawnLocations.add(new Vector2(0, 0));
-
-        for (int i = 0; i < neutralSpawnLocations.size(); i++) {
-            Barracks barracks = UnitPool.barracks.fetchMemory();
-            barracks.configure(gamer4);
-            barracks.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
-            baseEngine.addUnit(barracks);
-        }
-
-        NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
-        nanobotFactory.configure(gamer4);
-        nanobotFactory.battleNode.coords.pos.zero();
-        baseEngine.addUnit(nanobotFactory);
-
-//        neutralSpawnLocations = new ArrayList<Vector2>(4);
-//        neutralSpawnLocations.add(new Vector2(-14, -14));
-//        neutralSpawnLocations.add(new Vector2(14, -14));
-//        neutralSpawnLocations.add(new Vector2(-14, 14));
-//        neutralSpawnLocations.add(new Vector2(14, 14));
-//
-//        for (int i = 0; i < neutralSpawnLocations.size(); i++) {
-//            NanobotFactory nanobotFactory = UnitPool.nanobotFactories.fetchMemory();
-//            nanobotFactory.configure(gamer4);
-//            nanobotFactory.battleNode.coords.pos.copy(neutralSpawnLocations.get(i));
-//            baseEngine.addUnit(nanobotFactory);
-//        }
 
         baseEngine.playerSystem.setCurrentPlayer(gamer0);
 

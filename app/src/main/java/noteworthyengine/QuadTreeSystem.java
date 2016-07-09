@@ -222,10 +222,11 @@ public class QuadTreeSystem extends System {
             public void subdivide() {
                 if (northWest == null) {
                     // TODO: Think about / Test precision errors...
-                    northWest = QTreeNode.create(this.squareBoundary.x / 4, this.squareBoundary.y / 4, this.squareBoundary.width / 2);
-                    northEast = QTreeNode.create(this.squareBoundary.x * 3 / 4, this.squareBoundary.y / 4, this.squareBoundary.width / 2);
-                    southWest = QTreeNode.create(this.squareBoundary.x / 4, this.squareBoundary.y * 3 / 4, this.squareBoundary.width / 2);
-                    southEast = QTreeNode.create(this.squareBoundary.x * 3 / 4, this.squareBoundary.y / 4, this.squareBoundary.width / 2);
+                    double quarterWidth = squareBoundary.width / 4;
+                    northWest = QTreeNode.create(squareBoundary.x - quarterWidth, squareBoundary.y  - quarterWidth, this.squareBoundary.width / 2);
+                    northEast = QTreeNode.create(squareBoundary.x + quarterWidth, squareBoundary.y - quarterWidth, this.squareBoundary.width / 2);
+                    southWest = QTreeNode.create(this.squareBoundary.x - quarterWidth, this.squareBoundary.y + quarterWidth, this.squareBoundary.width / 2);
+                    southEast = QTreeNode.create(this.squareBoundary.x + quarterWidth, this.squareBoundary.y + quarterWidth, this.squareBoundary.width / 2);
                 }
             }
             public ArrayList queryRange(double x, double y, double range, ArrayList results) {
