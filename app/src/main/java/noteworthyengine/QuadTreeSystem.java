@@ -136,8 +136,8 @@ public class QuadTreeSystem extends System {
         }
 
         public static class QTreeNode<T extends Positionable> {
-            public static final int NUMBER_CHILDREN = 4;
-            public static final int NUMBER_POINTS = 4;
+            public static final int NUMBER_CHILDREN = 1;
+            public static final int NUMBER_POINTS = 1;
 
             public QTreeNode() { }
 
@@ -223,10 +223,15 @@ public class QuadTreeSystem extends System {
                 if (northWest == null) {
                     // TODO: Think about / Test precision errors...
                     double quarterWidth = squareBoundary.width / 4;
-                    northWest = QTreeNode.create(squareBoundary.x - quarterWidth, squareBoundary.y  - quarterWidth, this.squareBoundary.width / 2);
-                    northEast = QTreeNode.create(squareBoundary.x + quarterWidth, squareBoundary.y - quarterWidth, this.squareBoundary.width / 2);
-                    southWest = QTreeNode.create(this.squareBoundary.x - quarterWidth, this.squareBoundary.y + quarterWidth, this.squareBoundary.width / 2);
-                    southEast = QTreeNode.create(this.squareBoundary.x + quarterWidth, this.squareBoundary.y + quarterWidth, this.squareBoundary.width / 2);
+                    northWest = QTreeNode.create(squareBoundary.x - quarterWidth, squareBoundary.y + quarterWidth, squareBoundary.width / 2);
+                    northEast = QTreeNode.create(squareBoundary.x + quarterWidth, squareBoundary.y + quarterWidth, squareBoundary.width / 2);
+                    southWest = QTreeNode.create(squareBoundary.x - quarterWidth, squareBoundary.y - quarterWidth, squareBoundary.width / 2);
+                    southEast = QTreeNode.create(squareBoundary.x + quarterWidth, squareBoundary.y - quarterWidth, squareBoundary.width / 2);
+
+                    northWest.parent = this;
+                    northEast.parent = this;
+                    southWest.parent = this;
+                    southEast.parent = this;
                 }
             }
             public ArrayList queryRange(double x, double y, double range, ArrayList results) {
@@ -236,7 +241,13 @@ public class QuadTreeSystem extends System {
                 }
 
                 for (int i = 0; i < items.size(); i++) {
-                    results.add(items.get(i));
+                    T item = items.get(i);
+                    if (item.getPosition().x >= x - range &&
+                            item.getPosition().x <= x + range &&
+                            item.getPosition().y >= y - range &&
+                            item.getPosition().y <= y + range) {
+                        results.add(items.get(i));
+                    }
                 }
 
                 if (northWest != null) {
@@ -256,12 +267,28 @@ public class QuadTreeSystem extends System {
 
                 public boolean containsPoint(double inX, double inY) {
                     return inX >= x - width/2 && inX <= x + width/2 &&
-                            inY >= y - width/2 && inY >= y + width/2;
+                            inY >= y - width/2 && inY <= y + width/2;
                 }
 
                 public boolean intersectsAABB(double inX, double inY, double inWidth) {
-                    return (Math.abs(inX - x) * 2 < (width + inWidth)) &&
-                            (Math.abs(inY - y) * 2 < (width + inWidth));
+                    //return (Math.abs(inX - x) * 2 < (width + inWidth)) &&
+                    //        (Math.abs(inY - y) * 2 < (width + inWidth));
+
+                    double aLeft = x - width / 2;
+                    double aRight = x + width / 2;
+                    double aTop = y + width / 2;
+                    double aBottom = y - width / 2;
+
+                    double bLeft = inX - inWidth / 2;
+                    double bRight = inX + inWidth / 2;
+                    double bTop = inY + inWidth / 2;
+                    double bBottom = inY - inWidth / 2;
+
+                    if (aLeft > bRight) return false;
+                    if (bLeft > aRight) return false;
+                    if (bBottom > aTop) return false;
+                    if (aBottom > bTop) return false;
+                    return true;
                 }
             }
         }
