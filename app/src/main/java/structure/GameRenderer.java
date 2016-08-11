@@ -336,7 +336,9 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 			drawRegularSprites(simpleSpriteBatch);
 			drawTemporarySprites(simpleSpriteBatch);
-			drawText(simpleSpriteBatch);
+
+			// TODO: Fix performance issues for drawing text!
+			//drawText(simpleSpriteBatch);
 
 			simpleSpriteBatch.endDrawing();
 
