@@ -136,7 +136,7 @@ public class QuadTreeSystem extends System {
         }
 
         public static class QTreeNode<T extends Positionable> {
-            public static final int NUMBER_CHILDREN = 1;
+
             public static final int NUMBER_POINTS = 1;
 
             public QTreeNode() { }
@@ -195,7 +195,7 @@ public class QuadTreeSystem extends System {
                     return false;
                 }
 
-                if (items.size() < NUMBER_CHILDREN) {
+                if (items.size() < NUMBER_POINTS) {
                     items.add(item);
                     item.setQTreeNode(this);
                     return true;
