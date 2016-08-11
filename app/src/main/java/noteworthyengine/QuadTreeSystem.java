@@ -205,12 +205,12 @@ public class QuadTreeSystem extends System {
 
                     if (northWest == null) {
                         subdivide();
-
-                        if (northWest.add(item)) return true;
-                        if (northEast.add(item)) return true;
-                        if (southWest.add(item)) return true;
-                        if (southEast.add(item)) return true;
                     }
+
+                    if (northWest.add(item)) return true;
+                    if (northEast.add(item)) return true;
+                    if (southWest.add(item)) return true;
+                    if (southEast.add(item)) return true;
                 }
 
                 return false;
