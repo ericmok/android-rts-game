@@ -99,9 +99,7 @@ public class BattleSystem extends noteworthyframework.System {
 
         //Grid grid = gridSystem.grid;
 
-        int query = 0;
-
-        ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes = quadTreeSystem.qTree.queryRange(battleNode.coords.pos.x, battleNode.coords.pos.y, query);
+        ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes = quadTreeSystem.qTree.queryRange(battleNode.coords.pos.x, battleNode.coords.pos.y, range);
 
         for (int i = 0; i < quadTreeNodes.size(); i++) {
 
