@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.GridNode;
@@ -36,6 +37,8 @@ public class Mine extends Unit {
 
     public Mine() {
         this.name = NAME;
+
+        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
 
         gridNode = new GridNode(this, separationNode, battleNode);
 

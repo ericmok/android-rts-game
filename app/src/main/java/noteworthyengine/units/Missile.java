@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.DestinationMovementNode;
 import noteworthyengine.DestinationMovementSystem;
@@ -42,6 +43,8 @@ public class Missile extends Unit {
 
     public Missile() {
         this.name = NAME;
+
+        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
 
         gridNode = new GridNode(this, separationNode, battleNode);
         battleNode.battleEffects.add(new SuicidalAOEAttackBattleEffect());

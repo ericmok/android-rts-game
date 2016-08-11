@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.battle.BasicAttackEffect;
 import noteworthyengine.battle.BattleBalance;
 import noteworthyengine.battle.BattleNode;
@@ -41,6 +42,8 @@ public class Zug extends Unit {
     public Zug() {
         super();
         this.name = NAME;
+
+        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
 
         movementNode = new MovementNode(this);
 

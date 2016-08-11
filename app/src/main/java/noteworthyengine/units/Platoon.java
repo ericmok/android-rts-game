@@ -32,7 +32,6 @@ public class Platoon extends Unit {
     public static final String NAME = "Troopy";
 
     //public GridNode gridNode;
-    public QuadTreeSystem.QuadTreeNode quadTreeNode;
     public MovementNode movementNode;
 
     public FieldNode fieldNode;
@@ -52,8 +51,9 @@ public class Platoon extends Unit {
     public Platoon() {
         this.name = NAME;
 
+        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
+
         movementNode = new MovementNode(this);
-        quadTreeNode = new QuadTreeSystem.QuadTreeNode(this);
 
         fieldNode = FieldNode.createAgentFieldNode(this);
 

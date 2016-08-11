@@ -2,6 +2,7 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
@@ -36,6 +37,8 @@ public class PufferZug extends Unit {
 
     public PufferZug() {
         this.name = NAME;
+
+        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
 
         gridNode = new GridNode(this, separationNode, battleNode);
         fieldNode = FieldNode.createAgentFieldNode(this);
