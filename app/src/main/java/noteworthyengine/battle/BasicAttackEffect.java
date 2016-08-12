@@ -18,7 +18,7 @@ public class BasicAttackEffect extends BattleEffect {
 
     @Override
     public void onFindNewTarget(BattleSystem battleSystem) {
-        battleSystem.findAttackablesWithinRange(battleNode.target,
+        battleSystem.findClosestBatleNodeWithinRange(battleNode.target,
                 battleNode,
                 battleNode.targetAcquisitionRange.v,
                 battleNode.targetCriteria);

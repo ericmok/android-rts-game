@@ -108,7 +108,7 @@ public class Mine extends Unit {
 
         @Override
         public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            battleSystem.findAttackablesWithinRange(mine.battleTargets, mine.battleNode, mine.battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
+            battleSystem.findBattleNodesWithinRange(mine.battleTargets, mine.battleNode, mine.battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
 
             for (int j = mine.battleTargets.size() - 1; j >= 0; j--) {
                 BattleNode toInflict = mine.battleTargets.get(j).v;

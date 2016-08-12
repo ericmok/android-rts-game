@@ -22,10 +22,10 @@ public class SuicidalAOEAttackBattleEffect extends BattleEffect {
     @Override
     public void sendEvent(BattleSystem battleSystem, BattleNode battleNode, Event event) {
         if (event == Event.FIND_NEW_TARGET) {
-            battleSystem.findAttackablesWithinRange(battleNode.target, battleNode, battleNode.targetAcquisitionRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
+            battleSystem.findClosestBatleNodeWithinRange(battleNode.target, battleNode, battleNode.targetAcquisitionRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
         }
         if (event == Event.ATTACK_CAST) {
-            battleSystem.findAttackablesWithinRange(multipleTargetBuffer, battleNode, battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
+            battleSystem.findBattleNodesWithinRange(multipleTargetBuffer, battleNode, battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
 
             for (int i = 0; i < multipleTargetBuffer.size(); i++) {
                 BattleNode.Target target = multipleTargetBuffer.get(i);

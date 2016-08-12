@@ -152,7 +152,7 @@ public class Cannon extends Unit {
         @Override
         public void sendEvent(BattleSystem battleSystem, BattleNode battleNode, Event event) {
             if (event == Event.FIND_NEW_TARGET) {
-                battleSystem.findAttackablesWithinRange(battleNode.target, battleNode, battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
+                battleSystem.findClosestBatleNodeWithinRange(battleNode.target, battleNode, battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
             }
             if (event == Event.ATTACK_CAST) {
                 Missile missile = UnitPool.missles.fetchMemory();

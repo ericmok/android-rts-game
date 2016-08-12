@@ -92,7 +92,7 @@ public class BattleSystem extends noteworthyframework.System {
      * @param battleNode
      * @return
      */
-    public double findAttackablesWithinRange(BattleNode.Ptr out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
+    public double findClosestBatleNodeWithinRange(BattleNode.Ptr out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
 
         out.v = null;
         double bestDistance = 10000000;
@@ -165,7 +165,7 @@ public class BattleSystem extends noteworthyframework.System {
      * @param battleNode
      * @return
      */
-    public double findAttackablesWithinRange(RewriteOnlyArray<BattleNode.Target> out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
+    public double findBattleNodesWithinRange(RewriteOnlyArray<BattleNode.Target> out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
 
         out.resetWriteIndex();
 
