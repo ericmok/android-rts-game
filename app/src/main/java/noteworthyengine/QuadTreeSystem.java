@@ -16,7 +16,7 @@ import utils.Vector2;
 public class QuadTreeSystem extends System {
 
     public QueueMutationList<QuadTreeNode> nodes = new QueueMutationList<>(100);
-    public QTree qTree = new QTree(100, 200);
+    public QTree qTree = new QTree(100, 200, (byte)1);
 
     @Override
     public void addNode(Node node) {
@@ -101,18 +101,22 @@ public class QuadTreeSystem extends System {
         public QTreeNode root = null;
         private double width = 0;
 
-        public QTree(int maxCapacity, double width) {
+        // This number is needed for testing
+        private byte numberItemsPerNode = 3;
+
+        public QTree(int maxCapacity, double width, byte numberItemsPerNode) {
             QTreeNodeMemoryPool = new MemoryPool<>(QTreeNode.class, maxCapacity);
 
             // TODO: Select a better capacity value
             RESULTS = new ArrayList<>(maxCapacity / 4);
 
             this.width = width;
+            this.numberItemsPerNode = numberItemsPerNode;
         }
 
         public void add(T item) {
             if (root == null) {
-                root = QTreeNode.create(0, 0, width);
+                root = QTreeNode.create(0, 0, width, numberItemsPerNode);
             }
 
             root.add(item);
@@ -137,17 +141,18 @@ public class QuadTreeSystem extends System {
 
         public static class QTreeNode<T extends Positionable> {
 
-            public static final int NUMBER_POINTS = 1;
+            private byte numberItemsPerNode = 1;
 
             public QTreeNode() { }
 
-            public static QTreeNode create(double x, double y, double width) {
+            public static QTreeNode create(double x, double y, double width, byte numberItemsPerNode) {
                 QTreeNode qTreeNode = QTreeNodeMemoryPool.fetchMemory();
                 qTreeNode.squareBoundary.x = x;
                 qTreeNode.squareBoundary.y = y;
                 qTreeNode.squareBoundary.width = width;
                 qTreeNode.parent = null;
                 qTreeNode.items.clear();
+                qTreeNode.numberItemsPerNode = numberItemsPerNode;
                 return qTreeNode;
             }
 
@@ -175,7 +180,7 @@ public class QuadTreeSystem extends System {
             }
 
             public QTreeNode parent = null;
-            public ArrayList<T> items = new ArrayList<>(NUMBER_POINTS);
+            public ArrayList<T> items = new ArrayList<>(numberItemsPerNode);
 
             public QTreeNode northWest = null;
             public QTreeNode northEast = null;
@@ -195,7 +200,7 @@ public class QuadTreeSystem extends System {
                     return false;
                 }
 
-                if (items.size() < NUMBER_POINTS) {
+                if (items.size() < numberItemsPerNode) {
                     items.add(item);
                     item.setQTreeNode(this);
                     return true;
@@ -223,10 +228,10 @@ public class QuadTreeSystem extends System {
                 if (northWest == null) {
                     // TODO: Think about / Test precision errors...
                     double quarterWidth = squareBoundary.width / 4;
-                    northWest = QTreeNode.create(squareBoundary.x - quarterWidth, squareBoundary.y + quarterWidth, squareBoundary.width / 2);
-                    northEast = QTreeNode.create(squareBoundary.x + quarterWidth, squareBoundary.y + quarterWidth, squareBoundary.width / 2);
-                    southWest = QTreeNode.create(squareBoundary.x - quarterWidth, squareBoundary.y - quarterWidth, squareBoundary.width / 2);
-                    southEast = QTreeNode.create(squareBoundary.x + quarterWidth, squareBoundary.y - quarterWidth, squareBoundary.width / 2);
+                    northWest = QTreeNode.create(squareBoundary.x - quarterWidth, squareBoundary.y + quarterWidth, squareBoundary.width / 2, numberItemsPerNode);
+                    northEast = QTreeNode.create(squareBoundary.x + quarterWidth, squareBoundary.y + quarterWidth, squareBoundary.width / 2, numberItemsPerNode);
+                    southWest = QTreeNode.create(squareBoundary.x - quarterWidth, squareBoundary.y - quarterWidth, squareBoundary.width / 2, numberItemsPerNode);
+                    southEast = QTreeNode.create(squareBoundary.x + quarterWidth, squareBoundary.y - quarterWidth, squareBoundary.width / 2, numberItemsPerNode);
 
                     northWest.parent = this;
                     northEast.parent = this;
