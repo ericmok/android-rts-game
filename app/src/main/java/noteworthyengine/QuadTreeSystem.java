@@ -50,7 +50,7 @@ public class QuadTreeSystem extends System {
         nodes.flushQueues();
     }
 
-    public static class QuadTreeNode extends Node implements Positionable {
+    public static class QuadTreeNode extends Node implements QTree.Positionable {
         public Coords coords;
         public QTree.QTreeNode _qtTreeNode;
 
@@ -80,13 +80,6 @@ public class QuadTreeSystem extends System {
         }
     }
 
-    public static interface Positionable {
-        public Vector2 getPosition();
-        public Object getData();
-        public void setQTreeNode(QTree.QTreeNode qTreeNode);
-        public QTree.QTreeNode getQTreeNode();
-    }
-
     /**
      * Backing data structure of the system.
      * Based on: https://en.wikipedia.org/wiki/Quadtree
@@ -94,7 +87,7 @@ public class QuadTreeSystem extends System {
      * QuadTreeSystem should not be confused with QTree.
      * QuadTreeNodes should not to be confused with QTreeNodes.
      */
-    public static class QTree<T extends Positionable> {
+    public static class QTree<T extends QTree.Positionable> {
         private static MemoryPool<QTreeNode> QTreeNodeMemoryPool;
         private ArrayList<T> RESULTS;
 
@@ -137,6 +130,13 @@ public class QuadTreeSystem extends System {
                 root.recycle();
             }
             root = null;
+        }
+
+        public static interface Positionable {
+            public Vector2 getPosition();
+            public Object getData();
+            public void setQTreeNode(QTreeNode qTreeNode);
+            public QTreeNode getQTreeNode();
         }
 
         public static class QTreeNode<T extends Positionable> {

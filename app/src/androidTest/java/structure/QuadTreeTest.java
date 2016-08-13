@@ -11,7 +11,7 @@ import utils.Vector2;
  */
 public class QuadTreeTest extends TestCase {
 
-    public class Item implements QuadTreeSystem.Positionable {
+    public class Item implements QuadTreeSystem.QTree.Positionable {
         private Vector2 position;
         private QuadTreeSystem.QTree.QTreeNode qtNodeRef;
 
