@@ -1,5 +1,6 @@
 package noteworthyengine.battle;
 
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -12,11 +13,36 @@ import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.*;
 import structure.RewriteOnlyArray;
 import utils.BooleanFunc2;
+import utils.QTree;
 
 /**
  * Created by eric on 3/6/15.
  */
 public class BattleSystem extends noteworthyframework.System {
+
+    public static final QTree.DistanceMeasurable QTREE_BATTLE_DISTANCE_MEASURE = new QTree.DistanceMeasurable<QuadTreeSystem.QuadTreeNode>() {
+
+        @Override
+        public double distanceMeasure(QuadTreeSystem.QuadTreeNode item, QuadTreeSystem.QuadTreeNode candidateItem) {
+            BattleNode otherBattleNode = (BattleNode) candidateItem.unit.node(BattleNode._NAME);
+            if (otherBattleNode == null) {
+                return QTree.INFINITE_DISTANCE;
+            }
+            BattleNode battleNode = (BattleNode) item.unit.node(BattleNode._NAME);
+
+            // TODO: Target criteria varies per unit class!
+            if (battleNode.playerUnitPtr.v == otherBattleNode.playerUnitPtr.v) {
+                return QTree.INFINITE_DISTANCE;
+            }
+
+            if (battleNodeShouldAttackOther(battleNode, otherBattleNode)) {
+                return item.getPosition().squaredDistanceTo(candidateItem.getPosition());
+            } else {
+                return QTree.INFINITE_DISTANCE;
+            }
+        }
+    };
+
 
     public QueueMutationList<BattleNode> battleNodes = new QueueMutationList<BattleNode>(127);
 
@@ -94,70 +120,17 @@ public class BattleSystem extends noteworthyframework.System {
      */
     public double findClosestBatleNodeWithinRange(BattleNode.Ptr out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
 
-        out.v = null;
-        double bestDistance = 10000000;
+        quadTreeSystem.useMeasure(QTREE_BATTLE_DISTANCE_MEASURE);
+        QuadTreeSystem.QuadTreeNode quadTreeNode = quadTreeSystem.queryClosestTo((QuadTreeSystem.QuadTreeNode) battleNode.unit.node(QuadTreeSystem.QuadTreeNode._NAME));
 
-        //Grid grid = gridSystem.grid;
-
-        ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes = quadTreeSystem.qTree.queryRange(battleNode.coords.pos.x, battleNode.coords.pos.y, range);
-
-        for (int i = 0; i < quadTreeNodes.size(); i++) {
-
-            //BattleNode possibleTarget = (BattleNode)gridNodes.get(i).unit.node(BattleNode._NAME);
-            //BattleNode possibleTarget =
-            QuadTreeSystem.QuadTreeNode quadTreeNode = (QuadTreeSystem.QuadTreeNode) quadTreeNodes.get(i).getData();
-            Object cast = quadTreeNode.unit.node(BattleNode._NAME);
-            BattleNode battleNodeToTest;
-
-            if (cast != null) {
-                battleNodeToTest = (BattleNode)cast;
-            }
-            else {
-                continue;
-            }
-
-            // Narrow phase
-            if (battleNode.coords.pos.distanceTo(battleNodeToTest.coords.pos) > range) {
-                continue;
-            }
-
-            if (!battleNodeShouldAttackOther(battleNode, battleNodeToTest)) {
-                continue;
-            }
-            if (!criteria.apply(battleNode, battleNodeToTest)) {
-                continue;
-            }
-
-            double distance = battleNode.coords.pos.distanceTo(battleNodeToTest.coords.pos);
-
-            if (distance < range) {
-
-                // TODO: Check if it is in "front" (not in back)
-
-                if (distance < bestDistance) {
-                    out.v = battleNodeToTest;
-                    bestDistance = distance;
-                }
-            }
+        if (quadTreeNode != null) {
+            BattleNode closest = (BattleNode) quadTreeNode.unit.node(BattleNode._NAME);
+            out.v = closest;
+        } else {
+            out.v = null;
         }
 
-//        while (query <= grid.numberCellsForRange(range)) {
-//
-//            List<GridNode> gridNodes = grid.getShell(battleNode.gridX.v, battleNode.gridY.v, query);
-//
-//            for (int i = gridNodes.size() - 1; i >= 0; i--) {
-//
-//            }
-//
-//            // We found a target that meets all criteria, so skip further search
-//            if (out.v != null) {
-//                return bestDistance;
-//            }
-//
-//            query += 1;
-//        }
-
-        return bestDistance;
+        return Double.MAX_VALUE;
     }
 
     /**
@@ -165,39 +138,22 @@ public class BattleSystem extends noteworthyframework.System {
      * @param battleNode
      * @return
      */
-    public double findBattleNodesWithinRange(RewriteOnlyArray<BattleNode.Target> out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
+    public void findBattleNodesWithinRange(RewriteOnlyArray<BattleNode.Target> out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
 
         out.resetWriteIndex();
-
-        double bestDistance = 10000000;
+//
+//        double bestDistance = 10000000;
 
         //Grid grid = gridSystem.grid;
-
+        quadTreeSystem.useMeasure(QTREE_BATTLE_DISTANCE_MEASURE);
         ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes =
-                quadTreeSystem.qTree.queryRange(battleNode.coords.pos.x,
+                quadTreeSystem.queryRange(battleNode.coords.pos.x,
                         battleNode.coords.pos.y, range);
 
         //List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v , range);
 
         for (int i = 0; i < quadTreeNodes.size(); i++) {
             BattleNode possibleTarget = (BattleNode) quadTreeNodes.get(i).unit.node(BattleNode._NAME);
-
-            // Not all gridNodes belong to units that have battleNodes...
-            if (possibleTarget == null) {
-                continue;
-            }
-
-            // Narrow phase
-            if (battleNode.coords.pos.distanceTo(possibleTarget.coords.pos) > range) {
-                continue;
-            }
-
-            if (!battleNodeShouldAttackOther(battleNode, possibleTarget)) {
-                continue;
-            }
-            if (!criteria.apply(battleNode, possibleTarget)) {
-                continue;
-            }
 
             double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
 
@@ -213,8 +169,6 @@ public class BattleSystem extends noteworthyframework.System {
                 }
             }
         }
-
-        return bestDistance;
     }
 
     /**
