@@ -89,6 +89,10 @@ public class QuadTreeSystem extends System {
      */
     public static class QTree<T extends QTree.Positionable> {
         private static MemoryPool<QTreeNode> QTreeNodeMemoryPool;
+
+        /** Used to avoid stack allocation */
+        private BestCandidate<T> bestCandidateToReturn = new BestCandidate<T>();
+
         private ArrayList<T> RESULTS;
 
         public QTreeNode root = null;
@@ -125,6 +129,148 @@ public class QuadTreeSystem extends System {
             return RESULTS;
         }
 
+        /**
+         * Find closest item that is not itself within the range
+         * @param item
+         * @return
+         */
+        public T queryClosestTo(T item) {
+
+            // The item might have been positioned right above a point that is even
+            // a smaller QTNode
+            QTreeNode initial =
+                    root.findSmallestQTNodeForPoint(item.getPosition().x, item.getPosition().y);
+
+            // TODO: Set all nodes to !isVisited or use a random number for isVisited
+            bestCandidateToReturn.item = null;
+            bestCandidateToReturn.sqDist = Double.MAX_VALUE;
+            return (T)queryClosestToRecursive(item, initial, bestCandidateToReturn).item;
+        }
+
+        private boolean visitNodeTest(QTreeNode<T> node, double intersectX, double intersectY, double intersectWidth) {
+            if (node != null) {
+                if (!node.isVisited) {
+                    if (node.squareBoundary.intersectsAABB(intersectX, intersectY, intersectWidth)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public BestCandidate<T> queryClosestToRecursive(T item, QTreeNode<T> node, BestCandidate<T> bestCandidateOut) {
+
+            // Post order traversal
+            node.isHalfVisited = true;
+
+            if (node.northWest != null) {
+                //double quadrantX = node.squareBoundary.x - item.getPosition().x;
+                //double quadrantY = node.squareBoundary.y - item.getPosition().y;
+
+                // Allow bestCandidate to be overwritten several times.
+                // The bestCandidate is only written to if a better candidate is found
+
+                if (visitNodeTest(node.northWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)) {
+                    queryClosestToRecursive(item, node.northWest, bestCandidateOut);
+                }
+                if (visitNodeTest(node.northEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)) {
+                    queryClosestToRecursive(item, node.northEast, bestCandidateOut);
+                }
+                if (visitNodeTest(node.southWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)) {
+                    queryClosestToRecursive(item, node.southWest, bestCandidateOut);
+                }
+                if (visitNodeTest(node.southEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)) {
+                    queryClosestToRecursive(item, node.southEast, bestCandidateOut);
+                }
+            }
+
+            // Leaf node
+
+            int numberItems = node.items.size(); // cache
+
+            // Try to find an item to overwrite BestCandidate data with
+            for (int i = 0; i < numberItems; i++) {
+
+                T candidateItem = node.items.get(i);
+                if (candidateItem != item) {
+
+                    if (bestCandidateOut.item != null) {
+
+                        double sqDistToCandidate = item.getPosition().squaredDistanceTo(candidateItem.getPosition());
+//                                candidateItem.getPosition().x * bestCandidateOut.item.getPosition().x +
+//                                        candidateItem.getPosition().y * bestCandidateOut.item.getPosition().y;
+
+                        if (sqDistToCandidate < bestCandidateOut.sqDist) {
+                            bestCandidateOut.item = candidateItem;
+                            bestCandidateOut.sqDist = sqDistToCandidate;
+                        }
+                    }
+                    else {
+                        bestCandidateOut.item = candidateItem;
+                        bestCandidateOut.sqDist = item.getPosition().squaredDistanceTo(candidateItem.getPosition());
+                        //bestCandidateOut.sqDist = candidateItem.getPosition().x * item.getPosition().x +
+                        //                    candidateItem.getPosition().y * item.getPosition().y;
+                    }
+                }
+            }
+
+            node.isVisited = true;
+
+            if (visitNodeTest(node.parent, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)
+                    && node.parent.isHalfVisited == false) {
+                queryClosestToRecursive(item, node.parent, bestCandidateOut);
+            }
+
+            return bestCandidateOut; // Not needed since we mutate it anyway
+        }
+
+//        public ArrayList<T> queryClosestTo(QTreeNode node, ArrayList results) {
+//
+//            QTreeNode point = findSmallestQTNodeForPoint(node.squareBoundary.x, node.squareBoundary.y);
+//
+//            this.isVisited = true;
+//
+//            // Go postorder in tree to find a point
+//            // Set range search based on that point
+//            // For postorder to work, we bias the quadrant search
+//
+//            return results;
+////
+////                node.isVisited = true;
+////
+////                if (node.northWest != null) {
+////                    //double quadrantX = node.squareBoundary.x - node.getPosition().x;
+////                    if (!northWest.isVisited) queryClosestTo(northWest, results);
+////                    if (!northEast.isVisited) queryClosestTo(northEast, results);
+////                    if (!southWest.isVisited) queryClosestTo(southWest, results);
+////                    if (!southEast.isVisited) queryClosestTo(southEast, results);
+////                }
+////                else {
+////                    // Leaf node
+////
+//////                    int numberItems = items.size();
+//////                    for (int i = 0; i < numberItems; i++) {
+//////                        results.add(items.get(i));
+//////                    }
+////                    QTreeNode anyNode;
+////
+////                    if (items.size() > 0) {
+////                        anyNode = items.get(0).getQTreeNode();
+////                    }
+////
+////                    if (node.parent != null) {
+////                        queryClosestTo(node.parent, results);
+////                    }
+////                    return queryClosestTo(node.parent, results);
+////                }
+//        }
+
+//        public ArrayList<T> queryClosestTo(T item, ArrayList results) {
+//            QTreeNode node = root.findSmallestQTNodeForPoint(item.getPosition().x, item.getPosition().y);
+//            queryClosestTo(node, results);
+//            return null;
+//        }
+
         public void clear() {
             if (root != null) {
                 root.recycle();
@@ -137,6 +283,21 @@ public class QuadTreeSystem extends System {
             public Object getData();
             public void setQTreeNode(QTreeNode qTreeNode);
             public QTreeNode getQTreeNode();
+        }
+
+        public static class BestCandidate<T> implements Comparable<BestCandidate<T>> {
+            public double sqDist = Double.MAX_VALUE;
+            public T item;
+
+            @Override
+            public int compareTo(BestCandidate bestCandidate) {
+                return Double.compare(sqDist, bestCandidate.sqDist);
+            }
+
+            public void copy(BestCandidate<T> other) {
+                this.sqDist = other.sqDist;
+                this.item = other.item;
+            }
         }
 
         public static class QTreeNode<T extends Positionable> {
@@ -180,7 +341,7 @@ public class QuadTreeSystem extends System {
             }
 
             public QTreeNode parent = null;
-            public ArrayList<T> items = new ArrayList<>(numberItemsPerNode);
+            public ArrayList<T> items = new ArrayList<T>(numberItemsPerNode);
 
             public QTreeNode northWest = null;
             public QTreeNode northEast = null;
@@ -188,6 +349,9 @@ public class QuadTreeSystem extends System {
             public QTreeNode southEast = null;
 
             public SquareBoundary squareBoundary = new SquareBoundary();
+
+            private boolean isHalfVisited = false;
+            private boolean isVisited = false;
 
             public boolean containsPoint(double x, double y) {
                 return this.squareBoundary.containsPoint(x, y);
@@ -239,6 +403,35 @@ public class QuadTreeSystem extends System {
                     southEast.parent = this;
                 }
             }
+
+            public QTreeNode findSmallestQTNodeForPoint(double x, double y) {
+                QTreeNode toReturn = this;
+
+                if (!this.squareBoundary.containsPoint(x, y)) {
+                    return null;
+                }
+
+                if (northWest != null) {
+
+                     //Quadrants are exclusive
+
+                    QTreeNode northWestResult = northWest.findSmallestQTNodeForPoint(x, y);
+                    if (northWestResult != null) { toReturn = northWestResult; }
+
+                    QTreeNode nortEastResult = northEast.findSmallestQTNodeForPoint(x, y);
+                    if (nortEastResult != null) { toReturn = nortEastResult; }
+
+                    QTreeNode southWestResult = southWest.findSmallestQTNodeForPoint(x, y);
+                    if (southWestResult != null) { toReturn = southWestResult; }
+
+                    QTreeNode southEastResult = southEast.findSmallestQTNodeForPoint(x, y);
+                    if (southEastResult != null) { toReturn = southEastResult; }
+
+                }
+
+                return toReturn;
+            }
+
             public ArrayList queryRange(double x, double y, double range, ArrayList results) {
 
                 if (!this.squareBoundary.intersectsAABB(x, y, range)) {

@@ -177,4 +177,82 @@ public class QuadTreeTest extends TestCase {
         assertEquals(1.0, result0.getPosition().x, 0.001);
         assertEquals(1.0, result0.getPosition().y, 0.001);
     }
+
+    public void testfindSmallestQTNodeForPoint() {
+        QuadTreeSystem.QTree qTree = new QuadTreeSystem.QTree(10, 200, (byte)1);
+        Item item = new Item(1, 1);
+        Item item2 = new Item(1.1, 1.1);
+        Item item3 = new Item(1.05, 1.05);
+
+        qTree.add(item);
+        qTree.add(item2);
+        qTree.add(item3);
+
+        QuadTreeSystem.QTree.QTreeNode node = item.qtNodeRef.findSmallestQTNodeForPoint(1, 1);
+        assertEquals(item3.getQTreeNode(), node);
+        assertNull(item3.getQTreeNode().northWest);
+        assertNull(item3.getQTreeNode().northEast);
+        assertNull(item3.getQTreeNode().southWest);
+        assertNull(item3.getQTreeNode().southEast);
+    }
+
+    public void testCanFindClosestItem() {
+        Item item = new Item(2, 2);
+        Item item2 = new Item(4, 4);
+        Item item3 = new Item(8, 8);
+        Item item4 = new Item(16, 16);
+        Item item5 = new Item(32, 32);
+
+        QuadTreeSystem.QTree<Item> qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte)1);
+
+        qTree.add(item);
+        Item initialTest = qTree.queryClosestTo(item);
+        assertNull(initialTest);
+
+        qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte)1);
+        qTree.add(item);
+        qTree.add(item5);
+        Item testAnyResult = qTree.queryClosestTo(item5);
+        assertNotNull(testAnyResult);
+        assertEquals(item, testAnyResult);
+
+        qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte)1);
+
+        qTree.add(item);
+        qTree.add(item2);
+        qTree.add(item3);
+        qTree.add(item4);
+        qTree.add(item5);
+
+        Item result = qTree.queryClosestTo(item3);
+        assertNotSame(item3, result);
+        assertEquals(item2, result);
+    }
+
+    /**
+     * Needed to test the resetting of any flags related to tree traversals
+     */
+    public void xtestCanFindClosestItemTwice() {
+        Item item = new Item(2, 2);
+        Item item2 = new Item(4, 4);
+        Item item3 = new Item(8, 8);
+        Item item4 = new Item(16, 16);
+        Item item5 = new Item(32, 32);
+
+        QuadTreeSystem.QTree<Item> qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte)1);
+        qTree.add(item);
+        qTree.add(item2);
+        qTree.add(item3);
+        qTree.add(item4);
+        qTree.add(item5);
+
+        Item result = qTree.queryClosestTo(item3);
+        assertNotSame(item3, result);
+        assertEquals(item2, result);
+
+        Item secondResult = qTree.queryClosestTo(item4);
+        assertNotNull(secondResult);
+        assertNotSame(item4, secondResult);
+        assertEquals(item3, secondResult);
+    }
 }
