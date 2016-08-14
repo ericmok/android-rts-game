@@ -88,6 +88,9 @@ public class QuadTreeSystem extends System {
      * QuadTreeNodes should not to be confused with QTreeNodes.
      */
     public static class QTree<T extends QTree.Positionable> {
+        public static final double INFINITE_DISTANCE = Double.MAX_VALUE;
+        public final EuclideanDistance SQUARED_EUCLIDEAN_DISTANCE = new EuclideanDistance();
+
         private static MemoryPool<QTreeNode> QTreeNodeMemoryPool;
 
         /** Used to avoid stack allocation */
@@ -106,6 +109,7 @@ public class QuadTreeSystem extends System {
          * was visited before.
          */
         private int traversalId = 314;
+        private DistanceMeasurable<T> distanceMeasurable;
 
         public QTree(int maxCapacity, double width, byte numberItemsPerNode) {
             QTreeNodeMemoryPool = new MemoryPool<>(QTreeNode.class, maxCapacity);
@@ -115,6 +119,21 @@ public class QuadTreeSystem extends System {
 
             this.width = width;
             this.numberItemsPerNode = numberItemsPerNode;
+
+            useMeasure(SQUARED_EUCLIDEAN_DISTANCE);
+        }
+
+        /**
+         * Sets the measure for distance comparison between an item and a candidate item.
+         * This can be used to manipulate preferences for certain types of items of type T.
+         * If the measure returns INFINITE_DISTANCE, then the candidate is ignored.
+         *
+         * @param distanceMeasurable For example: QTree.SQUARED_EUCLIDEAN_DISTANCE (default)
+         * @return Returns the tree itself
+         */
+        public QTree<T> useMeasure(DistanceMeasurable distanceMeasurable) {
+            this.distanceMeasurable = distanceMeasurable;
+            return this;
         }
 
         public void add(T item) {
@@ -231,18 +250,24 @@ public class QuadTreeSystem extends System {
                 T candidateItem = node.items.get(i);
                 if (candidateItem != item) {
 
-                    if (bestCandidateOut.item != null) {
+                    double sqDistToCandidate = distanceMeasurable.distanceMeasure(item, candidateItem);
+                    if (sqDistToCandidate == INFINITE_DISTANCE) {
+                        continue;
+                    }
 
-                        double sqDistToCandidate = item.getPosition().squaredDistanceTo(candidateItem.getPosition());
+                    if (bestCandidateOut.item != null) {
 
                         if (sqDistToCandidate < bestCandidateOut.sqDist) {
                             bestCandidateOut.item = candidateItem;
                             bestCandidateOut.sqDist = sqDistToCandidate;
                         }
+
                     }
                     else {
+
                         bestCandidateOut.item = candidateItem;
-                        bestCandidateOut.sqDist = item.getPosition().squaredDistanceTo(candidateItem.getPosition());
+                        bestCandidateOut.sqDist = distanceMeasurable.distanceMeasure(item, candidateItem);
+
                     }
                 }
             }
@@ -262,6 +287,30 @@ public class QuadTreeSystem extends System {
                 root.recycle();
             }
             root = null;
+        }
+
+        /**
+         * A measure for distance comparison between an item and a candidate item.
+         *
+         * @param <T>
+         */
+        public static interface DistanceMeasurable<T extends Positionable> {
+            /**
+             * This can be used to manipulate preferences for certain types of items of type T.
+             * If the measure returns INFINITE_DISTANCE, then the candidate is ignored.
+             *
+             * @param item
+             * @param candidateItem
+             * @return
+             */
+            public double distanceMeasure(T item, T candidateItem);
+        }
+
+        public class EuclideanDistance implements DistanceMeasurable<T> {
+            @Override
+            public double distanceMeasure(T item, T candidateItem) {
+                return item.getPosition().squaredDistanceTo(candidateItem.getPosition());
+            }
         }
 
         public static interface Positionable {

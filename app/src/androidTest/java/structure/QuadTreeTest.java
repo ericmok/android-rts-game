@@ -260,4 +260,34 @@ public class QuadTreeTest extends TestCase {
         assertNotSame(item5, thirdResult);
         assertEquals(item4, thirdResult);
     }
+
+    public void testUseMeasure() {
+        Item item = new Item(2, 2);
+        Item item2 = new Item(4, 4);
+        Item item3 = new Item(8, 8);
+        final Item item4 = new Item(16, 16);
+        Item item5 = new Item(32, 32);
+
+        QuadTreeSystem.QTree<Item> qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte) 1);
+        qTree.add(item);
+        qTree.add(item2);
+        qTree.add(item3);
+        qTree.add(item4);
+        qTree.add(item5);
+
+        assertEquals(item4, qTree.queryClosestTo(item5));
+
+        QuadTreeSystem.QTree.DistanceMeasurable biasedMeasure = new QuadTreeSystem.QTree.DistanceMeasurable() {
+            @Override
+            public double distanceMeasure(QuadTreeSystem.QTree.Positionable item, QuadTreeSystem.QTree.Positionable candidateItem) {
+                if (candidateItem == item4) return QuadTreeSystem.QTree.INFINITE_DISTANCE;
+                return item.getPosition().squaredDistanceTo(candidateItem.getPosition());
+            }
+        };
+
+        qTree.useMeasure(biasedMeasure);
+
+        assertNotSame(item4, qTree.queryClosestTo(item5));
+        assertEquals(item3, qTree.queryClosestTo(item5));
+    }
 }
