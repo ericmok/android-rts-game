@@ -162,7 +162,7 @@ public class QuadTreeSystem extends System {
             // TODO: Set all nodes to !isVisited or use a random number for isVisited
             bestCandidateToReturn.item = null;
             bestCandidateToReturn.sqDist = Double.MAX_VALUE;
-            return (T)queryClosestToRecursive(item, initial, bestCandidateToReturn, queryId).item;
+            return (T) queryClosestToRecursively(item, initial, bestCandidateToReturn, queryId).item;
         }
 
         private boolean visitNodeTest(QTreeNode<T> node, double intersectX, double intersectY, double intersectWidth, int queryId) {
@@ -191,29 +191,33 @@ public class QuadTreeSystem extends System {
          *                recursive calling session
          * @return Returns the mutated BestCandidate passed in
          */
-        private BestCandidate<T> queryClosestToRecursive(T item, QTreeNode<T> node, BestCandidate<T> bestCandidateOut, int queryId) {
+        private BestCandidate<T> queryClosestToRecursively(T item, QTreeNode<T> node, BestCandidate<T> bestCandidateOut, int queryId) {
 
             // Post order traversal
             node.isHalfVisited = queryId;
 
             if (node.northWest != null) {
-                //double quadrantX = node.squareBoundary.x - item.getPosition().x;
-                //double quadrantY = node.squareBoundary.y - item.getPosition().y;
+                /*
+                Note: Ideally the quadrants are sorted by their proximity to the item to
+                increase the aggressiveness of the pruning. Example:
+                double quadrantX = node.squareBoundary.x - item.getQTreeNode().getPosition().x;
+                double quadrantY = node.squareBoundary.y - item.getQTreeNode().getPosition().y;
+                 */
 
                 // Allow bestCandidate to be overwritten several times.
                 // The bestCandidate is only written to if a better candidate is found
 
                 if (visitNodeTest(node.northWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
-                    queryClosestToRecursive(item, node.northWest, bestCandidateOut, queryId);
+                    queryClosestToRecursively(item, node.northWest, bestCandidateOut, queryId);
                 }
                 if (visitNodeTest(node.northEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
-                    queryClosestToRecursive(item, node.northEast, bestCandidateOut, queryId);
+                    queryClosestToRecursively(item, node.northEast, bestCandidateOut, queryId);
                 }
                 if (visitNodeTest(node.southWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
-                    queryClosestToRecursive(item, node.southWest, bestCandidateOut, queryId);
+                    queryClosestToRecursively(item, node.southWest, bestCandidateOut, queryId);
                 }
                 if (visitNodeTest(node.southEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
-                    queryClosestToRecursive(item, node.southEast, bestCandidateOut, queryId);
+                    queryClosestToRecursively(item, node.southEast, bestCandidateOut, queryId);
                 }
             }
 
@@ -230,8 +234,6 @@ public class QuadTreeSystem extends System {
                     if (bestCandidateOut.item != null) {
 
                         double sqDistToCandidate = item.getPosition().squaredDistanceTo(candidateItem.getPosition());
-//                                candidateItem.getPosition().x * bestCandidateOut.item.getPosition().x +
-//                                        candidateItem.getPosition().y * bestCandidateOut.item.getPosition().y;
 
                         if (sqDistToCandidate < bestCandidateOut.sqDist) {
                             bestCandidateOut.item = candidateItem;
@@ -241,8 +243,6 @@ public class QuadTreeSystem extends System {
                     else {
                         bestCandidateOut.item = candidateItem;
                         bestCandidateOut.sqDist = item.getPosition().squaredDistanceTo(candidateItem.getPosition());
-                        //bestCandidateOut.sqDist = candidateItem.getPosition().x * item.getPosition().x +
-                        //                    candidateItem.getPosition().y * item.getPosition().y;
                     }
                 }
             }
@@ -251,58 +251,11 @@ public class QuadTreeSystem extends System {
 
             if (visitNodeTest(node.parent, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)
                     && node.parent.isHalfVisited != queryId) {
-                queryClosestToRecursive(item, node.parent, bestCandidateOut, queryId);
+                queryClosestToRecursively(item, node.parent, bestCandidateOut, queryId);
             }
 
             return bestCandidateOut; // Not needed since we mutate it anyway
         }
-
-//        public ArrayList<T> queryClosestTo(QTreeNode node, ArrayList results) {
-//
-//            QTreeNode point = findSmallestQTNodeForPoint(node.squareBoundary.x, node.squareBoundary.y);
-//
-//            this.isVisited = true;
-//
-//            // Go postorder in tree to find a point
-//            // Set range search based on that point
-//            // For postorder to work, we bias the quadrant search
-//
-//            return results;
-////
-////                node.isVisited = true;
-////
-////                if (node.northWest != null) {
-////                    //double quadrantX = node.squareBoundary.x - node.getPosition().x;
-////                    if (!northWest.isVisited) queryClosestTo(northWest, results);
-////                    if (!northEast.isVisited) queryClosestTo(northEast, results);
-////                    if (!southWest.isVisited) queryClosestTo(southWest, results);
-////                    if (!southEast.isVisited) queryClosestTo(southEast, results);
-////                }
-////                else {
-////                    // Leaf node
-////
-//////                    int numberItems = items.size();
-//////                    for (int i = 0; i < numberItems; i++) {
-//////                        results.add(items.get(i));
-//////                    }
-////                    QTreeNode anyNode;
-////
-////                    if (items.size() > 0) {
-////                        anyNode = items.get(0).getQTreeNode();
-////                    }
-////
-////                    if (node.parent != null) {
-////                        queryClosestTo(node.parent, results);
-////                    }
-////                    return queryClosestTo(node.parent, results);
-////                }
-//        }
-
-//        public ArrayList<T> queryClosestTo(T item, ArrayList results) {
-//            QTreeNode node = root.findSmallestQTNodeForPoint(item.getPosition().x, item.getPosition().y);
-//            queryClosestTo(node, results);
-//            return null;
-//        }
 
         public void clear() {
             if (root != null) {
