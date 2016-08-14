@@ -232,7 +232,7 @@ public class QuadTreeTest extends TestCase {
     /**
      * Needed to test the resetting of any flags related to tree traversals
      */
-    public void xtestCanFindClosestItemTwice() {
+    public void testCanFindClosestItemMultipleTimes() {
         Item item = new Item(2, 2);
         Item item2 = new Item(4, 4);
         Item item3 = new Item(8, 8);
@@ -254,5 +254,10 @@ public class QuadTreeTest extends TestCase {
         assertNotNull(secondResult);
         assertNotSame(item4, secondResult);
         assertEquals(item3, secondResult);
+
+        Item thirdResult = qTree.queryClosestTo(item5);
+        assertNotNull(thirdResult);
+        assertNotSame(item5, thirdResult);
+        assertEquals(item4, thirdResult);
     }
 }

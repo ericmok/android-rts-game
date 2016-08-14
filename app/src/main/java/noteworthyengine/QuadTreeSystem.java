@@ -101,6 +101,12 @@ public class QuadTreeSystem extends System {
         // This number is needed for testing
         private byte numberItemsPerNode = 3;
 
+        /**
+         * Random number to check against during tree traversals to determine if a QTNode
+         * was visited before.
+         */
+        private int traversalId = 314;
+
         public QTree(int maxCapacity, double width, byte numberItemsPerNode) {
             QTreeNodeMemoryPool = new MemoryPool<>(QTreeNode.class, maxCapacity);
 
@@ -130,11 +136,23 @@ public class QuadTreeSystem extends System {
         }
 
         /**
+         * Synchronized function that increments internal traversal id for use
+         * in tree traversals
+         * @return The internal counter
+         */
+        public synchronized int makeNewTraversalId() {
+            traversalId = traversalId + 1;
+            traversalId = traversalId % (Integer.MAX_VALUE - 123);
+            return traversalId;
+        }
+
+        /**
          * Find closest item that is not itself within the range
          * @param item
          * @return
          */
         public T queryClosestTo(T item) {
+            int queryId = makeNewTraversalId();
 
             // The item might have been positioned right above a point that is even
             // a smaller QTNode
@@ -144,12 +162,12 @@ public class QuadTreeSystem extends System {
             // TODO: Set all nodes to !isVisited or use a random number for isVisited
             bestCandidateToReturn.item = null;
             bestCandidateToReturn.sqDist = Double.MAX_VALUE;
-            return (T)queryClosestToRecursive(item, initial, bestCandidateToReturn).item;
+            return (T)queryClosestToRecursive(item, initial, bestCandidateToReturn, queryId).item;
         }
 
-        private boolean visitNodeTest(QTreeNode<T> node, double intersectX, double intersectY, double intersectWidth) {
+        private boolean visitNodeTest(QTreeNode<T> node, double intersectX, double intersectY, double intersectWidth, int queryId) {
             if (node != null) {
-                if (!node.isVisited) {
+                if (node.isVisited != queryId) {
                     if (node.squareBoundary.intersectsAABB(intersectX, intersectY, intersectWidth)) {
                         return true;
                     }
@@ -158,10 +176,25 @@ public class QuadTreeSystem extends System {
             return false;
         }
 
-        public BestCandidate<T> queryClosestToRecursive(T item, QTreeNode<T> node, BestCandidate<T> bestCandidateOut) {
+        /**
+         * This recursive algorithm visits every QTNode in post-order fashion in search of
+         * the closest item to the item given.
+         * The algorithm progressively prunes the search area each time it receives a better
+         * candidate for the closest item.
+         *
+         * @param item Position to measure against for closest item. This item is excluded as
+         *             a candidate for closest item.
+         * @param node The smallest (deepest) QTNode that overlaps with the item's location.
+         *             This is not necessarily the QTNode of the item itself!
+         * @param bestCandidateOut Mutable data to pass up and down the stack.
+         * @param queryId A random number to check if a QTNode has been visited for this
+         *                recursive calling session
+         * @return Returns the mutated BestCandidate passed in
+         */
+        private BestCandidate<T> queryClosestToRecursive(T item, QTreeNode<T> node, BestCandidate<T> bestCandidateOut, int queryId) {
 
             // Post order traversal
-            node.isHalfVisited = true;
+            node.isHalfVisited = queryId;
 
             if (node.northWest != null) {
                 //double quadrantX = node.squareBoundary.x - item.getPosition().x;
@@ -170,17 +203,17 @@ public class QuadTreeSystem extends System {
                 // Allow bestCandidate to be overwritten several times.
                 // The bestCandidate is only written to if a better candidate is found
 
-                if (visitNodeTest(node.northWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)) {
-                    queryClosestToRecursive(item, node.northWest, bestCandidateOut);
+                if (visitNodeTest(node.northWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
+                    queryClosestToRecursive(item, node.northWest, bestCandidateOut, queryId);
                 }
-                if (visitNodeTest(node.northEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)) {
-                    queryClosestToRecursive(item, node.northEast, bestCandidateOut);
+                if (visitNodeTest(node.northEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
+                    queryClosestToRecursive(item, node.northEast, bestCandidateOut, queryId);
                 }
-                if (visitNodeTest(node.southWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)) {
-                    queryClosestToRecursive(item, node.southWest, bestCandidateOut);
+                if (visitNodeTest(node.southWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
+                    queryClosestToRecursive(item, node.southWest, bestCandidateOut, queryId);
                 }
-                if (visitNodeTest(node.southEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)) {
-                    queryClosestToRecursive(item, node.southEast, bestCandidateOut);
+                if (visitNodeTest(node.southEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
+                    queryClosestToRecursive(item, node.southEast, bestCandidateOut, queryId);
                 }
             }
 
@@ -214,11 +247,11 @@ public class QuadTreeSystem extends System {
                 }
             }
 
-            node.isVisited = true;
+            node.isVisited = queryId;
 
-            if (visitNodeTest(node.parent, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist)
-                    && node.parent.isHalfVisited == false) {
-                queryClosestToRecursive(item, node.parent, bestCandidateOut);
+            if (visitNodeTest(node.parent, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)
+                    && node.parent.isHalfVisited != queryId) {
+                queryClosestToRecursive(item, node.parent, bestCandidateOut, queryId);
             }
 
             return bestCandidateOut; // Not needed since we mutate it anyway
@@ -350,8 +383,8 @@ public class QuadTreeSystem extends System {
 
             public SquareBoundary squareBoundary = new SquareBoundary();
 
-            private boolean isHalfVisited = false;
-            private boolean isVisited = false;
+            private int isHalfVisited = -1;
+            private int isVisited = -1;
 
             public boolean containsPoint(double x, double y) {
                 return this.squareBoundary.containsPoint(x, y);
