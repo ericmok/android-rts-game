@@ -54,6 +54,7 @@ public class QuadTreeSystem extends System {
     }
 
     public static class QuadTreeNode extends Node implements QTree.Positionable {
+        public static String _NAME = "QuadTreeNode";
         public Coords coords;
         public QTree.QTreeNode _qtTreeNode;
 
