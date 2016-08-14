@@ -38,6 +38,9 @@ public class QuadTreeSystem extends System {
 
     @Override
     public void step(double ct, double dt) {
+        // Important if other systems make use of the QTree and overwrite the metric.
+        qTree.useMeasure(QTree.SQUARED_EUCLIDEAN_DISTANCE);
+
         qTree.clear();
 
         for (int i = 0; i < nodes.size(); i++) {
@@ -89,7 +92,7 @@ public class QuadTreeSystem extends System {
      */
     public static class QTree<T extends QTree.Positionable> {
         public static final double INFINITE_DISTANCE = Double.MAX_VALUE;
-        public final EuclideanDistance SQUARED_EUCLIDEAN_DISTANCE = new EuclideanDistance();
+        public static final EuclideanDistance SQUARED_EUCLIDEAN_DISTANCE = new EuclideanDistance();
 
         private static MemoryPool<QTreeNode> QTreeNodeMemoryPool;
 
@@ -306,9 +309,9 @@ public class QuadTreeSystem extends System {
             public double distanceMeasure(T item, T candidateItem);
         }
 
-        public class EuclideanDistance implements DistanceMeasurable<T> {
+        public static class EuclideanDistance implements DistanceMeasurable {
             @Override
-            public double distanceMeasure(T item, T candidateItem) {
+            public double distanceMeasure(Positionable item, Positionable candidateItem) {
                 return item.getPosition().squaredDistanceTo(candidateItem.getPosition());
             }
         }
