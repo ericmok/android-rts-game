@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import noteworthyengine.QuadTreeSystem;
+import utils.QTree;
 import utils.Vector2;
 
 /**
@@ -11,9 +12,9 @@ import utils.Vector2;
  */
 public class QuadTreeTest extends TestCase {
 
-    public class Item implements QuadTreeSystem.QTree.Positionable {
+    public class Item implements QTree.Positionable {
         private Vector2 position;
-        private QuadTreeSystem.QTree.QTreeNode qtNodeRef;
+        private QTree.QTreeNode qtNodeRef;
 
         public Item(double x, double y) {
             position = new Vector2(x, y);
@@ -34,12 +35,12 @@ public class QuadTreeTest extends TestCase {
         }
 
         @Override
-        public void setQTreeNode(QuadTreeSystem.QTree.QTreeNode qTreeNode) {
+        public void setQTreeNode(QTree.QTreeNode qTreeNode) {
             this.qtNodeRef = qTreeNode;
         }
 
         @Override
-        public QuadTreeSystem.QTree.QTreeNode getQTreeNode() {
+        public QTree.QTreeNode getQTreeNode() {
             return qtNodeRef;
         }
     }
@@ -51,7 +52,7 @@ public class QuadTreeTest extends TestCase {
     }
 
     public void testCanAddNode() {
-        QuadTreeSystem.QTree qTree = new QuadTreeSystem.QTree(10, 200, (byte)1);
+        QTree qTree = new QTree(10, 200, (byte) 1);
         Item item = new Item(0, 0);
         qTree.add(item);
 
@@ -72,7 +73,7 @@ public class QuadTreeTest extends TestCase {
     }
 
     public void testCanSubdivide() {
-        QuadTreeSystem.QTree qTree = new QuadTreeSystem.QTree(10, 200, (byte)1);
+        QTree qTree = new QTree(10, 200, (byte) 1);
         Item item = new Item(0, 0);
         qTree.add(item);
         item.qtNodeRef.subdivide();
@@ -99,7 +100,7 @@ public class QuadTreeTest extends TestCase {
     }
 
     public void testCanAddMultipleNodes() {
-        QuadTreeSystem.QTree qTree = new QuadTreeSystem.QTree(10, 200, (byte)1);
+        QTree qTree = new QTree(10, 200, (byte) 1);
         Item item = new Item(-2, -2);
         Item item2 = new Item(2, 2);
         qTree.add(item);
@@ -135,7 +136,7 @@ public class QuadTreeTest extends TestCase {
     public void testCanRecycleNodes() {}
 
     public void testCanQueryRange() {
-        QuadTreeSystem.QTree qTree = new QuadTreeSystem.QTree(10, 200, (byte)1);
+        QTree qTree = new QTree(10, 200, (byte) 1);
         Item item = new Item(1, 1);
         Item item2 = new Item(3, 3);
 
@@ -179,7 +180,7 @@ public class QuadTreeTest extends TestCase {
     }
 
     public void testfindSmallestQTNodeForPoint() {
-        QuadTreeSystem.QTree qTree = new QuadTreeSystem.QTree(10, 200, (byte)1);
+        QTree qTree = new QTree(10, 200, (byte) 1);
         Item item = new Item(1, 1);
         Item item2 = new Item(1.1, 1.1);
         Item item3 = new Item(1.05, 1.05);
@@ -188,7 +189,7 @@ public class QuadTreeTest extends TestCase {
         qTree.add(item2);
         qTree.add(item3);
 
-        QuadTreeSystem.QTree.QTreeNode node = item.qtNodeRef.findSmallestQTNodeForPoint(1, 1);
+        QTree.QTreeNode node = item.qtNodeRef.findSmallestQTNodeForPoint(1, 1);
         assertEquals(item3.getQTreeNode(), node);
         assertNull(item3.getQTreeNode().northWest);
         assertNull(item3.getQTreeNode().northEast);
@@ -203,20 +204,20 @@ public class QuadTreeTest extends TestCase {
         Item item4 = new Item(16, 16);
         Item item5 = new Item(32, 32);
 
-        QuadTreeSystem.QTree<Item> qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte)1);
+        QTree<Item> qTree = new QTree<Item>(10, 200, (byte) 1);
 
         qTree.add(item);
         Item initialTest = qTree.queryClosestTo(item);
         assertNull(initialTest);
 
-        qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte)1);
+        qTree = new QTree<Item>(10, 200, (byte) 1);
         qTree.add(item);
         qTree.add(item5);
         Item testAnyResult = qTree.queryClosestTo(item5);
         assertNotNull(testAnyResult);
         assertEquals(item, testAnyResult);
 
-        qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte)1);
+        qTree = new QTree<Item>(10, 200, (byte) 1);
 
         qTree.add(item);
         qTree.add(item2);
@@ -239,7 +240,7 @@ public class QuadTreeTest extends TestCase {
         Item item4 = new Item(16, 16);
         Item item5 = new Item(32, 32);
 
-        QuadTreeSystem.QTree<Item> qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte)1);
+        QTree<Item> qTree = new QTree<Item>(10, 200, (byte) 1);
         qTree.add(item);
         qTree.add(item2);
         qTree.add(item3);
@@ -268,7 +269,7 @@ public class QuadTreeTest extends TestCase {
         final Item item4 = new Item(16, 16);
         Item item5 = new Item(32, 32);
 
-        QuadTreeSystem.QTree<Item> qTree = new QuadTreeSystem.QTree<Item>(10, 200, (byte) 1);
+        QTree<Item> qTree = new QTree<Item>(10, 200, (byte) 1);
         qTree.add(item);
         qTree.add(item2);
         qTree.add(item3);
@@ -277,10 +278,10 @@ public class QuadTreeTest extends TestCase {
 
         assertEquals(item4, qTree.queryClosestTo(item5));
 
-        QuadTreeSystem.QTree.DistanceMeasurable biasedMeasure = new QuadTreeSystem.QTree.DistanceMeasurable() {
+        QTree.DistanceMeasurable biasedMeasure = new QTree.DistanceMeasurable() {
             @Override
-            public double distanceMeasure(QuadTreeSystem.QTree.Positionable item, QuadTreeSystem.QTree.Positionable candidateItem) {
-                if (candidateItem == item4) return QuadTreeSystem.QTree.INFINITE_DISTANCE;
+            public double distanceMeasure(QTree.Positionable item, QTree.Positionable candidateItem) {
+                if (candidateItem == item4) return QTree.INFINITE_DISTANCE;
                 return item.getPosition().squaredDistanceTo(candidateItem.getPosition());
             }
         };
