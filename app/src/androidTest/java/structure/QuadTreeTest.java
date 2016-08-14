@@ -45,10 +45,9 @@ public class QuadTreeTest extends TestCase {
         }
     }
 
-    public void testCanCreateQuadTreeSystem() {
-        QuadTreeSystem quadTreeSystem = new QuadTreeSystem();
-        assertTrue(quadTreeSystem.nodes.size() == 0);
-        assertTrue(quadTreeSystem.qTree.root == null);
+    public void testQTreeCreation() {
+        QTree qTree = new QTree(10, 10, (byte) 1);
+        assertNull(qTree.root);
     }
 
     public void testCanAddNode() {
