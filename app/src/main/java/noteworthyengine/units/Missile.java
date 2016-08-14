@@ -33,10 +33,6 @@ public class Missile extends Unit {
     public BattleNode battleNode = new MissileBattleNode(this);
     public RenderNode renderNode = new RenderNode(this);
 
-    public RewriteOnlyArray<BattleNode.Target> battleTargets =
-            new RewriteOnlyArray<BattleNode.Target>(BattleNode.Target.class, MAX_BATTLE_NODES_AFFECTED);
-
-
     private Vector2 firingSource = new Vector2();
     private Vector2 temp = new Vector2();
 
