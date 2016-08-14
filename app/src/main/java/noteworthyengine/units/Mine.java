@@ -1,5 +1,7 @@
 package noteworthyengine.units;
 
+import java.util.ArrayList;
+
 import art.Animations;
 import art.Constants;
 import noteworthyengine.QuadTreeSystem;
@@ -41,6 +43,8 @@ public class Mine extends Unit {
         this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
 
         gridNode = new GridNode(this, separationNode, battleNode);
+        // TODO: Add a different BattleEffect that isn't suicidal
+        battleNode.battleEffects.add(new SuicidalAOEAttackBattleEffect());
 
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -106,15 +110,15 @@ public class Mine extends Unit {
 
         }
 
-        @Override
-        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            battleSystem.findBattleNodesWithinRange(mine.battleTargets, mine.battleNode, mine.battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
-
-            for (int j = mine.battleTargets.size() - 1; j >= 0; j--) {
-                BattleNode toInflict = mine.battleTargets.get(j).v;
-                toInflict.onAttacked(battleSystem, this, this.battleAttack.amount);
-            }
-        }
+//        @Override
+//        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+//            ArrayList<QuadTreeSystem.QuadTreeNode> battleTargets = battleSystem.findBattleNodesWithinRange(mine.battleNode, mine.battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
+//
+//            for (int j = battleTargets.size() - 1; j >= 0; j--) {
+//                BattleNode toInflict = (BattleNode)battleTargets.get(j).unit.node(BattleNode._NAME);
+//                toInflict.onAttacked(battleSystem, this, this.battleAttack.amount);
+//            }
+//        }
     }
 
     public void configure(PlayerUnit playerUnit) {

@@ -133,42 +133,32 @@ public class BattleSystem extends noteworthyframework.System {
         return Double.MAX_VALUE;
     }
 
-    /**
-     * Performs an exhaustive search for the closest target that is not the enemy...
-     * @param battleNode
-     * @return
-     */
-    public void findBattleNodesWithinRange(RewriteOnlyArray<BattleNode.Target> out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
-
-        out.resetWriteIndex();
-//
-//        double bestDistance = 10000000;
-
-        //Grid grid = gridSystem.grid;
+    public void inflictSplashDamage(BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
         quadTreeSystem.useMeasure(QTREE_BATTLE_DISTANCE_MEASURE);
         ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes =
                 quadTreeSystem.queryRange(battleNode.coords.pos.x,
                         battleNode.coords.pos.y, range);
 
-        //List<GridNode> gridNodes = grid.getSurroundingNodes(battleNode.gridX.v, battleNode.gridY.v , range);
-
         for (int i = 0; i < quadTreeNodes.size(); i++) {
-            BattleNode possibleTarget = (BattleNode) quadTreeNodes.get(i).unit.node(BattleNode._NAME);
-
-            double distance = battleNode.coords.pos.distanceTo(possibleTarget.coords.pos);
-
-            if (distance < range) {
-
-                // TODO: Check if it is in "front" (not in back)
-
-                // Ugly overflow check
-                if (out.size() < out.capacity() - 1) {
-                    BattleNode.Target nodeToAdd = out.takeNextWritable();
-                    nodeToAdd.v = possibleTarget;
-                    nodeToAdd.distance = distance;
-                }
+            BattleNode target = (BattleNode) quadTreeNodes.get(i).unit.node(BattleNode._NAME);
+            if (criteria.apply(battleNode, target)) {
+                calculateAndInflictDamage(battleNode, target);
             }
         }
+    }
+
+    /**
+     * Performs an exhaustive search for the closest target that is not the enemy...
+     * @param battleNode
+     * @return
+     */
+    public ArrayList<QuadTreeSystem.QuadTreeNode> xfindBattleNodesWithinRange(BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
+        quadTreeSystem.useMeasure(QTREE_BATTLE_DISTANCE_MEASURE);
+        ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes =
+                quadTreeSystem.queryRange(battleNode.coords.pos.x,
+                        battleNode.coords.pos.y, range);
+
+        return quadTreeNodes;
     }
 
     /**

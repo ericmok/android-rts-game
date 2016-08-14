@@ -1,5 +1,8 @@
 package noteworthyengine.units;
 
+import java.util.ArrayList;
+
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.battle.BattleEffect;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
@@ -12,7 +15,7 @@ import structure.RewriteOnlyArray;
  *
  */
 public class SuicidalAOEAttackBattleEffect extends BattleEffect {
-    RewriteOnlyArray<BattleNode.Target> multipleTargetBuffer = new RewriteOnlyArray<>(BattleNode.Target.class, 8);
+    //RewriteOnlyArray<BattleNode.Target> multipleTargetBuffer = new RewriteOnlyArray<>(BattleNode.Target.class, 8);
 
     @Override
     public void update(BattleSystem battleSystem, double dt) {
@@ -25,12 +28,7 @@ public class SuicidalAOEAttackBattleEffect extends BattleEffect {
             battleSystem.findClosestBatleNodeWithinRange(battleNode.target, battleNode, battleNode.targetAcquisitionRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
         }
         if (event == Event.ATTACK_CAST) {
-            battleSystem.findBattleNodesWithinRange(multipleTargetBuffer, battleNode, battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
-
-            for (int i = 0; i < multipleTargetBuffer.size(); i++) {
-                BattleNode.Target target = multipleTargetBuffer.get(i);
-                battleSystem.calculateAndInflictDamage(battleNode, target.v);
-            }
+            battleSystem.inflictSplashDamage(battleNode, battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
 
             battleNode.hp.v = 0;
         }
