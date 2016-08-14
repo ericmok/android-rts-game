@@ -1,5 +1,7 @@
 package noteworthyengine;
 
+import java.util.ArrayList;
+
 import noteworthyframework.Coords;
 import noteworthyframework.Node;
 import noteworthyframework.QueueMutationList;
@@ -14,7 +16,7 @@ import utils.Vector2;
 public class QuadTreeSystem extends System {
 
     public QueueMutationList<QuadTreeNode> nodes = new QueueMutationList<>(100);
-    public QTree qTree = new QTree(100, 200, (byte)1);
+    private QTree<QuadTreeNode> qTree = new QTree(100, 200, (byte) 1);
 
     @Override
     public void addNode(Node node) {
@@ -28,6 +30,18 @@ public class QuadTreeSystem extends System {
         if (node instanceof QuadTreeNode) {
             nodes.queueToRemove((QuadTreeNode)node);
         }
+    }
+
+    public void useMeasure(QTree.DistanceMeasurable distanceMeasurable) {
+        qTree.useMeasure(distanceMeasurable);
+    }
+
+    public QuadTreeNode queryClosestTo(QuadTreeNode quadTreeNode) {
+        return qTree.queryClosestTo(quadTreeNode);
+    }
+
+    public ArrayList<QuadTreeNode> queryRange(double x, double y, double range) {
+        return qTree.queryRange(x, y, range);
     }
 
     private void index(QuadTreeNode node) {
@@ -51,10 +65,11 @@ public class QuadTreeSystem extends System {
         nodes.flushQueues();
     }
 
+
     public static class QuadTreeNode extends Node implements QTree.Positionable {
         public static String _NAME = "QuadTreeNode";
         public Coords coords;
-        public QTree.QTreeNode _qtTreeNode;
+        public QTree.QTreeNode qTreeNode;
 
         public QuadTreeNode(Unit unit) {
             super(QuadTreeNode.class.getSimpleName(), unit);
@@ -73,12 +88,12 @@ public class QuadTreeSystem extends System {
 
         @Override
         public void setQTreeNode(QTree.QTreeNode qTreeNode) {
-            _qtTreeNode = qTreeNode;
+            this.qTreeNode = qTreeNode;
         }
 
         @Override
         public QTree.QTreeNode getQTreeNode() {
-            return _qtTreeNode;
+            return qTreeNode;
         }
     }
 

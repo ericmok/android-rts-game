@@ -86,7 +86,7 @@ public class SelectionSystem extends noteworthyframework.System {
 //        List<GridNode> gridNodes = gridSystem.grid.getSurroundingNodes(x, y, range);
 
 
-        ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes = quadTreeSystem.qTree.queryRange(temp.x, temp.y, range);
+        ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes = quadTreeSystem.queryRange(temp.x, temp.y, range);
         found = false;
 
         for (int i = 0; i < quadTreeNodes.size(); i++) {

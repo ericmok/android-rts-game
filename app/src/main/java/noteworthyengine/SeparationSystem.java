@@ -51,7 +51,7 @@ public class SeparationSystem extends noteworthyframework.System {
 
             //List<GridNode> nearbyNodes = grid.getSurroundingNodes(node.gridX.v, node.gridY.v, 2);
             double radius = 2;
-            ArrayList<QuadTreeSystem.QuadTreeNode> nearbyNodes = quadTreeSystem.qTree.queryRange(node.coords.pos.x, node.coords.pos.y, radius);
+            ArrayList<QuadTreeSystem.QuadTreeNode> nearbyNodes = quadTreeSystem.queryRange(node.coords.pos.x, node.coords.pos.y, radius);
 
             for (int j = 0; j < nearbyNodes.size(); j++) {
 
