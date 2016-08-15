@@ -1,4 +1,4 @@
-package structure.reflection;
+package tests.reflection;
 
 /**
  * Created by eric on 3/10/15.

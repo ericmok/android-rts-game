@@ -1,8 +1,8 @@
-package structure.reflection;
+package tests.reflection;
 
-import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.IntegerPtr;
 import utils.VoidFunc;
 
 /**

@@ -1,4 +1,4 @@
-package structure.grid;
+package tests.grid;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
@@ -8,7 +8,6 @@ import java.util.List;
 
 import noteworthyengine.Grid;
 import noteworthyengine.GridNode;
-import noteworthyframework.Unit;
 
 /**
  * Created by eric on 3/20/15.

@@ -1,4 +1,4 @@
-package structure.serialization;
+package tests.serialization;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
@@ -22,13 +22,13 @@ public class SerializationTest extends ApplicationTestCase<Application> {
 
         try {
             JSONObject jsonObject = new JSONObject(json);
-            this.assertNotNull(jsonObject.get("pos"));
-            this.assertNotNull(jsonObject.get("rot"));
-            this.assertTrue(json.contains("["));
+            assertNotNull(jsonObject.get("pos"));
+            assertNotNull(jsonObject.get("rot"));
+            assertTrue(json.contains("["));
 
-            this.assertNotNull(jsonObject.get("pos"));
-            this.assertNotNull(jsonObject.get("rot"));
-            this.assertNotNull(jsonObject.get("animationName"));
+            assertNotNull(jsonObject.get("pos"));
+            assertNotNull(jsonObject.get("rot"));
+            assertNotNull(jsonObject.get("animationName"));
         } catch (JSONException e) {
             e.printStackTrace();
             //this.assertTrue(false);

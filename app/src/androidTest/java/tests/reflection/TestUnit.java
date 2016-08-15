@@ -1,4 +1,4 @@
-package structure.reflection;
+package tests.reflection;
 
 import noteworthyengine.RenderNode;
 import noteworthyframework.Unit;

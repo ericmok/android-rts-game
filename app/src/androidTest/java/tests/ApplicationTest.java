@@ -1,4 +1,4 @@
-package structure;
+package tests;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

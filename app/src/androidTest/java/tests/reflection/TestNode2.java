@@ -1,8 +1,8 @@
-package structure.reflection;
+package tests.reflection;
 
-import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.IntegerPtr;
 
 /**
  * Created by eric on 3/10/15.

@@ -1,9 +1,9 @@
-package structure;
+package tests;
 
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
-import noteworthyengine.QuadTreeSystem;
+
 import utils.QTree;
 import utils.Vector2;
 

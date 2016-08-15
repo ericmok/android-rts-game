@@ -1,10 +1,10 @@
-package structure;
-
-import android.app.Application;
+package tests;
 
 import junit.framework.TestCase;
 
 import java.util.Comparator;
+
+import structure.RewriteOnlyArray;
 
 /**
  * Created by eric on 3/11/15.

@@ -1,4 +1,4 @@
-package structure.grid;
+package tests.grid;
 
 import noteworthyengine.GridNode;
 import noteworthyframework.Unit;
