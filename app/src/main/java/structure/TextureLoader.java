@@ -26,6 +26,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
@@ -323,7 +324,12 @@ public class TextureLoader {
 	 */
 	public void loadLetterTextures() {
 		StringBuilder sb = new StringBuilder(1);
-		String alphabet = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/=[]{}\"\'<>!@#$%^&*()?,.";
+		String alphabet = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/=[]{}\"\'<>!@#$%^&*()?,.:";
+
+		Paint heightNormalizer = new Paint();
+		heightNormalizer.setTextSize(144);
+		Rect rect = new Rect();
+		heightNormalizer.getTextBounds(alphabet, 0, alphabet.length(), rect);
 		
 		for (int i = 0; i < alphabet.length(); i++) {
 			// reset builder
@@ -331,16 +337,15 @@ public class TextureLoader {
 			sb.append(alphabet.charAt(i));
 			
 			// generate bitmap from single letter
-			Bitmap bitmap = generateTextBitmap(sb);
-			int texture = generateGLTextureFromBitmap(bitmap, false);
+			Bitmap bitmap = generateTextBitmap(sb, rect.height());
+			int texture = generateGLTextureFromBitmap(bitmap, true);
 			
 			// create the letter texture
 			LetterTexture letterTexture = new LetterTexture();
 			letterTexture.bitmap = bitmap;
 			letterTexture.character = alphabet.charAt(i);
-			//letterTexture.glTexture = texture;
 			letterTexture.texture.glHandle = texture;
-			letterTexture.widthRatio = (float)bitmap.getWidth() / bitmap.getHeight();
+			letterTexture.widthRatio = ((float)bitmap.getWidth() / bitmap.getHeight());
 			
 			letterTextures.put(alphabet.charAt(i), letterTexture);
 		}
@@ -352,31 +357,55 @@ public class TextureLoader {
 	 * @param text
 	 * @return
 	 */
-	public Bitmap generateTextBitmap(StringBuilder text) {		
+	public Bitmap generateTextBitmap(StringBuilder text, int height) {
 		Paint paint = new Paint();
 		paint.setTextSize(144);
 		paint.setAntiAlias(true);
-		paint.setColor(Color.rgb(240, 240, 240));
-		paint.setAlpha(170);
+		paint.setColor(Color.rgb(255, 255, 255));
+		paint.setAlpha(255);
 		//center version
-		//paint.setTextAlign(Paint.Align.CENTER);
-		paint.setTextAlign(Paint.Align.LEFT);
-		 
-		int width = (int) (paint.measureText((CharSequence)text, 0 , text.length()) + 0.5f);
-		float baseline = (int) (-paint.ascent() + 0.5f);
-		int height = (int) (baseline + paint.descent() + 0.5f );
-		
-		Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		paint.setTextAlign(Paint.Align.CENTER);
+		//paint.setTextAlign(Paint.Align.LEFT);
+
+        // Some of the constants here are eye-balled
+//		int width = (int) (paint.measureText(text, 0 , text.length()) + 0.5f);
+//		float baseline = (int) (-paint.ascent() + 0.5f);
+//		int height = (int) (paint.descent() + (-paint.ascent()) + 10);
+
+		int pot = 128;
+
+		Rect rect = new Rect();
+		paint.getTextBounds(text.toString(), 0, 1, rect);
+		if (text.toString().trim().length() < 1) { // Spaces don't have width apparently
+			rect.set(0, 0, pot, height);
+		}
+		if (height < 1) {
+			height = pot;
+		} else {
+			height += 4;
+		}
+
+		int widthMargins = 4;
+		int finalWidth = rect.width() + widthMargins;
+
+		// Hack: To deal with "i" and "j" - bitmap is correct but rendering text strides aren't
+		if (finalWidth < 40) {
+			finalWidth *= 1.5;
+		}
+
+		Bitmap image = Bitmap.createBitmap(finalWidth, height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(image);
-		//canvas.drawText((CharSequence)text, 0, text.length(), width/2, baseline, paint);
-		
-		// At height 0, the text is drawn with the baseline on the top border
-		//center version
-		//canvas.drawText((CharSequence)text, 0, text.length(), width/2, height - paint.descent(), paint);
-		
-		// explicit version
-		//canvas.drawText((CharSequence)text, 0, text.length(), 0, height - paint.descent(), paint);
-		canvas.drawText((CharSequence)text, 0, text.length(), 0, baseline, paint);
+
+		//http://stackoverflow.com/questions/11120392/android-center-text-on-canvas
+		int yPos = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2)) ;
+		//((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
+
+		// For debugging...
+		//paint.setColor(Color.BLACK);
+		//canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
+		paint.setColor(Color.WHITE);
+
+		canvas.drawText(text, 0, text.length(), pot / 2 - (pot - finalWidth)/2, yPos, paint);
 
 		return image;
 	}

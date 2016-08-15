@@ -2,7 +2,10 @@ package noteworthyengine;
 
 import android.util.Log;
 
-import noteworthyframework.*;
+import noteworthyframework.Coords;
+import noteworthyframework.Node;
+import noteworthyframework.QueueMutationList;
+import noteworthyframework.Unit;
 import structure.Game;
 import utils.FloatPtr;
 import utils.StringPtr;
@@ -72,7 +75,7 @@ public class ButtonSystem extends noteworthyframework.System {
         public VoidFunc<ButtonSystem> onTap = ON_TAP_DEFAULT;
 
         public ButtonNode(Unit unit) {
-            super(NAME, unit);
+            super(ButtonNode.class, unit);
             Node.instantiatePublicFieldsForUnit(unit, ButtonNode.class, this);
         }
 

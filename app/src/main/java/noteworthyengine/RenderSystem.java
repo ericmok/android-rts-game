@@ -4,6 +4,7 @@ import noteworthyframework.*;
 import structure.Line2dDef;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
+import structure.TextDrawItem;
 
 /**
  * Created by eric on 3/7/15.
@@ -107,6 +108,10 @@ public class RenderSystem extends noteworthyframework.System {
             return -1;
         }
         return cameraSystem.nodes.get(renderLayer).index.v;
+    }
+
+    public TextDrawItem fetchTextDrawItem() {
+        return drawCompat.textDrawItemAllocator.takeNextWritable();
     }
 
     public Sprite2dDef defineNewSprite(Sprite2dDef toCopy, int renderLayer) {

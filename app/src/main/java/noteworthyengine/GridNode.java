@@ -1,9 +1,10 @@
 package noteworthyengine;
 
+import noteworthyengine.battle.BattleNode;
 import noteworthyframework.Coords;
-import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.IntegerPtr;
 
 /**
  * Created by eric on 3/20/15.
@@ -19,7 +20,7 @@ public class GridNode extends Node {
     public BattleNode _battleNode = null;
 
     public GridNode(Unit unit, SeparationNode separationNode, BattleNode battleNode) {
-        super(NAME, unit);
+        super(GridNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, GridNode.class, this);
 
         this._separationNode = separationNode;

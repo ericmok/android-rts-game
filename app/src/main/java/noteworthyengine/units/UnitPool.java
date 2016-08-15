@@ -1,6 +1,7 @@
 package noteworthyengine.units;
 
-import noteworthyframework.Gamer;
+import art.Constants;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import utils.MemoryPool;
 
@@ -9,11 +10,12 @@ import utils.MemoryPool;
  */
 public class UnitPool {
 
-    public static final Gamer NO_GAMER = new Gamer("No gamer!") {{
-      this.team = Gamer.TeamColors.size() - 1;
+    public static final PlayerUnit NO_GAMER = new PlayerUnit() {{
+      this.playerNode.playerData.playerTag = "No Team";
+      this.playerNode.playerData.team = Constants.TeamColors.size() - 1;
     }};
 
-    public static final int NUMBER_UNITS = 512;
+    public static final int NUMBER_UNITS = 256;
     public static final int NUMBER_BUILDINGS = 63;
 
     public static final MemoryPool<Mech> mechs = new MemoryPool<Mech>(Mech.class, NUMBER_UNITS);
@@ -22,9 +24,13 @@ public class UnitPool {
 
     public static final MemoryPool<Cannon> cannons = new MemoryPool<Cannon>(Cannon.class, NUMBER_UNITS);
 
-    public static final MemoryPool<Missle> missles = new MemoryPool<Missle>(Missle.class, NUMBER_UNITS);
+    public static final MemoryPool<Missile> missles = new MemoryPool<Missile>(Missile.class, NUMBER_UNITS);
 
     public static final MemoryPool<Mine> mines = new MemoryPool<Mine>(Mine.class, NUMBER_UNITS);
+
+    public static final MemoryPool<Zug> zugs = new MemoryPool<Zug>(Zug.class, NUMBER_UNITS);
+
+    public static final MemoryPool<PufferZug> pufferZugs = new MemoryPool<>(PufferZug.class, 100);
 
     public static final MemoryPool<City> cities = new MemoryPool<City>(City.class, NUMBER_BUILDINGS);
 
@@ -38,6 +44,9 @@ public class UnitPool {
 
     public static final MemoryPool<NanobotFactory> nanobotFactories = new MemoryPool<NanobotFactory>(NanobotFactory.class, NUMBER_BUILDINGS);
 
+    public static final MemoryPool<ZugNest> zugNests = new MemoryPool<ZugNest>(ZugNest.class, NUMBER_BUILDINGS);
+
+    public static final MemoryPool<ArrowCommand> arrowCommands = new MemoryPool<>(ArrowCommand.class, 11);
 
     public static void load() {
         // Does nothing. Just load class static fields via class loader.
@@ -50,11 +59,20 @@ public class UnitPool {
         else if (unit.getClass() == Cannon.class) {
             UnitPool.cannons.recycleMemory((Cannon)unit);
         }
-        else if (unit.getClass() == Missle.class) {
-            UnitPool.missles.recycleMemory((Missle)unit);
+        else if (unit.getClass() == Missile.class) {
+            UnitPool.missles.recycleMemory((Missile)unit);
         }
         else if (unit.getClass() == Mech.class) {
             UnitPool.mechs.recycleMemory((Mech)unit);
+        }
+        else if (unit.getClass() == Mine.class) {
+            UnitPool.mines.recycleMemory((Mine) unit);
+        }
+        else if (unit.getClass() == Zug.class) {
+            UnitPool.zugs.recycleMemory((Zug) unit);
+        }
+        else if (unit.getClass() == PufferZug.class) {
+            UnitPool.pufferZugs.recycleMemory((PufferZug)unit);
         }
         else if (unit.getClass() == City.class) {
             UnitPool.cities.recycleMemory((City)unit);
@@ -73,6 +91,9 @@ public class UnitPool {
         }
         else if (unit.getClass() == NanobotFactory.class) {
             UnitPool.nanobotFactories.recycleMemory((NanobotFactory)unit);
+        }
+        else if (unit.getClass() == ArrowCommand.class) {
+            UnitPool.arrowCommands.recycleMemory((ArrowCommand)unit);
         }
     }
 

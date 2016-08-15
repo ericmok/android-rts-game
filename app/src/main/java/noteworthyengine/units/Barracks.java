@@ -1,24 +1,26 @@
 package noteworthyengine.units;
 
-import noteworthyengine.BattleNode;
-import noteworthyengine.BattleSystem;
+import art.Constants;
 import noteworthyengine.CityWinLoseConditionNode;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
 import noteworthyengine.GridNode;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.RenderNode;
-import noteworthyframework.BaseEngine;
-import noteworthyframework.Gamer;
+import noteworthyengine.RenderSystem;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.BattleSystem;
+import noteworthyengine.battle.ChangeOwnershipOnDeathBattleEffect;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
-import utils.DoublePtr;
+import structure.TextDrawItem;
 import utils.VoidFunc;
 import utils.VoidFunc2;
-import utils.VoidFunc4;
 
 /**
  * Created by eric on 4/30/15.
  */
-public class Barracks extends Unit {
+public class Barracks extends Unit implements ChangeOwnershipOnDeathBattleEffect.SpawnForEnemyable{
 
     public static final String NAME = "barracks";
 
@@ -26,20 +28,10 @@ public class Barracks extends Unit {
 
     public FactoryNode factoryNode = new FactoryNode(this);
 
-    public BattleNode battleNode = new BattleNode(this) {
-        @Override
-        public void inflictDamage(BattleSystem battleSystem, BattleNode target, double damage) {
-            super.inflictDamage(battleSystem, target, damage);
-            battleNode.hp.v -= damage;
+    public BattleNode battleNode = new BattleNode(this) {{
+        this.battleEffects.add(new ChangeOwnershipOnDeathBattleEffect(this, Barracks.this));
+    }};
 
-            if (battleNode.hp.v <= 0) {
-                Barracks barracks = UnitPool.barracks.fetchMemory();
-                barracks.configure(target.gamer.v);
-                barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
-                battleSystem.getBaseEngine().addUnit(barracks);
-            }
-        }
-    };
     public RenderNode renderNode = new RenderNode(this);
 
     public CityWinLoseConditionNode cityWinLoseConditionNode = new CityWinLoseConditionNode(this);
@@ -47,43 +39,59 @@ public class Barracks extends Unit {
     public Barracks() {
         this.name = NAME;
 
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
         gridNode = new GridNode(this, null, battleNode);
+
+        renderNode.onDraw = new VoidFunc<RenderSystem>() {
+            @Override
+            public void apply(RenderSystem system) {
+                TextDrawItem textDrawItem = system.fetchTextDrawItem();
+                textDrawItem.position.set(renderNode.coords.pos.x, renderNode.coords.pos.y - 1, 0);
+                textDrawItem.height = 0.9f;
+                textDrawItem.cameraIndex = system.getCameraIndex(RenderNode.RENDER_LAYER_FOREGROUND);
+                textDrawItem.color = renderNode.color.v;
+                textDrawItem.textDirection.set(1, 0);
+                textDrawItem.stringBuilder.setLength(0);
+                textDrawItem.stringBuilder.append((int) (factoryNode.buildTime.v - factoryNode.buildProgress.v));
+
+                // HP Bars:
+                system.drawLine(system.getCameraIndex(renderNode.renderLayer.v),
+                    (float)renderNode.coords.pos.x - 0.5f, (float)renderNode.coords.pos.y + 0.8f,
+                    (float)renderNode.coords.pos.x + 0.5f * (float)(battleNode.hp.v / battleNode.startingHp.v), (float)renderNode.coords.pos.y + 0.8f,
+                    4,
+                    renderNode.color.v);
+
+            }
+        };
 
         factoryNode.spawnFunction = new VoidFunc2<FactorySystem, FactoryNode>() {
             @Override
             public void apply(FactorySystem factorySystem, FactoryNode factoryNode) {
                 Platoon platoon = UnitPool.platoons.fetchMemory();
-                platoon.configure(factoryNode.gamer.v);
+                platoon.configure(factoryNode.playerUnitPtr.v);
                 platoon.battleNode.coords.pos.copy(battleNode.coords.pos);
                 factorySystem.getBaseEngine().addUnit(platoon);
             }
         };
     }
 
-    public void configure(Gamer gamer) {
+    public void configure(PlayerUnit playerUnit) {
+        battleNode.reset();
+        battleNode.startingHp.v = 100;
         battleNode.hp.v = 100;
-        battleNode.attackDamage.v = 1;
-        battleNode.gamer.v = gamer;
-        renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Gamer.colorForTeam(gamer.team), "Animations/Buildings/City", 0, 0);
+        battleNode.battleAttack.amount = 1;
+        battleNode.playerUnitPtr.v = playerUnit;
+        renderNode.set(0, 0, 0, 1.5f, 1.5f, 90f, Constants.colorForTeam(playerUnit.playerNode.playerData.team), "Animations/Buildings/City", 0, 0);
 
-        factoryNode.configure(gamer);
+        factoryNode.configure(playerUnit);
         factoryNode.buildTime.v = 25;
         factoryNode.buildProgress.v = 0;
     }
 
-    public VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr> createOnDieFunction() {
-        return new VoidFunc4<BattleSystem, BattleNode, BattleNode, DoublePtr>() {
-            @Override
-            public void apply(BattleSystem battleSystem, BattleNode that, BattleNode attacker, DoublePtr damage) {
-                battleNode.hp.v -= damage.v;
-
-                if (!battleNode.isAlive()) {
-                    Barracks barracks = UnitPool.barracks.fetchMemory();
-                    barracks.configure(attacker.gamer.v);
-                    barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
-                    battleSystem.getBaseEngine().addUnit(barracks);
-                }
-            }
-        };
+    public void spawnForEnemy(BattleSystem battleSystem, BattleNode attacker) {
+        Barracks barracks = UnitPool.barracks.fetchMemory();
+        barracks.configure(attacker.playerUnitPtr.v);
+        barracks.battleNode.coords.pos.copy(battleNode.coords.pos);
+        battleSystem.getBaseEngine().addUnit(barracks);
     }
 }

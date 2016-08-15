@@ -1,8 +1,10 @@
 package noteworthyengine;
 
 import noteworthyengine.events.GameEvents;
+import noteworthyengine.players.PlayerNode;
+import noteworthyengine.players.PlayerSystem;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.units.WinUnit;
-import noteworthyframework.Gamer;
 import noteworthyframework.Node;
 import noteworthyframework.QueueMutationList;
 import structure.Game;
@@ -13,12 +15,14 @@ import utils.QueueMutationHashedList;
  */
 public class CityWinLoseConditionSystem extends noteworthyframework.System {
 
-    public QueueMutationHashedList<Gamer, CityWinLoseConditionNode> nodesByGamer = new QueueMutationHashedList(7, 63);
+    public QueueMutationHashedList<PlayerUnit, CityWinLoseConditionNode> nodesByGamer = new QueueMutationHashedList(7, 63);
 
     private Game game;
+    private PlayerSystem playerSystem;
 
-    public CityWinLoseConditionSystem(Game game) {
+    public CityWinLoseConditionSystem(Game game, PlayerSystem playerSystem) {
         this.game = game;
+        this.playerSystem = playerSystem;
     }
 
     @Override
@@ -27,7 +31,7 @@ public class CityWinLoseConditionSystem extends noteworthyframework.System {
         if (node.getClass() == CityWinLoseConditionNode.class) {
             CityWinLoseConditionNode cityWinLoseConditionNode = (CityWinLoseConditionNode) node;
             //nodesByGamer.getListFor(cityWinLoseConditionNode.gamer.v).queueToAdd(cityWinLoseConditionNode);
-            nodesByGamer.queueToAdd(cityWinLoseConditionNode.gamer.v, cityWinLoseConditionNode);
+            nodesByGamer.queueToAdd(cityWinLoseConditionNode.playerUnitPtr.v, cityWinLoseConditionNode);
         }
     }
 
@@ -36,24 +40,23 @@ public class CityWinLoseConditionSystem extends noteworthyframework.System {
         if (node.getClass() == CityWinLoseConditionNode.class) {
             CityWinLoseConditionNode cityWinLoseConditionNode = (CityWinLoseConditionNode) node;
             //nodesByGamer.getListFor(cityWinLoseConditionNode.gamer.v).queueToRemove(cityWinLoseConditionNode);
-            nodesByGamer.queueToRemove(cityWinLoseConditionNode.gamer.v, cityWinLoseConditionNode);
+            nodesByGamer.queueToRemove(cityWinLoseConditionNode.playerUnitPtr.v, cityWinLoseConditionNode);
         }
     }
 
     @Override
     public void step(double ct, double dt) {
-        Gamer currentGamer = this.getBaseEngine().currentGamer;
 
         int size = nodesByGamer.numberKeys();
         int checks = 0;
 
         for (int i = 0; i < size; i++) {
 
-            Gamer gamer = nodesByGamer.keys.get(i);
+            PlayerUnit playerUnit = nodesByGamer.keys.get(i);
 
-            if (gamer == currentGamer) continue;
+            if (playerUnit == playerSystem.getCurrentPlayer()) continue;
 
-            QueueMutationList<CityWinLoseConditionNode> gamerUnits = nodesByGamer.getListFor(gamer);
+            QueueMutationList<CityWinLoseConditionNode> gamerUnits = nodesByGamer.getListFor(playerUnit);
 
             int numberUnitsForThatGamer = 0;
 
@@ -61,7 +64,7 @@ public class CityWinLoseConditionSystem extends noteworthyframework.System {
                 numberUnitsForThatGamer = gamerUnits.size();
             }
 
-            if (gamer != currentGamer && numberUnitsForThatGamer == 0) {
+            if (playerUnit != playerSystem.getCurrentPlayer() && numberUnitsForThatGamer == 0) {
                 checks += 1;
             }
         }
@@ -74,7 +77,7 @@ public class CityWinLoseConditionSystem extends noteworthyframework.System {
             this.getBaseEngine().removeSystem(this);
         }
 
-        QueueMutationList currentGamerUnits = nodesByGamer.getListFor(currentGamer);
+        QueueMutationList currentGamerUnits = nodesByGamer.getListFor(playerSystem.getCurrentPlayer());
 
         if (currentGamerUnits != null && currentGamerUnits.size() == 0) {
             this.getBaseEngine().emitEvent(GameEvents.LOSE);

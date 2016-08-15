@@ -1,14 +1,17 @@
 package noteworthyengine.units;
 
 import art.Animations;
-import noteworthyengine.BattleNode;
+import art.Constants;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.battle.BasicAttackEffect;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.TemporarySprite2dDef;
 import utils.VoidFunc;
@@ -29,9 +32,12 @@ public class Nanobot extends Unit {
     public Nanobot() {
         this.name = this.getClass().getSimpleName();
 
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
+
         movementNode = new MovementNode(this);
         separationNode = new SeparationNode(this);
         battleNode = new BattleNode(this);
+        battleNode.battleEffects.add(new BasicAttackEffect(battleNode));
 
         renderNode = new RenderNode(this);
 
@@ -42,20 +48,23 @@ public class Nanobot extends Unit {
         renderNode.onDraw = getOnDrawFunction();
     }
 
-    public void configure(Gamer gamer) {
-        battleNode.gamer.v = gamer;
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+    public void configure(PlayerUnit playerUnit) {
+        movementNode.reset();
+        battleNode.reset();
+
+        battleNode.playerUnitPtr.v = playerUnit;
+        renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
 
         movementNode.maxSpeed.v = 1.1;
 
         battleNode.hp.v = 24;
         battleNode.targetAcquisitionRange.v = 20;
-        battleNode.attackCooldown.v = 1;
-        battleNode.attackDamage.v = 2;
-        battleNode.attackCooldown.v = 1;
-        battleNode.attackRange.v = 1.0;
+        battleNode.battleAttack.cooldownTime = 1;
+        battleNode.battleAttack.amount = 10;
+        //battleNode.battleAttack.cooldownTime = 1;
+        battleNode.battleAttack.range = 1.3;
 
-        battleNode.attackState.v = BattleNode.ATTACK_STATE_READY;
+        battleNode.battleState.v = BattleNode.BATTLE_STATE_IDLE;
         battleNode.target.v = null;
 
         renderNode.animationName.v = "Animations/Nanobots/Idling";
@@ -71,7 +80,7 @@ public class Nanobot extends Unit {
             @Override
             public void apply(RenderSystem renderSystem) {
 
-                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING && battleNode.target.v != null) {
+                if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING && battleNode.target.v != null) {
 
                     // Attack animation here...
 

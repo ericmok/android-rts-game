@@ -12,7 +12,7 @@ import utils.JsonSerializable;
 public class Unit implements JsonSerializable {
     public Hashtable<String, Object> fields = new Hashtable<String, Object>(64);
 
-    private Hashtable<String, Node> nodes = new Hashtable<String, Node>(32);
+    private Hashtable<Class, Node> nodes = new Hashtable<>(32);
     public ArrayList<Node> nodeList = new ArrayList<Node>(32);
 
     /// For storing the unit in a group with same labels
@@ -24,13 +24,16 @@ public class Unit implements JsonSerializable {
     }
 
     public Object field(String key) { return fields.get(key); }
-    public Node node(String key) {
-        return nodes.get(key);
+
+    //public Node xnode(String key) { return nodes.get(key); }
+
+    public Node getNode(Class node) {
+        return nodes.get(node);
     }
 
-    public void addNode(String nodeName, Node node) {
-        node._name = nodeName; // safeguard?
-        nodes.put(nodeName, node);
+    public void addNode(Class nodeClass, Node node) {
+        //node._name = nodeName; // safeguard?
+        nodes.put(nodeClass, node);
         nodeList.add(node);
     }
 

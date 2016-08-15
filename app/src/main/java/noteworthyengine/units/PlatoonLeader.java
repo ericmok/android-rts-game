@@ -3,16 +3,15 @@ package noteworthyengine.units;
 import android.graphics.Color;
 
 import art.Animations;
-import noteworthyengine.BattleNode;
+import art.Constants;
+import noteworthyengine.battle.BattleNode;
 import noteworthyengine.FieldNode;
-import noteworthyengine.FieldSystem;
 import noteworthyengine.FormationNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import utils.Vector2;
@@ -52,7 +51,7 @@ public class PlatoonLeader extends Unit {
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
             public void apply(RenderSystem system) {
-                renderNode.color.v = Gamer.colorForTeam(battleNode.gamer.v.team);
+                renderNode.color.v = Constants.colorForTeam(battleNode.playerUnitPtr.v.playerNode.playerData.team);
 //
 //                for (int i = 0; i < formationLeader.freeIndices.size(); i++) {
 //                    formationLeader.calculateSheepPosition(temp, formationLeader.freeIndices.get(i));

@@ -3,9 +3,7 @@ package noteworthyengine;
 import noteworthyframework.Coords;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
-import structure.GameCamera;
 import structure.OrthographicCamera;
-import utils.DoublePtr;
 import utils.FloatPtr;
 import utils.IntegerPtr;
 
@@ -21,7 +19,7 @@ public class CameraNode extends Node {
     public OrthographicCamera camera;
 
     public CameraNode(Unit unit) {
-        super(NAME, unit);
+        super(CameraNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, CameraNode.class, this);
     }
 

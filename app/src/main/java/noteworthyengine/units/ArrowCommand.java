@@ -2,11 +2,12 @@ package noteworthyengine.units;
 
 import android.graphics.Color;
 
+import art.Constants;
 import noteworthyengine.DecayNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
-import noteworthyframework.Gamer;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import utils.VoidFunc;
@@ -22,6 +23,7 @@ public class ArrowCommand extends Unit {
     //public static final float HEIGHT = 3f;
 
     public static final String ANIMATION_FIELD_ARROW_EXISTING = "Animations/FieldArrows/Existing";
+    public static final int RENDER_ALPHA = 128;
 
     FieldNode fieldNode;
     DecayNode decayNode;
@@ -34,7 +36,6 @@ public class ArrowCommand extends Unit {
         fieldNode._fieldArrowNode = new FieldNode.FieldArrowNode(this);
 
         decayNode = new DecayNode(this);
-        decayNode.timeToLive.v = 10;
 
         renderNode = new RenderNode(this);
         renderNode.animationName.v = ANIMATION_FIELD_ARROW_EXISTING;
@@ -42,19 +43,32 @@ public class ArrowCommand extends Unit {
         renderNode.width.v = (float)fieldNode._fieldArrowNode.fieldArrowInfluenceRadius.v;
         renderNode.height.v = (float)fieldNode._fieldArrowNode.fieldArrowInfluenceRadius.v;
         renderNode.onDraw = onDraw;
+
+        reset();
     }
 
-    public void set(Gamer gamer, double x, double y, double rx, double ry) {
-        this.fieldNode.gamer.v = gamer;
+    public void reset() {
+        decayNode.timeToLive.v = 7;
+    }
+
+    public void set(PlayerUnit playerUnit, double x, double y, double rx, double ry) {
+        reset();
+        this.fieldNode.playerUnitPtr.v = playerUnit;
         this.fieldNode._fieldArrowNode.coords.pos.set(x, y);
         this.fieldNode._fieldArrowNode.coords.rot.setDirection(rx, ry);
-        this.renderNode.color.v = Gamer.TeamColors.get(gamer.team);
+
+        int color = Constants.colorForTeam(playerUnit.playerNode.playerData.team);
+
+        this.renderNode.color.v = Color.argb(RENDER_ALPHA,
+                Color.red(color),
+                Color.green(color),
+                Color.blue(color));
     }
 
     public VoidFunc<RenderSystem> onDraw = new VoidFunc<RenderSystem>() {
         @Override
         public void apply(RenderSystem element) {
-            renderNode.color.v = Gamer.TeamColors.get(fieldNode.gamer.v.team);
+            //renderNode.color.v = Gamer.TeamColors.get(fieldNode.gamer.v.team);
         }
     };
 }

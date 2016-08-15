@@ -33,8 +33,8 @@ public class TimelineSystem extends noteworthyframework.System {
             if (timelineNode.frameTime.v <= ct) {
                 if (timelineNode.type.v == TimelineNode.ADD_NODE) {
                     ArrowCommand arrowCommand = new ArrowCommand();
-                    if (timelineNode.gamerPtr.v != null) {
-                        arrowCommand.set(timelineNode.gamerPtr.v,
+                    if (timelineNode.playerUnitPtr.v != null) {
+                        arrowCommand.set(timelineNode.playerUnitPtr.v,
                                 timelineNode.coords.pos.x, timelineNode.coords.pos.y,
                                 timelineNode.coords.rot.x, timelineNode.coords.rot.y);
                         this.getBaseEngine().addUnit(arrowCommand);

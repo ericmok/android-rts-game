@@ -26,6 +26,7 @@ public class GameGLSurfaceView extends GLSurfaceView {
 		gestureDetector = new GestureDetector(this.getContext(), game.gameInput);
 		scaleGestureDetector = new ScaleGestureDetector(this.getContext(), game.gameInput);
 
+		this.setPreserveEGLContextOnPause(true);
 		this.setEGLContextClientVersion(2);
 	}
 	

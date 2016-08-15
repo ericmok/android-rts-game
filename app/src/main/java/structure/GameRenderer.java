@@ -263,7 +263,8 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 		while (textDrawItems.canIterateNext()) {
 			TextDrawItem textDrawItem = textDrawItems.getNextIteratorItem();
-			float accumulator = 0;
+			double accumulator = 0;
+
 			for (int i = 0; i < textDrawItem.stringBuilder.length(); i++) {
 				Character characterToDraw = textDrawItem.stringBuilder.charAt(i);
 				TextureLoader.LetterTexture texture = game.graphics.getTextureLoader().letterTextures.get(characterToDraw);
@@ -271,15 +272,22 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 				simpleSpriteBatch
 						//.setTextureParams(texture.texture.glHandle, 0, 0, 1, 1)
 						.setTextureParams(texture.texture.glHandle)
-						.setQuadParams(cameras.get(0).getViewProjectionMatrix(),
-								(float) (accumulator + textDrawItem.position.x), (float) textDrawItem.position.y,
+						.setQuadParams(cameras.get(textDrawItem.cameraIndex).getViewProjectionMatrix(),
+								(float) (accumulator * textDrawItem.textDirection.x + textDrawItem.position.x),
+								(float) (accumulator * textDrawItem.textDirection.y + textDrawItem.position.y),
 								0,
-								textDrawItem.angle,
+								(float) textDrawItem.textDirection.getDegrees(),
+								//textDrawItem.angle,
 								textDrawItem.height * texture.widthRatio, textDrawItem.height,
+								//textDrawItem.height, textDrawItem.height,
+								//(float) (textDrawItem.height + (texture.widthRatio * textDrawItem.height) * textDrawItem.textDirection.x),
+								//(float) (textDrawItem.height + (texture.widthRatio * textDrawItem.height) * textDrawItem.textDirection.y),
 								textDrawItem.color)
 						.draw2d();
 
-				accumulator += texture.widthRatio * 0.1f;
+				//accumulator += texture.widthRatio * 0.1f;
+				accumulator += texture.widthRatio * textDrawItem.height;
+				//accumulator += textDrawItem.height;
 			}
 		}
 	}
@@ -328,7 +336,9 @@ public class GameRenderer implements GLSurfaceView.Renderer  {
 
 			drawRegularSprites(simpleSpriteBatch);
 			drawTemporarySprites(simpleSpriteBatch);
-			drawText(simpleSpriteBatch);
+
+			// TODO: Fix performance issues for drawing text!
+			//drawText(simpleSpriteBatch);
 
 			simpleSpriteBatch.endDrawing();
 

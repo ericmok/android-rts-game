@@ -5,11 +5,14 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import noteworthyengine.CityWinLoseConditionSystem;
+import noteworthyengine.NoteworthyEngine;
 import noteworthyengine.events.GameEvents;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.units.Barracks;
 import noteworthyengine.units.Cannon;
 import noteworthyengine.units.CannonFactory;
 import noteworthyengine.units.DefeatUnit;
+import noteworthyengine.units.FactoryCounterGUI;
 import noteworthyengine.units.Mech;
 import noteworthyengine.units.MechFactory;
 import noteworthyengine.units.Mine;
@@ -20,7 +23,6 @@ import noteworthyengine.units.UnitPool;
 import noteworthyengine.units.WinUnit;
 import noteworthyframework.BaseEngine;
 import noteworthyframework.EngineDataLoader;
-import noteworthyframework.Gamer;
 import structure.Game;
 import utils.Orientation;
 import utils.Vector2;
@@ -28,7 +30,7 @@ import utils.Vector2;
 /**
  * Created by eric on 4/27/15.
  */
-public class LevelTwo implements EngineDataLoader {
+public class LevelTwo {
 
     private Game game;
 
@@ -36,7 +38,7 @@ public class LevelTwo implements EngineDataLoader {
         this.game = game;
     }
 
-    public void spawnBase0(BaseEngine baseEngine, Gamer gamer, Vector2 location) {
+    public void spawnBase0(BaseEngine baseEngine, PlayerUnit playerUnit, Vector2 location) {
 
         Vector2 rot = new Vector2();
         rot.copy(location);
@@ -48,13 +50,13 @@ public class LevelTwo implements EngineDataLoader {
         Orientation.getPerpendicular(perp, rot);
 
         Barracks barracks = UnitPool.barracks.fetchMemory(); //new City(gamer);
-        barracks.configure(gamer);
+        barracks.configure(playerUnit);
         barracks.battleNode.coords.pos.copy(location);
         barracks.battleNode.coords.pos.translate(-1, 0);
         baseEngine.addUnit(barracks);
 
         barracks = UnitPool.barracks.fetchMemory(); //new City(gamer);
-        barracks.configure(gamer);
+        barracks.configure(playerUnit);
         barracks.battleNode.coords.pos.copy(location);
         barracks.battleNode.coords.pos.translate(1, 0);
         baseEngine.addUnit(barracks);
@@ -63,7 +65,7 @@ public class LevelTwo implements EngineDataLoader {
         for (int h = 0; h <= 2; h++) {
             for (int i = -6; i <= 6; i++) {
                 Platoon platoon = UnitPool.platoons.fetchMemory(); //new Platoon();
-                platoon.configure(gamer);
+                platoon.configure(playerUnit);
                 platoon.battleNode.coords.pos.copy(location);
                 platoon.battleNode.coords.pos.translate((i) * perp.x + h * rot.x, (i) * perp.y + h * rot.y);
                 //platoon.battleNode.gamer.v = gamer;
@@ -80,7 +82,7 @@ public class LevelTwo implements EngineDataLoader {
 //        }
     }
 
-    public void spawnBase1(BaseEngine baseEngine, Gamer gamer, Vector2 location) {
+    public void spawnBase1(BaseEngine baseEngine, PlayerUnit gamer, Vector2 location) {
 
         Vector2 rot = new Vector2();
         rot.copy(location);
@@ -127,42 +129,42 @@ public class LevelTwo implements EngineDataLoader {
 
     }
 
-    @Override
-    public boolean loadFromJson(final BaseEngine baseEngine, String json) throws JSONException {
+    public boolean loadFromJson(final NoteworthyEngine noteworthyEngine, String json) throws JSONException {
 
-        baseEngine.addSystem(new CityWinLoseConditionSystem(game));
+        noteworthyEngine.addSystem(new CityWinLoseConditionSystem(game, noteworthyEngine.playerSystem));
 
-        baseEngine.gameTime = 0;
+        noteworthyEngine.gameTime = 0;
 
-        Gamer gamer0 = new Gamer("taco");
-        gamer0.team = 0;
+        PlayerUnit gamer0 = new PlayerUnit("taco", 0);
+        PlayerUnit gamer1 = new PlayerUnit("avilo", 1);
 
-        Gamer gamer1 = new Gamer("avilo");
-        gamer1.team = 1;
+        noteworthyEngine.addUnit(gamer0);
+        noteworthyEngine.addUnit(gamer1);
 
-        baseEngine.gamers.add(gamer0);
-        baseEngine.gamers.add(gamer1);
+        noteworthyEngine.playerSystem.setCurrentPlayer(gamer0);
 
-        baseEngine.currentGamer = gamer0;
-
-        spawnBase0(baseEngine, gamer0, new Vector2(0, -9));
+        spawnBase0(noteworthyEngine, gamer0, new Vector2(0, -9));
         //spawnBase1(baseEngine, gamer0, new Vector2(0, -9));
-        spawnBase1(baseEngine, gamer1, new Vector2(0, 9));
+        spawnBase1(noteworthyEngine, gamer1, new Vector2(0, 9));
 
-        baseEngine.addEventListener(new BaseEngine.EventListener() {
+        FactoryCounterGUI factoryCounterGUI = new FactoryCounterGUI();
+        factoryCounterGUI.configure(gamer0);
+        noteworthyEngine.addUnit(factoryCounterGUI);
+
+        noteworthyEngine.addEventListener(new BaseEngine.EventListener() {
             @Override
             public void onEvent(int event) {
                 if (event == GameEvents.WIN) {
                     WinUnit winUnit = new WinUnit();
-                    baseEngine.addUnit(winUnit);
+                    noteworthyEngine.addUnit(winUnit);
                 } else if (event == GameEvents.LOSE) {
                     DefeatUnit defeatUnit = new DefeatUnit();
-                    baseEngine.addUnit(defeatUnit);
+                    noteworthyEngine.addUnit(defeatUnit);
                 }
             }
         });
 
-        baseEngine.flushQueues();
+        noteworthyEngine.flushQueues();
 
         return true;
     }

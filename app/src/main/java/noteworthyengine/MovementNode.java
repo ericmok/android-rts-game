@@ -1,9 +1,11 @@
 package noteworthyengine;
 
+import noteworthyengine.battle.BattleNode;
 import noteworthyframework.Coords;
-import utils.DoublePtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.DoublePtr;
+import utils.IntegerPtr;
 import utils.JsonSerializable;
 import utils.Vector2;
 
@@ -23,12 +25,15 @@ public class MovementNode extends Node implements JsonSerializable {
     public Vector2 velocity;
     public Vector2 acceleration;
 
+    public Vector2 destination;
     public Vector2 fieldForce;
     public Vector2 formationForce;
     public Vector2 separationForce;
     public Vector2 enemyAttractionForce;
 
     public BattleNode.Ptr target;
+
+    public IntegerPtr hasDestination = new IntegerPtr() {{ v = 0; }};
 
     public DoublePtr turnFactor = new DoublePtr() {{ v = 0.4; }};
 
@@ -37,13 +42,20 @@ public class MovementNode extends Node implements JsonSerializable {
     //public double crowdSpeed = 1;
 
     public MovementNode(Unit unit) {
-        super(_NAME, unit);
+        super(MovementNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, MovementNode.class, this);
     }
 
     public MovementNode(String name, Unit unit) {
-        super(name, unit);
+        super(MovementNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, MovementNode.class, this);
+    }
+
+    public void reset() {
+        this._enabled = true;
+        this.velocity.zero();
+        this.acceleration.zero();
+        this.hasDestination.v = 0;
     }
 
     public String json() {

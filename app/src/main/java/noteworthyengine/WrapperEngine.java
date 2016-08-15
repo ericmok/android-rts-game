@@ -8,6 +8,7 @@ import art.Animations;
 import noteworthyengine.events.GameEvents;
 import noteworthyengine.levels.LevelOne;
 import noteworthyengine.levels.LevelTwo;
+import noteworthyengine.levels.ZugLevel;
 import noteworthyengine.units.ButtonUnit;
 import noteworthyengine.units.CameraUnit;
 import noteworthyframework.BaseEngine;
@@ -73,9 +74,9 @@ public class WrapperEngine extends BaseEngine {
         };
         buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
         //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
-        buttonUnit.renderNode.coords.pos.set(0, 0);
+        buttonUnit.renderNode.coords.pos.set(-1, 0);
         buttonUnit.renderNode.coords.rot.setDegrees(0);
-        buttonUnit.renderNode.width.v = 1f;
+        buttonUnit.renderNode.width.v = 0.9f;
         buttonUnit.renderNode.height.v = 0.5f;
         buttonUnit.renderNode.color.v = Color.WHITE;
         loaderUIEngine.addUnit(buttonUnit);
@@ -99,9 +100,34 @@ public class WrapperEngine extends BaseEngine {
         };
         buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
         //buttonUnit.renderNode.coords.pos.set(-0.85, 0);
-        buttonUnit.renderNode.coords.pos.set(0, -0.5);
+        buttonUnit.renderNode.coords.pos.set(-1, -0.5);
         buttonUnit.renderNode.coords.rot.setDegrees(0);
-        buttonUnit.renderNode.width.v = 1f;
+        buttonUnit.renderNode.width.v = 0.9f;
+        buttonUnit.renderNode.height.v = 0.5f;
+        buttonUnit.renderNode.color.v = Color.WHITE;
+        loaderUIEngine.addUnit(buttonUnit);
+
+        buttonUnit = new ButtonUnit() {
+            @Override
+            public void onTap() {
+
+                noteworthyEngine.initialize();
+
+                try {
+                    ZugLevel level = new ZugLevel(game);
+                    level.loadFromJson(noteworthyEngine, "");
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                state = State.IN_GAME;
+            }
+        };
+        buttonUnit.renderNode.animationName.v = Animations.ANIMATION_BUTTONS_PLAY;
+        buttonUnit.renderNode.coords.pos.set(-1, 0.6);
+        buttonUnit.renderNode.coords.rot.setDegrees(0);
+        buttonUnit.renderNode.width.v = 0.9f;
         buttonUnit.renderNode.height.v = 0.5f;
         buttonUnit.renderNode.color.v = Color.WHITE;
         loaderUIEngine.addUnit(buttonUnit);

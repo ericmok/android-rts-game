@@ -2,15 +2,13 @@ package noteworthyengine;
 
 import java.util.ArrayList;
 
+import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Coords;
-import noteworthyframework.GamerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.DoublePtr;
 import utils.IntegerPtr;
-import utils.Orientation;
 import utils.Vector2;
-import utils.VoidFunc;
 
 /**
  * Created by eric on 3/13/15.
@@ -19,7 +17,7 @@ public class FormationNode extends Node {
 
     public static final String NAME = "formationNode";
 
-    public GamerPtr gamer;
+    public PlayerUnitPtr playerUnitPtr;
 
     public Coords coords;
     public Vector2 formationForce;
@@ -28,7 +26,7 @@ public class FormationNode extends Node {
     public ArrayList<Vector2> openPositions = new ArrayList<Vector2>(8);
 
     public FormationNode(Unit unit) {
-        super(NAME, unit);
+        super(FormationNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, FormationNode.class, this);
     }
 
@@ -52,7 +50,7 @@ public class FormationNode extends Node {
 
         public static Vector2 temp = new Vector2();
 
-        public GamerPtr gamer;
+        public PlayerUnitPtr playerUnitPtr;
         public Coords coords;
         public IntegerPtr gridX;
         public IntegerPtr gridY;
@@ -99,7 +97,7 @@ public class FormationNode extends Node {
         }
 
         public FormationLeader(Unit unit) {
-            super(NAME, unit);
+            super(FormationLeader.class, unit);
             Node.instantiatePublicFieldsForUnit(unit, FormationLeader.class, this);
         }
 
@@ -111,7 +109,7 @@ public class FormationNode extends Node {
     public static class FormationSheep extends Node {
         public static final String NAME = "formationSheep";
 
-        public GamerPtr gamer;
+        public PlayerUnitPtr playerUnitPtr;
         public Coords coords;
         public IntegerPtr gridX;
         public IntegerPtr gridY;
@@ -129,7 +127,7 @@ public class FormationNode extends Node {
         }
 
         public FormationSheep(Unit unit) {
-            super(NAME, unit);
+            super(FormationSheep.class, unit);
             Node.instantiatePublicFieldsForUnit(unit, FormationSheep.class, this);
         }
 

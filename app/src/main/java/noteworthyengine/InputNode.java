@@ -2,7 +2,6 @@ package noteworthyengine;
 
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
-import structure.GameCamera;
 import utils.IntegerPtr;
 import utils.Vector2;
 
@@ -27,7 +26,7 @@ public class InputNode extends Node {
     }
 
     public InputNode(Unit unit) {
-        super(NAME, unit);
+        super(InputNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, InputNode.class, this);
     }
 }

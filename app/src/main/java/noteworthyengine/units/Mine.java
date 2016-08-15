@@ -1,16 +1,16 @@
 package noteworthyengine.units;
 
-import android.graphics.Color;
-
 import art.Animations;
-import noteworthyengine.BattleNode;
-import noteworthyengine.BattleSystem;
+import art.Constants;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
-import noteworthyframework.Gamer;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.SuicidalAOEAttackBattleEffect;
+import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
 import structure.Sprite2dDef;
@@ -38,7 +38,11 @@ public class Mine extends Unit {
     public Mine() {
         this.name = NAME;
 
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
+
         gridNode = new GridNode(this, separationNode, battleNode);
+        // TODO: Add a different BattleEffect that isn't suicidal
+        battleNode.battleEffects.add(new SuicidalAOEAttackBattleEffect());
 
         renderNode.onDraw = new VoidFunc<RenderSystem>() {
             @Override
@@ -53,9 +57,9 @@ public class Mine extends Unit {
                     system.endNewTempSprite(tempSprite, 0);
                 }
 
-                if (battleNode.attackState.v == BattleNode.ATTACK_STATE_SWINGING) {
-                    float ratio = (float)(battleNode.attackProgress.v / battleNode.attackSwingTime.v);
-                    float rad = (float)(battleNode.attackRange.v * ratio);
+                if (battleNode.battleState.v == BattleNode.BATTLE_STATE_SWINGING) {
+                    float ratio = (float)(battleNode.battleProgress.v / battleNode.battleAttack.swingTime);
+                    float rad = (float)(battleNode.battleAttack.range * ratio);
 
                     Sprite2dDef sprite2dDef = system.defineNewSprite(Animations.ANIMATION_MINE_EXPLODING,
                             (int) (ratio * 100),
@@ -93,37 +97,37 @@ public class Mine extends Unit {
             this.lockOnAttack.v = 0;
             this.fractionToWalkIntoAttackRange.v = 0.2;
             this.targetAcquisitionRange.v = 8;
-            this.attackRange.v = 1.9;
-            this.attackDamage.v = 50;
-            this.attackSwingTime.v = 1.5;
-            this.attackCooldown.v = 3;
-            this.startingHp.v = 400;
-            this.hp.v = 400;
+            this.battleAttack.range = 1.9;
+            this.battleAttack.amount = 50;
+            this.battleAttack.swingTime = 1.5;
+            this.battleAttack.cooldownTime = 3;
+            this.startingHp.v = 200;
+            this.hp.v = 200;
             this.isAttackable.v = 1;
-            this.attackState.v = BattleNode.ATTACK_STATE_READY;
             this.target.v = null;
 
         }
 
-        @Override
-        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
-            super.onAttackCast(battleSystem, target);
-            battleSystem.findAttackablesWithinRange(mine.battleTargets, mine.battleNode, mine.battleNode.attackRange.v, BattleSystem.DEFAULT_TARGET_CRITERIA);
-
-            for (int j = mine.battleTargets.size() - 1; j >= 0; j--) {
-                BattleNode toInflict = mine.battleTargets.get(j).v;
-                toInflict.inflictDamage(battleSystem, this, this.attackDamage.v);
-            }
-        }
+//        @Override
+//        public void onAttackCast(BattleSystem battleSystem, BattleNode target) {
+//            ArrayList<QuadTreeSystem.QuadTreeNode> battleTargets = battleSystem.findBattleNodesWithinRange(mine.battleNode, mine.battleNode.battleAttack.range, BattleSystem.DEFAULT_TARGET_CRITERIA);
+//
+//            for (int j = battleTargets.size() - 1; j >= 0; j--) {
+//                BattleNode toInflict = (BattleNode)battleTargets.get(j).unit.node(BattleNode._NAME);
+//                toInflict.onAttacked(battleSystem, this, this.battleAttack.amount);
+//            }
+//        }
     }
 
-    public void configure(Gamer gamer) {
-        movementNode.maxSpeed.v = 0.9;
-
-        battleNode.gamer.v = gamer;
+    public void configure(PlayerUnit playerUnit) {
+        movementNode.reset();
         battleNode.reset();
 
-        renderNode.color.v = Gamer.TeamColors.get(gamer.team) & 0xaaffffff;
+        movementNode.maxSpeed.v = 0.9;
+
+        battleNode.playerUnitPtr.v = playerUnit;
+
+        renderNode.color.v = Constants.colorForTeam(playerUnit.playerNode.playerData.team) & 0xaaffffff;
         renderNode.animationName.v = Animations.ANIMATION_MINE_IDLING;
         renderNode.isGfxInterpolated.v = 0;
         renderNode.width.v = 0.95f;

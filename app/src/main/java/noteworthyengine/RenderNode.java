@@ -3,11 +3,11 @@ package noteworthyengine;
 import android.graphics.Color;
 
 import noteworthyframework.Coords;
+import noteworthyframework.Node;
+import noteworthyframework.Unit;
 import utils.DoublePtr;
 import utils.FloatPtr;
 import utils.IntegerPtr;
-import noteworthyframework.Node;
-import noteworthyframework.Unit;
 import utils.StringPtr;
 import utils.Vector2;
 import utils.VoidFunc;
@@ -52,12 +52,12 @@ public class RenderNode extends Node {
     public VoidFunc<RenderSystem> onDraw = _DO_NOTHING;
 
     public RenderNode(Unit unit) {
-        super(_NAME, unit);
+        super(RenderNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, RenderNode.class, this);
     }
 
     public RenderNode(String name, Unit unit) {
-        super(name, unit);
+        super(RenderNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, RenderNode.class, this);
     }
 

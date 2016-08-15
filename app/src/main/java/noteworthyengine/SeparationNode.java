@@ -1,9 +1,9 @@
 package noteworthyengine;
 
 import noteworthyframework.Coords;
-import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.IntegerPtr;
 import utils.Vector2;
 
 /**
@@ -20,7 +20,7 @@ public class SeparationNode extends Node {
     public IntegerPtr gridY;
 
     public SeparationNode(Unit unit) {
-        super(NAME, unit);
+        super(SeparationNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, SeparationNode.class, this);
     }
 }

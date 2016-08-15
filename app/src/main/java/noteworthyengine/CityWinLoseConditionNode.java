@@ -1,6 +1,6 @@
 package noteworthyengine;
 
-import noteworthyframework.GamerPtr;
+import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 
@@ -11,10 +11,10 @@ public class CityWinLoseConditionNode extends Node {
 
     public static final String NAME = "cityWinLoseConditionNode";
 
-    public GamerPtr gamer;
+    public PlayerUnitPtr playerUnitPtr;
 
     public CityWinLoseConditionNode(Unit unit) {
-        super(NAME, unit);
+        super(CityWinLoseConditionNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, CityWinLoseConditionNode.class, this);
     }
 
