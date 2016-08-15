@@ -72,7 +72,7 @@ public class QuadTreeSystem extends System {
         public QTree.QTreeNode qTreeNode;
 
         public QuadTreeNode(Unit unit) {
-            super(QuadTreeNode.class.getSimpleName(), unit);
+            super(QuadTreeNode.class, unit);
             Node.instantiatePublicFieldsForUnit(unit, QuadTreeNode.class, this);
         }
 

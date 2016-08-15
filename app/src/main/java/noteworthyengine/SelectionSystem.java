@@ -1,15 +1,14 @@
 package noteworthyengine;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import noteworthyengine.players.PlayerSystem;
-import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.units.SelectionTap;
-import noteworthyframework.*;
+import noteworthyframework.Node;
+import noteworthyframework.QueueMutationList;
 import structure.Game;
 import utils.Vector2;
 
@@ -94,7 +93,7 @@ public class SelectionSystem extends noteworthyframework.System {
 
             if (quadTreeNode.coords.pos.distanceTo(temp) < TOUCH_RADIUS) {
 
-                SelectionNode selectionNode = (SelectionNode)quadTreeNode.unit.node("selectionNode");
+                SelectionNode selectionNode = (SelectionNode) quadTreeNode.unit.getNode(SelectionNode.class);
                 if (selectionNode != null && selectionNode.playerUnitPtr.v == playerSystem.getCurrentPlayer()) {
                     tempSelectionNodes.add(selectionNode);
                 }
@@ -144,7 +143,7 @@ public class SelectionSystem extends noteworthyframework.System {
 
             if (selectionNode.isSelected.v == 1) {
                 //selectionNode.isSelected.v = 0;
-                MovementNode movementNode = (MovementNode) selectionNode.unit.node(MovementNode._NAME);
+                MovementNode movementNode = (MovementNode) selectionNode.unit.getNode(MovementNode.class);
 
                 game.gameInput.getCoordsCenteredAndNormalized(temp, mocap.getX(), mocap.getY());
                 NoteworthyEngine noteworthyEngine = (NoteworthyEngine) this.getBaseEngine();

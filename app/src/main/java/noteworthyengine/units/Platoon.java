@@ -4,26 +4,26 @@ import android.graphics.Color;
 
 import art.Animations;
 import art.Constants;
-import noteworthyengine.QuadTreeSystem;
-import noteworthyengine.battle.BasicAttackEffect;
-import noteworthyengine.battle.BattleBalance;
-import noteworthyengine.battle.BattleNode;
-import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.FieldNode;
 import noteworthyengine.FormationNode;
-import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
+import noteworthyengine.battle.BasicAttackEffect;
+import noteworthyengine.battle.BattleBalance;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.players.PlayerUnit;
-//import noteworthyframework.Gamer;
 import noteworthyframework.Unit;
 import structure.Sprite2dDef;
 import structure.TemporarySprite2dDef;
 import utils.Orientation;
 import utils.VoidFunc;
+
+//import noteworthyframework.Gamer;
 
 /**
  * Created by eric on 3/7/15.
@@ -51,7 +51,7 @@ public class Platoon extends Unit {
     public Platoon() {
         this.name = NAME;
 
-        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
 
         movementNode = new MovementNode(this);
 

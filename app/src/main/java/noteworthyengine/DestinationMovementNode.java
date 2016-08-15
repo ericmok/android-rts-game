@@ -4,7 +4,6 @@ import noteworthyframework.Coords;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.DoublePtr;
-import utils.IntegerPtr;
 import utils.Vector2;
 import utils.VoidFunc;
 
@@ -29,7 +28,7 @@ public class DestinationMovementNode extends Node {
     public VoidFunc<DestinationMovementSystem> onDestinationReached = null;
 
     public DestinationMovementNode(Unit unit) {
-        super(_NAME, unit);
+        super(DestinationMovementNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, DestinationMovementNode.class, this);
     }
 }

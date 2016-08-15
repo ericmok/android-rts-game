@@ -3,7 +3,6 @@ package noteworthyengine;
 import noteworthyframework.Coords;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
-import structure.GameCamera;
 import utils.DoublePtr;
 import utils.FloatPtr;
 
@@ -22,7 +21,7 @@ public class FieldCameraNode extends Node {
     public float _originalCameraScale = 1;
 
     public FieldCameraNode(Unit unit, float scale, float zoomScale) {
-        super(NAME, unit);
+        super(FieldCameraNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, FieldCameraNode.class, this);
 
         this._originalCameraScale = scale;

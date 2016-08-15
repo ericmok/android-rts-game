@@ -3,10 +3,11 @@ package noteworthyengine;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Coords;
-//import noteworthyframework.GamerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
 import utils.IntegerPtr;
+
+//import noteworthyframework.GamerPtr;
 
 /**
  * Created by eric on 10/15/15.
@@ -24,7 +25,7 @@ public class SelectionNode extends Node {
     }};
 
     public SelectionNode(Unit unit) {
-        super("selectionNode", unit);
+        super(SelectionNode.class, unit);
         this._name = "selectionNode";
         Node.instantiatePublicFieldsForUnit(unit, SelectionNode.class, this);
     }

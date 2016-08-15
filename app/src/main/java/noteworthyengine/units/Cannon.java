@@ -2,16 +2,16 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
-import noteworthyengine.QuadTreeSystem;
-import noteworthyengine.battle.BattleEffect;
-import noteworthyengine.battle.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SelectionNode;
 import noteworthyengine.SeparationNode;
+import noteworthyengine.battle.BattleEffect;
+import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
@@ -41,7 +41,7 @@ public class Cannon extends Unit {
     public Cannon() {
         this.name = this.getClass().getSimpleName();
 
-        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
 
         this.battleNode.battleEffects.add(new MissileAttackEffect(this.battleNode));
         this.renderNode.onDraw = new VoidFunc<RenderSystem>() {

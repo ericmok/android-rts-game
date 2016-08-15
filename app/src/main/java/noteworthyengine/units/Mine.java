@@ -1,17 +1,14 @@
 package noteworthyengine.units;
 
-import java.util.ArrayList;
-
 import art.Animations;
 import art.Constants;
-import noteworthyengine.QuadTreeSystem;
-import noteworthyengine.battle.BattleNode;
-import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
+import noteworthyengine.battle.BattleNode;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
@@ -40,7 +37,7 @@ public class Mine extends Unit {
     public Mine() {
         this.name = NAME;
 
-        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
 
         gridNode = new GridNode(this, separationNode, battleNode);
         // TODO: Add a different BattleEffect that isn't suicidal

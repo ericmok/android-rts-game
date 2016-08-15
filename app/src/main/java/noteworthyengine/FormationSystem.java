@@ -3,7 +3,8 @@ package noteworthyengine;
 import java.util.List;
 
 import noteworthyengine.players.PlayerUnit;
-import noteworthyframework.*;
+import noteworthyframework.Node;
+import noteworthyframework.QueueMutationList;
 import utils.QueueMutationHashedList;
 import utils.Vector2;
 
@@ -77,7 +78,7 @@ public class FormationSystem extends noteworthyframework.System {
             for (int i = gridNodeList.size() - 1; i >= 0; i--) {
                 GridNode gridNode = gridNodeList.get(i);
 
-                FormationNode.FormationSheep sheep = (FormationNode.FormationSheep)gridNode.unit.node(FormationNode.FormationSheep.NAME);
+                FormationNode.FormationSheep sheep = (FormationNode.FormationSheep) gridNode.unit.getNode(FormationNode.FormationSheep.class);
 
                 if (sheep == null) {
                     continue;

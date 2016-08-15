@@ -14,10 +14,10 @@ public abstract class Node {
     public Node() {
     }
 
-    public Node(String name, Unit unit) {
+    public Node(Class nodeClass, Unit unit) {
         this.unit = unit;
-        this._name = name;
-        unit.addNode(this._name, this);
+        //this._name = name;
+        unit.addNode(nodeClass, this);
     }
 
     private static boolean isPublishedField(java.lang.reflect.Field field) {

@@ -1,19 +1,16 @@
 package noteworthyengine.units;
 
 import art.Constants;
-import noteworthyengine.QuadTreeSystem;
-import noteworthyengine.battle.BattleEffect;
-import noteworthyengine.battle.BattleNode;
-import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.CityWinLoseConditionNode;
 import noteworthyengine.FactoryNode;
 import noteworthyengine.FactorySystem;
 import noteworthyengine.GridNode;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
-import noteworthyengine.battle.BattleTriggerHandler;
+import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.BattleSystem;
 import noteworthyengine.battle.ChangeOwnershipOnDeathBattleEffect;
-import noteworthyengine.battle.EmptyBattleEffect;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.TextDrawItem;
@@ -42,7 +39,7 @@ public class Barracks extends Unit implements ChangeOwnershipOnDeathBattleEffect
     public Barracks() {
         this.name = NAME;
 
-        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
         gridNode = new GridNode(this, null, battleNode);
 
         renderNode.onDraw = new VoidFunc<RenderSystem>() {

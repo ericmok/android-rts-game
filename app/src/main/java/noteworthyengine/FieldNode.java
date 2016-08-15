@@ -2,9 +2,9 @@ package noteworthyengine;
 
 import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Coords;
-import utils.DoublePtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.DoublePtr;
 import utils.Vector2;
 
 /**
@@ -21,12 +21,12 @@ public class FieldNode extends Node {
     public FieldAgentNode _fieldAgentNode;
 
     public FieldNode(Unit unit) {
-        super(_NAME, unit);
+        super(FieldNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, FieldNode.class, this);
     }
 
     public FieldNode(String name, Unit unit) {
-        super(name, unit);
+        super(FieldNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, FieldNode.class, this);
     }
 
@@ -56,12 +56,12 @@ public class FieldNode extends Node {
         public DoublePtr rampDistance = new DoublePtr() {{ v = fieldArrowInfluenceRadius.v * BLEED; }};
 
         public FieldArrowNode(Unit unit) {
-            super(_NAME, unit);
+            super(FieldArrowNode.class, unit);
             Node.instantiatePublicFieldsForUnit(unit, FieldArrowNode.class, this);
         }
 
         public FieldArrowNode(String name, Unit unit) {
-            super(name, unit);
+            super(FieldArrowNode.class, unit);
             Node.instantiatePublicFieldsForUnit(unit, FieldArrowNode.class, this);
         }
     }
@@ -77,12 +77,12 @@ public class FieldNode extends Node {
         public DoublePtr maxSpeed;
 
         public FieldAgentNode(Unit unit) {
-            super(_NAME, unit);
+            super(FieldAgentNode.class, unit);
             Node.instantiatePublicFieldsForUnit(unit, FieldAgentNode.class, this);
         }
 
         public FieldAgentNode(String name, Unit unit) {
-            super(name, unit);
+            super(FieldAgentNode.class, unit);
             Node.instantiatePublicFieldsForUnit(unit, FieldAgentNode.class, this);
         }
     }

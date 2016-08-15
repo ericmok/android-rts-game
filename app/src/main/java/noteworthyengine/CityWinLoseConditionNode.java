@@ -14,7 +14,7 @@ public class CityWinLoseConditionNode extends Node {
     public PlayerUnitPtr playerUnitPtr;
 
     public CityWinLoseConditionNode(Unit unit) {
-        super(NAME, unit);
+        super(CityWinLoseConditionNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, CityWinLoseConditionNode.class, this);
     }
 

@@ -12,7 +12,7 @@ public class PlayerNode extends Node {
     public PlayerData playerData = new PlayerData();
 
     public PlayerNode(Unit unit) {
-        super(_NAME, unit);
+        super(PlayerNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, PlayerNode.class, this);
     }
 

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Coords;
+import noteworthyframework.Node;
+import noteworthyframework.Unit;
 import structure.RewriteOnlyArray;
 import utils.BooleanFunc2;
 import utils.DoublePtr;
 import utils.IntegerPtr;
-import noteworthyframework.Node;
-import noteworthyframework.Unit;
 import utils.JsonSerializable;
 import utils.Vector2;
 import utils.VoidFunc3;
@@ -118,7 +118,7 @@ public class BattleNode extends Node implements BattleTriggerHandler, BattleBuff
     public ArrayList<BattleEffect> battleEffects = new ArrayList<>(1);
 
     public BattleNode(Unit unit) {
-        super(_NAME, unit);
+        super(BattleNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, BattleNode.class, this);
     }
 

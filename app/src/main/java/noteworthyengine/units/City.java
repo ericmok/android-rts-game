@@ -1,12 +1,12 @@
 package noteworthyengine.units;
 
 import art.Constants;
+import noteworthyengine.GridNode;
 import noteworthyengine.QuadTreeSystem;
+import noteworthyengine.RenderNode;
 import noteworthyengine.battle.BattleBalance;
 import noteworthyengine.battle.BattleNode;
 import noteworthyengine.battle.BattleSystem;
-import noteworthyengine.GridNode;
-import noteworthyengine.RenderNode;
 import noteworthyengine.battle.ChangeOwnershipOnDeathBattleEffect;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.BaseEngine;
@@ -31,7 +31,7 @@ public class City extends Unit implements ChangeOwnershipOnDeathBattleEffect.Spa
     public City() {
         this.name = NAME;
 
-        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
         gridNode = new GridNode(this, null, battleNode);
     }
 

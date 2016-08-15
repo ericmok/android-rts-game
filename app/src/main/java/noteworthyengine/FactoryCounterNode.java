@@ -15,6 +15,6 @@ public class FactoryCounterNode extends Node {
     public IntegerPtr numberFactories = new IntegerPtr() {{ v = 0; }};
 
     public FactoryCounterNode(Unit unit) {
-        super("factoryCounterNode", unit);
+        super(FactoryCounterNode.class, unit);
     }
 }

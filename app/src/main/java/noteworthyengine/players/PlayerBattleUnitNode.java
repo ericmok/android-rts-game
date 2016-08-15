@@ -10,7 +10,7 @@ public class PlayerBattleUnitNode extends Node {
     public static final String NAME = "PlayerBattleUnitNode";
 
     public PlayerBattleUnitNode(Unit unit) {
-        super(NAME, unit);
+        super(PlayerBattleUnitNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, PlayerBattleUnitNode.class, this);
     }
 }

@@ -2,9 +2,9 @@ package noteworthyengine;
 
 import noteworthyengine.battle.BattleNode;
 import noteworthyframework.Coords;
-import utils.DoublePtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.DoublePtr;
 import utils.IntegerPtr;
 import utils.JsonSerializable;
 import utils.Vector2;
@@ -42,12 +42,12 @@ public class MovementNode extends Node implements JsonSerializable {
     //public double crowdSpeed = 1;
 
     public MovementNode(Unit unit) {
-        super(_NAME, unit);
+        super(MovementNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, MovementNode.class, this);
     }
 
     public MovementNode(String name, Unit unit) {
-        super(name, unit);
+        super(MovementNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, MovementNode.class, this);
     }
 

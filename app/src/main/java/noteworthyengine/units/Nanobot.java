@@ -2,15 +2,15 @@ package noteworthyengine.units;
 
 import art.Animations;
 import art.Constants;
-import noteworthyengine.QuadTreeSystem;
-import noteworthyengine.battle.BasicAttackEffect;
-import noteworthyengine.battle.BattleNode;
 import noteworthyengine.FieldNode;
 import noteworthyengine.GridNode;
 import noteworthyengine.MovementNode;
+import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
+import noteworthyengine.battle.BasicAttackEffect;
+import noteworthyengine.battle.BattleNode;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import structure.TemporarySprite2dDef;
@@ -32,7 +32,7 @@ public class Nanobot extends Unit {
     public Nanobot() {
         this.name = this.getClass().getSimpleName();
 
-        this.addNode("QuadTreeNode created in constructor", new QuadTreeSystem.QuadTreeNode(this));
+        this.addNode(QuadTreeSystem.QuadTreeNode.class, new QuadTreeSystem.QuadTreeNode(this));
 
         movementNode = new MovementNode(this);
         separationNode = new SeparationNode(this);

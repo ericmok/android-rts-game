@@ -3,10 +3,10 @@ package noteworthyengine;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyengine.players.PlayerUnitPtr;
 import noteworthyframework.Coords;
-import utils.DoublePtr;;
-import utils.IntegerPtr;
 import noteworthyframework.Node;
 import noteworthyframework.Unit;
+import utils.DoublePtr;
+import utils.IntegerPtr;
 
 /**
  * Created by eric on 3/14/15.
@@ -23,7 +23,7 @@ public class TimelineNode extends Node {
     public IntegerPtr type;
 
     public TimelineNode(Unit unit) {
-        super(NAME, unit);
+        super(TimelineNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, TimelineNode.class, this);
     }
 
