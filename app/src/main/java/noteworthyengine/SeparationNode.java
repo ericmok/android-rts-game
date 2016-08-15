@@ -20,7 +20,7 @@ public class SeparationNode extends Node {
     public IntegerPtr gridY;
 
     public SeparationNode(Unit unit) {
-        super(SelectionNode.class, unit);
+        super(SeparationNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, SeparationNode.class, this);
     }
 }
