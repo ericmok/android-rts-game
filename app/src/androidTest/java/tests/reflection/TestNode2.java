@@ -14,7 +14,7 @@ public class TestNode2 extends Node {
     public IntegerPtr mixinVariable;
 
     public TestNode2(Unit unit) {
-        super("testNode2", unit);
+        super(TestNode2.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, TestNode2.class, this);
     }
 }

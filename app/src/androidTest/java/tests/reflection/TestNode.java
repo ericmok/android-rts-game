@@ -28,7 +28,7 @@ public class TestNode extends Node {
     };
 
     public TestNode(Unit unit) {
-        super("testNode", unit);
+        super(TestNode.class, unit);
         Node.instantiatePublicFieldsForUnit(unit, TestNode.class, this);
     }
 }
