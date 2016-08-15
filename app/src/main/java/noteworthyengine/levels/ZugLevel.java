@@ -10,12 +10,11 @@ import noteworthyengine.units.Barracks;
 import noteworthyengine.units.DefeatUnit;
 import noteworthyengine.units.FactoryCounterGUI;
 import noteworthyengine.units.Platoon;
+import noteworthyengine.units.PufferZug;
 import noteworthyengine.units.UnitPool;
 import noteworthyengine.units.WinUnit;
-import noteworthyengine.units.Zug;
 import noteworthyengine.units.ZugNest;
 import noteworthyframework.BaseEngine;
-import noteworthyframework.EngineDataLoader;
 import structure.Game;
 import utils.Orientation;
 import utils.Vector2;
@@ -89,13 +88,13 @@ public class ZugLevel {
         baseEngine.addUnit(zugNest);
 
         for (int i = -14; i < 14; i++) {
-            Zug zug = new Zug(); // new Cannon(gamer);;
+            PufferZug zug = new PufferZug(); // new Cannon(gamer);;
             zug.configure(playerUnit);
             zug.battleNode.coords.pos.copy(location);
             zug.battleNode.coords.pos.translate((i) * perp.x + 2.5 * rot.x, ((i)) * perp.y + 2.5 * rot.y);
             baseEngine.addUnit(zug);
 
-            zug = new Zug(); // new Cannon(gamer);;
+            zug = new PufferZug(); // new Cannon(gamer);;
             zug.configure(playerUnit);
             zug.battleNode.coords.pos.copy(location);
             zug.battleNode.coords.pos.translate(i * perp.x + 4 * rot.x, i * perp.y + 4 * rot.y);

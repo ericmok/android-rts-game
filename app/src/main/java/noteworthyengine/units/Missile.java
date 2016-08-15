@@ -12,6 +12,7 @@ import noteworthyengine.RenderNode;
 import noteworthyengine.RenderSystem;
 import noteworthyengine.SeparationNode;
 import noteworthyengine.battle.BattleNode;
+import noteworthyengine.battle.SuicidalAOEAttackBattleEffect;
 import noteworthyengine.players.PlayerUnit;
 import noteworthyframework.Unit;
 import utils.Vector2;

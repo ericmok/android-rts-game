@@ -1,12 +1,4 @@
-package noteworthyengine.units;
-
-import java.util.ArrayList;
-
-import noteworthyengine.QuadTreeSystem;
-import noteworthyengine.battle.BattleEffect;
-import noteworthyengine.battle.BattleNode;
-import noteworthyengine.battle.BattleSystem;
-import structure.RewriteOnlyArray;
+package noteworthyengine.battle;
 
 /**
  * Created by eric on 5/24/16.
