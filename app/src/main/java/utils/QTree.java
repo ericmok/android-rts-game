@@ -33,7 +33,6 @@ public class QTree<T extends QTree.Positionable> {
      * was visited before.
      */
     private int traversalId = 314;
-    private DistanceMeasurable<T> distanceMeasurable;
 
     public QTree(int maxCapacity, double width, byte numberItemsPerNode) {
         QTreeNodeMemoryPool = new MemoryPool<>(QTreeNode.class, maxCapacity);
@@ -43,21 +42,6 @@ public class QTree<T extends QTree.Positionable> {
 
         this.width = width;
         this.numberItemsPerNode = numberItemsPerNode;
-
-        useMeasure(SQUARED_EUCLIDEAN_DISTANCE);
-    }
-
-    /**
-     * Sets the measure for distance comparison between an item and a candidate item.
-     * This can be used to manipulate preferences for certain types of items of type T.
-     * If the measure returns INFINITE_DISTANCE, then the candidate is ignored.
-     *
-     * @param distanceMeasurable For example: QTree.SQUARED_EUCLIDEAN_DISTANCE (default)
-     * @return Returns the tree itself
-     */
-    public QTree<T> useMeasure(DistanceMeasurable distanceMeasurable) {
-        this.distanceMeasurable = distanceMeasurable;
-        return this;
     }
 
     public void add(T item) {
@@ -91,12 +75,25 @@ public class QTree<T extends QTree.Positionable> {
     }
 
     /**
-     * Find closest item that is not itself within the range
+     * Finds the closest item to the given item.
      *
      * @param item
      * @return
      */
     public T queryClosestTo(T item) {
+        return queryClosestTo(item, QTree.SQUARED_EUCLIDEAN_DISTANCE);
+    }
+
+    /**
+     * Find the closest item to the given item.
+     *
+     * @param item
+     * @param distanceMeasurable A filter that runs on the nodes that are within range to manipulate
+     *                           the final result that is considered best. This can be used to
+     *                           prioritize certain units over another for example.
+     * @return
+     */
+    public T queryClosestTo(T item, DistanceMeasurable distanceMeasurable) {
         int queryId = makeNewTraversalId();
 
         // The item might have been positioned right above a point that is even
@@ -107,7 +104,7 @@ public class QTree<T extends QTree.Positionable> {
         // TODO: Set all nodes to !isVisited or use a random number for isVisited
         bestCandidateToReturn.item = null;
         bestCandidateToReturn.sqDist = Double.MAX_VALUE;
-        return (T) queryClosestToRecursively(item, initial, bestCandidateToReturn, queryId).item;
+        return (T) queryClosestToRecursively(item, initial, bestCandidateToReturn, queryId, distanceMeasurable).item;
     }
 
     private boolean visitNodeTest(QTreeNode<T> node, double intersectX, double intersectY, double intersectWidth, int queryId) {
@@ -136,7 +133,7 @@ public class QTree<T extends QTree.Positionable> {
      *                         recursive calling session
      * @return Returns the mutated BestCandidate passed in
      */
-    private BestCandidate<T> queryClosestToRecursively(T item, QTreeNode<T> node, BestCandidate<T> bestCandidateOut, int queryId) {
+    private BestCandidate<T> queryClosestToRecursively(T item, QTreeNode<T> node, BestCandidate<T> bestCandidateOut, int queryId, DistanceMeasurable distanceMeasurable) {
 
         // Post order traversal
         node.isHalfVisited = queryId;
@@ -153,16 +150,16 @@ public class QTree<T extends QTree.Positionable> {
             // The bestCandidate is only written to if a better candidate is found
 
             if (visitNodeTest(node.northWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
-                queryClosestToRecursively(item, node.northWest, bestCandidateOut, queryId);
+                queryClosestToRecursively(item, node.northWest, bestCandidateOut, queryId, distanceMeasurable);
             }
             if (visitNodeTest(node.northEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
-                queryClosestToRecursively(item, node.northEast, bestCandidateOut, queryId);
+                queryClosestToRecursively(item, node.northEast, bestCandidateOut, queryId, distanceMeasurable);
             }
             if (visitNodeTest(node.southWest, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
-                queryClosestToRecursively(item, node.southWest, bestCandidateOut, queryId);
+                queryClosestToRecursively(item, node.southWest, bestCandidateOut, queryId, distanceMeasurable);
             }
             if (visitNodeTest(node.southEast, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)) {
-                queryClosestToRecursively(item, node.southEast, bestCandidateOut, queryId);
+                queryClosestToRecursively(item, node.southEast, bestCandidateOut, queryId, distanceMeasurable);
             }
         }
 
@@ -201,7 +198,7 @@ public class QTree<T extends QTree.Positionable> {
 
         if (visitNodeTest(node.parent, item.getPosition().x, item.getPosition().y, bestCandidateOut.sqDist, queryId)
                 && node.parent.isHalfVisited != queryId) {
-            queryClosestToRecursively(item, node.parent, bestCandidateOut, queryId);
+            queryClosestToRecursively(item, node.parent, bestCandidateOut, queryId, distanceMeasurable);
         }
 
         return bestCandidateOut; // Not needed since we mutate it anyway
@@ -219,7 +216,7 @@ public class QTree<T extends QTree.Positionable> {
      *
      * @param <T>
      */
-    public static interface DistanceMeasurable<T extends Positionable> {
+    public interface DistanceMeasurable<T extends Positionable> {
         /**
          * This can be used to manipulate preferences for certain types of items of type T.
          * If the measure returns INFINITE_DISTANCE, then the candidate is ignored.
@@ -228,7 +225,7 @@ public class QTree<T extends QTree.Positionable> {
          * @param candidateItem
          * @return
          */
-        public double distanceMeasure(T item, T candidateItem);
+        double distanceMeasure(T item, T candidateItem);
     }
 
     public static class EuclideanDistance implements DistanceMeasurable {
@@ -238,14 +235,14 @@ public class QTree<T extends QTree.Positionable> {
         }
     }
 
-    public static interface Positionable {
-        public Vector2 getPosition();
+    public interface Positionable {
+        Vector2 getPosition();
 
-        public Object getData();
+        Object getData();
 
-        public void setQTreeNode(QTreeNode qTreeNode);
+        void setQTreeNode(QTreeNode qTreeNode);
 
-        public QTreeNode getQTreeNode();
+        QTreeNode getQTreeNode();
     }
 
     public static class BestCandidate<T> implements Comparable<BestCandidate<T>> {
@@ -456,8 +453,7 @@ public class QTree<T extends QTree.Positionable> {
                 if (aLeft > bRight) return false;
                 if (bLeft > aRight) return false;
                 if (bBottom > aTop) return false;
-                if (aBottom > bTop) return false;
-                return true;
+                return aBottom <= bTop;
             }
         }
     }

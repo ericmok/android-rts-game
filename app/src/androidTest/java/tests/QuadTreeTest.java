@@ -206,7 +206,7 @@ public class QuadTreeTest extends TestCase {
         QTree<Item> qTree = new QTree<Item>(10, 200, (byte) 1);
 
         qTree.add(item);
-        Item initialTest = qTree.queryClosestTo(item);
+        Item initialTest = qTree.queryClosestTo(item, null);
         assertNull(initialTest);
 
         qTree = new QTree<Item>(10, 200, (byte) 1);
@@ -261,7 +261,7 @@ public class QuadTreeTest extends TestCase {
         assertEquals(item4, thirdResult);
     }
 
-    public void testUseMeasure() {
+    public void testCanQueryClosestToUsingDistanceMeasure() {
         Item item = new Item(2, 2);
         Item item2 = new Item(4, 4);
         Item item3 = new Item(8, 8);
@@ -285,9 +285,7 @@ public class QuadTreeTest extends TestCase {
             }
         };
 
-        qTree.useMeasure(biasedMeasure);
-
-        assertNotSame(item4, qTree.queryClosestTo(item5));
-        assertEquals(item3, qTree.queryClosestTo(item5));
+        assertNotSame(item4, qTree.queryClosestTo(item5, biasedMeasure));
+        assertEquals(item3, qTree.queryClosestTo(item5, biasedMeasure));
     }
 }

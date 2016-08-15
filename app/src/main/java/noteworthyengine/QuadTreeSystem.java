@@ -32,12 +32,12 @@ public class QuadTreeSystem extends System {
         }
     }
 
-    public void useMeasure(QTree.DistanceMeasurable distanceMeasurable) {
-        qTree.useMeasure(distanceMeasurable);
-    }
-
     public QuadTreeNode queryClosestTo(QuadTreeNode quadTreeNode) {
         return qTree.queryClosestTo(quadTreeNode);
+    }
+
+    public QuadTreeNode queryClosestTo(QuadTreeNode quadTreeNode, QTree.DistanceMeasurable distanceMeasurable) {
+        return qTree.queryClosestTo(quadTreeNode, distanceMeasurable);
     }
 
     public ArrayList<QuadTreeNode> queryRange(double x, double y, double range) {
@@ -50,9 +50,6 @@ public class QuadTreeSystem extends System {
 
     @Override
     public void step(double ct, double dt) {
-        // Important if other systems make use of the QTree and overwrite the metric.
-        qTree.useMeasure(QTree.SQUARED_EUCLIDEAN_DISTANCE);
-
         qTree.clear();
 
         for (int i = 0; i < nodes.size(); i++) {

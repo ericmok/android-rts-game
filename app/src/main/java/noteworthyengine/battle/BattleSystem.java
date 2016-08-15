@@ -115,8 +115,9 @@ public class BattleSystem extends noteworthyframework.System {
      */
     public double findClosestBatleNodeWithinRange(BattleNode.Ptr out, BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
 
-        quadTreeSystem.useMeasure(QTREE_BATTLE_DISTANCE_MEASURE);
-        QuadTreeSystem.QuadTreeNode quadTreeNode = quadTreeSystem.queryClosestTo((QuadTreeSystem.QuadTreeNode) battleNode.unit.getNode(QuadTreeSystem.QuadTreeNode.class));
+        QuadTreeSystem.QuadTreeNode quadTreeNode = quadTreeSystem.queryClosestTo(
+                (QuadTreeSystem.QuadTreeNode) battleNode.unit.getNode(QuadTreeSystem.QuadTreeNode.class),
+                QTREE_BATTLE_DISTANCE_MEASURE);
 
         if (quadTreeNode != null) {
             BattleNode closest = (BattleNode) quadTreeNode.unit.getNode(BattleNode.class);
@@ -129,7 +130,6 @@ public class BattleSystem extends noteworthyframework.System {
     }
 
     public void inflictSplashDamage(BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
-        quadTreeSystem.useMeasure(QTREE_BATTLE_DISTANCE_MEASURE);
         ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes =
                 quadTreeSystem.queryRange(battleNode.coords.pos.x,
                         battleNode.coords.pos.y, range);
@@ -148,7 +148,6 @@ public class BattleSystem extends noteworthyframework.System {
      * @return
      */
     public ArrayList<QuadTreeSystem.QuadTreeNode> xfindBattleNodesWithinRange(BattleNode battleNode, double range, BooleanFunc2<BattleNode, BattleNode> criteria) {
-        quadTreeSystem.useMeasure(QTREE_BATTLE_DISTANCE_MEASURE);
         ArrayList<QuadTreeSystem.QuadTreeNode> quadTreeNodes =
                 quadTreeSystem.queryRange(battleNode.coords.pos.x,
                         battleNode.coords.pos.y, range);
