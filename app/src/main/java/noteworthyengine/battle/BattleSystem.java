@@ -15,9 +15,14 @@ import utils.QTree;
  */
 public class BattleSystem extends noteworthyframework.System {
 
-    public static final QTree.DistanceMeasurable QTREE_BATTLE_DISTANCE_MEASURE = new QTree.DistanceMeasurable<QuadTreeSystem.QuadTreeNode>() {
+    public class BattleDistanceMeasureable implements QTree.DistanceMeasurable<QuadTreeSystem.QuadTreeNode> {
+        private BooleanFunc2<BattleNode, BattleNode> criteria;
 
-        @Override
+        public QTree.DistanceMeasurable setCriteria(BooleanFunc2<BattleNode, BattleNode> criteria) {
+            this.criteria = criteria;
+            return this;
+        }
+
         public double distanceMeasure(QuadTreeSystem.QuadTreeNode item, QuadTreeSystem.QuadTreeNode candidateItem) {
             BattleNode otherBattleNode = (BattleNode) candidateItem.unit.getNode(BattleNode.class);
             if (otherBattleNode == null) {
@@ -25,9 +30,10 @@ public class BattleSystem extends noteworthyframework.System {
             }
             BattleNode battleNode = (BattleNode) item.unit.getNode(BattleNode.class);
 
-            // TODO: Target criteria varies per unit class!
-            if (battleNode.playerUnitPtr.v == otherBattleNode.playerUnitPtr.v) {
-                return QTree.INFINITE_DISTANCE;
+            if (criteria != null) {
+                if (!criteria.apply(battleNode, otherBattleNode)) {
+                    return QTree.INFINITE_DISTANCE;
+                }
             }
 
             if (battleNodeShouldAttackOther(battleNode, otherBattleNode)) {
@@ -36,7 +42,9 @@ public class BattleSystem extends noteworthyframework.System {
                 return QTree.INFINITE_DISTANCE;
             }
         }
-    };
+    }
+
+    public BattleDistanceMeasureable battleDistanceMeasureable = new BattleDistanceMeasureable();
 
 
     public QueueMutationList<BattleNode> battleNodes = new QueueMutationList<BattleNode>(127);
@@ -117,7 +125,9 @@ public class BattleSystem extends noteworthyframework.System {
 
         QuadTreeSystem.QuadTreeNode quadTreeNode = quadTreeSystem.queryClosestTo(
                 (QuadTreeSystem.QuadTreeNode) battleNode.unit.getNode(QuadTreeSystem.QuadTreeNode.class),
-                QTREE_BATTLE_DISTANCE_MEASURE);
+                battleDistanceMeasureable.setCriteria(criteria));
+
+        battleDistanceMeasureable.setCriteria(null);
 
         if (quadTreeNode != null) {
             BattleNode closest = (BattleNode) quadTreeNode.unit.getNode(BattleNode.class);
