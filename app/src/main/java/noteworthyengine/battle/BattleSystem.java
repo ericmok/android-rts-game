@@ -1,7 +1,7 @@
 package noteworthyengine.battle;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import noteworthyengine.QuadTreeSystem;
 import noteworthyengine.players.PlayerUnit;
@@ -49,8 +49,8 @@ public class BattleSystem extends noteworthyframework.System {
 
     public QueueMutationList<BattleNode> battleNodes = new QueueMutationList<BattleNode>(127);
 
-    public Hashtable<PlayerUnit, QueueMutationList<BattleNode>> battleNodesByGamer =
-            new Hashtable<PlayerUnit, QueueMutationList<BattleNode>>(8);
+    public HashMap<PlayerUnit, QueueMutationList<BattleNode>> battleNodesByGamer =
+            new HashMap<PlayerUnit, QueueMutationList<BattleNode>>(8);
 
     public ArrayList<PlayerUnit> players = new ArrayList<PlayerUnit>(8);
 

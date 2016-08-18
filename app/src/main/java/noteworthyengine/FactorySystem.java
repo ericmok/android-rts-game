@@ -1,9 +1,10 @@
 package noteworthyengine;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import noteworthyengine.players.PlayerUnit;
-import noteworthyframework.*;
+import noteworthyframework.Node;
+import noteworthyframework.QueueMutationList;
 
 /**
  * Created by eric on 4/30/15.
@@ -12,7 +13,7 @@ public class FactorySystem extends noteworthyframework.System {
 
     public QueueMutationList<FactoryNode> factoryNodes = new QueueMutationList<FactoryNode>(16);
     public QueueMutationList<FactoryCounterNode> factoryCounterNodes = new QueueMutationList<>(16);
-    public Hashtable<PlayerUnit, Integer> factoryCountByGamer = new Hashtable<>();
+    public HashMap<PlayerUnit, Integer> factoryCountByGamer = new HashMap<>();
 
     @Override
     public void addNode(Node node) {

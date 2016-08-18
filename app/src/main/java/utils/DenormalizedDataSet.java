@@ -1,7 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * Created by eric on 10/30/14.
@@ -63,7 +63,7 @@ public class DenormalizedDataSet<E extends Denormalizable, F> implements Denorma
      *     are selectable.
      * </p>
      */
-    public Hashtable<F, ArrayList<E>> denormalizedLists;
+    public HashMap<F, ArrayList<E>> denormalizedLists;
 
     private ArrayList<Integer> labels = new ArrayList<Integer>();
 
@@ -76,7 +76,7 @@ public class DenormalizedDataSet<E extends Denormalizable, F> implements Denorma
     public DenormalizedDataSet(int upperBoundNumberLabels, int upperBoundNumberDenormalizablesPerLabel) {
         this.upperBoundNumberDenormalizablesPerLabel = upperBoundNumberDenormalizablesPerLabel;
 
-        denormalizedLists = new Hashtable<F, ArrayList<E>>(upperBoundNumberLabels);
+        denormalizedLists = new HashMap<F, ArrayList<E>>(upperBoundNumberLabels);
 
 //        Iterator<Map.Entry<Integer, ArrayList<Denormalizable>>> itr = denormalizedLists.entrySet().iterator();
 //        while (itr.hasNext()) {

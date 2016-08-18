@@ -1,10 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.HashMap;
 
 import noteworthyframework.QueueMutationList;
 
@@ -12,7 +9,7 @@ import noteworthyframework.QueueMutationList;
  * Created by eric on 3/17/15.
  */
 public class QueueMutationHashedList<K, V> {
-    public Hashtable<K, QueueMutationList<V>> hashtable;
+    public HashMap<K, QueueMutationList<V>> HashMap;
     public ArrayList<K> keys;
 
     private int keyCapacity;
@@ -22,15 +19,15 @@ public class QueueMutationHashedList<K, V> {
         this.keyCapacity = keyCapacity;
         this.valueCapacity = valueCapacity;
 
-        hashtable = new Hashtable<K, QueueMutationList<V>>(keyCapacity);
+        HashMap = new HashMap<K, QueueMutationList<V>>(keyCapacity);
         keys = new ArrayList<K>(keyCapacity);
     }
 
     public void queueToAdd(K key, V value) {
-        QueueMutationList<V> list = hashtable.get(key);
+        QueueMutationList<V> list = HashMap.get(key);
         if (list == null) {
             list = new QueueMutationList<V>(valueCapacity);
-            hashtable.put(key, list);
+            HashMap.put(key, list);
             keys.add(key);
         }
 
@@ -38,20 +35,20 @@ public class QueueMutationHashedList<K, V> {
     }
 
     public void queueToRemove(K key, V value) {
-        hashtable.get(key).queueToRemove(value);
+        HashMap.get(key).queueToRemove(value);
     }
 
     public QueueMutationList<V> getListByKeyIndex(int index) {
-        return hashtable.get(keys.get(index));
+        return HashMap.get(keys.get(index));
     }
 
     public QueueMutationList<V> getListFor(K key) {
-        return hashtable.get(key);
+        return HashMap.get(key);
     }
 
     public void flushQueues() {
         for (int i = keys.size() - 1; i >= 0; i--) {
-            hashtable.get(keys.get(i)).flushQueues();
+            HashMap.get(keys.get(i)).flushQueues();
         }
     }
 

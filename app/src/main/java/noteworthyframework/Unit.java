@@ -1,8 +1,8 @@
 package noteworthyframework;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import utils.JsonSerializable;
 
@@ -10,9 +10,9 @@ import utils.JsonSerializable;
  * Created by eric on 3/6/15.
  */
 public class Unit implements JsonSerializable {
-    public Hashtable<String, Object> fields = new Hashtable<String, Object>(64);
+    public Map<String, Object> fields = new HashMap<>(64);
 
-    private Hashtable<Class, Node> nodes = new Hashtable<>(32);
+    private Map<Class, Node> nodes = new HashMap<>(32);
     public ArrayList<Node> nodeList = new ArrayList<Node>(32);
 
     /// For storing the unit in a group with same labels
@@ -53,29 +53,31 @@ public class Unit implements JsonSerializable {
     //}
 
     public String json() {
-        StringBuilder sb = new StringBuilder();
-
-        Enumeration<String> keys = this.fields.keys();
-
-        while (keys.hasMoreElements()) {
-            String key = keys.nextElement();
-
-            // Skip event handlers
-            if (key.startsWith("on")) {
-                continue;
-            }
-
-            sb.append(key + ":");
-            Object field = this.fields.get(key);
-
-            sb.append(((JsonSerializable)field).json());
-
-            if (keys.hasMoreElements()) {
-                sb.append(",\n");
-            }
-        }
-
-        return sb.toString();
+        // TODO: Make allocation safe
+//        StringBuilder sb = new StringBuilder();
+//
+//        Enumeration<String> keys = this.fields.keys();
+//
+//        while (keys.hasMoreElements()) {
+//            String key = keys.nextElement();
+//
+//            // Skip event handlers
+//            if (key.startsWith("on")) {
+//                continue;
+//            }
+//
+//            sb.append(key + ":");
+//            Object field = this.fields.get(key);
+//
+//            sb.append(((JsonSerializable)field).json());
+//
+//            if (keys.hasMoreElements()) {
+//                sb.append(",\n");
+//            }
+//        }
+//
+//        return sb.toString();
+        return "Not implemented";
     }
 
     public void step(BaseEngine engine, double dt) {

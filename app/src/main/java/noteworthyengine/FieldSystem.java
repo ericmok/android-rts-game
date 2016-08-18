@@ -1,12 +1,12 @@
 package noteworthyengine;
 
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import noteworthyengine.players.PlayerUnit;
-import noteworthyframework.*;
+import noteworthyframework.Coords;
+import noteworthyframework.Node;
+import noteworthyframework.QueueMutationList;
 import utils.Vector2;
 
 /**
@@ -16,11 +16,11 @@ public class FieldSystem extends noteworthyframework.System {
 
     public static final double FORCE_WEIGHTING = 2;
 
-    public Hashtable<PlayerUnit, QueueMutationList<FieldNode>> agentsByGamer =
-            new Hashtable<PlayerUnit, QueueMutationList<FieldNode>>(4);
+    public HashMap<PlayerUnit, QueueMutationList<FieldNode>> agentsByGamer =
+            new HashMap<PlayerUnit, QueueMutationList<FieldNode>>(4);
             //new QueueMutationList<FieldNode>(127);
-    public Hashtable<PlayerUnit, QueueMutationList<FieldNode>> arrowsByGamer =
-            new Hashtable<PlayerUnit, QueueMutationList<FieldNode>>(4);
+            public HashMap<PlayerUnit, QueueMutationList<FieldNode>> arrowsByGamer =
+                    new HashMap<PlayerUnit, QueueMutationList<FieldNode>>(4);
             //new QueueMutationList<FieldNode>(127);
 
     public ArrayList<PlayerUnit> playerUnits = new ArrayList<PlayerUnit>(4);
@@ -34,11 +34,11 @@ public class FieldSystem extends noteworthyframework.System {
 
 //    public static final int MAX_GAMERS = 4;
 //
-//    public Hashtable<String, DenormalizedDataSet<FieldNode, String>> nodesByGamer;
+//    public HashMap<String, DenormalizedDataSet<FieldNode, String>> nodesByGamer;
 //
 
     // To much down casting
-    //public Hashtable<Class, QueueMutationList> nodesLists = new Hashtable<Class, QueueMutationList>(ACCEPTED_NODES.length);
+    //public HashMap<Class, QueueMutationList> nodesLists = new HashMap<Class, QueueMutationList>(ACCEPTED_NODES.length);
 
     public FieldSystem() {
         super();
